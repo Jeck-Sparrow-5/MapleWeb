@@ -1,0 +1,7 @@
+{"$imgdir":"2112006.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$string":"info","value":"10000"},
+    {"$string":"link","value":"2112000"}
+  ]},
+  {"$string":"action","value":"money10000"}
+]}

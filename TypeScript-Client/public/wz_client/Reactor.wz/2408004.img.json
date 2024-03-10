@@ -1,0 +1,20 @@
+{"$imgdir":"2408004.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$string":"name","value":"나인스피릿의둥지"}
+  ]},
+  {"$imgdir":"0","$$":[
+    {"$canvas":"0","width":"1","height":"1","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAANSURBVBhXY2BgYBAEAAAWABJnFC3KAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"0","y":"0"}
+    ]},
+    {"$imgdir":"hit","$$":[
+      {"$canvas":"0","width":"1","height":"1","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAANSURBVBhXY2BgYBAEAAAWABJnFC3KAAAAAElFTkSuQmCC","$$":[
+        {"$vector":"origin","x":"0","y":"0"}
+      ]}
+    ]}
+  ]},
+  {"$imgdir":"1","$$":[
+    {"$canvas":"0","width":"1","height":"1","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAANSURBVBhXY2BgYBAEAAAWABJnFC3KAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"0","y":"0"}
+    ]}
+  ]}
+]}

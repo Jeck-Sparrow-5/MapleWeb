@@ -1,0 +1,8 @@
+{"$imgdir":"1412.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$canvas":"icon","width":"26","height":"30","basedata":"iVBORw0KGgoAAAANSUhEUgAAABoAAAAeCAYAAAAy2w7YAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAFvSURBVEhL7ZaBjYMwDEVZgRVYoSuwQlZgha7ACqyQFViBFbrCrZDzD/eD40BpdWkrnS7SE6lN/OK0ojRqhBeRjXDzU5ivQxgvXZj6S5yTyfXb3OSO4ssPqL0qZPK1LPFGSFzXRjAn125/rkHc4qUm6q8amSDwqOgIKwGog/pCfyrycmzI4QoQ058JYhqI+taI8P0gWVtUdHQmOoJF9Zw8JcLNuOoCWsLcW0U2vivC7x5JYEVncB3Ruc+J2C74rUive0qkF+7BdRrmXiayuaoiwLU2/i8qCli41sb/ngh1C5EfnDyrNmGMORefGrgS/lXrWB7Pn3uZCDewk1qww0zEJF5C7E4T0jF2qGHnPAUWB8MmyUXxTWcc5UVlLrjNgvyVaJZpjKQjw9HH49+4K2IBTVHMFNRdsiN1bLkIoGjWifdFBxZuIm1EbUAdXxRhJBkZhPWs8/gj7HSVRBgM1gaSVkgDHxCsTSbhQLA2MprmG6Au+vlA8OaqAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"-4","y":"30"}
+    ]}
+  ]},
+  {"$imgdir":"skill"}
+]}

@@ -1,0 +1,44 @@
+{"$imgdir":"2708000.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$string":"info","value":"배경 변환용 리액터"}
+  ]},
+  {"$imgdir":"0","$$":[
+    {"$canvas":"0","width":"10","height":"10","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAATSURBVChTYwACQRAxCgYVYBAEAByhACPxvhh+AAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"-2","y":"32"}
+    ]},
+    {"$imgdir":"hit","$$":[
+      {"$canvas":"0","width":"10","height":"10","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAATSURBVChTYwACQRAxCgYVYBAEAByhACPxvhh+AAAAAElFTkSuQmCC","$$":[
+        {"$vector":"origin","x":"-2","y":"32"}
+      ]}
+    ]},
+    {"$imgdir":"event","$$":[
+      {"$imgdir":"0","$$":[
+        {"$int":"type","value":"100"},
+        {"$int":"state","value":"1"},
+        {"$int":"0","value":"4001193"},
+        {"$int":"1","value":"1"},
+        {"$int":"2","value":"1"},
+        {"$vector":"lt","x":"-96","y":"-126"},
+        {"$vector":"rb","x":"100","y":"7"}
+      ]}
+    ]}
+  ]},
+  {"$imgdir":"1","$$":[
+    {"$canvas":"0","width":"10","height":"10","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAATSURBVChTYwACQRAxCgYVYBAEAByhACPxvhh+AAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"-2","y":"32"}
+    ]},
+    {"$imgdir":"hit","$$":[
+      {"$canvas":"0","width":"10","height":"10","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAATSURBVChTYwACQRAxCgYVYBAEAByhACPxvhh+AAAAAElFTkSuQmCC","$$":[
+        {"$vector":"origin","x":"-2","y":"32"}
+      ]}
+    ]},
+    {"$imgdir":"event","$$":[
+      {"$imgdir":"0","$$":[
+        {"$int":"type","value":"101"},
+        {"$int":"state","value":"0"}
+      ]},
+      {"$int":"timeOut","value":"7200000"}
+    ]}
+  ]},
+  {"$string":"action","value":"PinkBeenBack0"}
+]}

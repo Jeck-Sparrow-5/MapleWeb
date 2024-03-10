@@ -1,0 +1,38 @@
+{"$imgdir":"6109022.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$string":"info","value":"글로벌 파티 퀘스트 - 불 콘트롤g_c"},
+    {"$int":"activateByTouch","value":"1"}
+  ]},
+  {"$imgdir":"0","$$":[
+    {"$imgdir":"event","$$":[
+      {"$imgdir":"0","$$":[
+        {"$int":"type","value":"6"},
+        {"$int":"state","value":"1"}
+      ]}
+    ]},
+    {"$imgdir":"hit","$$":[
+      {"$canvas":"0","width":"149","height":"45","basedata":"iVBORw0KGgoAAAANSUhEUgAAAJUAAAAtCAYAAACnOylXAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAACQSURBVHhe7cgxEcAwAMSwUAh/si0AT/2O8p0Wn7cLP8sJi5ywyAmLnLDICYucsMgJi5ywyAmLnLDICYucsMgJi5ywyAmLnLDICYucsMgJi5ywyAmLnLDICYucsMgJi5ywyAmLnLDICYucsMgJi5ywyAmLnLDICYucsMgJi5ywyAmLnLDICYucsMgJi5zw0bkP7zO9URgoIQcAAAAASUVORK5CYII=","$$":[
+        {"$vector":"origin","x":"74","y":"22"},
+        {"$int":"z","value":"0"}
+      ]}
+    ]},
+    {"$canvas":"0","width":"149","height":"45","basedata":"iVBORw0KGgoAAAANSUhEUgAAAJUAAAAtCAYAAACnOylXAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAACQSURBVHhe7cgxEcAwAMSwUAh/si0AT/2O8p0Wn7cLP8sJi5ywyAmLnLDICYucsMgJi5ywyAmLnLDICYucsMgJi5ywyAmLnLDICYucsMgJi5ywyAmLnLDICYucsMgJi5ywyAmLnLDICYucsMgJi5ywyAmLnLDICYucsMgJi5ywyAmLnLDICYucsMgJi5zw0bkP7zO9URgoIQcAAAAASUVORK5CYII=","$$":[
+      {"$vector":"origin","x":"74","y":"22"},
+      {"$int":"z","value":"0"}
+    ]}
+  ]},
+  {"$imgdir":"1","$$":[
+    {"$imgdir":"event","$$":[
+      {"$imgdir":"0","$$":[
+        {"$int":"type","value":"7"},
+        {"$int":"state","value":"0"}
+      ]}
+    ]},
+    {"$uol":"hit","value":"../0/hit"},
+    {"$canvas":"0","width":"149","height":"45","basedata":"iVBORw0KGgoAAAANSUhEUgAAAJUAAAAtCAYAAACnOylXAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAACQSURBVHhe7cgxEcAwAMSwUAh/si0AT/2O8p0Wn7cLP8sJi5ywyAmLnLDICYucsMgJi5ywyAmLnLDICYucsMgJi5ywyAmLnLDICYucsMgJi5ywyAmLnLDICYucsMgJi5ywyAmLnLDICYucsMgJi5ywyAmLnLDICYucsMgJi5ywyAmLnLDICYucsMgJi5zw0bkP7zO9URgoIQcAAAAASUVORK5CYII=","$$":[
+      {"$vector":"origin","x":"74","y":"22"},
+      {"$int":"z","value":"0"}
+    ]}
+  ]},
+  {"$string":"action","value":"glpqflame2"}
+]}

@@ -1,0 +1,8 @@
+{"$imgdir":"9102007.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$string":"name","value":"달맞이꽃"},
+    {"$string":"link","value":"9102002"},
+    {"$int":"removeInFieldSet","value":"1"}
+  ]},
+  {"$string":"action","value":"moonItem5"}
+]}

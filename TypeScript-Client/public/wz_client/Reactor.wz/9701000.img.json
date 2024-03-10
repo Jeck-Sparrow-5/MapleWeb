@@ -1,0 +1,30 @@
+{"$imgdir":"9701000.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$string":"info","value":"마을 케이크 출몰용"}
+  ]},
+  {"$imgdir":"0","$$":[
+    {"$canvas":"0","width":"1","height":"1","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAANSURBVBhXY2BgYBAEAAAWABJnFC3KAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"0","y":"0"}
+    ]},
+    {"$imgdir":"event","$$":[
+      {"$imgdir":"0","$$":[
+        {"$int":"type","value":"101"},
+        {"$int":"state","value":"1"}
+      ]},
+      {"$int":"timeOut","value":"3600000"}
+    ]}
+  ]},
+  {"$imgdir":"1","$$":[
+    {"$canvas":"0","width":"1","height":"1","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAANSURBVBhXY2BgYBAEAAAWABJnFC3KAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"0","y":"0"}
+    ]},
+    {"$imgdir":"event","$$":[
+      {"$imgdir":"0","$$":[
+        {"$int":"type","value":"101"},
+        {"$int":"state","value":"0"}
+      ]},
+      {"$int":"timeOut","value":"60000"}
+    ]}
+  ]},
+  {"$string":"action","value":"6th_mob0"}
+]}

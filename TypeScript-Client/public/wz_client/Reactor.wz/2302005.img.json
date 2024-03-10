@@ -1,0 +1,8 @@
+{"$imgdir":"2302005.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$string":"info","value":"길들인몬스터:연구보고서"},
+    {"$string":"link","value":"2302000"},
+    {"$int":"removeInFieldSet","value":"1"}
+  ]},
+  {"$string":"action","value":"tameItem0"}
+]}

@@ -1,0 +1,7 @@
+{"$imgdir":"1002001.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$string":"info","value":"배틀필드 나무상자"},
+    {"$string":"link","value":"0002000"}
+  ]},
+  {"$string":"action","value":"BF_item0"}
+]}

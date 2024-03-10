@@ -1,0 +1,31 @@
+{"$imgdir":"9201000.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$string":"info","value":"투명리엑터:서브몬스터 소환"}
+  ]},
+  {"$imgdir":"0","$$":[
+    {"$canvas":"0","width":"1","height":"1","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAANSURBVBhXY2BgYBAEAAAWABJnFC3KAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"0","y":"0"}
+    ]},
+    {"$imgdir":"event","$$":[
+      {"$imgdir":"0","$$":[
+        {"$int":"type","value":"100"},
+        {"$int":"state","value":"1"},
+        {"$string":"0","value":"4001036"},
+        {"$int":"1","value":"1"},
+        {"$vector":"lt","x":"-80","y":"-30"},
+        {"$vector":"rb","x":"80","y":"30"}
+      ]}
+    ]},
+    {"$imgdir":"hit","$$":[
+      {"$canvas":"0","width":"1","height":"1","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAANSURBVBhXY2BgYBAEAAAWABJnFC3KAAAAAElFTkSuQmCC","$$":[
+        {"$vector":"origin","x":"0","y":"0"}
+      ]}
+    ]}
+  ]},
+  {"$imgdir":"1","$$":[
+    {"$canvas":"0","width":"1","height":"1","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAANSURBVBhXY2BgYBAEAAAWABJnFC3KAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"0","y":"0"}
+    ]}
+  ]},
+  {"$string":"action","value":"syarenMob0"}
+]}

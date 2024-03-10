@@ -1,0 +1,44 @@
+{"$imgdir":"6109026.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$string":"info","value":"글로벌 파티 퀘스트 - 불 콘트롤6_2"},
+    {"$int":"activateByTouch","value":"1"}
+  ]},
+  {"$imgdir":"0","$$":[
+    {"$imgdir":"event","$$":[
+      {"$imgdir":"0","$$":[
+        {"$int":"type","value":"6"},
+        {"$int":"state","value":"1"}
+      ]}
+    ]},
+    {"$imgdir":"hit","$$":[
+      {"$canvas":"0","width":"256","height":"70","basedata":"iVBORw0KGgoAAAANSUhEUgAAAQAAAABGCAYAAAAjBEqjAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAADwSURBVHhe7chBDcAwAMSwUih/siuAINg5kj85rwvMyglsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAn83rkf/lymPb7NI1oAAAAASUVORK5CYII=","$$":[
+        {"$vector":"origin","x":"128","y":"35"},
+        {"$int":"z","value":"0"},
+        {"$vector":"lt","x":"-128","y":"-68"},
+        {"$vector":"rb","x":"130","y":"21"}
+      ]}
+    ]},
+    {"$canvas":"0","width":"256","height":"70","basedata":"iVBORw0KGgoAAAANSUhEUgAAAQAAAABGCAYAAAAjBEqjAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAADwSURBVHhe7chBDcAwAMSwUih/siuAINg5kj85rwvMyglsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAn83rkf/lymPb7NI1oAAAAASUVORK5CYII=","$$":[
+      {"$vector":"origin","x":"128","y":"35"},
+      {"$int":"z","value":"0"},
+      {"$vector":"lt","x":"-128","y":"-68"},
+      {"$vector":"rb","x":"130","y":"21"}
+    ]}
+  ]},
+  {"$imgdir":"1","$$":[
+    {"$imgdir":"event","$$":[
+      {"$imgdir":"0","$$":[
+        {"$int":"type","value":"7"},
+        {"$int":"state","value":"0"}
+      ]}
+    ]},
+    {"$uol":"hit","value":"../0/hit"},
+    {"$canvas":"0","width":"256","height":"70","basedata":"iVBORw0KGgoAAAANSUhEUgAAAQAAAABGCAYAAAAjBEqjAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAADwSURBVHhe7chBDcAwAMSwUih/siuAINg5kj85rwvMyglsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAlsyAn83rkf/lymPb7NI1oAAAAASUVORK5CYII=","$$":[
+      {"$vector":"origin","x":"128","y":"35"},
+      {"$int":"z","value":"0"},
+      {"$vector":"lt","x":"-128","y":"-68"},
+      {"$vector":"rb","x":"130","y":"21"}
+    ]}
+  ]},
+  {"$string":"action","value":"glpqflame6"}
+]}

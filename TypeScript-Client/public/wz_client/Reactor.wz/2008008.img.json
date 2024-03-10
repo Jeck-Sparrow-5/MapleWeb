@@ -1,0 +1,10 @@
+{"$imgdir":"2008008.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$string":"info","value":"투명리액터:위치치환용"}
+  ]},
+  {"$imgdir":"0","$$":[
+    {"$canvas":"0","width":"1","height":"1","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAANSURBVBhXY2BgYBAEAAAWABJnFC3KAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"0","y":"0"}
+    ]}
+  ]}
+]}

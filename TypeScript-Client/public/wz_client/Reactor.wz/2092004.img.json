@@ -1,0 +1,25 @@
+{"$imgdir":"2092004.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$string":"info","value":"표창제거"}
+  ]},
+  {"$imgdir":"0","$$":[
+    {"$canvas":"0","width":"4","height":"4","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAARSURBVBhXYwACQRBBNmAQBAAElQAjVVCqPwAAAABJRU5ErkJggg==","$$":[
+      {"$vector":"origin","x":"0","y":"0"}
+    ]},
+    {"$imgdir":"event","$$":[
+      {"$imgdir":"0","$$":[
+        {"$int":"type","value":"100"},
+        {"$int":"state","value":"1"},
+        {"$int":"0","value":"2070016"},
+        {"$int":"1","value":"1"},
+        {"$vector":"lt","x":"-81","y":"-68"},
+        {"$vector":"rb","x":"99","y":"31"}
+      ]}
+    ]}
+  ]},
+  {"$imgdir":"1","$$":[
+    {"$canvas":"0","width":"4","height":"4","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAARSURBVBhXYwACQRBBNmAQBAAElQAjVVCqPwAAAABJRU5ErkJggg==","$$":[
+      {"$vector":"origin","x":"0","y":"0"}
+    ]}
+  ]}
+]}

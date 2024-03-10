@@ -1,0 +1,84 @@
+{"$imgdir":"MCSkill.img","$$":[
+  {"$imgdir":"0","$$":[
+    {"$int":"target","value":"1"},
+    {"$int":"spendCP","value":"14"},
+    {"$string":"name","value":" Seal (1 person)"},
+    {"$string":"desc","value":"Seals up a single member from the opposing party."},
+    {"$int":"mobSkillID","value":"120"},
+    {"$int":"level","value":"10"}
+  ]},
+  {"$imgdir":"1","$$":[
+    {"$int":"target","value":"2"},
+    {"$int":"spendCP","value":"17"},
+    {"$string":"name","value":" Darkness (Party)"},
+    {"$string":"desc","value":" Puts everyone in the opposing party in a state of darkness at an 80% success rate."},
+    {"$int":"mobSkillID","value":"121"},
+    {"$int":"level","value":"6"}
+  ]},
+  {"$imgdir":"2","$$":[
+    {"$int":"target","value":"2"},
+    {"$int":"spendCP","value":"19"},
+    {"$string":"name","value":"Weakness(Party)"},
+    {"$string":"desc","value":"Puts everyone in the opposing party in a state of weakness at an 80% success rate."},
+    {"$int":"mobSkillID","value":"122"},
+    {"$int":"level","value":"7"}
+  ]},
+  {"$imgdir":"3","$$":[
+    {"$int":"target","value":"1"},
+    {"$int":"spendCP","value":"22"},
+    {"$string":"name","value":"Stun (1 person)"},
+    {"$string":"desc","value":"Stuns a single member from the opposing party."},
+    {"$int":"mobSkillID","value":"123"},
+    {"$int":"level","value":"11"}
+  ]},
+  {"$imgdir":"4","$$":[
+    {"$int":"target","value":"2"},
+    {"$int":"spendCP","value":"12"},
+    {"$string":"name","value":"Curse (Party)"},
+    {"$string":"desc","value":"Curses everyone in the opposing party."},
+    {"$int":"mobSkillID","value":"124"},
+    {"$int":"level","value":"7"}
+  ]},
+  {"$imgdir":"5","$$":[
+    {"$int":"target","value":"2"},
+    {"$int":"spendCP","value":"19"},
+    {"$string":"name","value":"Poisoned (Party)"},
+    {"$string":"desc","value":"Poisons everyone in the opposing party at an 80% success rate."},
+    {"$int":"mobSkillID","value":"125"},
+    {"$int":"level","value":"6"}
+  ]},
+  {"$imgdir":"6","$$":[
+    {"$int":"target","value":"2"},
+    {"$int":"spendCP","value":"16"},
+    {"$string":"name","value":"Slow (Party)"},
+    {"$string":"desc","value":"Slows down everyone in the opposing party at an 80% success rate."},
+    {"$int":"mobSkillID","value":"126"},
+    {"$int":"level","value":"6"}
+  ]},
+  {"$imgdir":"7","$$":[
+    {"$int":"target","value":"1"},
+    {"$int":"spendCP","value":"18"},
+    {"$string":"name","value":"Cancel Buff (1 person)"},
+    {"$string":"desc","value":"Cancels the buff of a single member of the opposing party."},
+    {"$int":"mobSkillID","value":"127"},
+    {"$int":"level","value":"9"}
+  ]},
+  {"$imgdir":"8","$$":[
+    {"$int":"target","value":"1"},
+    {"$int":"type","value":"8"},
+    {"$int":"time","value":"30"},
+    {"$int":"spendCP","value":"10"},
+    {"$string":"name","value":"Random"},
+    {"$string":"desc","value":"Random"},
+    {"$int":"prop","value":"100"}
+  ]},
+  {"$imgdir":"9","$$":[
+    {"$int":"target","value":"2"},
+    {"$int":"type","value":"8"},
+    {"$int":"time","value":"30"},
+    {"$int":"spendCP","value":"10"},
+    {"$string":"name","value":"Random"},
+    {"$string":"desc","value":"Random"},
+    {"$int":"prop","value":"100"}
+  ]}
+]}

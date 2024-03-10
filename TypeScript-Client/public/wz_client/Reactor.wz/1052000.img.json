@@ -1,0 +1,7 @@
+{"$imgdir":"1052000.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$string":"info","value":"돌방패:세이람의방패"},
+    {"$string":"link","value":"1050000"}
+  ]},
+  {"$string":"action","value":"s4berserkItem0"}
+]}

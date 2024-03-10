@@ -1,0 +1,7 @@
+{"$imgdir":"2602000.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$string":"info","value":"왕비의 보물상자"},
+    {"$string":"link","value":"2002000"}
+  ]},
+  {"$string":"action","value":"ariantItem0"}
+]}

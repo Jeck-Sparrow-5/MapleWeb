@@ -1,0 +1,32 @@
+{"$imgdir":"2001002.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$string":"info","value":"투명리액터:여신탑의 샐리온1"}
+  ]},
+  {"$imgdir":"0","$$":[
+    {"$canvas":"0","width":"1","height":"1","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAANSURBVBhXY2BgYBAEAAAWABJnFC3KAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"0","y":"0"}
+    ]},
+    {"$imgdir":"hit","$$":[
+      {"$canvas":"0","width":"1","height":"1","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAANSURBVBhXY2BgYBAEAAAWABJnFC3KAAAAAElFTkSuQmCC","$$":[
+        {"$vector":"origin","x":"0","y":"0"}
+      ]}
+    ]},
+    {"$imgdir":"event","$$":[
+      {"$imgdir":"0","$$":[
+        {"$int":"type","value":"100"},
+        {"$int":"state","value":"1"},
+        {"$int":"0","value":"4001074"},
+        {"$int":"1","value":"1"},
+        {"$int":"2","value":"0"},
+        {"$vector":"lt","x":"-160","y":"-32"},
+        {"$vector":"rb","x":"160","y":"32"}
+      ]}
+    ]}
+  ]},
+  {"$imgdir":"1","$$":[
+    {"$canvas":"0","width":"1","height":"1","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAANSURBVBhXY2BgYBAEAAAWABJnFC3KAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"0","y":"0"}
+    ]}
+  ]},
+  {"$string":"action","value":"fgodMob2"}
+]}

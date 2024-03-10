@@ -1,0 +1,7 @@
+{"$imgdir":"2119001.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$string":"info","value":"좀비의 무덤+상자2"},
+    {"$string":"link","value":"2119000"}
+  ]},
+  {"$string":"action","value":"scaScript2"}
+]}

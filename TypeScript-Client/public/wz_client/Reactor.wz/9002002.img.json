@@ -1,0 +1,7 @@
+{"$imgdir":"9002002.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$string":"info","value":"비밀문서&잡템"},
+    {"$string":"link","value":"2202002"}
+  ]},
+  {"$string":"action","value":"eventItem2"}
+]}

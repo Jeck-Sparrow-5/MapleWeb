@@ -1,0 +1,7 @@
+{"$imgdir":"2201001.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$string":"info","value":"차원의 블록퍼스를 소환한다."},
+    {"$string":"link","value":"2202002"}
+  ]},
+  {"$string":"action","value":"ludiMob1"}
+]}

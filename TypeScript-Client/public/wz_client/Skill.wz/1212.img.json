@@ -1,0 +1,8 @@
+{"$imgdir":"1212.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$canvas":"icon","width":"26","height":"30","basedata":"iVBORw0KGgoAAAANSUhEUgAAABoAAAAeCAYAAAAy2w7YAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAFlSURBVEhL7ZaBbYMwEEVZISuwAit4BVbwCqzACl7BK7ACK7ACK7j+kG/OF1OK6rRSVUtPOHfcPY5EkEas8CayFZZpCdM4haEdguvHbU+cdcde5c7i8zhvoPeuiJt1WcNoxk3St2YDe2LbvriXIK7xxuciBL4qOkNLgHl0FJlLke/3HI4AMfmZICaBqNMifD9I1hahzy3RGWwq9+SWCCfjKBtICXM/KtLxogi/eySBFl3BOiJzvyfiuOC7Ill3SyQLS7BOwtzbRDpXVQRYq+P/opcGGtbq+N8Toe+LaBp8fB27VIS9jzE8NXAkfFXLWBZXz71MhBM4SS04YSZi0tn4JFZXKsEfEMk++XHbt+ZdvG3gkOQiSGY/h3Vei+BVIsG5oHgr7c6nohLFZgI5pe3sk5OJAJqeTaHlhBeRLuQ5DdDfEVaSEf5Egc5dIWvRO5JEWAzWBpJHJC18QLA2mYQLwdrE1TQfY7+GSZ1BKM8AAAAASUVORK5CYII=","$$":[
+      {"$vector":"origin","x":"-4","y":"30"}
+    ]}
+  ]},
+  {"$imgdir":"skill"}
+]}

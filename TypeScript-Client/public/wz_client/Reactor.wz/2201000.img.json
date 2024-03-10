@@ -1,0 +1,7 @@
+{"$imgdir":"2201000.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$string":"info","value":"퀘스트용장난감목마를 최대 10마리까지 소환"},
+    {"$string":"link","value":"2202002"}
+  ]},
+  {"$string":"action","value":"ludiMob0"}
+]}

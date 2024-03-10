@@ -1,0 +1,33 @@
+{"$imgdir":"8892000.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$string":"info","value":"Check the condition of the Giant Snowman"}
+  ]},
+  {"$imgdir":"0","$$":[
+    {"$canvas":"0","width":"11","height":"1","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAsAAAABCAYAAAAIN1RAAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAAPSURBVBhXYwCC/8Rhhv8A5kYK9lVqPLcAAAAASUVORK5CYII=","$$":[
+      {"$vector":"origin","x":"5","y":"0"},
+      {"$int":"z","value":"0"}
+    ]},
+    {"$imgdir":"hit","$$":[
+      {"$canvas":"0","width":"11","height":"1","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAsAAAABCAYAAAAIN1RAAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAAPSURBVBhXYwCC/8Rhhv8A5kYK9lVqPLcAAAAASUVORK5CYII=","$$":[
+        {"$vector":"origin","x":"5","y":"0"},
+        {"$int":"z","value":"0"}
+      ]}
+    ]},
+    {"$imgdir":"event","$$":[
+      {"$imgdir":"0","$$":[
+        {"$int":"type","value":"100"},
+        {"$int":"state","value":"1"},
+        {"$int":"0","value":"4032199"},
+        {"$int":"1","value":"1"},
+        {"$vector":"lt","x":"-1790","y":"-1190"},
+        {"$vector":"rb","x":"1797","y":"817"}
+      ]}
+    ]}
+  ]},
+  {"$imgdir":"1","$$":[
+    {"$canvas":"0","width":"1","height":"1","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAANSURBVBhXY2BgYBAEAAAWABJnFC3KAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"0","y":"0"}
+    ]}
+  ]},
+  {"$string":"action","value":"08_Snowman0"}
+]}

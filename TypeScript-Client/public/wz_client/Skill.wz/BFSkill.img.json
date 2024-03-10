@@ -1,0 +1,55 @@
+{"$imgdir":"BFSkill.img","$$":[
+  {"$imgdir":"0","$$":[
+    {"$string":"name","value":"Cry"},
+    {"$string":"desc","value":"You cry at the Wolf, and it slows down as if it's in shock. "},
+    {"$int":"mobSkillID","value":"126"},
+    {"$int":"level","value":"9"},
+    {"$int":"userCount","value":"5"},
+    {"$int":"owner","value":"0"},
+    {"$string":"effect","value":"Effect/BasicEff/ItemSkill/Success"}
+  ]},
+  {"$imgdir":"1","$$":[
+    {"$string":"name","value":"Surprise Attack"},
+    {"$string":"desc","value":"You attack the Wolf. He should be momentarily stunned. "},
+    {"$int":"mobSkillID","value":"123"},
+    {"$int":"level","value":"14"},
+    {"$int":"userCount","value":"2"},
+    {"$int":"owner","value":"0"},
+    {"$string":"effect","value":"Effect/BasicEff/ItemSkill/Success"}
+  ]},
+  {"$imgdir":"2","$$":[
+    {"$string":"name","value":"Great Confusion"},
+    {"$string":"desc","value":"The Sheep are in a state of confusion."},
+    {"$int":"mobSkillID","value":"132"},
+    {"$int":"level","value":"4"},
+    {"$int":"userCount","value":"6"},
+    {"$int":"owner","value":"1"},
+    {"$string":"effect","value":"Effect/BasicEff/ItemSkill/Success"}
+  ]},
+  {"$imgdir":"3","$$":[
+    {"$string":"name","value":"Sheep's Bell"},
+    {"$string":"desc","value":"The Wolves have slowed down."},
+    {"$int":"mobSkillID","value":"126"},
+    {"$int":"level","value":"10"},
+    {"$int":"allMap","value":"1"},
+    {"$int":"owner","value":"0"}
+  ]},
+  {"$imgdir":"4","$$":[
+    {"$string":"name","value":"Wolf's Bell"},
+    {"$string":"desc","value":"The Sheep are momentarily stunned."},
+    {"$int":"mobSkillID","value":"123"},
+    {"$int":"level","value":"15"},
+    {"$int":"allMap","value":"1"},
+    {"$int":"owner","value":"1"}
+  ]},
+  {"$imgdir":"5","$$":[
+    {"$string":"name","value":"Wolf's Threat"},
+    {"$string":"desc","value":"The Sheep have momentarily weakened."},
+    {"$int":"mobSkillID","value":"122"},
+    {"$int":"level","value":"12"},
+    {"$int":"allMap","value":"1"},
+    {"$int":"owner","value":"1"},
+    {"$int":"userCount","value":"6"},
+    {"$string":"effect","value":"Effect/BasicEff/ItemSkill/Success"}
+  ]}
+]}

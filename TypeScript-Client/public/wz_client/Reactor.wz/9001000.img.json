@@ -1,0 +1,7 @@
+{"$imgdir":"9001000.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$string":"info","value":"슈퍼 주니어 네키 한마리 출현"},
+    {"$string":"link","value":"2202002"}
+  ]},
+  {"$string":"action","value":"eventMob0"}
+]}

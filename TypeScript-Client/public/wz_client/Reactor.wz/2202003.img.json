@@ -1,0 +1,7 @@
+{"$imgdir":"2202003.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$string":"info","value":"파티퀘스트용 통행증"},
+    {"$string":"link","value":"2202002"}
+  ]},
+  {"$string":"action","value":"ludiquest3"}
+]}

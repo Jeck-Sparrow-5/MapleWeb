@@ -1,0 +1,25 @@
+{"$imgdir":"103040412.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"0"},
+    {"$int":"town","value":"0"},
+    {"$int":"swim","value":"0"},
+    {"$int":"returnMap","value":"103040400"},
+    {"$int":"forcedReturn","value":"103040400"},
+    {"$float":"mobRate","value":"2.0"},
+    {"$string":"bgm","value":"Bgm21/KerningSquareField"},
+    {"$string":"mapMark","value":"101Building"},
+    {"$int":"fly","value":"0"},
+    {"$int":"noMapCmd","value":"0"},
+    {"$int":"hideMinimap","value":"0"},
+    {"$int":"fieldLimit","value":"271096"},
+    {"$int":"VRTop","value":"-240"},
+    {"$int":"VRLeft","value":"-1238"},
+    {"$int":"VRBottom","value":"555"},
+    {"$int":"VRRight","value":"1336"},
+    {"$string":"onFirstUserEnter","value":""},
+    {"$string":"onUserEnter","value":"Depart_topFloorEnter"},
+    {"$int":"lvForceMove","value":"51"},
+    {"$string":"link","value":"103040410"}
+  ]}
+]}

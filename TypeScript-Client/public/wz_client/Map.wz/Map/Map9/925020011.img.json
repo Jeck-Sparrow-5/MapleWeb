@@ -1,0 +1,28 @@
+{"$imgdir":"925020011.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"0"},
+    {"$int":"town","value":"0"},
+    {"$int":"swim","value":"0"},
+    {"$int":"returnMap","value":"925020002"},
+    {"$int":"forcedReturn","value":"925020002"},
+    {"$float":"mobRate","value":"1.0"},
+    {"$string":"bgm","value":"Bgm17/MureungSchool1"},
+    {"$string":"mapMark","value":"MuruengRaid"},
+    {"$int":"fly","value":"0"},
+    {"$int":"hideMinimap","value":"0"},
+    {"$int":"fieldLimit","value":"927480"},
+    {"$int":"VRTop","value":"-686"},
+    {"$int":"VRLeft","value":"-495"},
+    {"$int":"VRBottom","value":"120"},
+    {"$int":"VRRight","value":"495"},
+    {"$string":"onFirstUserEnter","value":"dojang_Msg"},
+    {"$string":"onUserEnter","value":""},
+    {"$int":"fieldType","value":"14"},
+    {"$imgdir":"timeMob","$$":[
+      {"$int":"id","value":"9300216"},
+      {"$string":"message","value":"So Gong ran away crying. There appears to be an exit on the 2nd floor railing."}
+    ]},
+    {"$string":"link","value":"925020010"}
+  ]}
+]}

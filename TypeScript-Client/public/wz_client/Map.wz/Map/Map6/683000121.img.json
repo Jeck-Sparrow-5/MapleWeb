@@ -1,0 +1,25 @@
+{"$imgdir":"683000121.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"0"},
+    {"$int":"town","value":"0"},
+    {"$int":"swim","value":"0"},
+    {"$int":"returnMap","value":"600000000"},
+    {"$int":"forcedReturn","value":"683000000"},
+    {"$float":"mobRate","value":"1.5"},
+    {"$string":"bgm","value":"BgmEvent/FunnyRabbitFaster"},
+    {"$string":"mapMark","value":"Event"},
+    {"$int":"fly","value":"0"},
+    {"$int":"hideMinimap","value":"0"},
+    {"$int":"fieldLimit","value":"262216"},
+    {"$string":"onFirstUserEnter","value":""},
+    {"$string":"onUserEnter","value":""},
+    {"$int":"VRTop","value":"-1500"},
+    {"$int":"VRLeft","value":"-918"},
+    {"$int":"VRBottom","value":"577"},
+    {"$int":"VRRight","value":"467"},
+    {"$int":"timeLimit","value":"3600"},
+    {"$int":"fieldType","value":"6"},
+    {"$string":"link","value":"683000120"}
+  ]}
+]}

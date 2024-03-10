@@ -1,0 +1,23 @@
+{"$imgdir":"910120003.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"0"},
+    {"$int":"town","value":"0"},
+    {"$int":"returnMap","value":"100050000"},
+    {"$float":"mobRate","value":"1.999998"},
+    {"$string":"bgm","value":"Bgm01/MoonlightShadow"},
+    {"$string":"mapDesc","value":""},
+    {"$int":"forcedReturn","value":"100050000"},
+    {"$int":"hideMinimap","value":"0"},
+    {"$int":"moveLimit","value":"0"},
+    {"$string":"mapMark","value":"Ellinia"},
+    {"$string":"link","value":"910120000"},
+    {"$int":"swim","value":"0"},
+    {"$int":"fly","value":"0"},
+    {"$int":"noMapCmd","value":"0"},
+    {"$int":"fieldLimit","value":"344252"},
+    {"$int":"lvForceMove","value":"20"},
+    {"$string":"onFirstUserEnter","value":""},
+    {"$string":"onUserEnter","value":""}
+  ]}
+]}

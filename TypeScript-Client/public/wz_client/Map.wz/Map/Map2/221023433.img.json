@@ -1,0 +1,30 @@
+{"$imgdir":"221023433.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"0"},
+    {"$int":"town","value":"0"},
+    {"$int":"returnMap","value":"220000000"},
+    {"$int":"forcedReturn","value":"221023400"},
+    {"$float":"mobRate","value":"1.5"},
+    {"$string":"bgm","value":"Bgm07/FunnyTimeMaker"},
+    {"$string":"mapMark","value":"LudiTower1"},
+    {"$int":"hideMinimap","value":"0"},
+    {"$int":"fieldLimit","value":"262216"},
+    {"$int":"VRTop","value":"32"},
+    {"$int":"VRLeft","value":"-400"},
+    {"$int":"VRBottom","value":"2277"},
+    {"$int":"VRRight","value":"400"},
+    {"$int":"swim","value":"0"},
+    {"$int":"fieldType","value":"6"},
+    {"$int":"timeLimit","value":"7200"},
+    {"$imgdir":"autoLieDetector","$$":[
+      {"$int":"startHour","value":"0"},
+      {"$int":"endHour","value":"24"},
+      {"$int":"interval","value":"100"},
+      {"$int":"prop","value":"80"}
+    ]},
+    {"$int":"miniMapOnOff","value":"1"},
+    {"$string":"onFirstUserEnter","value":""},
+    {"$string":"link","value":"221023401"}
+  ]}
+]}

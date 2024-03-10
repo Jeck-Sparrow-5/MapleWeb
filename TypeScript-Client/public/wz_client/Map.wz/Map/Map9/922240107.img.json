@@ -1,0 +1,29 @@
+{"$imgdir":"922240107.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"0"},
+    {"$int":"town","value":"0"},
+    {"$int":"swim","value":"0"},
+    {"$int":"returnMap","value":"922240200"},
+    {"$int":"forcedReturn","value":"922240200"},
+    {"$float":"mobRate","value":"1.0"},
+    {"$string":"bgm","value":"Bgm00/FloralLife"},
+    {"$string":"mapMark","value":"Event"},
+    {"$int":"fly","value":"0"},
+    {"$int":"noMapCmd","value":"0"},
+    {"$int":"hideMinimap","value":"0"},
+    {"$int":"fieldLimit","value":"271100"},
+    {"$string":"onFirstUserEnter","value":"spaceGaGa_sMap"},
+    {"$string":"onUserEnter","value":""},
+    {"$int":"VRTop","value":"-470"},
+    {"$int":"VRLeft","value":"-486"},
+    {"$int":"VRBottom","value":"250"},
+    {"$int":"VRRight","value":"419"},
+    {"$int":"fieldType","value":"20"},
+    {"$imgdir":"timeMob","$$":[
+      {"$int":"id","value":"9300338"},
+      {"$string":"message","value":"수상한 우주선이 나타나서 무지개빛 광선을 가가에게 쏩니다."}
+    ]},
+    {"$string":"link","value":"922240100"}
+  ]}
+]}

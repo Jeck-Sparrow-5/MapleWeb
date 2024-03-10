@@ -1,0 +1,31 @@
+{"$imgdir":"240040834.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"0"},
+    {"$int":"town","value":"0"},
+    {"$int":"swim","value":"0"},
+    {"$int":"returnMap","value":"240000000"},
+    {"$int":"forcedReturn","value":"240040511"},
+    {"$float":"mobRate","value":"1.5"},
+    {"$string":"bgm","value":"Bgm14/DragonNest"},
+    {"$string":"mapMark","value":"Leafre"},
+    {"$int":"hideMinimap","value":"0"},
+    {"$int":"fieldLimit","value":"262216"},
+    {"$int":"VRTop","value":"-310"},
+    {"$int":"VRLeft","value":"-399"},
+    {"$int":"VRBottom","value":"1710"},
+    {"$int":"VRRight","value":"1190"},
+    {"$int":"lvLimit","value":"15"},
+    {"$int":"fieldType","value":"6"},
+    {"$int":"timeLimit","value":"7200"},
+    {"$imgdir":"autoLieDetector","$$":[
+      {"$int":"startHour","value":"0"},
+      {"$int":"endHour","value":"24"},
+      {"$int":"interval","value":"100"},
+      {"$int":"prop","value":"80"}
+    ]},
+    {"$int":"miniMapOnOff","value":"1"},
+    {"$string":"onFirstUserEnter","value":""},
+    {"$string":"link","value":"240040800"}
+  ]}
+]}

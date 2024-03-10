@@ -1,0 +1,28 @@
+{"$imgdir":"390000032.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"0"},
+    {"$int":"town","value":"0"},
+    {"$int":"swim","value":"0"},
+    {"$int":"returnMap","value":"390009999"},
+    {"$int":"forcedReturn","value":"390009999"},
+    {"$float":"mobRate","value":"2.999999"},
+    {"$string":"bgm","value":"Bgm00/GoPicnic"},
+    {"$string":"mapMark","value":"Goldrich"},
+    {"$int":"fly","value":"0"},
+    {"$int":"noMapCmd","value":"1"},
+    {"$int":"hideMinimap","value":"0"},
+    {"$int":"fieldLimit","value":"2433788"},
+    {"$string":"onFirstUserEnter","value":""},
+    {"$string":"onUserEnter","value":""},
+    {"$int":"lvLimit","value":"10"},
+    {"$int":"dropExpire","value":"10"},
+    {"$int":"VRTop","value":"-960"},
+    {"$int":"VRLeft","value":"-1360"},
+    {"$int":"VRBottom","value":"220"},
+    {"$int":"VRRight","value":"520"},
+    {"$int":"fieldType","value":"6"},
+    {"$int":"timeLimit","value":"60"},
+    {"$string":"link","value":"390000000"}
+  ]}
+]}

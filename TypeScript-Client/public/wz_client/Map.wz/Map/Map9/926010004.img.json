@@ -1,0 +1,25 @@
+{"$imgdir":"926010004.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"0"},
+    {"$int":"town","value":"0"},
+    {"$int":"swim","value":"0"},
+    {"$int":"returnMap","value":"926020004"},
+    {"$int":"forcedReturn","value":"926020004"},
+    {"$float":"mobRate","value":"1.0"},
+    {"$string":"bgm","value":"Bgm20/NetsPiramid"},
+    {"$string":"mapMark","value":"Ariant"},
+    {"$int":"fly","value":"0"},
+    {"$int":"noMapCmd","value":"1"},
+    {"$int":"hideMinimap","value":"0"},
+    {"$int":"fieldLimit","value":"271100"},
+    {"$int":"VRTop","value":"-415"},
+    {"$int":"VRLeft","value":"-495"},
+    {"$int":"VRBottom","value":"270"},
+    {"$int":"VRRight","value":"495"},
+    {"$string":"onFirstUserEnter","value":""},
+    {"$string":"onUserEnter","value":"Massacre_result"},
+    {"$int":"fieldType","value":"24"},
+    {"$string":"link","value":"926010001"}
+  ]}
+]}

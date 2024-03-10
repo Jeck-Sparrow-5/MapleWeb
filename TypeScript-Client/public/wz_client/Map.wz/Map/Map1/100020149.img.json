@@ -1,0 +1,29 @@
+{"$imgdir":"100020149.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"0"},
+    {"$int":"town","value":"0"},
+    {"$int":"returnMap","value":"100000000"},
+    {"$float":"mobRate","value":"2.199998"},
+    {"$string":"bgm","value":"Bgm00/RestNPeace"},
+    {"$string":"mapDesc","value":""},
+    {"$int":"forcedReturn","value":"100020000"},
+    {"$int":"hideMinimap","value":"0"},
+    {"$int":"miniMapOnOff","value":"1"},
+    {"$int":"moveLimit","value":"0"},
+    {"$string":"mapMark","value":"Henesys"},
+    {"$int":"swim","value":"0"},
+    {"$int":"fieldLimit","value":"262216"},
+    {"$int":"fieldType","value":"6"},
+    {"$int":"timeLimit","value":"7200"},
+    {"$imgdir":"autoLieDetector","$$":[
+      {"$int":"startHour","value":"0"},
+      {"$int":"endHour","value":"24"},
+      {"$int":"interval","value":"100"},
+      {"$int":"prop","value":"80"}
+    ]},
+    {"$int":"fly","value":"0"},
+    {"$string":"onFirstUserEnter","value":""},
+    {"$string":"link","value":"100020100"}
+  ]}
+]}

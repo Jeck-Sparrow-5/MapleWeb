@@ -1,0 +1,25 @@
+{"$imgdir":"910520004.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"0"},
+    {"$int":"town","value":"0"},
+    {"$int":"swim","value":"0"},
+    {"$int":"returnMap","value":"105100100"},
+    {"$int":"forcedReturn","value":"105100100"},
+    {"$float":"mobRate","value":"1.0"},
+    {"$string":"bgm","value":"Bgm00/FloralLife"},
+    {"$string":"mapMark","value":"Dungeon"},
+    {"$int":"fly","value":"0"},
+    {"$int":"hideMinimap","value":"0"},
+    {"$int":"fieldLimit","value":"271096"},
+    {"$int":"lvLimit","value":"50"},
+    {"$string":"onFirstUserEnter","value":"tristan_questMap"},
+    {"$string":"onUserEnter","value":""},
+    {"$int":"VRTop","value":"-300"},
+    {"$int":"VRLeft","value":"-407"},
+    {"$int":"VRBottom","value":"300"},
+    {"$int":"VRRight","value":"406"},
+    {"$int":"noMapCmd","value":"0"},
+    {"$string":"link","value":"910520000"}
+  ]}
+]}

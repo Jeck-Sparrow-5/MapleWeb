@@ -1,0 +1,27 @@
+{"$imgdir":"105040332.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"0"},
+    {"$int":"town","value":"0"},
+    {"$int":"returnMap","value":"105040300"},
+    {"$float":"mobRate","value":"1.999998"},
+    {"$string":"bgm","value":"Bgm00/SleepyWood"},
+    {"$int":"forcedReturn","value":"105040304"},
+    {"$string":"mapMark","value":"Dungeon"},
+    {"$int":"swim","value":"0"},
+    {"$int":"hideMinimap","value":"0"},
+    {"$int":"fieldLimit","value":"262216"},
+    {"$int":"fieldType","value":"6"},
+    {"$int":"timeLimit","value":"7200"},
+    {"$imgdir":"autoLieDetector","$$":[
+      {"$int":"startHour","value":"0"},
+      {"$int":"endHour","value":"24"},
+      {"$int":"interval","value":"100"},
+      {"$int":"prop","value":"80"}
+    ]},
+    {"$int":"miniMapOnOff","value":"1"},
+    {"$int":"fly","value":"0"},
+    {"$string":"onFirstUserEnter","value":""},
+    {"$string":"link","value":"105040320"}
+  ]}
+]}

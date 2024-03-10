@@ -1,0 +1,20 @@
+{"$imgdir":"103000301.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"0"},
+    {"$int":"town","value":"0"},
+    {"$int":"swim","value":"0"},
+    {"$int":"returnMap","value":"103000100"},
+    {"$int":"forcedReturn","value":"103000100"},
+    {"$float":"mobRate","value":"1.0"},
+    {"$string":"bgm","value":"Bgm21/KerningSquareSubway"},
+    {"$string":"mapMark","value":"101Building"},
+    {"$int":"fly","value":"0"},
+    {"$int":"noMapCmd","value":"0"},
+    {"$int":"hideMinimap","value":"0"},
+    {"$int":"fieldLimit","value":"380"},
+    {"$string":"onFirstUserEnter","value":""},
+    {"$string":"onUserEnter","value":"Depart_inSubway"},
+    {"$string":"link","value":"103000300"}
+  ]}
+]}

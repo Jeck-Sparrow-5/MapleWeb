@@ -1,0 +1,26 @@
+{"$imgdir":"106021501.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"0"},
+    {"$int":"town","value":"0"},
+    {"$int":"swim","value":"0"},
+    {"$int":"returnMap","value":"106021400"},
+    {"$int":"forcedReturn","value":"106021400"},
+    {"$float":"mobRate","value":"1.5"},
+    {"$string":"bgm","value":"Bgm19/MushCatle"},
+    {"$string":"mapMark","value":"MushCatle"},
+    {"$int":"fly","value":"0"},
+    {"$int":"noMapCmd","value":"0"},
+    {"$int":"hideMinimap","value":"0"},
+    {"$int":"fieldLimit","value":"271096"},
+    {"$int":"lvLimit","value":"30"},
+    {"$string":"onFirstUserEnter","value":"summon_pepeking"},
+    {"$string":"onUserEnter","value":"pepeking_effect"},
+    {"$int":"VRTop","value":"-830"},
+    {"$int":"VRLeft","value":"-765"},
+    {"$int":"VRBottom","value":"130"},
+    {"$int":"VRRight","value":"765"},
+    {"$int":"lvForceMove","value":"39"},
+    {"$string":"link","value":"106021500"}
+  ]}
+]}

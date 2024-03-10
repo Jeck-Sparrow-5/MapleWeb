@@ -1,0 +1,24 @@
+{"$imgdir":"922241005.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"0"},
+    {"$int":"town","value":"0"},
+    {"$int":"swim","value":"1"},
+    {"$int":"returnMap","value":"922241100"},
+    {"$int":"forcedReturn","value":"922241100"},
+    {"$float":"mobRate","value":"1.0"},
+    {"$string":"bgm","value":"Bgm00/FloralLife"},
+    {"$string":"mapMark","value":"Event"},
+    {"$int":"fly","value":"0"},
+    {"$int":"noMapCmd","value":"0"},
+    {"$int":"hideMinimap","value":"0"},
+    {"$int":"fieldLimit","value":"271100"},
+    {"$string":"onFirstUserEnter","value":""},
+    {"$string":"onUserEnter","value":""},
+    {"$int":"VRTop","value":"-840"},
+    {"$int":"VRLeft","value":"-540"},
+    {"$int":"VRBottom","value":"350"},
+    {"$int":"VRRight","value":"660"},
+    {"$string":"link","value":"922241000"}
+  ]}
+]}

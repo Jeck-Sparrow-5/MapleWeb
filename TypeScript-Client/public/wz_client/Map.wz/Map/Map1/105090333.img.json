@@ -1,0 +1,34 @@
+{"$imgdir":"105090333.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"0"},
+    {"$int":"town","value":"0"},
+    {"$int":"returnMap","value":"105040300"},
+    {"$float":"mobRate","value":"2.0"},
+    {"$string":"bgm","value":"Bgm01/AncientMove"},
+    {"$string":"mapDesc","value":""},
+    {"$int":"forcedReturn","value":"105090311"},
+    {"$string":"mapMark","value":"Dungeon"},
+    {"$int":"swim","value":"0"},
+    {"$int":"hideMinimap","value":"0"},
+    {"$int":"fieldLimit","value":"262216"},
+    {"$int":"fly","value":"0"},
+    {"$int":"noMapCmd","value":"0"},
+    {"$int":"miniMapOnOff","value":"1"},
+    {"$string":"onFirstUserEnter","value":""},
+    {"$string":"onUserEnter","value":""},
+    {"$int":"VRTop","value":"-1360"},
+    {"$int":"VRLeft","value":"-485"},
+    {"$int":"VRBottom","value":"420"},
+    {"$int":"VRRight","value":"580"},
+    {"$int":"fieldType","value":"6"},
+    {"$int":"timeLimit","value":"7200"},
+    {"$imgdir":"autoLieDetector","$$":[
+      {"$int":"startHour","value":"0"},
+      {"$int":"endHour","value":"24"},
+      {"$int":"interval","value":"100"},
+      {"$int":"prop","value":"80"}
+    ]},
+    {"$string":"link","value":"105090320"}
+  ]}
+]}

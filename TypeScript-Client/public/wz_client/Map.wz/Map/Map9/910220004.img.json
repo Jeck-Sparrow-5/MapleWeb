@@ -1,0 +1,21 @@
+{"$imgdir":"910220004.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"1"},
+    {"$int":"town","value":"0"},
+    {"$float":"mobRate","value":"1.999998"},
+    {"$string":"bgm","value":"Bgm00/Nightmare"},
+    {"$int":"returnMap","value":"101040000"},
+    {"$int":"forcedReturn","value":"101040000"},
+    {"$string":"mapMark","value":"Perion"},
+    {"$int":"swim","value":"0"},
+    {"$int":"fly","value":"0"},
+    {"$int":"noMapCmd","value":"0"},
+    {"$int":"hideMinimap","value":"0"},
+    {"$int":"fieldLimit","value":"344124"},
+    {"$string":"onFirstUserEnter","value":""},
+    {"$string":"onUserEnter","value":""},
+    {"$string":"link","value":"910220000"},
+    {"$int":"lvForceMove","value":"20"}
+  ]}
+]}

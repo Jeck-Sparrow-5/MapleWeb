@@ -1,0 +1,30 @@
+{"$imgdir":"261020341.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"0"},
+    {"$int":"town","value":"0"},
+    {"$int":"swim","value":"0"},
+    {"$int":"returnMap","value":"261000000"},
+    {"$int":"forcedReturn","value":"261020300"},
+    {"$float":"mobRate","value":"2.3"},
+    {"$string":"bgm","value":"Bgm12/Dispute"},
+    {"$string":"mapMark","value":"Magatia"},
+    {"$int":"hideMinimap","value":"0"},
+    {"$int":"fieldLimit","value":"262216"},
+    {"$int":"VRTop","value":"-317"},
+    {"$int":"VRLeft","value":"-714"},
+    {"$int":"VRBottom","value":"323"},
+    {"$int":"VRRight","value":"892"},
+    {"$int":"fieldType","value":"6"},
+    {"$int":"timeLimit","value":"7200"},
+    {"$imgdir":"autoLieDetector","$$":[
+      {"$int":"startHour","value":"0"},
+      {"$int":"endHour","value":"24"},
+      {"$int":"interval","value":"100"},
+      {"$int":"prop","value":"80"}
+    ]},
+    {"$int":"miniMapOnOff","value":"1"},
+    {"$string":"onFirstUserEnter","value":""},
+    {"$string":"link","value":"261020301"}
+  ]}
+]}

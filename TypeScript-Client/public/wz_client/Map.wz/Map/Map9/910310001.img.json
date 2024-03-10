@@ -1,0 +1,21 @@
+{"$imgdir":"910310001.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"1"},
+    {"$int":"town","value":"0"},
+    {"$int":"returnMap","value":"103010000"},
+    {"$float":"mobRate","value":"2.0"},
+    {"$string":"bgm","value":"Bgm01/BadGuys"},
+    {"$int":"forcedReturn","value":"103010000"},
+    {"$string":"mapMark","value":"KerningCity"},
+    {"$int":"swim","value":"0"},
+    {"$int":"hideMinimap","value":"0"},
+    {"$int":"fieldLimit","value":"344124"},
+    {"$string":"onUserEnter","value":"explorationPoint"},
+    {"$string":"link","value":"910310000"},
+    {"$int":"fly","value":"0"},
+    {"$int":"noMapCmd","value":"0"},
+    {"$int":"lvForceMove","value":"20"},
+    {"$string":"onFirstUserEnter","value":""}
+  ]}
+]}

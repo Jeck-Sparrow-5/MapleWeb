@@ -1,0 +1,24 @@
+{"$imgdir":"910041220.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"0"},
+    {"$int":"town","value":"0"},
+    {"$int":"swim","value":"0"},
+    {"$int":"returnMap","value":"910040001"},
+    {"$int":"forcedReturn","value":"910040001"},
+    {"$float":"mobRate","value":"1.0"},
+    {"$string":"bgm","value":"Bgm18/WolfAndSheep"},
+    {"$string":"mapMark","value":"Event"},
+    {"$int":"fly","value":"0"},
+    {"$int":"noMapCmd","value":"0"},
+    {"$int":"hideMinimap","value":"0"},
+    {"$int":"fieldLimit","value":"337912"},
+    {"$string":"onFirstUserEnter","value":"BF_wolfSet"},
+    {"$string":"onUserEnter","value":"BF_wolfChat"},
+    {"$int":"VRTop","value":"-300"},
+    {"$int":"VRLeft","value":"-630"},
+    {"$int":"VRBottom","value":"300"},
+    {"$int":"VRRight","value":"450"},
+    {"$string":"link","value":"910040120"}
+  ]}
+]}

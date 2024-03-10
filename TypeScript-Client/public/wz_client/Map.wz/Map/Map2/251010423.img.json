@@ -1,0 +1,33 @@
+{"$imgdir":"251010423.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"1"},
+    {"$int":"town","value":"0"},
+    {"$int":"swim","value":"0"},
+    {"$int":"returnMap","value":"251000000"},
+    {"$int":"forcedReturn","value":"251010402"},
+    {"$float":"mobRate","value":"2.0"},
+    {"$string":"bgm","value":"Bgm15/Pirate"},
+    {"$string":"mapMark","value":"Murueng"},
+    {"$int":"hideMinimap","value":"0"},
+    {"$int":"fieldLimit","value":"262216"},
+    {"$int":"VRTop","value":"-750"},
+    {"$int":"VRLeft","value":"-500"},
+    {"$int":"VRBottom","value":"245"},
+    {"$int":"VRRight","value":"1090"},
+    {"$int":"fly","value":"0"},
+    {"$int":"noMapCmd","value":"0"},
+    {"$int":"miniMapOnOff","value":"1"},
+    {"$string":"onFirstUserEnter","value":""},
+    {"$string":"onUserEnter","value":""},
+    {"$int":"fieldType","value":"6"},
+    {"$int":"timeLimit","value":"7200"},
+    {"$imgdir":"autoLieDetector","$$":[
+      {"$int":"startHour","value":"0"},
+      {"$int":"endHour","value":"24"},
+      {"$int":"interval","value":"100"},
+      {"$int":"prop","value":"80"}
+    ]},
+    {"$string":"link","value":"251010410"}
+  ]}
+]}

@@ -1,0 +1,26 @@
+{"$imgdir":"240070204.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"0"},
+    {"$int":"town","value":"0"},
+    {"$int":"swim","value":"0"},
+    {"$int":"returnMap","value":"240070000"},
+    {"$int":"forcedReturn","value":"240070000"},
+    {"$float":"mobRate","value":"1.0"},
+    {"$string":"bgm","value":"Bgm21/2099year"},
+    {"$string":"mapMark","value":"TokyoK"},
+    {"$int":"fly","value":"0"},
+    {"$int":"noMapCmd","value":"0"},
+    {"$int":"hideMinimap","value":"0"},
+    {"$int":"fieldLimit","value":"271100"},
+    {"$int":"lvLimit","value":"73"},
+    {"$string":"onFirstUserEnter","value":""},
+    {"$string":"onUserEnter","value":"TD_neo_BossEnter"},
+    {"$int":"VRTop","value":"-700"},
+    {"$int":"VRLeft","value":"-180"},
+    {"$int":"VRBottom","value":"395"},
+    {"$int":"VRRight","value":"810"},
+    {"$int":"partyOnly","value":"1"},
+    {"$string":"link","value":"240070203"}
+  ]}
+]}

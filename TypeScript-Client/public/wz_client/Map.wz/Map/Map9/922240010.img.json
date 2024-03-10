@@ -1,0 +1,25 @@
+{"$imgdir":"922240010.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"0"},
+    {"$int":"town","value":"0"},
+    {"$int":"swim","value":"0"},
+    {"$int":"returnMap","value":"922240200"},
+    {"$int":"forcedReturn","value":"922240200"},
+    {"$float":"mobRate","value":"1.0"},
+    {"$string":"bgm","value":"Bgm08/LetsHuntAliens"},
+    {"$string":"mapMark","value":"Event"},
+    {"$int":"fly","value":"0"},
+    {"$int":"noMapCmd","value":"0"},
+    {"$int":"hideMinimap","value":"0"},
+    {"$int":"fieldLimit","value":"402430"},
+    {"$string":"onFirstUserEnter","value":"spaceGaGa_start"},
+    {"$string":"onUserEnter","value":""},
+    {"$int":"VRTop","value":"-60"},
+    {"$int":"VRLeft","value":"-90"},
+    {"$int":"VRBottom","value":"874"},
+    {"$int":"VRRight","value":"9630"},
+    {"$int":"fieldType","value":"20"},
+    {"$string":"link","value":"922240000"}
+  ]}
+]}

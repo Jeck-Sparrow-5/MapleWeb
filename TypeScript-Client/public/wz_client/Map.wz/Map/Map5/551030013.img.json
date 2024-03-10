@@ -1,0 +1,23 @@
+{"$imgdir":"551030013.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"0"},
+    {"$int":"town","value":"0"},
+    {"$int":"swim","value":"0"},
+    {"$int":"returnMap","value":"551000000"},
+    {"$float":"mobRate","value":"2.999998"},
+    {"$string":"bgm","value":"BgmMY/Highland"},
+    {"$int":"forcedReturn","value":"551030000"},
+    {"$string":"mapDesc","value":""},
+    {"$string":"mapMark","value":"Dungeon"},
+    {"$int":"hideMinimap","value":"0"},
+    {"$int":"fieldLimit","value":"262216"},
+    {"$int":"fly","value":"0"},
+    {"$string":"onFirstUserEnter","value":""},
+    {"$string":"onUserEnter","value":""},
+    {"$int":"fieldType","value":"6"},
+    {"$int":"timeLimit","value":"7200"},
+    {"$int":"miniMapOnOff","value":"1"},
+    {"$string":"link","value":"551030001"}
+  ]}
+]}

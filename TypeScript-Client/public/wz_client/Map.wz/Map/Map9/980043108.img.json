@@ -1,0 +1,21 @@
+{"$imgdir":"980043108.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"0"},
+    {"$int":"town","value":"0"},
+    {"$int":"swim","value":"0"},
+    {"$int":"returnMap","value":"980040000"},
+    {"$int":"forcedReturn","value":"980040000"},
+    {"$float":"mobRate","value":"1.0"},
+    {"$string":"bgm","value":"BgmEvent/wichTower"},
+    {"$int":"fieldType","value":"21"},
+    {"$string":"mapMark","value":"None"},
+    {"$int":"fly","value":"0"},
+    {"$int":"noMapCmd","value":"0"},
+    {"$int":"hideMinimap","value":"0"},
+    {"$int":"fieldLimit","value":"272126"},
+    {"$string":"onFirstUserEnter","value":""},
+    {"$string":"onUserEnter","value":""},
+    {"$string":"link","value":"980043100"}
+  ]}
+]}

@@ -1,0 +1,24 @@
+{"$imgdir":"925022301.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"0"},
+    {"$int":"town","value":"0"},
+    {"$int":"swim","value":"0"},
+    {"$int":"returnMap","value":"925020002"},
+    {"$int":"forcedReturn","value":"925020002"},
+    {"$float":"mobRate","value":"10.0"},
+    {"$string":"bgm","value":"Bgm17/MureungSchool2"},
+    {"$string":"mapMark","value":"MuruengRaid"},
+    {"$int":"fly","value":"0"},
+    {"$int":"hideMinimap","value":"1"},
+    {"$int":"fieldLimit","value":"927480"},
+    {"$int":"VRTop","value":"-686"},
+    {"$int":"VRLeft","value":"-495"},
+    {"$int":"VRBottom","value":"120"},
+    {"$int":"VRRight","value":"495"},
+    {"$string":"onFirstUserEnter","value":"dojang_1st"},
+    {"$string":"onUserEnter","value":"dojang_Eff"},
+    {"$int":"fieldType","value":"14"},
+    {"$string":"link","value":"925022300"}
+  ]}
+]}

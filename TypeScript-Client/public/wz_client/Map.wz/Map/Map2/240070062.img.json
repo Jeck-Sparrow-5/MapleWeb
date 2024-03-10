@@ -1,0 +1,25 @@
+{"$imgdir":"240070062.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"0"},
+    {"$int":"town","value":"0"},
+    {"$int":"swim","value":"0"},
+    {"$int":"returnMap","value":"240000000"},
+    {"$int":"forcedReturn","value":"240070000"},
+    {"$float":"mobRate","value":"1.0"},
+    {"$string":"bgm","value":"Bgm21/TeraForest"},
+    {"$string":"mapMark","value":"TokyoK"},
+    {"$int":"fly","value":"0"},
+    {"$int":"noMapCmd","value":"0"},
+    {"$int":"hideMinimap","value":"1"},
+    {"$int":"fieldLimit","value":"271096"},
+    {"$int":"VRTop","value":"-600"},
+    {"$int":"VRLeft","value":"-720"},
+    {"$int":"VRBottom","value":"600"},
+    {"$int":"VRRight","value":"540"},
+    {"$int":"lvLimit","value":"90"},
+    {"$string":"onFirstUserEnter","value":""},
+    {"$string":"onUserEnter","value":""},
+    {"$string":"link","value":"240070060"}
+  ]}
+]}

@@ -1,0 +1,21 @@
+{"$imgdir":"Physics.img","$$":[
+  {"$double":"walkForce","value":"140000"},
+  {"$double":"walkSpeed","value":"125"},
+  {"$double":"walkDrag","value":"80000"},
+  {"$double":"slipForce","value":"60000"},
+  {"$double":"slipSpeed","value":"120"},
+  {"$double":"floatDrag1","value":"100000"},
+  {"$double":"floatDrag2","value":"10000"},
+  {"$double":"floatCoefficient","value":"0.01"},
+  {"$double":"swimForce","value":"120000"},
+  {"$double":"swimSpeed","value":"140"},
+  {"$double":"flyForce","value":"120000"},
+  {"$double":"flySpeed","value":"200"},
+  {"$double":"gravityAcc","value":"2000"},
+  {"$double":"fallSpeed","value":"670"},
+  {"$double":"jumpSpeed","value":"555"},
+  {"$double":"maxFriction","value":"2"},
+  {"$double":"minFriction","value":"0.05"},
+  {"$double":"swimSpeedDec","value":"0.9"},
+  {"$float":"flyJumpDec","value":"35.0"}
+]}

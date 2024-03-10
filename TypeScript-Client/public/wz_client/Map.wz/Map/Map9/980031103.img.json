@@ -1,0 +1,25 @@
+{"$imgdir":"980031103.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"version","value":"10"},
+    {"$int":"cloud","value":"0"},
+    {"$int":"town","value":"0"},
+    {"$int":"swim","value":"0"},
+    {"$int":"returnMap","value":"980031203"},
+    {"$int":"forcedReturn","value":"980030010"},
+    {"$float":"mobRate","value":"1.0"},
+    {"$string":"bgm","value":"Bgm09/FairyTale"},
+    {"$string":"mapMark","value":"None"},
+    {"$int":"fly","value":"0"},
+    {"$int":"hideMinimap","value":"0"},
+    {"$int":"fieldLimit","value":"343804"},
+    {"$string":"onFirstUserEnter","value":""},
+    {"$string":"onUserEnter","value":""},
+    {"$int":"VRTop","value":"-300"},
+    {"$int":"VRLeft","value":"-1295"},
+    {"$int":"VRBottom","value":"870"},
+    {"$int":"VRRight","value":"700"},
+    {"$int":"fieldType","value":"15"},
+    {"$int":"blockPBossChange","value":"1"},
+    {"$string":"link","value":"980031100"}
+  ]}
+]}

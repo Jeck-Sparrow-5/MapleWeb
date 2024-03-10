@@ -1,0 +1,19 @@
+{"$imgdir":"01102039.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$canvas":"icon","width":"30","height":"30","basedata":"iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAG2SURBVEhLzZSBbcJADEVZoSt0ha7QFboCK2SFrMAKrMAKrNAVugL1M/eDYy7hjiC1X3oSudh+Pqqy68ilxjCMM+zsZXHB/nCcGI6nO8bT2XmVvFkY2SrvFgLS0/flObma7WOzENQ3nn+cbrkGED4/klqLw+eXiRnmcqMmA8WlW+QUKwxStICVzBZTJiHL9Yop1FCiG8RleLbSZXkQN8v/hVgDo0jE5zsxwl55vFkeaK8nJAUSl6yJS189tdsqnPOeHxQrnUlJXrJL3iOuRT0SU9sktvyJ2F96U5KSVrGkokXuTS1ifj6pr4XeKHok9kOGqzlGCzWLgzyLgV63WvxgTRyla2Jqs2zp1v6gW2UpeUq8cutN4iV5TQxRziz/3+WhVVy2ncjxGUkUn11KorgmJRIXWUypuGVJDJNU4eCR2MqylJSKW2bi9HVTf20L8Zu3id8SpepaJ3GWU2fUo5vHaJC9ho/CZ2Cqy+Lw54F3g0XrkTwPsVcwBMbCXW2QqnZvfBksXZVzyGYuioPK2WGBmbBItVizWF8lhRKCtl9CdZIIZjFz/au26NaCpoyGZWIfMEuE7Ha/R/VtB9zXavwAAAAASUVORK5CYII=","$$":[
+      {"$vector":"origin","x":"-1","y":"30"}
+    ]},
+    {"$canvas":"iconRaw","width":"30","height":"29","basedata":"iVBORw0KGgoAAAANSUhEUgAAAB4AAAAdCAYAAAC9pNwMAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGASURBVEhLzdSBcYMwDAVQpu0KrMAKXSErZIWs0BW6Qqov/MlHsUEG7tJ/p7tgZD07vWboyLNW4zitytYuiwNf37elxtv9rab7w+sqPA1qncW7QRTQ+8/zGM7N9jENorhvevx6deMcgODzHmpbvPD5MhjDHLeqYSjG0TM4mhkMYngAa1kdjFlAHK4XRiOHIryBHgbP1trGBU7j/wLmQIVY+vwGA+zF9WZxoL1eiigK0UPW4LKvntptGazjPX5QrHWFIvGQXXgPXAv3EEZvCrZ8BPaXvimgSBYmysrgvikD4+cT/bVgr0J7sC9iODdreKA0LHiEUdjrqsUXtmBFt2D0Rqx1a3/grSKKHII3bn0KbuE1GKU4Zvn/Lh6ycDntUjE+I0D67CiicA1FCBdMUzpeacGoBWWwsAdbW0SR0vHKCg5fN/rnbRK/eT+MlK65j3DE0Te3V8KbazjIXm/CRBWWP08bZYjHIfaqCcdeQbvjkA4qa62swKOohmBmULbPMgx/LU5WlQB10MQAAAAASUVORK5CYII=","$$":[
+      {"$vector":"origin","x":"-1","y":"30"}
+    ]},
+    {"$string":"islot","value":"Cp"},
+    {"$string":"vslot","value":"Cp"},
+    {"$int":"reqJob","value":"0"},
+    {"$int":"reqLevel","value":"0"},
+    {"$int":"reqSTR","value":"0"},
+    {"$int":"reqDEX","value":"0"},
+    {"$int":"reqINT","value":"0"},
+    {"$int":"reqLUK","value":"0"},
+    {"$int":"cash","value":"1"}
+  ]}
+]}

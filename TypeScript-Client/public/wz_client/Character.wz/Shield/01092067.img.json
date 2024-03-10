@@ -1,0 +1,19 @@
+{"$imgdir":"01092067.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$canvas":"icon","width":"26","height":"30","basedata":"iVBORw0KGgoAAAANSUhEUgAAABoAAAAeCAYAAAAy2w7YAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAG+SURBVEhLvdUBkYJQFIVhK2wFKliBClSgAhWsQAUrWMEKVKCC63nw8w4XBGWdPTNnQBbv53s46+mTlFX1oOOl76ZumjScdH3/OJdl6njL39Jc2ocaI4geBhnuQHPrU7s+I1V7S23vfWpRFFPHUctoa9T46a/PARkYwAjo/Fy36by5damrqIAYASoBGrBuQnw4IK/phAFpSATIO5AK5uAEsV1AOsY45MgaFFe2gO5dHkYcoBGiDtXX+4QtIFajErZS5ZvnA727EM/oFcS1XF2b9xCkI/FrGZ1vWYT0ehVS4nMiDg3IOsRQX43OZ4gSnxP5OhS3j/wb5EjG5ogGCnkL0k+AhvB/TUOPQHq9CSlgIMow2JEMgegcaBdR1iAlQnE1a5DON3+jtlaVfy7mCJCOu6shW6sC09CIOLS7GuIYIJAK4JBW+PZqiD4NkI4R4tODHFoN2cIidBghERuQYagKFpAf62a4qVAd43kpAAEpreexmjNDGa4/6sbq2VoF87BthjQr1fs1RzMTBgLAjZexrYapWhWIvl3jN4z7vC+hxUqeBZwqzACGUb2Xsn0vt47qpljfe6+/T9UsOuZ0+gX2tImHGeVAzAAAAABJRU5ErkJggg==","$$":[
+      {"$vector":"origin","x":"-4","y":"30"}
+    ]},
+    {"$canvas":"iconRaw","width":"25","height":"29","basedata":"iVBORw0KGgoAAAANSUhEUgAAABkAAAAdCAYAAABfeMd1AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGASURBVEhLvZWBcUVAFEXVooXfgha0oAUtpAUt/Ba0oAUtaEFyl2Pfvs8GMTkzdyyT3OMt4xdXqOp6Juul52jaNhTDOE3zq6pC1j+5T/vVzYpHEnJLRrEtb/spZJyioO76kG6YQsqy3LJWpWg7FH/X759/juWLzJdr/Wq6sG77MeRDqHKPyhVAsojGTWCLkXFOggiJCnw5nJEoiKwsSNgiJDp6rMQK9iR+okQyjLEIbDnxEmIlzXvYRImEKRRg+xTeMFtmk5XwTI4kXIvRtTSXJTqCvRaF6TZ5ic4/JMI/F7CSRbAvodBOofUmEP65wKMSv2XwLxIriKJUoDIJfpXoM64CvlMqvCPR+aFEIEIgllIriBIEWiPJCsSeRHiJn2JPovXhb0xumvjJTwVIdMxOAblpEKnQC6wkOwVYETIkCuVWoslOTQG6CyQ6egl3jeDyFJATecktAXjRIlgKFUS3BWBFPB9B+Z8FgMjCVj0iABUpmgaB3qJTb9JVJLpeXhTfGvhwKZS4Bl0AAAAASUVORK5CYII=","$$":[
+      {"$vector":"origin","x":"-4","y":"30"}
+    ]},
+    {"$string":"islot","value":"Si"},
+    {"$string":"vslot","value":"Si"},
+    {"$int":"reqJob","value":"0"},
+    {"$int":"reqLevel","value":"0"},
+    {"$int":"reqSTR","value":"0"},
+    {"$int":"reqDEX","value":"0"},
+    {"$int":"reqINT","value":"0"},
+    {"$int":"reqLUK","value":"0"},
+    {"$int":"cash","value":"1"}
+  ]}
+]}

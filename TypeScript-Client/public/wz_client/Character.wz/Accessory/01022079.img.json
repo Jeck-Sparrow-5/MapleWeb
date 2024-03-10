@@ -1,0 +1,19 @@
+{"$imgdir":"01022079.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$canvas":"icon","width":"33","height":"24","basedata":"iVBORw0KGgoAAAANSUhEUgAAACEAAAAYCAYAAAB0kZQKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAHESURBVEhLtZQN0cIwGINn4bMwC7OAhVnAwizMAhY+C1iYBSxgYfTpyC4rLR07yF2O/rxvkrZAcxR9f57btpvD0PkpjvQ0zTCMM5xu98jLtHD4v30UhgNYzz7IHMi8H69uHEVt7S24STTCsFq7MQcESMwdu0QJgE71JlLzzMkPQyHCMK9Dwa/MheJTYMym8AtzUHwKAmDqX7j2NHw9AMg+BQGu0y1ugHv4YOyBQlkxCP0pMYL8DO2/JIL5y1PQpAAYck1QNwNzQWRIXQk6kF396vGcL9D3gE2HBDCJwYIhp6DezaljTL8fQhyv06qjGhis6yGABxGYQ+ABGDuYqz8NYt+3BYSguBaCU4XySObaywUQWFedgpjOBrGwdBqFoG4pj4jr3wwBYrHfhgtkGmOwr4fQe+mq1cy80Lj2qN6hNekoBPX0LhKv2ASBNL5JHvfSICn33oIjFjoryWONgkDvxdwDVLQ2mLtu+T/gk/myvMGfcQ1S4qcBUsioNXZPnowxsMI7tU5NIP3o7YKMZdYHnp8cjGOGvu+kFx00q0EUQOYSkcmlQg8kHgpRu4ESVStDES00Dz2HiEBKCaf0PoiWmEHTPAAM8mh7EN2MTwAAAABJRU5ErkJggg==","$$":[
+      {"$vector":"origin","x":"0","y":"24"}
+    ]},
+    {"$canvas":"iconRaw","width":"33","height":"20","basedata":"iVBORw0KGgoAAAANSUhEUgAAACEAAAAUCAYAAAADU1RxAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGBSURBVEhLtZQBkYMwFETRgoVaOAu1cBawgIWzcBawgIVaqAUu7+eWWVLStAzdmZ0mYf/fTULpjuJ6/V76/rKkofNdHKnpumEYFzjf7sGfOXP4vb0Vhg1YzWuQOZD5dZzcOJra2lNwkvRIw6Z2Yw4IUJg7XmpKAPo0T6I039n5YShEGu73QfApc6F6FRjzUPiEOaheBQEw9Reu/xpODwB2r4IA03yLB+Cefhh7oCSrBqG+JEaQv6F9SwLMH66CIgXAkGOCOhm4F0SG6GrQhuzoV4//eYbeAx461ACTCJYM2QV6N0fHmHrfhDhO89pHGpis2yGABxGYQ+ABGDuYq74MYu9bBiEQt0KwqyQPMtezvQAC69IpiPXZIIS13SgEuiwPxPqZIUCI/TS8wU5hBDs9hO5LR61i5pXCtUZ6h9bURyHQU5tbPGITBFL4JHk8K4OUfPUUHCF0NpKHRkGg12LuARq9Nlgul/w94Jd5Xq5iDVLjuwGOIgIrvFPraLK0RNf9AchiROMk6IWHAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"0","y":"24"}
+    ]},
+    {"$string":"islot","value":"Ay"},
+    {"$string":"vslot","value":"Ay"},
+    {"$int":"reqJob","value":"0"},
+    {"$int":"reqLevel","value":"0"},
+    {"$int":"reqSTR","value":"0"},
+    {"$int":"reqDEX","value":"0"},
+    {"$int":"reqINT","value":"0"},
+    {"$int":"reqLUK","value":"0"},
+    {"$int":"cash","value":"1"}
+  ]}
+]}

@@ -1,0 +1,26 @@
+{"$imgdir":"01112809.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$canvas":"icon","width":"29","height":"30","basedata":"iVBORw0KGgoAAAANSUhEUgAAAB0AAAAeCAYAAADQBxWhAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAMtSURBVEhLpZYNlawwDEbHAhawgAUsYAELWKgFLNQCFmoBC2OB991Mw7b87Zx9Oe97A2mS27QF9vVk721rpFbqbsRYk8P/zyiUiw5SkGYpHoSPMWKI/TucZKmXKLrKtT2JmBz7NzgJOXnRrRUdpnmb5rTF5W3VXUva5F+u4Ez4OzCBEsCk260bJoOVIFdp3B/gmp7VeQYTIDFD67Dtx22OqxUM+qUooju5Lq2E6zJJz2ANshezLq1DlnIMcXs1nYo0exeI5Q5aASZwZfiJewTjzIN2aAB26rRp+63tBi/gRd6vpq3gjB3tV7AcPGtBl9swhm2cosEOQH800OdUZzjg4z5jBZg9rg+Xbval9S5d+Dwpx7Iq/vwCfxPzBZjYjhpm3EhRlwbt1a0Ln8Z2qJvuHT5KdtrvwIzJzdDPMuviEmoH6ZPwrhIKw5fHdrCuK7vslgscDDgUINcFuF6ewuSvwDxqpdEifv38dKv/9oMEaNBB4pcIfk8JF4ZfYqltj+mutKJbDmRbznR/ZCC4CvBttxhjxHCqQ6yXmToKqWtwgYOBEnpIYG/p5qnbffJlt/J5Db5OO7RKYKZYyuSi28fXm/ynblHSNmu4hmLcSNYtB+gDWy3hc12B6Zj4Cs69xKTszUW35Bd7eoKSsL/0HbyAkK3qugCz1OwPgAqefXaSgXGaEffyn88FyWWSgwNfGHWNORgpjg1wOBNGnFAb57kFWHx9Pqf3aHJegue8z4vWC9IBTufymLK/OQJJo+7lebgFk2XVCzBjxJSyj4X2FChfI3wKf3zkzBRwAiNgq1YaoENdvM3ss9j1RyArUH9p7kxBvK0A738zOaAE+vuaPwBaAVnSAuiP2Xkv72xJqV3f70HLyvLsfx2W8FK+h4jJKndclvQVkGVAbdO2bd/3XQhhiHGZ0roumoC9Y+/EeEprnGOcxnHsqSH/7dIaSGLD+YYO0pg1KTf0wzBPU4iypA6S/q279B/+KYQ4KE7xU86lDjVPYAc6jATEFwjxtjI1TRO7rotagahJmASxe/k13nrOV9DLDr+QxzrARS1qfrW8LhKO8kJHlXmIWq7CXq9/fVGkjjiJzT0AAAAASUVORK5CYII=","$$":[
+      {"$vector":"origin","x":"-2","y":"29"}
+    ]},
+    {"$canvas":"iconRaw","width":"29","height":"28","basedata":"iVBORw0KGgoAAAANSUhEUgAAAB0AAAAcCAYAAACdz7SqAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAALGSURBVEhLpZcLdcMwDEVDIRRCIRRKIRRKoRRCIRRCIRRCoRRKwXtXtTw5v3WbznmrI8u6lu181lzZK6VW6qT+RPS1Ofx/RqKcdJBGaZLmjfDRRwyxf4czWLpJJH3Kla5ETI79G5wBefCiS0s6PKb0mNY0Ly/L7lrWJP9yBGfCn4EJlACuukz98DBYBLmicb2Ba3qW5xpMgMQMrcLudk/T/LSEo35JiqhOrkOLcDVX6RqsTvZiUtMqZCnv45yatleStlSBWO5RK8AEjgw/cZdgnLnTDg3AXpW23S11/eAJPMmrabsKTt/WfgTLwb02qpmG+5juj9lgG6DfGuh9qjMc8HafsQBmj+vDpYuytF6lC58PyrGsit+/wF/EfAAmtieHGRfSrKZBb6rWhU99Beqma4ffJTvtZ2D65Kbre5nVOITaQXoPeFUDguHLfQWsdmWH1dLAQYdDAdIO4Hp5gslfgbnVolEifv18V6s/5SABGnSQ+CWC392AA8MvsdS2x1QXLVTLgeziTMstA8EVwKfVYvQRw6ke53qZyaOQOgcNHHRE6GYAe0s1V9WWycdq5fMcvJ0KtBrATLE1k0O1l483+XfVolXbrO4ainEhWbUcoDfsaQPe7QpMxcRXcK4lJmVPLqplfNjTHZQB5aHv4AWE7KmqA5ilZn8AVPDss5MMjNOMuJZ/fy4YHAc5eOQNo6oxByPFsQEOZ8KIE2r93LcAw9vnfXq3JucheMr7vGi9IG3gVC6PKfvbLZBh5D08D6dgRln2AKaPmCh7WWhPgfI2wqfwy1vOTAE7MAL21EoDdKiLp5m9FvvbFsgK1G+aMyNIAly+mRwQgf685gOgE5AlDcDL2+zQCJaYJctTvg4jPMr3EClenl8C3RgkcWuQoIIfif4c99mSXhkJJIdz/EnsH9+Ia//K2D08/mUkk87+3fjhX42m+QIh37JNDCscqQAAAABJRU5ErkJggg==","$$":[
+      {"$vector":"origin","x":"-2","y":"29"}
+    ]},
+    {"$canvas":"sample","width":"74","height":"46","basedata":"iVBORw0KGgoAAAANSUhEUgAAAEoAAAAuCAYAAACPtY89AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAMtSURBVGhD7ZoNcatAFEZjAQu1UAu1UAvPQizEQi3UQizUQi3UAt1zcz96IQtdaPKyJJyZr+zP3XQ5Q5jMwG6M1vHuJF7a4cOjeFmHD4/iZR0+PIqXdfjwJF5aVGt4fdsem/bz+afr02cw97H/ar8OpyNZW71ReL6GVRyatt2nZsrX65MtPj6nsYSXdTDGho4vH93G3p7erb+W+jnn28EkRSzQIvsgklnImDajjf1r9pMbq61+zvn2sIqXxj7gN7uMswk2RGgruTW11YNNFJ5vD4rMrKO2T59hkwk28/b87r111c853x6xsHQRdeDdX/HyKupjXemajaVg+BHw010GH3D4fIyAn/Y8WMgHvKb74aME/PTLYZFE0b3n6Dwh9efBok1UASw6E9W83lc2UYXZRBVmE1WYTVRhahBl/3SiX0XuUdRf12dTiygYtpfmr+uzqV2UUD+OiTin+dyYGM4VpWZROk61L9EvSi2icke1RRxT+xL9otQsSsepdml/SJwvyqOIiv1FqUnUsK9jrh3ReJyf0y9KzaLUhjiu41hy85HhXFEuJQqWipobyI1fM1OYhBKs+qV7GHh1Uf8zgmd/hIelPF2OD02FyRjDKvRo+efxcvafri2AFAni0TuRqCiLx/FwspLBZpMgnsffkyiQIL2foDDOUaL0zoKeNv+IiSDnmMJbHhxdViS3kdoDEhXlDEXpikNSJ8r+IkJyYiSKqCbdt7rn85nN1BwYExW/evFq4ginM04nb1+zKCaKckm86fH+tIsvMqwqICFDQfEYr6befcpauqKQE6J3h0xkvJoGm1hDwCQEWUNR8WpSG9L6E9bj54BfPbqR6xgl8QNtrYEoq7uC/Cg5WUnCRpGVYi9UhaMk8QN07QEkIIrQjundm3LYzEAOifel2uAqyclQxtAVJFkSlr03RRgcion9oye7+EawlzFRzf70PfPSM5hDlr5ikkR/VBIwkZOitsbBl9wc9pIT9ZskYF5yInHMS/tYUZABGoc4ZwtuDPtYKklYYcK7hg9Nr/eabJFPVSEJ2EsUhaA5kh6CKCkKAi/ZQIbkbIJGcCc9fOrK7Hbf/vXE3anoaU8AAAAASUVORK5CYII="},
+    {"$string":"islot","value":"Ri"},
+    {"$string":"vslot","value":"Ri"},
+    {"$int":"reqJob","value":"0"},
+    {"$int":"reqLevel","value":"0"},
+    {"$int":"slotMax","value":"1"},
+    {"$int":"reqSTR","value":"0"},
+    {"$int":"reqDEX","value":"0"},
+    {"$int":"reqINT","value":"0"},
+    {"$int":"reqLUK","value":"0"},
+    {"$int":"tradeBlock","value":"1"},
+    {"$int":"only","value":"1"},
+    {"$int":"notSale","value":"1"},
+    {"$int":"incMDD","value":"10"},
+    {"$int":"tuc","value":"2"},
+    {"$int":"cash","value":"1"}
+  ]}
+]}

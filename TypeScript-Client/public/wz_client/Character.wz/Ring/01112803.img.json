@@ -1,0 +1,26 @@
+{"$imgdir":"01112803.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$canvas":"icon","width":"26","height":"33","basedata":"iVBORw0KGgoAAAANSUhEUgAAABoAAAAhCAYAAADH97ugAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAKkSURBVEhLrZYL1atADIRroRawgAUsYAELawELWMACFrCAhVrYO192w9mWZ2//OWcK3U0ySfbRPr5FjLESQ/66gebG/Po7FKzZC/inIg4FpbIpv9fii6dN/jUUuM8C8LCdP4MKRANfC36NzwBrEMWuXq/XWg6c9TEuq+gtmPGyKJCc4aKPaZ49iMYIHWMXhjiMswmBWTbYZrtTxHlZVpFPMIRI23Yx9KNsX7Efptjou9sHiY/jdCoWx2kyIZxS0MwUw0TmWf0RsAezOE18pnkwTYslg41FLqDMRhOi9Gy/waT5pmktQJARleAH3GdRooDv2Fn0AnGQA9ni/HxWbmRs29acwTAMsao5s1qjLq0RRdJua2lg16vSnY3xLlKtIivk9+SRXrWvVVXb9bY+5M+zVwJdFhmzePZZcSqyAwuGGO0LYVQlwcaoigo7JbG3RmZAu+qmuSMELLBVJpG677W2qQJEjs6T7RaE9rI4gSXIevmasvt4Zm5g2VV1rWzCodEBrO1dUFXy7/shiT6fx0JUE2T4P2II0HaSrVUhY2lqCxNj9w0Xp3oHdhOwXo2OAQmfrbUJ4UDfaQdjaeoWrCpEWnUEMpamtjAxP+FcRYylqUtYki5CZYylqS1MwO8rUOyiK5iti9w5JiZQinH1M56mD5EPfRK5qshhAoWWCTOeuYW2M632zaCRSxFHEhC5ze1dj48DuRIBNhF3HUckj9+GCQAqgvzK0iKOAbc054YKmEOEcfyS+3cwRwc7i1vazwpPYOfvB5ESb4KAKrw6n8fwF/Bb5CyDlixt4CncqCrIv0/YfEH3wf9N1IN7wFbsMvkH6ux3WM6XxJc4xDQxF3EBN/RAwwVLUeeh0FUlR3RbD+r09h22zonRJ8velyz9ILGcGY/HP/2MyT9JIkIGAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"-4","y":"32"}
+    ]},
+    {"$canvas":"iconRaw","width":"24","height":"29","basedata":"iVBORw0KGgoAAAANSUhEUgAAABgAAAAdCAYAAACwuqxLAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAJdSURBVEhLrZUNubMwDIVnAQtYwAIWsICFWsBCLdRCLWABC7PQ77xpy7gbf3ffPc+TAU1ykjRp97iLlFIjceXzELLx5fX3kHN7FkS6UF6/h0j6PaI/Ia8QGZXE8t5JnjxN+VcQ4VSIkcve/BpkLDHwuZHbeHdcncXZPp/PNX1k1k9Y1mCnMKNlEYGckEU/cZ6rs9agTGl0PvkwWwAwywbbYreLNC/LSv4OliAfhjG5Kcj2mSYfU6/vau8UNIS4GySFGC0AxpmsSPY18nnWPgjYg1kSI79ZD2JcLAlsjFlQJsECUGKx+0CUvu8Hc3QyInP8QPVZlCDgGztjF5KXIdnh1DRtVZoMw2BOwHuf2o6zph6MuQcUxbba1jmmV5VtGv6TvF3JV8i+4ZFfNZ+qYhgn23/y5Tkp8FjIQwlafNTYE/IdGAlB2CbngjJ3tkYVVDQq+LYHpmBbur6/EwAYoVUi8m6a1LucMeTv58G6T4Bt1BuwxOhH7RnTxLPICsum7TpFdx/KC9j2jk5VyH+afA7WNJ8ByN7J4JsgELO9JNmpItay6gULwjT5g1N4Aju59KPXOJPoXi8tAIbsK2WzllW3YFVAPmgHENay6gULUk8kVwZrWXUJS66SUwlrWfWCEdf7BGym4gpmW8nPxt2It0G4glnP6kOUw5rJjyqoMOJNDAvIepFPaCzZ0tpkrRySV2RiCbervevxdpBWgZjh4C5i1Mv6JYwYUAHCvxpbwThzazL3ZIwOctbxy+73YA4VTAq3Zp11nsDOzxfkW/wIBMi6VlP1GP4vtmRbOcDj8Q9mfaz1pd5mqQAAAABJRU5ErkJggg==","$$":[
+      {"$vector":"origin","x":"-5","y":"33"}
+    ]},
+    {"$canvas":"sample","width":"74","height":"46","basedata":"iVBORw0KGgoAAAANSUhEUgAAAEoAAAAuCAYAAACPtY89AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAMtSURBVGhD7ZoNcatAFEZjAQu1UAu1UAvPQizEQi3UQizUQi3UAt1zcz96IQtdaPKyJJyZr+zP3XQ5Q5jMwG6M1vHuJF7a4cOjeFmHD4/iZR0+PIqXdfjwJF5aVGt4fdsem/bz+afr02cw97H/ar8OpyNZW71ReL6GVRyatt2nZsrX65MtPj6nsYSXdTDGho4vH93G3p7erb+W+jnn28EkRSzQIvsgklnImDajjf1r9pMbq61+zvn2sIqXxj7gN7uMswk2RGgruTW11YNNFJ5vD4rMrKO2T59hkwk28/b87r111c853x6xsHQRdeDdX/HyKupjXemajaVg+BHw010GH3D4fIyAn/Y8WMgHvKb74aME/PTLYZFE0b3n6Dwh9efBok1UASw6E9W83lc2UYXZRBVmE1WYTVRhahBl/3SiX0XuUdRf12dTiygYtpfmr+uzqV2UUD+OiTin+dyYGM4VpWZROk61L9EvSi2icke1RRxT+xL9otQsSsepdml/SJwvyqOIiv1FqUnUsK9jrh3ReJyf0y9KzaLUhjiu41hy85HhXFEuJQqWipobyI1fM1OYhBKs+qV7GHh1Uf8zgmd/hIelPF2OD02FyRjDKvRo+efxcvafri2AFAni0TuRqCiLx/FwspLBZpMgnsffkyiQIL2foDDOUaL0zoKeNv+IiSDnmMJbHhxdViS3kdoDEhXlDEXpikNSJ8r+IkJyYiSKqCbdt7rn85nN1BwYExW/evFq4ginM04nb1+zKCaKckm86fH+tIsvMqwqICFDQfEYr6befcpauqKQE6J3h0xkvJoGm1hDwCQEWUNR8WpSG9L6E9bj54BfPbqR6xgl8QNtrYEoq7uC/Cg5WUnCRpGVYi9UhaMk8QN07QEkIIrQjundm3LYzEAOifel2uAqyclQxtAVJFkSlr03RRgcion9oye7+EawlzFRzf70PfPSM5hDlr5ikkR/VBIwkZOitsbBl9wc9pIT9ZskYF5yInHMS/tYUZABGoc4ZwtuDPtYKklYYcK7hg9Nr/eabJFPVSEJ2EsUhaA5kh6CKCkKAi/ZQIbkbIJGcCc9fOrK7Hbf/vXE3anoaU8AAAAASUVORK5CYII="},
+    {"$string":"islot","value":"Ri"},
+    {"$string":"vslot","value":"Ri"},
+    {"$int":"reqJob","value":"0"},
+    {"$int":"reqLevel","value":"0"},
+    {"$int":"reqSTR","value":"0"},
+    {"$int":"reqDEX","value":"0"},
+    {"$int":"slotMax","value":"1"},
+    {"$int":"reqINT","value":"0"},
+    {"$int":"reqLUK","value":"0"},
+    {"$int":"tradeBlock","value":"1"},
+    {"$int":"only","value":"1"},
+    {"$int":"notSale","value":"1"},
+    {"$int":"incMDD","value":"30"},
+    {"$int":"tuc","value":"3"},
+    {"$int":"cash","value":"1"}
+  ]}
+]}

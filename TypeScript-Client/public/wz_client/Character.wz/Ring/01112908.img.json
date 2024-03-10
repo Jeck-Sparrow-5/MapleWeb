@@ -1,0 +1,37 @@
+{"$imgdir":"01112908.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$canvas":"icon","width":"32","height":"32","basedata":"iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAOeSURBVFhHvZZRkeMwEERDIRRCIRSWwlIIhVAwBVMwBVMQBVEQBV+/lkZRfE5S+5Op6rNjS9NvRrJuT7vYvqTD2NZ1/YrwqpaP8ItvxR7iYZ6npnnbClr0UPJVY7jyLpQ0dlRJj/v1jcg2QHwAyJLeZ8wHgNGY54VxCq78PjIOKd4DdHNV5FBSfrvCPQD3TZiPv7Py/h2ARBKtt8JciuoN0DTeAxid4n4ruj+AULwHsDHPSKJrQTuAMOqKcUjzLDqid6vGd30CcPX8xlwJqIJ7EvuqhN0IhdledA7p3l0YQBTHAOmuCUcAUiQL+f04Jgyb/LwpINwNSfEawF1g0Jg8NCYenxPDc0PGmPZ8hFCktG7n8xFAh+BZJBnVEkrLoirOF81Pvqacfe1jSp3TKu0iUkoCOL8AMISWokP8LxtxG4EXqzfJsEF0w8LmVs71Vyt8ZbQBLpd3AIZgoloW646U+OfnVg330RrEMI9R0JXr9brN6hadQn5+CLBCOWg86QxSW+5KyTNCcA+jUrHP5rl24j7NBthHzgBcPgBYA0QAxMq0ih3tt/aWzae5LpPN1fqI7H2h6yHAIkPEbo37DqGy9dwAdSUeUrDpMV9XmWsfzEsFIH+sPUqpTnjRAVpd18hXDg1DPANQBMpI+bjXkrryWZVT/SIjw6oteITeb8JZJoiss0zRgrneDwC8phBLxmhdHubzmrdVdBUAwpA+V/kRhwBl9u5RNv02TDN3uXJpAEsqFu1eMFa7w3ya07Y8AdCuak6ODwCrIcokRTeQF5flAaYeIDaTeTV9Nu/tj8oNX81vdxWlOAaYkiQIC4gqlVmTDC08nQQxZX1mVQDQ+v/M3wLsNmEWQKiD0BUdIl6WloTDhe8boyM9mTeFOfPspVwHALkpQAJAFYiYsXxSfNv+vnW8+hnruzfta1/NGT/J/D2A2viAaCBa16Ljs9Bam01O1ENA9fkOwAdO/QSpnCP493brcw8Bkr7jbDUArlLR2o4AnOs9ngAeVeufbk7Vk/ZSQBAVYLcJq3kxSIVpECOA2j4CcLBUAMyr+I1oO6aYh+bfs+cdfgWj+aisz63om7eRKgaAMz0UECGqjMq5DwjMnUMBwHn/98AhgMwByAIoOnycoEFwrofWu/4wkTCJTYo6hN55rsYS9S+iCkB0iG/EWP0YhngliKuSxSb6i2JeVK42npvvU7hNr8TEC9LmqdL/92/E+6o6nvnPlZ9O/wCKa/OnnTxBigAAAABJRU5ErkJggg==","$$":[
+      {"$vector":"origin","x":"0","y":"32"}
+    ]},
+    {"$canvas":"iconRaw","width":"32","height":"32","basedata":"iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAOeSURBVFhHvZZRkeMwEERDIRRCIRSWwlIIhVAwBVMwBVMQBVEQBV+/lkZRfE5S+5Op6rNjS9NvRrJuT7vYvqTD2NZ1/YrwqpaP8ItvxR7iYZ6npnnbClr0UPJVY7jyLpQ0dlRJj/v1jcg2QHwAyJLeZ8wHgNGY54VxCq78PjIOKd4DdHNV5FBSfrvCPQD3TZiPv7Py/h2ARBKtt8JciuoN0DTeAxid4n4ruj+AULwHsDHPSKJrQTuAMOqKcUjzLDqid6vGd30CcPX8xlwJqIJ7EvuqhN0IhdledA7p3l0YQBTHAOmuCUcAUiQL+f04Jgyb/LwpINwNSfEawF1g0Jg8NCYenxPDc0PGmPZ8hFCktG7n8xFAh+BZJBnVEkrLoirOF81Pvqacfe1jSp3TKu0iUkoCOL8AMISWokP8LxtxG4EXqzfJsEF0w8LmVs71Vyt8ZbQBLpd3AIZgoloW646U+OfnVg330RrEMI9R0JXr9brN6hadQn5+CLBCOWg86QxSW+5KyTNCcA+jUrHP5rl24j7NBthHzgBcPgBYA0QAxMq0ih3tt/aWzae5LpPN1fqI7H2h6yHAIkPEbo37DqGy9dwAdSUeUrDpMV9XmWsfzEsFIH+sPUqpTnjRAVpd18hXDg1DPANQBMpI+bjXkrryWZVT/SIjw6oteITeb8JZJoiss0zRgrneDwC8phBLxmhdHubzmrdVdBUAwpA+V/kRhwBl9u5RNv02TDN3uXJpAEsqFu1eMFa7w3ya07Y8AdCuak6ODwCrIcokRTeQF5flAaYeIDaTeTV9Nu/tj8oNX81vdxWlOAaYkiQIC4gqlVmTDC08nQQxZX1mVQDQ+v/M3wLsNmEWQKiD0BUdIl6WloTDhe8boyM9mTeFOfPspVwHALkpQAJAFYiYsXxSfNv+vnW8+hnruzfta1/NGT/J/D2A2viAaCBa16Ljs9Bam01O1ENA9fkOwAdO/QSpnCP493brcw8Bkr7jbDUArlLR2o4AnOs9ngAeVeufbk7Vk/ZSQBAVYLcJq3kxSIVpECOA2j4CcLBUAMyr+I1oO6aYh+bfs+cdfgWj+aisz63om7eRKgaAMz0UECGqjMq5DwjMnUMBwHn/98AhgMwByAIoOnycoEFwrofWu/4wkTCJTYo6hN55rsYS9S+iCkB0iG/EWP0YhngliKuSxSb6i2JeVK42npvvU7hNr8TEC9LmqdL/92/E+6o6nvnPlZ9O/wCKa/OnnTxBigAAAABJRU5ErkJggg==","$$":[
+      {"$vector":"origin","x":"0","y":"32"}
+    ]},
+    {"$string":"islot","value":"Ri"},
+    {"$string":"vslot","value":"Ri"},
+    {"$int":"reqJob","value":"0"},
+    {"$int":"reqLevel","value":"0"},
+    {"$int":"reqSTR","value":"0"},
+    {"$int":"reqDEX","value":"0"},
+    {"$int":"reqINT","value":"0"},
+    {"$int":"reqLUK","value":"0"},
+    {"$int":"cash","value":"1"},
+    {"$int":"incSTR","value":"1"},
+    {"$int":"incDEX","value":"1"},
+    {"$int":"incLUK","value":"1"},
+    {"$int":"incINT","value":"1"},
+    {"$imgdir":"effect","$$":[
+      {"$string":"path","value":"Effect/CharacterEff.img/1112908"},
+      {"$int":"follow","value":"0"},
+      {"$string":"left","value":"-1"},
+      {"$string":"top","value":"40"},
+      {"$int":"right","value":"1"},
+      {"$int":"bottom","value":"50"},
+      {"$int":"dx","value":"5"},
+      {"$int":"dy","value":"0"},
+      {"$int":"delay","value":"1700"},
+      {"$int":"interval","value":"300"},
+      {"$int":"genOnMove","value":"1"},
+      {"$int":"z","value":"-1"}
+    ]}
+  ]}
+]}

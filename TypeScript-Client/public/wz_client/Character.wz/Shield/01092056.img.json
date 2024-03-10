@@ -1,0 +1,19 @@
+{"$imgdir":"01092056.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$canvas":"icon","width":"28","height":"28","basedata":"iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAHTSURBVEhLtZaBkYIwEEVt4VqgBVuwBVugBVqgBVuwBVqgBWvBfSEfNyFAuPP+zB/DZncfG5Tx8ld1XT9hW8r/pwAbXgMexteELPx9sJ+quXXTte2n+2MIUJm96F8rQLBpeI6vxEwJVBPL1M3l9Qp3GjXgOZxKUOzBrG27CupBVQX5tN62vdsjYupAXvmker7xmRcFp3hstVod7+dLttJXYQJaeB+mRIrDzgmVgCXoCsbZnwXmMLkIVHIOI1YD3oLhHJjAeHN4GLEjYA6jxq/DtfvShPehYIigYkwbsjbkYWpOjY817SMFOlgyWf4c1SRebsL49PHSTyK8hNWAJH+0SHFNXIJRo7XvZelroJqrUEeLamAWZm+ZjvpNICP7O/LALBZuyucGQHpkAUQO+UUoBSrOpwsxe+jEaXIAQ8uUPpf4vB0l6M50ySkUm3y0QEO93TCxecsJKIqXCTCfbrNJlD+1wiksgpc2NhjrE9MtArQHkz7PM/5gAckxPpJn/qlwlZb/L7Zu+Lz1zxE3bS/YrcLX6MZchBNkkyQK7uYWuxvAfcHdhqmnDz0TqGACqUANHwf2cPkQuJrMLPCelavmso718EhlknP7Z+Pt6zC95KjL5Q0teHS2rGYYEwAAAABJRU5ErkJggg==","$$":[
+      {"$vector":"origin","x":"-2","y":"28"}
+    ]},
+    {"$canvas":"iconRaw","width":"27","height":"25","basedata":"iVBORw0KGgoAAAANSUhEUgAAABsAAAAZCAYAAADAHFVeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGNSURBVEhLtZaNccMgDEY9S1boCl2hK2QFr5AVskJXYIWs4FlcnsxnCww1zs93pzMISQ+B48vwqsbxNmNxKPuMDBSmgIXHNKPofi/Ud3P5Huev623+uQcDylhL9pQMgEWF38eUGd0BVKcy8pb0PtkOkwK2uHMJiHko47h8CPSQrt2VXXqLy80aCdEH8So71H2mO94JRvWoerU70u2FyvRWkGDR3QYpiERbOaEarATuQJz1WVgJku1gCixB+HqgLRDmYRmIL4IH4TuClSBy/Njm6QWx75tACKd8dMm8JQ9SYXK873K9bzAHyjoq700F0rQJ4un95WtvH1QlE+CPE8mvTmsgcjT2tWJ4DlNhJek4UQ8oullbuyK/CqNNvxMPK3y2IR9rxfNjMggxxO+ABCux7Mp88YLxU+AAhNbufCz+ZTlKwH+6yrrfFci1Ai0/bhbfspQEEKVpBiu7qhZw8qdV6d4EKy8aQYxPdLUKSAskbfeXfoxAZPITt4S/rvX/BhOefgOs4/+YHPxJ0DD8AXm3UR4xQITMAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"-2","y":"28"}
+    ]},
+    {"$string":"islot","value":"Si"},
+    {"$string":"vslot","value":"Si"},
+    {"$int":"reqJob","value":"0"},
+    {"$int":"reqLevel","value":"0"},
+    {"$int":"reqSTR","value":"0"},
+    {"$int":"reqDEX","value":"0"},
+    {"$int":"reqINT","value":"0"},
+    {"$int":"reqLUK","value":"0"},
+    {"$int":"cash","value":"1"}
+  ]}
+]}

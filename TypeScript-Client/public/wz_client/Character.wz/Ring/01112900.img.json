@@ -1,0 +1,34 @@
+{"$imgdir":"01112900.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$canvas":"icon","width":"32","height":"32","basedata":"iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAKmSURBVFhHvZULEaNAEESxgAUsxAIWsICFWMACFmIBC7EQC1jg5g3buWECJLmqS1e6gP3M610+qZKWH3lXy+Px+Ilhrci/8o5faZqmTYgNvL5/786m98ltcWX90VIM8QxQMcFcf+lxXhb7LQ9LwzGqswaZsQpxGOBqA2UB5n56FsDLXC0Nx6kyer2BxnOJtpvZF3gWAAj9XGFCABLYoQXuQQ4ClMKb9trI1IaBdgNQWNslxwAOvVd+bClkcJo4lam3zBcPV3NeRB96GwBf3pgQWj27NFoTW8zRA3AVQtAncxvQYQAH2DZTOIOjFUDXzN3A5RJC43hr0GEAtvZi9mMzvwYp/bmN8TFAW9t5CuHATwLIBGjqm4fI7R4stEU4QAL0TQlRrgVFuwEoGg2I4oSYrJ9RLIB7LTAP1SZAgbUGzwFuN6tjYLQbQK8gRwXwN8ECZA1m+voIP1j9PKxt43jzEGg3gNR1qwlg9Tcqk9zMwpzn1Wc4hiPW2wC6/4gQ+AkqLgXs3G5KWH2GdxYIM7ZprM90GiBrA6e4vaZuhbE2h7HytOoIl9FugKMY66QEd3O9OkIjmGehgJ5GhwGiX7b+IEDe6gzW90LXaDcATzZ/qbxm0T7JtlbAaMEB7q0WMHWx2tBhgAyXGQcsW2DBec2GYfBz4JqvAH1/tbN/DBBh8nBZTX+ER/HpwV7jkwA82xy5HeU5dzNWQPnencMl2oFfr1A+3AECxBBlwosp9in8NECW4By1hYBw3/fub+FfB0BTtf4ZMZbveQ5A+55oF3wYRvdpAN55pK0HLO0FOIKXwi9wPI7c3A8C+KpDAEbE2xADZAPO2y746Q4gff32nHfhfn/4n0vbdk+vt2YbAHCEoxgAecOvlOGSd/zCsFbkq9T5v11UVX8AynPm6inyXUIAAAAASUVORK5CYII=","$$":[
+      {"$vector":"origin","x":"0","y":"32"}
+    ]},
+    {"$canvas":"iconRaw","width":"32","height":"32","basedata":"iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAKmSURBVFhHvZULEaNAEESxgAUsxAIWsICFWMACFmIBC7EQC1jg5g3buWECJLmqS1e6gP3M610+qZKWH3lXy+Px+Ilhrci/8o5faZqmTYgNvL5/786m98ltcWX90VIM8QxQMcFcf+lxXhb7LQ9LwzGqswaZsQpxGOBqA2UB5n56FsDLXC0Nx6kyer2BxnOJtpvZF3gWAAj9XGFCABLYoQXuQQ4ClMKb9trI1IaBdgNQWNslxwAOvVd+bClkcJo4lam3zBcPV3NeRB96GwBf3pgQWj27NFoTW8zRA3AVQtAncxvQYQAH2DZTOIOjFUDXzN3A5RJC43hr0GEAtvZi9mMzvwYp/bmN8TFAW9t5CuHATwLIBGjqm4fI7R4stEU4QAL0TQlRrgVFuwEoGg2I4oSYrJ9RLIB7LTAP1SZAgbUGzwFuN6tjYLQbQK8gRwXwN8ECZA1m+voIP1j9PKxt43jzEGg3gNR1qwlg9Tcqk9zMwpzn1Wc4hiPW2wC6/4gQ+AkqLgXs3G5KWH2GdxYIM7ZprM90GiBrA6e4vaZuhbE2h7HytOoIl9FugKMY66QEd3O9OkIjmGehgJ5GhwGiX7b+IEDe6gzW90LXaDcATzZ/qbxm0T7JtlbAaMEB7q0WMHWx2tBhgAyXGQcsW2DBec2GYfBz4JqvAH1/tbN/DBBh8nBZTX+ER/HpwV7jkwA82xy5HeU5dzNWQPnencMl2oFfr1A+3AECxBBlwosp9in8NECW4By1hYBw3/fub+FfB0BTtf4ZMZbveQ5A+55oF3wYRvdpAN55pK0HLO0FOIKXwi9wPI7c3A8C+KpDAEbE2xADZAPO2y746Q4gff32nHfhfn/4n0vbdk+vt2YbAHCEoxgAecOvlOGSd/zCsFbkq9T5v11UVX8AynPm6inyXUIAAAAASUVORK5CYII=","$$":[
+      {"$vector":"origin","x":"0","y":"32"}
+    ]},
+    {"$string":"islot","value":"Ri"},
+    {"$string":"vslot","value":"Ri"},
+    {"$int":"reqJob","value":"0"},
+    {"$int":"reqLevel","value":"0"},
+    {"$int":"reqSTR","value":"0"},
+    {"$int":"reqDEX","value":"0"},
+    {"$int":"reqINT","value":"0"},
+    {"$int":"reqLUK","value":"0"},
+    {"$int":"cash","value":"1"},
+    {"$imgdir":"effect","$$":[
+      {"$string":"path","value":"Effect/CharacterEff.img/1112900"},
+      {"$int":"follow","value":"1"},
+      {"$int":"left","value":"-10"},
+      {"$int":"top","value":"-15"},
+      {"$int":"right","value":"10"},
+      {"$int":"bottom","value":"5"},
+      {"$int":"dx","value":"40"},
+      {"$int":"dy","value":"45"},
+      {"$int":"delay","value":"3000"},
+      {"$int":"interval","value":"180"},
+      {"$int":"z","value":"-1"},
+      {"$int":"emission","value":"1"},
+      {"$int":"theta","value":"21"}
+    ]}
+  ]}
+]}

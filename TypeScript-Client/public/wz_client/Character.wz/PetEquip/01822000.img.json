@@ -1,0 +1,12 @@
+{"$imgdir":"01822000.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$canvas":"icon","width":"27","height":"28","basedata":"iVBORw0KGgoAAAANSUhEUgAAABsAAAAcCAYAAACQ0cTtAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAIjSURBVEhLrZULlYMwEEWxgIVawEIt1EItYAELtYCFWqgFLGBh9t0hQ9MthM/unPMOUCZzeckkrdaiqSorKaX9LaLYq05qantdaxvai9lwM3tezdp/gDL4ea3Munoq7LrPGm6VjXe9B8i7s1AG9IAeyQHXDnAqPgporQuog8NtgqZS5Zgd9Y2Zvvx+qeymKYyvbvU8qrg7Bizg2OrKM+Ij9PsuIEmAcNap8KP5/tIvqDsdJHGSU3s2ZSAvB7kZNBVroDwCOq3rBOx5JpLz1fG8yF1xLcEifFwA5Yh7HLrbNWDAXkoExnUPjPgApin1Z63hLhgNshdGzMC0hr6mvZpnyd0XTPeHWllBLusuqoN8L2pLrMJIcNhL+0bPR2CENw1rZ4+pM9e2QwABnQWS6+58OnuxWMuCOyC+uZkO3R+BEW933eRO4MUaDvROSok+/8fdRbNwiOsEL8BikSVf5BNAjjnc+UYvnShv4Og6A/QaAdNhXhy3BdyC+nhNpTea/jG28n8Bu6lp6NCsS5eK8JtPoxwB2wRFvIFyJQiD823Bu4CGOMT5ezoMI0h2IEqQgDK9IboX951ggDiyDoEi4qtnqIAAAjoLkNboNCiPJeiHUjMkUJ20GZF4yaQarmsUXBLvM+knF+O/wAEggeSbdE9qM3ULyt/nYix1qDkDAxSQSI5ijw3l4FARtuVoTZEbhUMxlcVpDJH4W/la5MrHIWqFUlTVD5ZMCtxyzDMVAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"-5","y":"29"}
+    ]},
+    {"$canvas":"iconRaw","width":"25","height":"24","basedata":"iVBORw0KGgoAAAANSUhEUgAAABkAAAAYCAYAAAAPtVbGAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAHZSURBVEhLpZUBtYMwDEWxgIVZwMIszMIsYAELs4CFWcACFrCQ/25oGIzCgJ9zclhpmtvXhK7YsqoobM9T2DWLJF2ZvCqtu5fW1zez/mH2vpvV/4Cx6H0vzJpyTOj+nLx/FDY8NQ+IubMwAlsAr7Rjng3AlHQQyGp3YA4MdQmWUuVtUtBWZtrp81bYQ0cVu6w1HpTUFQIUaKj1ZIwD1/tdEJMAUNIo4ata72wFc2W9XPmTMntXeRAve+2+l+QtwNwCNtZtBLWMsaR0tZ4XcxU89yBhvi5AUsBvFLm6b1BAOgUA4XkEgi1A6eh8rBrtQij8UQg2gVKNvGatmmKuZgXR70MtOTNiqatoDvBvSa29gjDhkE59r/EZCObNQG3sNXbad1sHCMBVELGuxo+tFYNaZdSQ3D9KZOv3GQj2UdOMagRc5HCQd0YK8PM9ryaagMtVN2sGEsWTe/EugLiOUOMfaO4G+IAG9ysgzxEQXbLZdb9Av2C+XkfmDaQbfDN+CWrGZqDjZl2XW8w7Py4pALIJCPuApELJWTRvb+YCFs7lyt/EYQhGkIPwlDxgHGM43YjaRhAAXC2HAGGxywkmEIkDNjkA1eA0YG452MJTkS8D5haJcp5Cvqwo/gC4Ouac8L2b2wAAAABJRU5ErkJggg==","$$":[
+      {"$vector":"origin","x":"-1","y":"33"}
+    ]},
+    {"$int":"reqLevel","value":"0"},
+    {"$int":"cash","value":"1"}
+  ]}
+]}

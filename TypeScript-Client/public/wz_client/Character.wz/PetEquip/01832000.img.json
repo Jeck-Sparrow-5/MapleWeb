@@ -1,0 +1,18 @@
+{"$imgdir":"01832000.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$canvas":"icon","width":"27","height":"28","basedata":"iVBORw0KGgoAAAANSUhEUgAAABsAAAAcCAYAAACQ0cTtAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAIISURBVEhLrZUBtYMwDEVnAQtYwAIWsIAFLGChFrCABSxgYRb6c1PCTxkDxvbOeYeRtrmEhu5xoHjin0iTFXXIXLVjnJ8xjlOMXRh/Ao1V02kyEm8NECPuv4HGqm5jGGZNFIZJk2GqkdCqup/V3fDcQi9JKxrGZ2z7IRZFJQsLS6BuuhD7MCkYATIgIr7MPZWCqKwo61hWzevCosygvlLb017AzNH5bxSbto9tJxXJol2Q1wIFyCtEto9Uelbhf1U8oVyJpaFDrUAqAlQ2g0KPgAqrpTpgXImloVNlFaIuzHplLE3JlcFoEGJp6JKyPbSmeVddBuP3HSCfDLIupVriafhfCqDL7JTgnngaviypJtUHDB1WB4hNvgWULu3lIEi4BDysjkF/HBFPw5el1SDyACaWhnLpkyFaGX1THbBJ3qZE92E0hsmOoTtAqmM7jr43lAGDgNCHQIXQ2XQo9ym8r7zC5SN1wDOofnfArv4bZEDrrE2X7iWRWKEVAUv317QCgQA0KEDGmOOth7js2R0Y0qTYIHQZtjjmX0MP8qpWEAcEa1OKz6QLLbFVBZCn92aPvgF5vUC9XTPgYvGpbGLpXC2uxT7p1oybbQ3rX8AGsKSNuF3cOfc79uPerCUPOVeggQxiky1ZOLEHmw9hZxW9s821xGZ7lYev0czErf1eePt1mFzmRY/HH5pdRJEZnKXUAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"-5","y":"29"}
+    ]},
+    {"$canvas":"iconRaw","width":"25","height":"24","basedata":"iVBORw0KGgoAAAANSUhEUgAAABkAAAAYCAYAAAAPtVbGAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAG+SURBVEhLpZQBtYMwDEVnAQtYwAIWsIAFLGChFrCABSxgYRbycxO637IOGHvn5GykbS6Ppn0cSE7iJ1mRqg1ZNP0s61NkXkSGMP8Ek6YbrAgF9wGIQDzfgUnT9hKm1QqEabEiBG+vqZfacbUYpucedihzMM1P6cdJqqrRBVVcaNENQcawGBABiCBEfpv7UQbASVW3Ujfd+4KqzmCps7hnowKZY/N3kq4fpR/UgU4uAlJtMEB8KhT3CWefHP274I30l5wPHeoFwgGAupsMVgIZpFU3QPgl50OnyhyhIaz2y5hPcWUQNp6cD11StkexGfZuMgj/74BofRS7DnfkfXiD0DXxVPNM3ocvS9/e/QBBRTcA2LxbIO26UQ+wYxxUdEMyvTbI+/Bl2dsj6gAk50MuexNES6Jf3ABZ9KtpNoew4VHxurgDwg2fvXReUAYKCkBfgqw4nUrH8ezpXLmj7XAloDOYnRsgZ7dzBoqdsuu60mLNVeYAiD8f6wWiOKAIA8QYc9Kwy1X35BsIsmJELE7XEDFPcIvbBdu0BuBgs9ZLXJMtiAWjC0C8bRrswR1AqjdYGskm3wakSovto6DH4w+J5yBgbFgkbgAAAABJRU5ErkJggg==","$$":[
+      {"$vector":"origin","x":"-1","y":"33"}
+    ]},
+    {"$int":"reqLevel","value":"0"},
+    {"$int":"cash","value":"1"},
+    {"$string":"pickupMeso","value":"0"},
+    {"$string":"pickupItem","value":"0"},
+    {"$string":"pickupOthers","value":"0"},
+    {"$string":"sweepForDrop","value":"0"},
+    {"$string":"longRange","value":"0"},
+    {"$string":"consumeMP","value":"1"}
+  ]}
+]}

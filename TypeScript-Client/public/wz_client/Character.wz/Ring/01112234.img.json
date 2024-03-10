@@ -1,0 +1,21 @@
+{"$imgdir":"01112234.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$canvas":"icon","width":"27","height":"27","basedata":"iVBORw0KGgoAAAANSUhEUgAAABsAAAAbCAYAAACN1PRVAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGxSURBVEhLrZQLscMgEEVjIRZiIRawgAUsYAELWKiFWqiFWoiFPO6GyyMUEuj0zpwhTZY9s/l0GsxeMCnzlvXX2V+v9468XDgO4Bwu/ELIZoJ1PomO4Lc/rq9+/1aYmjv/SNRkIgiiuGd4Qmmai/zjuT8CSC7ankrWbyesivCcarJcODphEkGwbZu0hAjn5Lgx1TcTJtG8LALOITVZKRmZ8CRaVpWKsSI9U7UmPNr85yRqyp6zHJeNa8flhHkuZR4viglrYESoV+kxJEOS0Ok+IUTWNibDW7cqLSKsSpuqELIe4a0MAooqMiQJrWoLr0RMEgJt7KUQspawS4YP2VgnItIvPE+l6/tOGRZKcwoDlOFxoOYorQf3I8mw8vhOSChq1H8kCXMKYd5EhASyZVm7ZchJyNtJYSFNzPMsImMcz3WnKqSM3yTBHwLeZojwP4v9R5v+iBCBcFA0R27DwiUgmxG8qZRBQCCCJBOpyBpBnw8xBShAsQ6YiDSCkEBCEa8HbAH2og96JiFFlLDYRXwkb5zDupxLWW0iSq9gLRsT3srL20hQWJI/i5x8H0AvEjNNf725/+blKAnYAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"-4","y":"28"}
+    ]},
+    {"$canvas":"iconRaw","width":"24","height":"25","basedata":"iVBORw0KGgoAAAANSUhEUgAAABgAAAAZCAYAAAArK+5dAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAFzSURBVEhLrZQBlYQgFEWtYAUrWIEKVKACFahABStYYSpMBSu4vO++v8gBxdl55/wDi3Cv39UZHmYvajDuLeM3sr9e7x15hTRPhTVc+FRCgJQPUeFH8Hc8rs9xfyJRYIiLVk0g0AT/PdPViYByeFzWfUmF5PBtNTI+6aQKx3OvCXJJTycKB3TbNsEAjjWZN+6+txOFj9MkhTWkJijBd52c4NNsdANGpOfuW50IJIc3Beso8xJWm5edXAoi/tkujameSOwsjFsBopJg+ySAe591gLdlNlbgGI11VQkEPZKqAFDCKwJEJd60JSWcUQnKOn8pgaAlaQrwcTkfBM7ql5zv3tbPPZcIkJJUFOBRY8+x9S/oVQUYOb+TsAhv7JeoJK9Ckh8UCQuCaZovBchJwkdFSSHSGsdR4M4Frl2mKqGA3wwLHyneQsDxu4bzB+Y6IkEg+TackQMI3jAKAGUBDvAn8DxyGBIWwITzOjb+Nzksr0aG4QeM2uV4iBk8VAAAAABJRU5ErkJggg==","$$":[
+      {"$vector":"origin","x":"-4","y":"28"}
+    ]},
+    {"$canvas":"sample","width":"60","height":"44","basedata":"iVBORw0KGgoAAAANSUhEUgAAADwAAAAsCAYAAAA5KtvpAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGQSURBVGhD7ZKNcYMwDIVZoSt0ha6QWZiFFTJLVsgKXaErUD/FjypG5kz5CXL47l5tSaDL16Qppe/7GxLLJ7zMigkL+kt7l4DYFrzMisGLXXi/vf7Ios+vbljmZVZMuoSLuMzLLOrkkaciWIQFFl5mIKqNkentYwj/a7jfu0bibSYJRMU/pCvD6xAsYfATkUXOZnC6tN/hnkhLJxFGuGS0yMtsrrD7FAnjrCFzhPGz8J7ZwnjQa07hQFR9IJ1T2F7mIZsJg6n6VXEjvPR9ZlNhkN7/m6XvMy8RJqx1j+gZ51aPpLNcdhfmOXVfo85lU2Hr5J3oHu9r1LnsLsxz6l5ap+h5Lq6FdV2azYXTmqd117Cv53PqXHYX5h3oPs9crLkmneWymfDcAKu/dg4jvFdO4UBUfSCddxGWirKnsM+cwgFbVgl7T7lwTdHC8heylWf0DaNx5FgSOtY7OoMskc6RMSQZCk0RNX0gn9gQRcxvzztidMpWKAvEKhF9C1ktCuIj9QApSlYtCqLbE3G0kKb5BcOeEVVbbt6bAAAAAElFTkSuQmCC"},
+    {"$string":"islot","value":"Ri"},
+    {"$string":"vslot","value":"Ri"},
+    {"$int":"reqJob","value":"0"},
+    {"$int":"reqLevel","value":"0"},
+    {"$int":"reqSTR","value":"0"},
+    {"$int":"reqDEX","value":"0"},
+    {"$int":"reqINT","value":"0"},
+    {"$int":"reqLUK","value":"0"},
+    {"$int":"cash","value":"1"},
+    {"$int":"chatBalloon","value":"37"}
+  ]}
+]}

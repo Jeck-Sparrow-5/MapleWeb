@@ -1,0 +1,26 @@
+{"$imgdir":"ChatBlockReason.img","$$":[
+  {"$imgdir":"1","$$":[
+    {"$string":"type","value":"Foul Language"},
+    {"$string":"msg","value":"Foul language/Harrassment"}
+  ]},
+  {"$imgdir":"2","$$":[
+    {"$string":"type","value":"Advertising"},
+    {"$string":"msg","value":"Advertising websites"}
+  ]},
+  {"$imgdir":"3","$$":[
+    {"$string":"type","value":"Hack"},
+    {"$string":"msg","value":"Fake GM"}
+  ]},
+  {"$imgdir":"4","$$":[
+    {"$string":"type","value":"Account Trading"},
+    {"$string":"msg","value":"Trading or selling account"}
+  ]},
+  {"$imgdir":"5","$$":[
+    {"$string":"type","value":"Trading"},
+    {"$string":"msg","value":"Do not report fame scams and trade scams. "}
+  ]},
+  {"$imgdir":"6","$$":[
+    {"$string":"type","value":"Penalty Alert"},
+    {"$string":"msg","value":"The reporter's conversation is also subject to penalties."}
+  ]}
+]}

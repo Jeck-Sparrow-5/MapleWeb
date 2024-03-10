@@ -1,0 +1,21 @@
+{"$imgdir":"01602001.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$canvas":"icon","width":"32","height":"32","basedata":"iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAKASURBVFhHrZIBdWoxEESxUAtYwAIWsICFWsACFrBQC7WAhVroz+zbGyb7ApT+zjlzsrvJ7k14bJ7puyjLP1a2TZVHRuVel0o485ViYyL2tFSzv1JtOH18hXMrmiIo4jx2kZ/bHJm8rWvlRhwI8OFjsQ1VjNHQk7GfE/jt/TNs+2vFTpPCGHZsDXIOol5BAWjnCqC/WPXtT+BauhMeg/MSUs218kJqUtQ/vzp4e7p6zygaeB0AYAzXipXLQAC5BQW8u3cB4BKwmXUGkMPiAjlcMVYOdHe+hhVLbV2USRQd5qDuHOavEkgQQBflBmPdz+BSFpZXdFC+NkFu1WdAxZ4D7OtlWR9fwCDUgdVXYQGAyAIB21++wooPuebcmwDVn5K6gzFQh3FeQGB9bX9q2c7dRKO/CiB7xJJiXuYwGRAwX48Z54xRfbBeJdvLZhbUh89iAYFWu1q+KJPhZd052AEVBOzYPiXr4u/u9v+OPTxcQOISMwtYYdhh1ATrvi7uexkPFwDOy6pUa1sdppxzWmegavbb/zzy7F0iLfE6A7iU6wL+Ms5oZThWTRZscJthfUukBbB/M9VxwNuACkGKgVCnd+bcXyIt/WUGELTdKex12UGS4vq6CB5IZ0KZrCCABjcIztYO8/wl0QxQcYVVZ1uHRdKU6evK5gHgwOps+T2wyi+Q6fQSqtn+/ysmmSixp8WNWvw3ymEDQHUUBVOW/045tP70z/T2C8/FBdqffnYBmrfmXXr/gulR/3iZBAJmBQro0HxMv5tPE/u+W72ao5m3SwDGmQsOmAEAzk/sl8GPL1DVys9efs+cBYb5DOtPcEd8Aqzmav+2bu+TNQsXbTb/AFeuuomgqXfEAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"0","y":"32"},
+      {"$int":"z","value":"0"}
+    ]},
+    {"$canvas":"iconRaw","width":"32","height":"31","basedata":"iVBORw0KGgoAAAANSUhEUgAAACAAAAAfCAYAAACGVs+MAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAI7SURBVFhHxZKLUSMxEESdwqVACqRACqTgFEiBFEjBKZACKTgFpwDTs/NEa1bH544yXdU1H0nzJHsPn+m1qdpfVh1bqrbMqrUhtXDVO+XCQqwpdLO+Uz/w+HxJ11IeyqSJ/dhF/RRzZOqIe9VCbkjw/fNmG6oco+lM5b5P4D8PL2lb3ytXQkpz2DEOyDWIfgclIPY1wHix+jdfgSsMFzwH1yWkXivyQnpS9l8uA3zzePYzszjA6wAAY7giVi0DAeQWFPDt3y4AXAK2svYAclheoIYrx6qB3j6d08qliJuqyKbDHDRcw/xVAgkC6KTaYMS7FVyqxvaKAarXFsit/gqo3GuAI562+PEFDEIfWH8VFgCILBCwu9Mlrfy+Ys19F6D+U9J3MAbqMPYLCGzE+Khl2/cuDvqrALJGLinnZQ6TAQHzeKy8Zswag/Uq2V62sqA+fJULCLTbFfWmKqaXDddgB3QQsGP8lcTNr8Pxfecani4gcYmVBeww7DB6gg2fN4+1yqcLAOdlXerF0oCpZp/iCtTNenznWdfZLVPI1xnApVoX8JexR5HhWD1ZsMkxw85tmQJg/8/UxwmPAR2ClAOhz9mVa33LFMbLDCBo3CntfdlBkvL+ukw+kPakqthBAE0OCK6jA+b1t8RhgMo7rLuODVgWoSq/rzo8ARzYXUf+HdjlF6hyeQn1bP3/lZNMtFhTcKPIf0Y1bAKoj7JhqvbPqYb2n/564gLx0f/uBVq8ngDjX7lAVy1dQYfDG0Lmk+NDwp1SAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"0","y":"32"},
+      {"$int":"z","value":"0"}
+    ]},
+    {"$string":"islot","value":"Ri"},
+    {"$string":"vslot","value":"Ri"},
+    {"$int":"reqJob","value":"2"},
+    {"$int":"reqLevel","value":"0"},
+    {"$int":"reqSTR","value":"0"},
+    {"$int":"reqDEX","value":"0"},
+    {"$int":"reqINT","value":"0"},
+    {"$int":"reqLUK","value":"0"},
+    {"$int":"cash","value":"1"}
+  ]}
+]}

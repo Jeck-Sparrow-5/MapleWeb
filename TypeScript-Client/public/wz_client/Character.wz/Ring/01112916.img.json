@@ -1,0 +1,30 @@
+{"$imgdir":"01112916.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$canvas":"icon","width":"31","height":"32","basedata":"iVBORw0KGgoAAAANSUhEUgAAAB8AAAAgCAYAAADqgqNBAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAReSURBVFhHrZYLseQgEEWxgAUsYCEWYiEWsICFWIiFWIiFWBgL7D1A8zLfnVe7XXMrCZ++/aMZ9yjnUcLtVtKazji5/RFB8H3p/5dju80iP9blzCJKAk97n4VJMEMM/2bQvt6CMMvzvUj27bwtMZUY5hL8VIKLJbp1FxGGLBdgUIxui13V70Qh9iLN8viEeIi+jlRKcntxbhFcRXD5sHeAESLHEK+5l1F4N+7mcIQUjyXN57avRyO+CZt+UymzyIPbindJZHMlPLuZPPkWOWkJIpnQGdx6R6bx58hgrUAeNTuXU55WYtlwzqVkd1bPJ5FLoQxYyhRzJURWGcu7yElH1BrS4JWigH49qxHvyCmYmXwGkeMpWb9lPfSe3FHJIZaCEj3eT5UwJcaWCq+acM7XcQO6qQWM0f5J+6tBQzTBZJKNNbxruJUtymsR5048d+KgsPsa9kY+Ta0O5riVNR9FNVNF9VO2rUXEQEQwQO8/0skz5IQWMgzI4SyLvmdhquRpkHtVv7aWoJPAM6dj1MCjYMQ8Ey1Ss85wDnkkhxCkICOiNhLq7jXhZZ33On4hVIVTWMtRD2cTvKcOwL43i47jNqIkrp9C7OQKOxNrM8BvJce97IuKTc/oc5lD7iHXeQ8UXc/7ckg5Hp76vs85396HkvNWU2ERGAboZRRcm8AAkEVMhavRqMggntR0CHWQ57yznpB7RxQ8Smu366C4SoxEaaqeY0Dj+CEfR40JqnoOkFLZrbqNHGLEzjbwKj7trRWNPpOudxgAiADffbxJ35xEeOpTCjk6BhUYxPJWK0dFX0JIZ7s/Ql00jkHVa0NKw4DhPb25en71qkF9XcTkmUJjDOJto+VWJUTtzmsTI1+WPNBq40JOI1DOK7kJDQRL7Ti9gva99Roxcrz9QL6qLebhOcekHatGwnHKqmpdQEpBzTGkePzxOu1zldwMeCJXRetCSElGrEwAuhagmuleHKde0dTHV3c46/QY5OCJXAXlBbW/RNHpJph0n+t+FaEVGMRE6BtSpK+rhNZ0wBN5kyligCpcDccPUuTWi1A5/iuxjLezXr02QiNnrM89SjVg0Uu7Vrs0rzduqC/I11oLeh3Ehgv5sx6FXVefUq8FeIvwpEWyQYrfVraJUsPlUckoXgPfjL/xukm3ql4GwELeyDN38kvvme+Kn4jBR69NjJzFkF8tJqQYwLprFB6JqZcrLjreE5uYIjOAnPNNSAFKem4HKXgkfSAexn4UlOqhY6K7WuTknIuBsVewMH8i/qZYh1DdegwD7FpclnU0DINVteWXPxGWY46euqX6iA7SN8JCHTk21crHAJQBLpXWp++NsHkjBdKjytexd/ozS5mg+i/CAi1kQ1DTifXcGyDCS3AlvCcNuieA5x8SQAdHECPeGtCJlfa2gW6HEpSp74dNY4PkGazxgEvK8CtyFkDOYjZ1I+4MeQXmjcjIALp+G/YBNl6g03UPxjoGiQFdhgdx7g9JifGcVACFhQAAAABJRU5ErkJggg==","$$":[
+      {"$vector":"origin","x":"0","y":"32"}
+    ]},
+    {"$canvas":"iconRaw","width":"31","height":"31","basedata":"iVBORw0KGgoAAAANSUhEUgAAAB8AAAAfCAYAAAAfrhY5AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAQISURBVFhHrZYNmawgFIapQAUqUMEKVrACFahgBStYwQpWmArc7wUO6zoze+f+nGe/R0eU9/wB6+52HiU8HiWt6YyT2+8Kku+v/n87tscs+LEuZxYoSVztfpYmyRwx/ZtD+/oI0qzI9yLbt/OxxFRimEvwUwkulujWXSAcWS7CoRjdFvtUf2ZKsRc0K+IT8DD9OlIpye3FuUVyVcHlw+4RTgiOI15jL7Pw7rmbwxFSPJY0n9u+Hg38kDb9TaXMgge3Fe+SYHMFnt1NrvwWnLIEQSbmDG79BtPz58zgrUQdNTqXU5FWsHw451KyO2vkk+CaUA4sZYq5ArFVznIvOOWIeocyeJUoML+u1Yl3cBpmpp5BcCKl6o+si+6TOyocsCYo0RP9VIEp8Wyp8uoJ53x9bmJuegFn9P2k76tDwzTAYJKPNb1reJQtKmqBcwfPHRyUdl/T3uDT1PpgjltZ81HUM9XUP2XbWkZMZAQHdP9lHZ6Bk1pgOJDDWRb9nqWpwtOAe3W/Pi1BK4FrTsfogbvhxDyTLUqzzjCH3eEAUQpyIupDUt2jJr28572WXwh1wims5aiLsxnR0wdo35tHx/EYWRLrqxE7XGlnYG0O+K3kuJd9UbPpGn0uc8g95VrvgabrdV8OTU6Ep35/rzm/vQ8l562WwjIwHNDNaLg2gAMoC0yHa6NRkwGetOmQ6qDIued9Uu4dWfBMWne7LpqrxEiWpho5DjTGF3wsNQbo6jkApbNbdxscMGZrG3k1n76tHc18Zn3e4QAiA/zuz5v1j5OAp35qQpaOSQ0GWNHqzdHRlxSys31fQt30HIdq1KaUhgMjevbmGvk1qibt6wJTZxqNZ4C3jS23TkLWvkVtZvBlyUOtNy5wNgLVvMLN2EDw1JbTK+m7t1FjBifaH+CrtsU8ImeZtGXVICynrK7WAaQS1BoDJeIfj9M+VuHmwBNcHa0DISU5sTKA2LUQ3czuxXLqHU1/fHSG854uA46e4GooL2n7SzSdToJJ57nOVwGtwQCToU+gWH+vAm3TQU/wZlPEAXW4Nhw/oNijN6Fq/FuwnLe1XqM2oMF51sfuVh1YdNOO1W4t6o0T6gP4WntBtwNsusCf51HadfSp9HqBaDGubJF8oInfdraZSsPhUWE0r4nfPH8TdbPuVT0MkKW8wTNn8svoGe8TP4HRj1GbGZyXgV89JqU4wHvXLNzB9MtVlzneg81sInOAmvOblCIm6bUdUHSH3sDD2R+NSXXRMtFZLTg152Dg2StZmv8ZbHZ3wI7FZVnHhmGyrrb68k/EpcZ/BjbrH1YHmAxxqLR9+rsTNm5Q1AP4e7MMmAARJboCb9CPtt+PjIm6RnO90n+FvrKLI0/qr3xozv0CsTfjVThr7q0AAAAASUVORK5CYII=","$$":[
+      {"$vector":"origin","x":"0","y":"31"}
+    ]},
+    {"$string":"islot","value":"Ri"},
+    {"$string":"vslot","value":"Ri"},
+    {"$int":"reqJob","value":"0"},
+    {"$int":"reqLevel","value":"0"},
+    {"$int":"reqSTR","value":"0"},
+    {"$int":"reqDEX","value":"0"},
+    {"$int":"reqINT","value":"0"},
+    {"$int":"reqLUK","value":"0"},
+    {"$int":"incSTR","value":"0"},
+    {"$int":"incDEX","value":"0"},
+    {"$int":"incLUK","value":"0"},
+    {"$int":"incINT","value":"0"},
+    {"$string":"cash","value":"1"},
+    {"$imgdir":"effect","$$":[
+      {"$string":"path","value":"Effect/CharacterEff.img/1112916"},
+      {"$int":"z","value":"-1"},
+      {"$int":"pos","value":"1"},
+      {"$int":"fixed","value":"1"},
+      {"$int":"animate","value":"1"}
+    ]}
+  ]}
+]}

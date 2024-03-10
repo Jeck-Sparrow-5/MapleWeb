@@ -1,0 +1,18 @@
+{"$imgdir":"01812000.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$canvas":"icon","width":"30","height":"29","basedata":"iVBORw0KGgoAAAANSUhEUgAAAB4AAAAdCAYAAAC9pNwMAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAHzSURBVEhLtdQBsYMwEARQLGABC1iohVrAAhawgAUs1AIWsIAF/u0lGy4hQGjn38xOgObyUiitCmt7mJ8qLLRtw3UWmYPgeK7tBpDi0oZumo7AWSxsr8WbOC2dMIxrSDF+BjP7Bg4VMNYj/A7GeQYP4CoDjwkX4SUwkuBb/Z4iCMWRmwm4NK9THFz7Cq6aIcJZPG+ajwbIPFTb3Ffbp9uDa4qfwaucr70eL+OOK5ziFqxr+bzqHJqBEYUV8IlgQT2M/gNM3GI2Z3DX+ttNwCM73LncwSnIpDDAgFrAIzv8dqPMQ18Wbpo5wmyAEkMW6V1kExHA8JpefymK38hj+CXzApZGFpMDBzAR3Lofpr9TWbhuxwh0yWASfdek9FwWXQc85zZGJenbQBh1C3/q/dtuy+JGj3LUDI3g/pn724tX6AxGXcKDhDihMPqNaDAHz11QgMwVjMrAbiLgFMetDqDJhDkGLYFRAfNBBTjdQAr2MiLfwLk6wMSBWfAOxlpuybLKwjmQ+Vd4fAhjHbfcs/oJRr9b5rt6DKPH5+cqgjHPp0bTk0ID0pi0PlkY103k713DHvRfboIYJqPxLel8ZP2QFELs5zboxTpYM4sTJchG+YKa8SacZ1MM333Ts3AuEYa3u/hWM2hKY5+dje1DsBZjqqr+AG9PVlcgs3ttAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"-1","y":"29"}
+    ]},
+    {"$canvas":"iconRaw","width":"30","height":"26","basedata":"iVBORw0KGgoAAAANSUhEUgAAAB4AAAAaCAYAAACgoey0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGsSURBVEhLtdOBkYMgEAVQWrAFW7CFtJAWbCEt0IIt2EJasAVbsAVu/7KLgKiQXP7MH9QDHmcSUxnX2K8SNnLOXnelOSiuly4+AFodXjDO8xE4awzHz9JDnIYn2GkLrcbPYO1+gEMCpmnC72DcF/AAbjTotcJVeA2MZrjrnnMCITrqYQJOi7c5LZ59BJveJrhG7/v+zQWyWOOWl3HvcS+eMX4Gb3S/vfh6nXac4RyPwa6jv5vRowUYZZgBaQITKjDWH2DFYyzuGTwO8roVEGSHR987OAe1OQwwoDEgyA4//UjzsK4I9/2SYHGBKoautHalQySAVp/x8wej+I40ww+aF7C8tBldeECbwIP/YsqbKsLdMCWgbwGj8m+Nwve06WbxOQ8pSs1/DQojt/C72/9bt65+FFRHru0Jl89cXi9+QmcwcglbquIKhVEOwsUcfO6EAtRewUgB9hMB5zhedQCjzpgToTUwEjApEuD8ADn4ohH9BC7lACsOLAbvYOzlt6xLES6B2p/CUyOMffx2bfkKxnq/zWdphrFG+nWqYMyT/muKMJ5H/VlyqAEz5g+F7zVnF0SBAQAAAABJRU5ErkJggg==","$$":[
+      {"$vector":"origin","x":"-1","y":"28"}
+    ]},
+    {"$int":"reqLevel","value":"0"},
+    {"$int":"cash","value":"1"},
+    {"$string":"pickupMeso","value":"1"},
+    {"$string":"pickupItem","value":"0"},
+    {"$string":"pickupOthers","value":"0"},
+    {"$string":"sweepForDrop","value":"0"},
+    {"$string":"consumeHP","value":"0"},
+    {"$string":"longRange","value":"0"}
+  ]}
+]}

@@ -1,0 +1,19 @@
+{"$imgdir":"01072153.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$canvas":"icon","width":"26","height":"32","basedata":"iVBORw0KGgoAAAANSUhEUgAAABoAAAAgCAYAAAAMq2gFAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAHaSURBVEhLrZMBeYMwEIVrYRZmYRZmoRZqIRawgAUsYKEWsDAL7N7lXnYJSQZp3/f9G5Tc+wmlt4vZK7wtqXR+bsq0PhN27aUcyn3WbTfZtocwjckwSEEZuayo5PkzLqIEd8zgMytLu9MdmeiyzEtATeCTZMKwCKU4rgkY3hBEMn5eJNHBXnkZ7gizseJcVITwfy+ju2Gsph0IKMGLgJk4eiH4nljUg4+MyOiYrCzyQMR4sYxee/sQDNiQor8Xk3gRQxm4LGO4Qxa28lYZaeUlGQZ8WjIvATI6Jjr72BT5wZ959bmAi1IBCmvCJFJBlPREeoFlGORngDIKGa5VgVtTFdUeTyowZFl2nq0RCY79DNZrOVN+2T49WSnhevSB2G7pSZieTBERcxAwI6IMtxukKZJkC2vJRHLSEvUkSFeEawcRMAn+4/p/EsZq8xwkXrTYb8U+R0esakfvDIUMjomXBPkgLGsEx4KTfBQcouWTDC/bTwJ3yzLwmBclncuOAOaF74Iv41PIpFoerOwxLft9mv8Ic3xUwn1eFcwYocFDuAsQqgx/YNY71CKIrDA9KgPrjNmYKjRFOMGWtQRvkL1FNcq7JiglfHyHR8ddESwq8c/e4+cAuojldvsFe6IKoKoBwjEAAAAASUVORK5CYII=","$$":[
+      {"$vector":"origin","x":"-4","y":"32"}
+    ]},
+    {"$canvas":"iconRaw","width":"25","height":"31","basedata":"iVBORw0KGgoAAAANSUhEUgAAABkAAAAfCAYAAAASsGZ+AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGlSURBVEhLrZMBsYMwEEQxWQu1EAtYwAIWsIAFLNQC//Zym3+BJCWZvpmdUsjtI5ROnZyF/IRUuOyHZt72FLs2zK3Ysx2niY4zhLlfhCGWX5HLGhXsnzEJBbhTgnNWlHalOzFJl8gLkFK5J4kkQxIU4rhUTngzkMj4M4mgQ63iK9wJZmPFd1QC+NliZBfEKuqgnAL86JiJow/B78KSVviYGBntF11LfCAhXiqjz98ygMU2oNH/gwm8hFCEdIkId8ayGj8TMTWGRVjsqYm8AJHRfsnTR6WRP/O315sXuSANo6wkSxItj4KaRE+yCEM8h1BEGeFaLXdrbpLSI0nDFlmWfc/WiADHfgbrtRxcf1hPS3QVcD36kNgutASkJdKIhGTlZESSxe0CFCVCtqhEJpEvNUlNAJoSXLtJEBPgE9dbAmKVOTeBl6z2X7Dz6IhVZfSOUEZwzHhBkBNh3WJwLHkiAFo8y+B6fFJwlyxC3suqSd9lJwjmY813tDhY0Xtez9e8/Ccs8fFIXsumwYylC70zLYHEytLjsWCdZRgtwJtib0spnUzTH2v09xw1ndXNAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"-4","y":"32"}
+    ]},
+    {"$string":"islot","value":"Cp"},
+    {"$string":"vslot","value":"Cp"},
+    {"$int":"reqJob","value":"0"},
+    {"$int":"reqLevel","value":"0"},
+    {"$int":"reqSTR","value":"0"},
+    {"$int":"reqDEX","value":"0"},
+    {"$int":"reqINT","value":"0"},
+    {"$int":"reqLUK","value":"0"},
+    {"$int":"cash","value":"1"}
+  ]}
+]}

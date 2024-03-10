@@ -1,0 +1,54 @@
+{"$imgdir":"BlockReason.img","$$":[
+  {"$imgdir":"1","$$":[
+    {"$string":"type","value":"HACK"},
+    {"$string":"msg","value":"Your account has been blocked for hacking or illegal use of third-party programs."}
+  ]},
+  {"$imgdir":"2","$$":[
+    {"$string":"type","value":"BOT"},
+    {"$string":"msg","value":"Your account has been blocked for using macro / auto-keyboard."}
+  ]},
+  {"$imgdir":"3","$$":[
+    {"$string":"type","value":"AD"},
+    {"$string":"msg","value":"Your account has been blocked for illicit promotion and advertising."}
+  ]},
+  {"$imgdir":"4","$$":[
+    {"$string":"type","value":"HARASS"},
+    {"$string":"msg","value":"Your account has been blocked for harassment."}
+  ]},
+  {"$imgdir":"5","$$":[
+    {"$string":"type","value":"CURSE"},
+    {"$string":"msg","value":"Your account has been blocked for using profane language."}
+  ]},
+  {"$imgdir":"6","$$":[
+    {"$string":"type","value":"SCAM"},
+    {"$string":"msg","value":"Your account has been blocked for scamming."}
+  ]},
+  {"$imgdir":"7","$$":[
+    {"$string":"type","value":"MISCONDUCT"},
+    {"$string":"msg","value":"Your account has been blocked for misconduct."}
+  ]},
+  {"$imgdir":"8","$$":[
+    {"$string":"type","value":"SELL"},
+    {"$string":"msg","value":"Your account has been blocked for illegal cash transaction"}
+  ]},
+  {"$imgdir":"9","$$":[
+    {"$string":"type","value":"ICASH"},
+    {"$string":"msg","value":"Your account has been blocked for illegal charging/funding. Please contact customer support for further details."}
+  ]},
+  {"$imgdir":"10","$$":[
+    {"$string":"type","value":"TEMP"},
+    {"$string":"msg","value":"Your account has been blocked for temporary request. Please contact customer support for further details."}
+  ]},
+  {"$imgdir":"11","$$":[
+    {"$string":"type","value":"GM"},
+    {"$string":"msg","value":"Your account has been blocked for impersonating GM. "}
+  ]},
+  {"$imgdir":"12","$$":[
+    {"$string":"type","value":"IPROGRAM"},
+    {"$string":"msg","value":"Your account has been blocked for using illegal programs or violating the game policy. "}
+  ]},
+  {"$imgdir":"13","$$":[
+    {"$string":"type","value":"MEGAPHONE"},
+    {"$string":"msg","value":"Your account has been blocked for one of cursing, scamming, or illegal trading via Megaphones."}
+  ]}
+]}

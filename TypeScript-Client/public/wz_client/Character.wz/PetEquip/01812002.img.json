@@ -1,0 +1,18 @@
+{"$imgdir":"01812002.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$canvas":"icon","width":"30","height":"33","basedata":"iVBORw0KGgoAAAANSUhEUgAAAB4AAAAhCAYAAADOHBvaAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAOFSURBVFhHtZYNlawwDIWxgAUsYAELWMACFrCABSxgAQtYwEL33iS3U1iYnX17Xs7eU+hPviRtma3+YnVTpati6P9YCZqrLq1Vb+JzOVYqlv670UkHjV1rGuraWkLHpoE8AHuPOVPV/h1OBymNBhfU2voFVZ/1o4/6LZwTS2Ww4NJQt8XzGchKcN2n4JTWPqWhTUdfpa2rDW7gnfAQnvfZgerjHEGV+a+hfKamtkpLy310JwanVgfPCE6BsI9zSrEibM37GyuhsjQC3gPcQYRJVyj7tjH68F4GEr4e7RY8AMyyUwPgVAZfofEsCR6+Hs2cs/VXgDr2AYaW5VYAU4PrAglAKFU+v4OWEFoJPkHpiGBqwmlVANTS4TohiBL+Fno9SIIqCwMPTQaX2RBOKRiCKb1ThNxZXBmWz0tofYhU+0YgNtRaygKaXBsVQVyBOgf0Z6Qb06BDCYw7eYZ7gIJbcCFVR0GUYn/4frQCukArhK8U+gwcW5LBnCsVAWRgVIPtsTzDU9ogg65p2Q7TuGweAJwSeIKqKkcLIcBjxZ+fcGWag4g15DjuZeGM32HkC+iMth2Z9Q6hVXY2j/0SCoH1VDo2wDsDMcucNcEInhzHuWEynY2nTHvwCJZyhoDNyHyuXQQex4F+D4Dw29LfZI25dOhg5kyo1IJZ9RN6X1DZsm5pXhZrt323AAzOqgBsWQf8LusMZqY5SwDZEurgdILSdoAIHMYJAeBsIADPGgr4e7DtG05t8pIJLCDNoAO0YYDZLVNaJweO05y6YXQonF/Bdu+fwTidpodMCV1x5ABNMzYEVyvhc3hA64hqAZ7LfNSfgfcTmDA4DyN0xxctTUOGHj0+JgBuOFxraAH8BY72R7DtscAdhIgjgJztjqsC6A6ogAvEk70hiFxmu9uc7+8C2xj6yHMswVpAIBcZmDcZB4cOmXEBpQicMMYAdvxW52wLsE61wGQ58mVxsmNvDN5AqzlUWZWpoKdsSygFf++ylVl0tpjiRIM7uCxrCWX/NygTCP2UrVnTx6eOUKmAE2YCjEGsZab2vUYbMK79CFpYvuySZ+Pwq3wMUIE4//JMn1AD1QQ8GQdt8ukbCwdlCe09pB+Dq+QHQoxVD7XQLZydjKyDONEW3jl9ktaEsDPVCH0E5qDAXEBdHX4X/u+KZ0Ek+qLPj0rNSRIXXSVnV5XrKPqSCquqLxJghDeW/S7tAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"-1","y":"33"}
+    ]},
+    {"$canvas":"iconRaw","width":"30","height":"32","basedata":"iVBORw0KGgoAAAANSUhEUgAAAB4AAAAgCAYAAAAFQMh/AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAANaSURBVFhHtZYNlawwDIWxgAUsYAELWMACFrCABSxgAQtYwEL33iS3U1iYnX17Xs7eUyhtviT9ma3+YnVTpavi0/+xEjRXXVqr3sTn8lupmPrvRicdNHataahrawkdmwbyAOw9xkxV+3c4HaQ0GlxQa+sXVH3Wjz7qt3AOLJXBgktD3RbPZyArwXmfglNa+5SGNh19lbauNriBd8JDeN5nB6qPYwRV5r+G8pma2iotLdfRnRicWh08IzgFwj6OKcWKsDXvb6yEytIIeA9wBxEmXaHs28bow3sZSPh6tFvwADDLTg2AUxl8hcazJHj4ejRzztZfAerYBxhallsBTA2OCyQAoVT5/A5aQmgl+ASlI4KpCbtVAVBLh+OEIEr4W+h1IwmqLAw8NBlcZkM4pWAIpvROEXJncWRYPi+h9SFSrRuBWFBrKQtocm1UBHEFah/Qn5FuTB8dSmCcyTPcAxTcggupOgqiFPvD96MV0AVaIdxS6DNwLEkGc6xUBJCBUQ22x/IMT2mDDLqmZTtM47J5AHBK4AmqqhwthACPFX++w5VpDiLmkOO4l4Uz3sPIF9AZbTsy6x1Cq+xsHPslFALzqXRsgHcGYpY5a4IRPDmOc8NgOhtPmfbgESzlDAGbkflcuwg8jgP9HgDht6W/yRpj6dDBzJlQqQWz6if0vqCyZd3SvCzWbvtuARicVQHYsg74XdYZzExzlgCyJdTB6QSl7QAROIwTAsDeQACeNRTw92BbN+za5CUTWECaQQdowwdmt0xpnRw4TnPqhtGhcH4F27l/BmN3mh4yJXTFlgM0zVgQHK2E6/CA1hHVAjyX+ag/A+8nMGFwHkbojhstTUOGHj0uEwA3bK41tAD+Akf7I9jWWOAOQsQRQM52x1EBdAdUwAXizt4QRC6znW2O93eB7Rv6yHMswZpAICcZmCcZG4cOmXEBpQic8I0B7PitztkWYO1qgcly5MtiZ8faGLyBVnOosipTQU/ZllAK/t5lK7PobDLFgQZ3cFnWEsr+b1AmEPopW7Omj6uOUKmAE2YCjEGsZaZ2X6MNGOd+BC0sH3bJs3H4Vf4NUIE4/vJMn+76Z7PBpzsWDsoS2ntIPwZXyQ8d/tZs4p3TJ2lO6M92dfhd+L8rnj+wqvoCapt4/soqXxYAAAAASUVORK5CYII=","$$":[
+      {"$vector":"origin","x":"-1","y":"33"}
+    ]},
+    {"$int":"reqLevel","value":"0"},
+    {"$int":"cash","value":"1"},
+    {"$string":"pickupMeso","value":"0"},
+    {"$string":"pickupItem","value":"0"},
+    {"$string":"pickupOthers","value":"0"},
+    {"$string":"sweepForDrop","value":"0"},
+    {"$string":"longRange","value":"0"},
+    {"$string":"consumeHP","value":"1"}
+  ]}
+]}

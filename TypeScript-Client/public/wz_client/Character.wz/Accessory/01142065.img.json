@@ -1,0 +1,25 @@
+{"$imgdir":"01142065.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$canvas":"icon","width":"26","height":"32","basedata":"iVBORw0KGgoAAAANSUhEUgAAABoAAAAgCAYAAAAMq2gFAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAIfSURBVEhLtZULlYMwEEWxgIVawAIWsIAFLGABC7VQC1jAQi1k5w55MJvdfpayc847Scjk3WZIaBUi/YN+jZRm0xbTrrs9fyTWmO7XetM8vACR0F8+10sQSXXbpcESh2HwtmraVHe992kljZmP+azHB7/V9mekqm3TZbquJSGsrYcxNbfZ+rW3EnO0zMd81uPjfk/CE9j6PM/pPtm4723x5GIs6RnzjMkPJXsKibEBBYrmccz8EUAZvpjyYEYraawcks8IN8Nc0jMmzwx701am3dzvS+6fFn6gaNfhFqfD/NjSlgol/Dh8N/OY7wmfo6XxnSxTnYb2HJhbLxmCsV3N1C5WxtHu2Emw1byAEPZNSNXN1N8+hq2O9l5uPX27nGbITuzjlMZ7sou62Gfm+g10tdy/wtycRfEvgnKxE0GqYS/f0V3tu8kQfq3DrFwRwvOjIDdk4dTtECYEAyCIngtE/13Yam6QsVn7JUzSWDsiHx0GyfRRCHYIxELa32BlXxAAjOfx8j5IMIEEQ3o/gijPIQabp+4tEOHGLGZAG4HxSGtOee+WTfEDhLlMozCmVd4hkGARWkaE/bVsig2md5JhtcSY04kKiHKehpIupg0mIOaSmyM7ZQHSZjVZ+HyDypxJEjtTb5KBg3QQBInzpqEQ6/HB02GCCKDEMWvKKo0Rz5UX9RBU7gQJ+EzKlamk8j0snURSqVj7qLgO4SXlqKov5tKV6qpHgS8AAAAASUVORK5CYII=","$$":[
+      {"$vector":"origin","x":"-4","y":"32"}
+    ]},
+    {"$canvas":"iconRaw","width":"21","height":"30","basedata":"iVBORw0KGgoAAAANSUhEUgAAABUAAAAeCAYAAADD0FVVAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAHPSURBVEhLtZSNsYMgEIRpwRZswRZswRZsgRZsgRZswRZowRZsgXd7unghJv5k3s7sHAfHF0CIE6V/sEspirPC7kX6PxlzxMtYZUdvoEj6+ne/QNFRtV3y0um91+iaNlVdr21EmjnGbT3mg5Ohrm1THcZ1W5DEyg+pmaK0K400xhAxbusxHxxCIU2w/BhjWoLkfS+FQY2cZh/GkaPebDsDrTKcUAuyOcbPYKW0EFvERESaOWtQfFc6ESCafRh8KvkKstUdpPdxaz+SfljENc36CaxXBbG0OYZb0lXGYbuHeLJzoyucQ5V8ex+smHkDAiLXPLWzHMUgd/gBeAUVQEjeUnKTuJ9ugdfZco5Tj7ZcdJmMFcoDTsOS5NLP8hTHF+gotd/ACkKB/dvDlrFCAp3fj+DKavdVbkCsQsGyZQtE/xWoTkZR6HYgBggGjED2E4r2EXgFCXBo1nYJpplzpaiHL0EJ+CSCT6EoQjwCl20CAUMeh/oYSjChBMM8TwJZp0ABx9C9QSGFoBAJooXba8Qx1h1tnXqDAkSANSCIrDuFEmx/oJQFf9s6lcE8wxKMHLcEvgKkMphwgGgFwfK1rwIpFiuUH4lAOy5+pBJyAnLuD8o7exaUZhq9AAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"-6","y":"32"}
+    ]},
+    {"$string":"islot","value":"Me"},
+    {"$string":"vslot","value":"Me"},
+    {"$int":"reqJob","value":"0"},
+    {"$int":"reqLevel","value":"0"},
+    {"$int":"reqSTR","value":"0"},
+    {"$int":"reqDEX","value":"0"},
+    {"$int":"reqINT","value":"0"},
+    {"$int":"reqLUK","value":"0"},
+    {"$int":"tuc","value":"0"},
+    {"$int":"price","value":"0"},
+    {"$int":"tradeBlock","value":"1"},
+    {"$int":"notSale","value":"1"},
+    {"$int":"only","value":"1"},
+    {"$int":"cash","value":"0"},
+    {"$int":"medalTag","value":"16"}
+  ]}
+]}

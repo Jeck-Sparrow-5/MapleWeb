@@ -1,0 +1,18 @@
+{"$imgdir":"01812001.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$canvas":"icon","width":"30","height":"32","basedata":"iVBORw0KGgoAAAANSUhEUgAAAB4AAAAgCAYAAAAFQMh/AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAKQSURBVFhHrZULkeMwEERDwRRCIRRCwRRMIRRCIRSWwlE4CqawFHTzJLXclu3Ed7dT1aXfqN+M4tq9/GekD/rxSNdb0X28pGm6psfzshJ75FX9SGQg5kAdrgIY2ZO4U66eD69al9NXWoDDdSnAixBUZ9yr+hgp3YvmmCP20HMuwhAwohgVpAIE9VeoHofRgMwlrQWefoX5qwCAat9fRKP7hA7DoR55fxwKNIM7aNuPgtQ90h4exWob+bAD5zlA9p8xMkfMBXYo2turXpvYfWKMJWDkaETAkQNQv65+u9Gg+q3UmYP13AigitVL/C1UselOHSJB3VQdqwDlSngW6+PIwDkNWVySmcQeOXsfk8Nc+Bb7/chGgiJ17dJP0EtF+EuMX8sc/4LZRjYQMGu8ZaXf15ResR/zDbjmMHc4UOkdvHW7As4BRF9D+o6/PkjwXAA5cSawwwFqFJg5rIIs0S468HEfypyOUUAaiLy652DBgXgRe12vLmXD76lIHbu6IvwVHAxwD8wa5hoMFPN3YMkKELz5hAAwqvtz4HlMr2l58l75JxC4wvuuHcz8MxgjM39XgMB0PD+2H9kpMAk5WfAQcO+uzfPPMLZnBiqwAz+CGzQSe3CanusC6FTfAOsK3/vIPoGJvKHEw653nhmwf2D/DEZ5HiZewEbWqT+zg7V2MKyCXKJdUvKqgNqZd9g+qBC5Ah2BGeEU3BKrRBloLUAvzvK5gXqoBKOgttGSZCD1Jn2OzhldysW7II6jPQsXHe7SWQ/o1wjP0DU0ADgKDhvczfakHM/XGp+qKTSGbqFdOJtUdg+1i5ickf3bk56hR+gUmEPAJHIB9YbvJIiEF56nnpokiUu9ZNbL7yG8JIvL5Q+jdPmR1FZOcwAAAABJRU5ErkJggg==","$$":[
+      {"$vector":"origin","x":"-1","y":"31"}
+    ]},
+    {"$canvas":"iconRaw","width":"30","height":"31","basedata":"iVBORw0KGgoAAAANSUhEUgAAAB4AAAAfCAYAAADwbH0HAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAJmSURBVEhLrZUNceswEIRNwRRCoRRCwRRMIRRCIRRCoRRKwRRKQU+fpJXXshynr72ZHf2d9rtTPO3wywgn+vMIl4+s6zSEeb6E233YiD3yiv4kEhBzoA5XAYzsSdzJV98Pr1qXwzOswPGyFuBFCKoz7hWdRgjXrCXOEXvovmRhCBhRjApSAYL6KxSPw6hA5pLWAs+f0fyRAUC17y+i0X2iDsOhHml/GjM0gRto3Y8FqXukPTyy1T7SYQNOc4Ds3+PIHDEX2KGot1e8dtF9YowlYORoRMCRA1C7Ln7dqFD9VurMwXpuBFDF6iV+ClXsulOHSFA3VccqQLkSntn6OBJwCWMSl2QmsUdO72NymAvfbN+PZCQoUtcu/QStVIS/xPRc5/hnzD6SgYBJ00dS+LqE8Ij7cb4DlxzmDgcqvYLXbjfAJQLRcwzf8a8PEjwVQE48E9jhADUKzBxWRuaoFx14u455TscoQiqIvLLnYMGBeBG9rjeXkuH3nKWOXU0R/goOBtgDs4a5BQPF/BVYsgIErz5RABjV/XvgZQqPeX3yVuknELjA264dzPwcjJGZvypAYDpebvuP7C0wCSlZ8Cjg3l2dp59hqs8MVGAHnoIrNCa24DDftwXQqb4B1gXe+8jOwETaUOJh151nBuwf2H+DUZpHEy9gJ+vUn9nBWjsYVkauUS8peVNA6cw7rB9UFLkCHYEZ4WTcGptEGWgtQCvO0rmBWqgEI6P2UZNkILUmbY7OGV3KxTsjjqM+Cxcd7tJZC2jXCM9sfR4V7mY9Kcfztcan6EdRL2LyjuzfnvTraA1f6Y0Yhn/H+u6tQJsEGQAAAABJRU5ErkJggg==","$$":[
+      {"$vector":"origin","x":"-1","y":"31"}
+    ]},
+    {"$int":"reqLevel","value":"0"},
+    {"$int":"cash","value":"1"},
+    {"$string":"pickupItem","value":"1"},
+    {"$string":"pickupOthers","value":"0"},
+    {"$string":"longRange","value":"0"},
+    {"$string":"consumeHP","value":"0"},
+    {"$string":"sweepForDrop","value":"0"},
+    {"$string":"pickupMeso","value":"0"}
+  ]}
+]}

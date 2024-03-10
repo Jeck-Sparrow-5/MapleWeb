@@ -1,0 +1,20 @@
+{"$imgdir":"01702190.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$canvas":"icon","width":"29","height":"23","basedata":"iVBORw0KGgoAAAANSUhEUgAAAB0AAAAXCAYAAAD3CERpAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAG7SURBVEhLtZQBlYNADERr4SycllrAQi3UAhawgAUsYAELWOAyk5196RJ6PXqd9+aVTbL52W3L5Q31iT8mAuZl21m54LfFRsu6TUcW/D6tWzfMm/Zg81+1g6Hp9T48OOYP4C8rPRlB/ciG92mh4wCAnQVX4FakdXtSgeMAgo7zynr087a56nUWFiWgmkXHAVqgoIiX3juxAa5DjhL4CB4dgc+ueHc6KA7wClSwA+jgKFcKjEJe8HiFGUygNlaueHTkL1CdTgZE8O+ur80Fi34KRSBTBmxPBzAskG4Ez7G2QGdHFqgluRluYUdAWKCv682B/cRTtVDkjLU40qAIWJLFMqRNcXMLFBR7ANZ+xFXHYRy6OtKgAOKEKMaksGKKw2WQFAgLiv3IKc6YQ2GKUBVzqgDVEMjHQTR9bWo1bb1q9KYy1h5qz2PX3di8NitD4DlC4Xgy1VgPWnsBtJuJuQeg3hijYmiEtQYBCHHl8MkfEKAGsFo2Laq1MNYeLlB8+pIawiB6izx8BbYe1IxX6sD6ywxCXK7iC94fqezkUBbHQPizT+b6/zuj7ORHg/yb0LRtnA3ycWWDnNTl8gNzDp9E6f3+vwAAAABJRU5ErkJggg==","$$":[
+      {"$vector":"origin","x":"-2","y":"25"}
+    ]},
+    {"$canvas":"iconRaw","width":"29","height":"25","basedata":"iVBORw0KGgoAAAANSUhEUgAAAB0AAAAZCAYAAADNAiUZAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAIESURBVEhLtZQNkYNADEZroRbOwlmoBSzUQi1gAQtYwAIWsIAFLi+73066LC13ncvMN4X8vWShXD6wvqF/MwfMy7aTYkEfmzda1m06kuCPad26Yd5UQ/FvbQej6e0xPCnGD+CnrbmZg/rRGz6mxRUHAPZXcAFu2XRfbypwHEDQcV49n36pbdvKcWaWm4BqFhUHqIGC4s+9d+YNOA4pmsBH8KgIfHXEu+2wOMAZqGAH0CGhkjWB0YgLHo+wBROo9uUjHhPyDVTbSUAE/+r60lywqJdQHC1rAevtACOBdCJcx9wMnRMyQy3oxaiGHQGRQNfbPQH7ybeqocSMtSSkQXFY0JMlTEWxuAYKSg1g1eNXng+ToGtCGhQgG5LMpEg++VEepAlEglJPTH73JShyc6iSfaoA1RDE4yCavjS1nDpfOfpSGWsPteux6+7evDTLQ3AdoShuphzr4VItQDuZGHsC6osxykcj7jUIIPyK8esvEFADWK43zVZyEffJnaH8plu3IQyir8jTI7D7Qc38SBOwvJnB8EvF/AOfLt1am2PRzyBXE390NJn4/+Grdcq0OY2/suLmQG4n9Z1Fj8MBCABDFHWmu4kPA0C2eZh0OlH4W6KePsB3YBxMJJiKaAgMaaCW6iHQKSiBuCES/JWUK4CkI357vHqOiIJa8VlFxTpELynY5fIDiAPDZM6mzoYAAAAASUVORK5CYII=","$$":[
+      {"$vector":"origin","x":"-2","y":"25"}
+    ]},
+    {"$string":"islot","value":"Wp"},
+    {"$string":"vslot","value":"Wp"},
+    {"$int":"reqJob","value":"0"},
+    {"$int":"reqLevel","value":"0"},
+    {"$int":"reqSTR","value":"0"},
+    {"$int":"reqDEX","value":"0"},
+    {"$int":"reqINT","value":"0"},
+    {"$int":"reqLUK","value":"0"},
+    {"$int":"cash","value":"1"}
+  ]},
+  {"$imgdir":"48"}
+]}

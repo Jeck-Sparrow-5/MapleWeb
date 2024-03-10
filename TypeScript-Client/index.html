@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>MapleStory</title>
+    <link rel="stylesheet" href="/normalize.css" />
+    <link rel="stylesheet" href="/style.css" />
+    <script src="/joy.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- basic favicon -->
+    <link rel="icon" href="/favicon.png" />
+  </head>
+  <body>
+    <div id="game-wrapper" class="game-wrapper">
+      <canvas id="game" height="720px" width="1280px" tabindex="-1"></canvas>
+      <div
+        id="joyDiv"
+        style="width: 200px; height: 200px; margin-bottom: 20px"
+      ></div>
+    </div>
+    <!-- <script type="module" src="/src/main.ts"></script>
+     -->
+    <script type="module" src="/src/main.ts"></script>
+    <!-- <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const script = document.createElement("script");
+        script.type = "module";
+        script.src = "/src/main.ts";
+        document.body.appendChild(script);
+      });
+    </script> -->
+  </body>
+</html>

@@ -1,0 +1,14 @@
+{"$imgdir":"9001108.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$imgdir":"script","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"script","value":"outmoonFlower"}
+      ]}
+    ]}
+  ]},
+  {"$imgdir":"stand","$$":[
+    {"$canvas":"0","width":"47","height":"66","basedata":"iVBORw0KGgoAAAANSUhEUgAAAC8AAABCCAYAAADHTY8oAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAASZSURBVGhD1ZqNkeowDISvllfLtUAL1wIt0AIt0AItpIW0QAs8r5JNFkVJbOfn5tazQ7Bl6ZMTON7M+/oDejsvKjvwYBkD9JLRz080BFP93G/I6hO4fY2OGpgEUFjrQk6T1e0ohOl+G50G4iwYi+/nw6wNYEAMPEFWj7XB0bTNAP1+3M24Rmy3oQfHQpsWtAGIgSeox54HNydWxNoGhUdgc/35jQasjoKDYwLu4KEPeG3gTHiCG3wPPoF34NDk9PH4nNiA5Se81c0Ep8LTx+1jA4jpQnfXCC6Pywf8Ajj1G6dveQf46NQzwKkBHj7h9AdwwrN2KTh11ulbPsLrqRMeMV1ovqxjhT/o9C1fBG+nXgkP2WYk8w3AWO/CNmkCrvBY78LK9UKC6PR3gu/PfN9HRvUi/AENTMAVHutdWL1CeDqtb4LnISg8G8B6F7ZNL4X/Eae1ajdNOgDawfcxu6hFQgLzOd0y2lc7mA2kOua94Q2aQvEtGlsYm2ADj/EP0i7wUmobtBdzRndBmqjWUAAjkq6vjTlhbe8GLJEvzPdbB6XQ6q0NDIlw/X252KsCYFhM+oDh2+L5c3nfL99pDvMaNR3IxbyAZC16C/yQBNfwMyXSQoSwQgKeA7+UV13bwJAA1/RcEcJ+2sd8OifvKfAaA3cxyw1o/PyhjA30sVmyjbjFuIZRAPZQWHs2bfo7cLVXmHvmgOBp3jiuFD5I0j0KWPPm2vWefjqnV98AvNTEnAlN5z46H0kozL/b6+gm/cVN7uJHeDaAeS3OfPzQRtK6sO4vhqcw92ouZoDjtbmnb5brv/fj9m3rgIcieOZbAqcYS+8GT/AInvLw3d0YwU+B10KYW4PnIxPDd9YRiWu7wWNgbg0e3zY03rPoHPzSOB2eRdQKXgOvuQ6FR5yHVZcMDw/wInhtAHOAJTyuI3iMo8Cz4bGJSdiEzSdgD4/5sXT90HpwzalTkwZsrofeC17zqz14Fbw2gDnAKngJvMLNmTU9eDU8jTnCE5zwEUiJfa0t4NQkKeb2APd5YQ9MowZgamSbWQDXHl4BSh3B0qydvFlDMg8fFa611kneVZZUwdURTGS/z/kQ2W3GK8H1mwQDc4xbeyRg5ks+XBN4fPAUHiP6QEbgcAY819VVCuGXvNbAArzNc6/m5BqCSjQUI3yUHOY8HYHTWEeu3tDHXs2rdxhxXXi+bBPgfQORI9jIjEc+fQ/PwWP0PEUa4NkAzYIeLtfYq3lghdcGcN3XLdIE/na/WXFcqzmvcGpdo7FPYzy8d18rSwasv234Wx6gc/YQCgfXNoA1xAIsR8MvSjawBo813moMhfLQtNWRODgChxGbnKXZf0WtgfuiETSNfXhl7JIRm5ylKnh/Yh5WTSB9P2esIzZ5VQbs4ZcawFzpqWMd+6J5NeYQl5wlA1/6B3gE70+dheeMdeaK1mnmT85SFTyBc8Bhhad1XXMnZ6sYnkW0+JoJz31Rvt5FKoLH+zV7cFjgoY/43lVahdf/i6DP+tzzjjhY5xz8bjJYD67wCkVQhdbryFjDXhQ7QgOwGvM7+lCdXnBZX1//AQrxne352EamAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"23","y":"66"}
+    ]}
+  ]}
+]}

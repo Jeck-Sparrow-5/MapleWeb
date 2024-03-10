@@ -1,0 +1,17 @@
+{"$imgdir":"0559.img","$$":[
+  {"$imgdir":"05590000","$$":[
+    {"$imgdir":"info","$$":[
+      {"$canvas":"icon","width":"18","height":"34","basedata":"iVBORw0KGgoAAAANSUhEUgAAABIAAAAiCAYAAABStIn6AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAIlSURBVEhLlZQLlYQwDEVHy1rAAhawgAUsYAELWMACFsYCFtjcpK9TFugyPeed/pKbNJS+Ltr+UNW237Vt2/b1/c7CNlzOLbns+zRNVa3r6sInXI/tAJmXJfflWPt3oAyRMelrrnHuDUK/LGeYg8ZxzNJcoHJNqoJwpM1zAFypJvM8+x6Af0EOEyQBSgGT3SWIz+sQjpKcRq9DzOkJgBhj+7Zg+AYiWjgmEIbTZJENNHj01CewjkbDNxDRDiDGkx0hIOM+DHEMz+obEA5AyMp7g+pY2r8FKYoXMx1Jd0XZRGYf0GWNMB6GwbPQuPd5XErAzFUn9gmKbyCiuXPf94csBHP1ITIBhG0VpMgxD0ekdQW7AvlZSdkdrA4Yoc6kmkisIQUoYV59RaAeGOCky4cjx0Rd13kwbP9mlUGojB6w2Z2zzEZHO4E4Gov8JiXMv1bKogTRy5Y7lkE4ie59yoTIrTkxlpj/NE22xaYArXvbtk4XEBGZj8CYvbjhCWC9+5QgNlksIajr4usw5sd1GzuqasScwp9Aiij50WydrBgjfwkSrAryT2s1kiMXsbG9KHa6X9ZjdwKVdHe2iAtPSYJJrAHE7hGIqFcgMn0EwqiECKwxEoxrUM2IB44xa0AF0Ji9eBluMmrskiEcgDEWRGJNr4TsTyA2BZQTPevK5mqPPoOUahmJGshQe6xpX3v4CkSzH3fzRURmNckOH3wD8Wla/FbWXq9f0RRommrX2RcAAAAASUVORK5CYII=","$$":[
+        {"$vector":"origin","x":"-7","y":"33"},
+        {"$int":"z","value":"0"}
+      ]},
+      {"$canvas":"iconRaw","width":"18","height":"34","basedata":"iVBORw0KGgoAAAANSUhEUgAAABIAAAAiCAYAAABStIn6AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAIlSURBVEhLlZQLlYQwDEVHy1rAAhawgAUsYAELWMACFsYCFtjcpK9TFugyPeed/pKbNJS+Ltr+UNW237Vt2/b1/c7CNlzOLbns+zRNVa3r6sInXI/tAJmXJfflWPt3oAyRMelrrnHuDUK/LGeYg8ZxzNJcoHJNqoJwpM1zAFypJvM8+x6Af0EOEyQBSgGT3SWIz+sQjpKcRq9DzOkJgBhj+7Zg+AYiWjgmEIbTZJENNHj01CewjkbDNxDRDiDGkx0hIOM+DHEMz+obEA5AyMp7g+pY2r8FKYoXMx1Jd0XZRGYf0GWNMB6GwbPQuPd5XErAzFUn9gmKbyCiuXPf94csBHP1ITIBhG0VpMgxD0ekdQW7AvlZSdkdrA4Yoc6kmkisIQUoYV59RaAeGOCky4cjx0Rd13kwbP9mlUGojB6w2Z2zzEZHO4E4Gov8JiXMv1bKogTRy5Y7lkE4ie59yoTIrTkxlpj/NE22xaYArXvbtk4XEBGZj8CYvbjhCWC9+5QgNlksIajr4usw5sd1GzuqasScwp9Aiij50WydrBgjfwkSrAryT2s1kiMXsbG9KHa6X9ZjdwKVdHe2iAtPSYJJrAHE7hGIqFcgMn0EwqiECKwxEoxrUM2IB44xa0AF0Ji9eBluMmrskiEcgDEWRGJNr4TsTyA2BZQTPevK5mqPPoOUahmJGshQe6xpX3v4CkSzH3fzRURmNckOH3wD8Wla/FbWXq9f0RRommrX2RcAAAAASUVORK5CYII=","$$":[
+        {"$vector":"origin","x":"-7","y":"33"},
+        {"$int":"z","value":"0"}
+      ]},
+      {"$int":"cash","value":"1"},
+      {"$int":"slotMax","value":"1"},
+      {"$int":"incLEV","value":"5"}
+    ]}
+  ]}
+]}

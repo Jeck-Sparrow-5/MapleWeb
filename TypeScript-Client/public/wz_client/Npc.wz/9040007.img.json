@@ -1,0 +1,19 @@
+{"$imgdir":"9040007.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"dcLeft","value":"-34"},
+    {"$int":"dcRight","value":"34"},
+    {"$int":"dcTop","value":"-30"},
+    {"$int":"dcBottom","value":"0"},
+    {"$int":"dcMark","value":"1"},
+    {"$imgdir":"script","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"script","value":"guildquest1_will"}
+      ]}
+    ]}
+  ]},
+  {"$imgdir":"stand","$$":[
+    {"$canvas":"0","width":"67","height":"30","basedata":"iVBORw0KGgoAAAANSUhEUgAAAEMAAAAeCAYAAAB32qNaAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAQ5SURBVGhD5ZmLddswDEWzQlfwClnBK3gFr6AVvIJW8ApaQSt4Ba+g4oJ4DMRQdtxfkprn3OpHi8QVCKntyye1peFp23K9TMv1WliW61NLWcbhsIynw3KZp+UynSpcC56ieSYAMobj3mFfzE8kZTnsd3WJCElxMWRNQP/gv2suQljhMBEFMsX3rZZkMcOhwG+D/6J5sNQFybjMY3B2CWU7mxdbRiEmwz0avmXzYA6vJiAVS4RQH+ZpdJCR8YzpSBHcN/EtWkx+XubzYFjwBsdaIrxRJGTF2QRNJsb2gd9ovxxvivmycmLC83I+HSuSQga4HJPSiihYnwwSTF4WYwfvMohxgy/VbMIl2Gkc/A2RpZzHNzlToCXiAfMdIhEN1wt9LLM61wTjB1+i+aR8OdgWIZKSyYKUNQQ6j7Yf5CD9nnadOnQL1SfmUabzea1MOkSUAKJW2LYn5b0YakORUrZWdwzPGrvfeTjWwHc7g23AvbIU5lOm9e+aBq1PTyIyV5YCYm5IEWsx1IryW6TomsvooHv8bRk16Mwq4A0RlUhh1RMPdJ5XIlYcCxJA/3sy9vvX+vu/JcQmUqq2RbJCE84QOBNHjgfcEeJS4hVLn5vZEvfVEsjcEsIXLXMvIdQH+EdanQAS8mutRZPXU/R0Vx1JMtaU1yZSlC38jm0NnBrRwnkDAXA8Hp1WyHngM//1t4X4DTQhwdO0P2oQ/i0gOoIkRsuDfj0put7LFI3dkyEJMJwGByHMfb/74SKA/Yjp4RbBbNSCJME61eOyz5fkmiyHPmwJTiL8reO/Pa0k+LdHICmSkbNBEjKeMSYgs/vxuBAfmKfEE+3KCPSdUL4g3/BXo21dRAQvCWyBv7jpiWcx+VwWIzifM6KVoPPEQfC/I4K2mpBQum/RCllhmfOGBc3TjuCRlcdR+kM+n6/nrJCQfAzEAUj4VRG0OrCexsSXISlvBY59L3RRLEvB5DugMCby+SrNBLiQJEP7CvYWnv5BKyBDHCWcIqXsPt5cgNbpOyx4hLgIOy6CbEnY9mRfidpqf7LM0NaF8HeUhBfVWJKTCWf8reAloD2n8xsyPtTyD7Rfs+I+NolHsAkfHPttprmv5uEyIsV7Qedz+byI+9DqPf2o01bv31rp+Se52L9PeaLiskHbr3cvjUumIUQFT3OUkDbgLRkcE5fHadmm4qpzRm313cvATKJdu7fwt4eK4bvi+DHK8liPyzmJOFrGSIRASA5YQbcydIyEjK4nKesPkUdk8NTom//57hHO8VFVjt/uuyUDsgyO85LpyWDbShDKDvpJBs0HBAYnSIoXE1XF7+HFM4Ssr63fIBW+JA0kFKxvBx/XtloiHnASIrKIHpKhoEESuJbBQVFRmt8cJAQ23yB30Nujx+ik/vwHUj428rgSwhz10O6J8L6x3wse8nn6IyE3nXxCXl5+AsrIjA+09A2FAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"34","y":"30"}
+    ]}
+  ]}
+]}

@@ -1,0 +1,9 @@
+{"$imgdir":"1012110.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$imgdir":"speak","$$":[
+      {"$string":"0","value":"n0"},
+      {"$string":"1","value":"n1"}
+    ]},
+    {"$string":"link","value":"9010005"}
+  ]}
+]}

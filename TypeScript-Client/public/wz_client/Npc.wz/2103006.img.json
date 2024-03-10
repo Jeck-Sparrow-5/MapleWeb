@@ -1,0 +1,20 @@
+{"$imgdir":"2103006.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"dcLeft","value":"-8"},
+    {"$int":"dcTop","value":"-16"},
+    {"$int":"dcRight","value":"8"},
+    {"$int":"dcBottom","value":"0"},
+    {"$int":"hideName","value":"1"},
+    {"$imgdir":"script","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"script","value":"ariant_house4"}
+      ]}
+    ]},
+    {"$int":"talkMouseOnly","value":"1"}
+  ]},
+  {"$imgdir":"stand","$$":[
+    {"$canvas":"0","width":"4","height":"4","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAARSURBVBhXYwACQRBBNmAQBAAElQAjVVCqPwAAAABJRU5ErkJggg==","$$":[
+      {"$vector":"origin","x":"0","y":"4"}
+    ]}
+  ]}
+]}

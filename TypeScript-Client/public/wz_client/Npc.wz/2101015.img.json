@@ -1,0 +1,10 @@
+{"$imgdir":"2101015.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$string":"link","value":"2101009"},
+    {"$imgdir":"script","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"script","value":"aMatchScore"}
+      ]}
+    ]}
+  ]}
+]}

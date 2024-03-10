@@ -1,0 +1,14 @@
+{"$imgdir":"1051001.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$imgdir":"speak","$$":[
+      {"$string":"0","value":"n0"},
+      {"$string":"1","value":"n1"}
+    ]}
+  ]},
+  {"$imgdir":"stand","$$":[
+    {"$canvas":"0","width":"47","height":"72","basedata":"iVBORw0KGgoAAAANSUhEUgAAAC8AAABICAYAAABm1qxOAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAATfSURBVGhDzZiBcdswDEWzQlbIClkhK3gWr5AVskJW8ApZISt0hZQf5Kc/IZCSLFk27t5ZJEHgQXWaXl92jr8BTxsmeH57M77e343Lx0eFOUh+pqjSKh4NgDXy87XHRyM+J/9MA8yKk2cbYCI+kgfPNMBm+UcNEIoDL+x5tHwoTbysx8sfPUAoTbys55HyobDiZSMeNUAovJZomHvLhyIRXs7j3zrBGfrkdvtGKBrhZdeCXrnlPhFKbiGQjdglQoERuDNiaV5iczRiS5r+fZ+GRHc6bIpV0srfzzkmGEAH82eJm+MmcRLKJ5ocCA/OEwi/x32L6HAoXpvKGwOTPCcG6hlr/H5fcTmTGimn7Fs0BwrOImpTRQbgec13uU0N19Pwecwt+aWuhW1+nt6uCSWJIIf4QrZm7r/fvO8benwNPuM+a6V17cf8clZcLPJBSsAAvSEszxWZrNF86QCgVwOfaa/2lBzsQVrDEn6/PoxwABXR9bVgbjaSxz2gzyWn3pccW7u+Ja+J2ozykwHKuYJ7dpcNS/HJHTxLjpH2Lud3+9Qaet+e5T7WiTAsUeWbAVCEjUEpOIH5JMoh+jXT/PJMJz6bZSdyYm+AcsZijURp1qDngKLAn3nkPrwKs9EfgNIq1hMlKhwR3QmAV9abD0vWASbiPek1glEu8bmpV/FaHFdxyvuiUWPF50dE94Dm3CLfiHv5qCGRvLf0zwvQWxujGqU3fLLWsuiLg1HDAiRRR2Wx9nvDWuidPMq9xTGWB1GzBKWJngHud/8EuL5RHDEv74DMnDjhOfJPp9TH57DvLvLBAJT10j5vDg5AbH+DOGM6QDBEl17+qA720XOjOKMWCwcBkUQCd+2+y6/7/g7Or9Jgl8jNRkN4EYH3a53gh9yJ3yVycx2CRIPwjOue9AHiGmw0HcYPAPQcqHjZK7UOj/4QOoAnnevdxKFhTfk/DPq/DM0AHUru4TGRJt/ns8GcEciX9SExEfZQvvkKJbB3en0N7+AMxe8dYXNF376KYy+Sx/8UX9JvVeSgwT2jNgRehOgA4Ofrq+7pABQ/Qt6aa+MekP13uRi4E8kjj+JYo35us3/U5sDLUwJwrzcA5P29w+XnBqAwh+AanxyA4jPyPBvldKNKszmYk2euHwBQnuIdedurvxvSL7aytyqqBAQo5eWJyjOXzxxA5fmJPor9TSXiu8hzAL4xSnsoDHQA4OXRg7WR24hveOuIydtbMgDzAe6zBj4hz7usT/i7oYrz+TrAqkFqYcp4+WgA5qoYoTzytP5n+spVeT9EGWDtV6hprEIq7wfQOwRyIJJH3UZepZUt8oBvHvQGYC7zuF4s3xtgy1sH0ffew1zFywP2wDnOZgfYUx6oNNF7njl57IFmgJVfF0TT1MuP3j6/PhFz8njGPtE/gbK3KG6WV0HPCnkG17o3G1WchQn25uR7oK6yQP6mqOL6AwM4ABpFgn4ADsWvDmrnFneUN/HOTz1QQQ+F/SAAtXMLi/qS8Il13t4WffkygH+jFOUPpoe5qJ1b1DDx+8h33v6cvF8zD6B+blNjN3FEK69DpE+VJkvk+c9m1M9t7hMmHw0QiYNnkkfUAfAMmZ446MkT7B8pj2CjoThQWTx7kHO0PCMUuhXUy2WPCTbck8MjklAQ0b5nQ7y8/AeitIUxEQcRVgAAAABJRU5ErkJggg==","$$":[
+      {"$vector":"origin","x":"23","y":"72"},
+      {"$int":"z","value":"0"}
+    ]}
+  ]}
+]}

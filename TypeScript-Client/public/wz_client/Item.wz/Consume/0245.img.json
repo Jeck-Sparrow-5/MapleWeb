@@ -1,0 +1,20 @@
+{"$imgdir":"0245.img","$$":[
+  {"$imgdir":"02450000","$$":[
+    {"$imgdir":"info","$$":[
+      {"$canvas":"icon","width":"28","height":"28","basedata":"iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAG5SURBVEhLtZUBsYMwEESxgIVawEItYAELtYAFLGABC1iohVqgt0mWXI6jhX7+zrwpTTa7pKVp9UHLP7FRmLj1T5dGuA8ZvPd8Him70NIgxIEF7fhaugSuQ+kX6m70y9pBQjxSwUMY5kw/5WJ3XaJ+TJvCELZBAhEKUDDOSwHn4Ftxcm5eob7zTAyenhkK1yyGL1NmeGXQMiLAgNAZvCJWmNM342U0vbM7vQiEEiAlz8SeOB9uSmUQt5A7IAwh30SfzQFuof4I1h2mBUcFL3el89zC+LTFL52l4KxYoh8i9wnl489C8KuOFELr7wimv+pQYSdl4CrxUADux6rPPp6Z2PFRwbt3ru6epTzVYcLiMzuGF+v0vwPZLawxmUyhUHZ5VPDeBWZYKqdUTvV5Bf9z7YnHFV7cpM7QuIVVh4kICn9BZ5S4hfI0kdbAMevZ827wClsZDMixY8QxHcz3VtnDPOFIYV6YCyDv2vri9X4ZlA1pkZYOo7wxiOOfCuMgSSF5YRnsXWvf+p1pbGEtJqIDqSJYefSrzliznDLI/GZiYAHHEKQ9ZtyC7FiRtTmKrgC5iY305NUYVdUblyKucF6nIxYAAAAASUVORK5CYII=","$$":[
+        {"$vector":"origin","x":"-2","y":"30"}
+      ]},
+      {"$canvas":"iconRaw","width":"28","height":"28","basedata":"iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAG5SURBVEhLtZUBsYMwEESxgIVawEItYAELtYAFLGABC1iohVqgt0mWXI6jhX7+zrwpTTa7pKVp9UHLP7FRmLj1T5dGuA8ZvPd8Him70NIgxIEF7fhaugSuQ+kX6m70y9pBQjxSwUMY5kw/5WJ3XaJ+TJvCELZBAhEKUDDOSwHn4Ftxcm5eob7zTAyenhkK1yyGL1NmeGXQMiLAgNAZvCJWmNM342U0vbM7vQiEEiAlz8SeOB9uSmUQt5A7IAwh30SfzQFuof4I1h2mBUcFL3el89zC+LTFL52l4KxYoh8i9wnl489C8KuOFELr7wimv+pQYSdl4CrxUADux6rPPp6Z2PFRwbt3ru6epTzVYcLiMzuGF+v0vwPZLawxmUyhUHZ5VPDeBWZYKqdUTvV5Bf9z7YnHFV7cpM7QuIVVh4kICn9BZ5S4hfI0kdbAMevZ827wClsZDMixY8QxHcz3VtnDPOFIYV6YCyDv2vri9X4ZlA1pkZYOo7wxiOOfCuMgSSF5YRnsXWvf+p1pbGEtJqIDqSJYefSrzliznDLI/GZiYAHHEKQ9ZtyC7FiRtTmKrgC5iY305NUYVdUblyKucF6nIxYAAAAASUVORK5CYII=","$$":[
+        {"$vector":"origin","x":"-2","y":"30"}
+      ]},
+      {"$int":"tradeBlock","value":"1"},
+      {"$int":"notSale","value":"1"},
+      {"$int":"timeLimited","value":"1"},
+      {"$int":"slotMax","value":"1"}
+    ]},
+    {"$imgdir":"spec","$$":[
+      {"$int":"time","value":"1800000"},
+      {"$int":"expBuff","value":"200"}
+    ]}
+  ]}
+]}

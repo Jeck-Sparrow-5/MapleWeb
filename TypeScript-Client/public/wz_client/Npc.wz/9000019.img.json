@@ -1,0 +1,35 @@
+{"$imgdir":"9000019.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"rpsGame","value":"1"}
+  ]},
+  {"$imgdir":"stand","$$":[
+    {"$canvas":"0","width":"48","height":"88","basedata":"iVBORw0KGgoAAAANSUhEUgAAADAAAABYCAYAAACzpXSwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAc5SURBVHhe5ZiLcepKFASdwk3BKTgFp+AUSIEUSIEUSIEUnAIpkILf9u6OGB2OhPjZVL1TNSVpv92SwNz7dkf9LMxL1QB2qQ7HY43P6fn1Gja/pyaEnlp3Q2clkSDz8Orb5bXbH37ev/b1eGs9U6RvcaoIy7USa7X5Ttun6tEifdlxOazuvrJUbK5cYv/9fbNEX+68HOrSua6vrUdI9KXOa7Mb33Wus3ZyT90jUSd5+WJEgOvtd9pO1HZr+brkGomzyVpgabL5WS5VHM/a8DXM6RpBOJjy9fHvYrJ5DnNLWAO+hjldZxsThztsPs+yX32M4uOJr5XBLQ3zYWyo0zVsJgAgj/vVEIH7uWdOSGuTDHIumgdjQ82rDmIzAf8ctil8bFME7ufbr/eaTIRkwFkYC2NDna4KBrjgXSK7BlbHLI8S0TgYG+p5NcBj+Y4nSPSjYGubXQOoc107uJ9nItvdfiRBMniifjgb7rgqwAg+EahjEgniYxzcz5dKkKsFBO8QLiAQzjMB7/d2SbjAUgkSBRgLb8Nu1aDC3WZTv9sOU8cnEvSrLbYLWue6dok5EWVaoAAJThuoXTC+OW0eh9U63qYskbgkAnNDb1U3A5QFfUOBOKQ2netXn0ftRNDxeqkEfXA3/C7AJiygzTjn6BAaFwHU5xLq11y1K1ojhn3Xm+2sxGIBSSgC0Uberz7NJ4yb6yObz7EA16zrElGEa/phHwmwgKA4HvfbSVDaDtt1PTIv9nMuKPXFqB9oibhAlPC4ADUpoHCtPoVrlyDeT9R+qU8SCmvOSaQCWlSwBPifw/ekCOeSIA41lyjxYIH3ATwmiihIuIjDCHIuPl5hnUxCbXA3/FYjgQG6/BUcEiSiDOdRhGRwS8JcwcbA27BPZZ+DIkA5vEdyiUxsjzIxGbhCfwZP4G3Y4zoJANprvy6vV8mZCDEZReOJy/nT0Surp96AT5mTgLPhnlddMAqoJiUsw5ggFUVc4iTwbxgrCReAr2eyzgQAWn+WRUocdC4a74lPQwKSmBOAq+dijQQcXomwMXF8jETiU+CcPvVLAKaGtryGzwEbFioLhxPsbOz10V0lEskEfBz7w9KQrqsqsCr2Pwf+jVBSfn/UI2AXJfqc/f4sx/1uAGyQYwGHv/XuU3XB9edHAS8bF6jjbtcgAONJnEF7EG5jmXeWCtmOEngkPDUW6Bu7wH79Vc7LU+nQ9VoC9e4b8K6A+XmF341eIY6APwJeVV6j8s3wVb4Skeh3tAJSBV7vcv2cmMzwBEYSPf0ukygA+KPgqfo54NjggOfu9xpgJ8Iciff4+w+8BPT+PxKeqgtzJBVIyYAVH2dp4E2ggbfXRQLap+RhFRes1yOwxeCnCFy/KhHoaz+8phatGwKRASsROIJn/6797TqDyzLc6dV6BK//qPpzCUogQAL2/V7A/5V/mZUIlD6OZLXevJYAQC5Rzwu8gIe20k8YT0mCddpyv18VBAigJHD8+BieAtcq+iVEvcxTAEQCnLuEw0YB6iUEBAIYMBIQqCAlqDHexzptud+vAQQoAPUUVGpTXIBr5rJOW+73a4CIX6FeGqM7/ioCI2D+cOkP2WG7au32VAT7KgINuAAAXO848FRvcwnyak+gAtQKAgJWKCB1/TICA2ABH373BDCudU4E7+NoY7227HNLG9XNKQCAqQIdVuUSgq8CiIb0dZ9anaoBqRxyHf7yep/Dt87yuiFbjnxWWL9t87yqG9YP5gTkVxfwpzDqIwj0dXTUh509ZnJz1QXqxv1uSWD0ipQxP6sCVaJ+ijHe7+vw2gmefl+DnyEecQB0TZVbWP49uy1fl33zCtDLBXZlrDarwKU9G3Ogv6+jZPD6Oe7hFYWpoV2uEbzgPt/fhjiY4BTaJaDxGqPxyhJ45RqJJmDwEtD/IkSwKKB+ja3jyo88hR98igQyaM9SgbM77wIAOVQmQBv9LusCDu/JoGOWSFSBCE/W69OdnYJXJEGYRzJoovUzYLKyp3OzwL68UsfyTm9LH5kVKFCEfsAZz9waA18iAPxms6nheplAeH0EHyuFJwWKTM27RaDeuHJ9tQBAiwTKV6LACWB/LuCAEWQEXo9j+CFh3qiv5ykCA6BFMKe2E/QZuKfPS/tK5gSI3n9yl8ApAJdj2XwWfGEuCXgeI1A2jfC87/Wdt7almRLwr0/lPoGyWQQn+rAOCf2XkgnEr0/lRoEcnCz9ppnLnIA+vMp1AslXY8zrCpSF58BHCQLpmJk8VSDbME2XSPsuJBMg8f0niwWyjZ6VKYEsdwnc+lV5aV4UyL4+lZsF9GEdEvqnsmSeC0x9fSo3CQgilo/JsnReJhA/vMr/U6AmgJz1T2XBvN8RIB0m7ZvLzDzBS4BMvf9kiQCVbvaMOPilLIWn6sLZho+M4AFTIrTnGgFqeLTZ5vcmg1ciuMbB1NCWV50kkUdGUEsiDoBuLV/kLzJRb2//AdOBAxVOD/bAAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"23","y":"88"},
+      {"$int":"delay","value":"250"}
+    ]},
+    {"$canvas":"1","width":"48","height":"88","basedata":"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","$$":[
+      {"$vector":"origin","x":"23","y":"88"},
+      {"$int":"delay","value":"250"}
+    ]},
+    {"$uol":"2","value":"0"},
+    {"$uol":"3","value":"1"},
+    {"$uol":"4","value":"0"},
+    {"$uol":"5","value":"1"},
+    {"$uol":"6","value":"0"},
+    {"$uol":"7","value":"1"},
+    {"$uol":"8","value":"0"},
+    {"$uol":"9","value":"1"},
+    {"$uol":"10","value":"0"},
+    {"$uol":"11","value":"1"},
+    {"$uol":"12","value":"0"},
+    {"$uol":"13","value":"1"},
+    {"$uol":"14","value":"0"},
+    {"$uol":"15","value":"1"},
+    {"$uol":"16","value":"0"},
+    {"$uol":"17","value":"1"},
+    {"$imgdir":"speak","$$":[
+      {"$string":"0","value":"n0"},
+      {"$string":"1","value":"n1"}
+    ]}
+  ]}
+]}

@@ -1,0 +1,14 @@
+{"$imgdir":"1031001.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$imgdir":"speak","$$":[
+      {"$string":"0","value":"n0"},
+      {"$string":"1","value":"n1"}
+    ]}
+  ]},
+  {"$imgdir":"stand","$$":[
+    {"$canvas":"0","width":"53","height":"63","basedata":"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","$$":[
+      {"$vector":"origin","x":"26","y":"63"},
+      {"$int":"z","value":"0"}
+    ]}
+  ]}
+]}

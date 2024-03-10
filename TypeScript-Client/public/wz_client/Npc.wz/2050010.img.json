@@ -1,0 +1,13 @@
+{"$imgdir":"2050010.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$imgdir":"speak","$$":[
+      {"$string":"0","value":"n0"},
+      {"$string":"1","value":"n1"}
+    ]}
+  ]},
+  {"$imgdir":"stand","$$":[
+    {"$canvas":"0","width":"41","height":"68","basedata":"iVBORw0KGgoAAAANSUhEUgAAACkAAABECAYAAAAcChxyAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAASsSURBVGhDzZgNleIwFEaxMBawgAUsYGEsYAELWMDCWMACFtbCbL6X3vARUmihYfedc09pft67k7SlzOrF+H2DrlEKrTe7h3ytNzesvtZXLE9isbgT22y/m/gYGJON84VkSzGX+d4fb/A+4ZLQEq1kX4pITuFarMUroqXtBdFIWgvuD6eCy8Erkq+KRsJHgv+DaCRrCZ5+zsG/loxEFKFwD8l3RCORCwqkHO93PiJJgbr4XEHRQzIGUKAl8QwXFHMlp4hGJwVaElCH2lwO/r3kdhtcLpcbMWgJCiRC5F1J0RIUPSS9PfqmSoobMQ8JpjmSdJj3TDBETLAeK5+sdY0y0QUdxMoKSnDgZ+B8PsfYuiBQQ9SCdT0hr6yXo0zWqrUmIelyLoikSzmevyXIjnlNeWW9HDeJhA8W9ba6mONiDnldkDou6HN0LrcQ9E5NZMAYknFJtTG/xTPBw/Gn5KBP6PxG0gsxgPaaWpJ5LSjogvQhqCNjGcfYIskECZDAk9VIzGmN0XxoCarWM8kASXUi6aItKDwHn09+l6TtTrAlCcgyeQk8p9dCUg6zJDWRbajxYnNgPqsrAbWrjv6ISZIkU4cmKSGyghfeGh/ToiUnvjepuI6pb5akGpksWls1FebWxZUfdM7Y2ZKeZAk8p6M+l2yKuqQGqvG4+2om7IHq1ZJ3skhqkEv2EiU3+R9JhuggSNxJkmgpyHnebwJ9ZrVGV7MliagnaqG+yym9dCQejashL3OQpPYjQSJ3pEkIIAG0/Z7TS7DRGgv73argY5AMoUG0OIwIesSgEPhzfguJJaPgfNrGOZKIITnUnRXXFWsU91V89MeEVJITp0OSS8fdcH1KjAe56uWy82NcNLWpH+76hzFCogjqKElWMZ7NbwgSkaTItoQdxhiaKzEJxrYm7MZ4W9CjJFXRudzI6fPCcq0owpMYBAu5/SNxV5w79kr+utVnXX9gW901rts2CMQNkD7zzSHBIjR8Vh/oJ4fy5HR9ogiMIWE+I43cKc3vLRnFVJyXYs5ZJSEx/0MOh0P+54JivQ5RoXw57bJRiuuIUC3tgkIrG6JJUOg/H71WMwQo6hICSf854EhSYqymzpUzp14uojg3i2SQdsExSVYToq2n5GaTrkFjimRIDTeQ9ytvTr9MRFJJHY/pO3m//93t0nVZCY+xTlvM46irZGsVhaRdvCX/MUltFVK+khKYgiT9plPOnHq5KCvJaiHJtQitx5BAlPPIuWDEa5cSS6pGYrpxuHlakrHNSVKvbZfjJr3ZHQLlziXej5DkmpIEQkgg+khSO9FVUon9wpeMyNdZ+tk6nEMtiiS5QOdRYaEoog4SdXuTLFSzSEQy+xoLfIXKKtmdWxNj8tzFo3yN8b2rI8IqrK1FUlssId/y3pIhVF4KUiDokhJBVDKSRb635FUuPTYIBHlGapwE/CZhyxHtLylBGCT9Qa5xyLikzllJVrOfpGIQZKtdUKi4y+jookV+YUFFSNUgqX5Cn2ewaLQKFDx0vt1u04LnBzXQVrV/LLxoMCbp5xVdI4q3VqmWFGNjB7pEvEcqdHwiEH31+E+I1gWWYPFoFXmXCbFa/QUM+9Jto48afgAAAABJRU5ErkJggg==","$$":[
+      {"$vector":"origin","x":"20","y":"68"}
+    ]}
+  ]}
+]}

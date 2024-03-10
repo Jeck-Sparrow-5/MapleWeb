@@ -1,0 +1,10 @@
+{"$imgdir":"2101018.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$imgdir":"script","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"script","value":"aMatchMove"}
+      ]}
+    ]},
+    {"$string":"link","value":"2101014"}
+  ]}
+]}

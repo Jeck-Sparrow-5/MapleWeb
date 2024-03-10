@@ -1,0 +1,17 @@
+{"$imgdir":"0226.img","$$":[
+  {"$imgdir":"02260000","$$":[
+    {"$imgdir":"info","$$":[
+      {"$canvas":"icon","width":"26","height":"30","basedata":"iVBORw0KGgoAAAANSUhEUgAAABoAAAAeCAYAAAAy2w7YAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAIDSURBVEhLrZQBsYNADERrAQtYqAUs1AIWsIAFLNQCFrCABSzcz8vd8kNnaAslMzt3pZd93QC9fah0QKcrtU2ThrZN4zC42L+KM01dn4atJq/CNKquKtdZmJsqBXtWzARjBaDP7OnL7d/Xah6N90C/JKLcQCZRuh7F+dx2rtLAgzCOLvao67qNOJePny8HTPPsElDQq0BuOC9LUrEXJKZj5XxuO1Zp6Ow9MQOMBUEx2QrirIm+3P59peVZuxnGAmxGSKICGB+W3kRfbv+u3CQtD9PsaTY19RtY32TI3FWHU2WQGa6gsnJdP4LV02g12GEQv3iTBmhZGamEuRL5ainpzzafK4NiMUbKUzLSh49qaq8GKZEBlvHuaSIItXUeOf3Z5nPtj4400z3NfbWChp9BMrciAWBPYxLEQWVsp0GYqXzPgwBkqFfIz4m4qZ6iFCC/L30WNx89TYCAXALC1GGksTWClOY0yMelF7UY8xBMXU6hkV0KkuGztb+ZAIgQ9sdB1kCjnjw3IZXdfI1LWtPw/VGQ/3dZKhqB+dgsoaRRRoh66DdV7vSmOIAcQrP+MF8TRADilaDP1JjuRbVpA+UDF/mSgw+TN8YXdy3uHddJ+z8u1AW1JnzwdJggAuhgXxSN9qSz0i4oJuEAEvCddFamksa3OzqJQ6+Ks4+KfQgvqdTt9geKXun8QXOP8AAAAABJRU5ErkJggg==","$$":[
+        {"$vector":"origin","x":"-4","y":"30"}
+      ]},
+      {"$canvas":"iconRaw","width":"17","height":"28","basedata":"iVBORw0KGgoAAAANSUhEUgAAABEAAAAcCAYAAACH81QkAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAG0SURBVEhLlZMBlYMwEESxgAUs1AIWagELWMACFmoBC1jAAhZy+zdMuqG01+5785KDnZ/ZHG1OlX7QZaWh79M8DGmZZxf7s+jpu+4SVBrOwhDVta3rCuQGnc6elUaBWDHrb/b4sj1XMUbTO8i7JJS/VEOUnkfRn22vlWYudVlc7NE4jpXoy+3X5eZ121yCCfgNxJu3fU8q9gLEVKz0Z9uz0jzad2AvMQmAYqICodeEL9tzpf3ReSMmmauxSHKYl7ulNuHLdtvQkPa7afMUVa1TBZr6DNjGtkqTIdZcIMfKcx3A6im0GqiCcFKVAuCxMqaEUUl8tXQ1JBajUZ6OMe8efx1+gSiJmffl5ikiBA1dvoYacjUOKdZb2qa2QOaPEBmtOBmopzAJ4JBjlEsIjSrfc6kA5q4APibhgvz0o4D4PUxZXCR6mIAA+BeCwUGksDVClOIS4iPoIztMXOg65tM1xtcQNT8G+7SDOQLY1xD7g4f6D3kDaewiNYJUUvA+Qvy3YGl4CMhHsWSSxosAeQShHMAL/bjOJ0cz4rPAl+3P8ofxoyvFXfGclM8RXgCxYtM7hWqaP4gj0wK3SYm3AAAAAElFTkSuQmCC","$$":[
+        {"$vector":"origin","x":"-8","y":"30"}
+      ]},
+      {"$int":"price","value":"500"},
+      {"$int":"slotMax","value":"200"}
+    ]},
+    {"$imgdir":"spec","$$":[
+      {"$int":"incFatigue","value":"-30"}
+    ]}
+  ]}
+]}

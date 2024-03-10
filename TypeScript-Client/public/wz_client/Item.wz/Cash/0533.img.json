@@ -1,0 +1,13 @@
+{"$imgdir":"0533.img","$$":[
+  {"$imgdir":"05330000","$$":[
+    {"$imgdir":"info","$$":[
+      {"$canvas":"icon","width":"32","height":"28","basedata":"iVBORw0KGgoAAAANSUhEUgAAACAAAAAcCAYAAAAAwr0iAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAJfSURBVEhLtZUBlbMwEIRroRZqAQu1gAUsYAELsRALsYAFLNQC/87uDiwBevzt3bz3PQokO5NNjrtd1PwLfCSd/BqzkIwyKH3pla50SpvbeRye8yTPprzHa0Utz05fTmK0FuzmMbVzP5o5DAmMIwX0jdI/74rXhPT3OE3LsxniDa7zNArFsdUPYgz6sHqYsSPEzJ+LcdcI7RJgnqaXmpcyLp4xgDLKipVkq85S9C5FIrl7LGClGXTNPLQPNW6bm5ivNaEjc0hfvl72EvffBOjcHKy1zRzAfEhpEwDyga81gJiXodWWovgmQGcBuM8W4DGngwDRPOWs5nUHIDOOHfgyAOpE81zK0v6Uyz7AcQdgboeKxiS23k5+IwEehwHUeBxP20/9QQCsfmt+1H5q3QI9fJ2Zo7iYRHNAc74HDMDTX9B2mBMxzwftj7KJGsD2Pxbnb35s6nOQ5E+wPoQwJEd7fyTrgB9AFudq61UbCCKHsAoQvwOBH+WrDwF0tbxy1WaK+yTng9c6QPUlvKS3AWgMMJacBsCZkM74uEta9h/bsLY8tt0K4pBRuCdqLsbhnxC4rF0ADRECYAwUA0ThfeAj1UU2UAiAv/V3quZ+LS9rYoCaM2G+85G8zCoGwJXUYY5ALSt5XW5pioaAwm98eiP1WNSykte1K3KmehxgkE9XTunkK4Jp3fJvzO/Ow2Eht9srBqB8TiOgBur9KJpi0lNohc7pndMwDAH5GIzHXNRBzbchaE5jGg5OOmAThgH8Geb8d4B3K38Hxi1hBMwHqPXRFhBMrmHRmjgPoBapdLv9A8z3v8s6SRXQAAAAAElFTkSuQmCC","$$":[
+        {"$vector":"origin","x":"0","y":"28"}
+      ]},
+      {"$canvas":"iconRaw","width":"32","height":"27","basedata":"iVBORw0KGgoAAAANSUhEUgAAACAAAAAbCAYAAAAdx42aAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAIpSURBVEhLvVUBkYMwEKyFt1ALWKgFLGABC1iIhViIhVjAQi3kb++ycAToM+3/78wOBJLdvUtKbxdRfoFvQRc/cxQGY5qUYxqVQxqUfexLnh5llmdz3LNqeSzPTl/OYrQKDiWHvozZzGFIwtgzgWOnHB9fyqoJ6H2e5+VZATjAtcxZmCqt+kmMwdFVDzN2hDTzx2I8dMJ+CVDm+anmKeXF0wdQZqlYGazqKKJfIuIZh/tCVBrBoStTf1fjvruJ+aoJHJkD+vL5tJcYfxJgqObgqm3mIMynEDYBgDrxuQYQ8zT12lKIbwIMFoD7bAHuJRwE8OYhRjVvOwCYse/AhwGg481jSkv7Q0z7AMcdgLkdKhqTvvV28jsJcD8MoMY5n7af+IMAqH5rftR+Yt0CPXyDmUNcTLw5SHO+BxmApz+h7TAnxTwetN/DFmoA238vznt+bNpzEOQn2B5CGJJHe38E60A9gBRntW3VRgSRQ9gE8N8Bxx9Rq3cBtFpeWbWZYhzkfPDaBmi+hJfwMgCNQcwlTwPgTEhn6rxLWPYf27C23LfdBHHICIxJNRdj9ycEXsYugIZwATAH8AE88N7xLbQiGxIIgN/6KzRrP0aVNTBAyzNgfeVbqDIrGABXsg1zRGiZ5HVUS4M3BAnc49Pr2c6Flklex07kDO08kEHerZzQxVcA07bln5p7UKja7eEDEHXNr+M0DEMAdc6fYxOGAeqzf8cSRkcvcbt9A4oBqAUjc/F3AAAAAElFTkSuQmCC","$$":[
+        {"$vector":"origin","x":"0","y":"28"}
+      ]},
+      {"$int":"cash","value":"1"}
+    ]}
+  ]}
+]}

@@ -1,0 +1,14 @@
+{"$imgdir":"2073000.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$imgdir":"speak","$$":[
+      {"$string":"0","value":"n0"},
+      {"$string":"1","value":"n1"}
+    ]},
+    {"$string":"link","value":"2071000"},
+    {"$imgdir":"script","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"script","value":"watermelon_out"}
+      ]}
+    ]}
+  ]}
+]}

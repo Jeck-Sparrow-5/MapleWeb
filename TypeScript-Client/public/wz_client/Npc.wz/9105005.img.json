@@ -1,0 +1,18 @@
+{"$imgdir":"9105005.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$imgdir":"speak","$$":[
+      {"$string":"0","value":"n0"},
+      {"$string":"1","value":"n1"}
+    ]},
+    {"$imgdir":"script","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"script","value":"out_08Xmas"}
+      ]}
+    ]}
+  ]},
+  {"$imgdir":"stand","$$":[
+    {"$canvas":"0","width":"51","height":"67","basedata":"iVBORw0KGgoAAAANSUhEUgAAADMAAABDCAYAAAAxgz3rAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAASGSURBVGhD7ZmLcdxGEAWZk2NxCorFKSgFpqAUlAJTUAo0esGG3g0Xezh8SLFKr64LwGJ3Zpoyz2Xr6ew8Pz+/wnR7jz86N8O+/Hpd5cfL683eNz49yzB14OnTpe5DrCP3oXknMH0eJs8rVcQuzY3E9Fm4l9xbuSN1Sd5J7I3nkxSCK4VOkaixnvSEuNJ/HuN4WsHpc0mom1SZM4UuFTHUT64Q+hARQx9JGfjSMlBljgh9qIihn6QMfGkZqDJ7hD5FhNAzSRn40jJQZR4V+jQZQt/kr8xbPlWE0DtJGXhEqG2aPp8WeicpAn9lMjz/+/1l4Z9vz+/2nBFqSu2nwCEZC3MFC14hZI+1forskuFqYcIVrhCy9r1+u2WysOHZ4v/9+HVYiLOytd8fK0M4Dx8i47P3Z8sQamztt1vGZ8nC33/+/r2BvfH81n67ZLi3gdTC7gd/sjW+r8kzsKUfz1tlSNs4fW4aWGRNBNyXa8Be4J64zt6UgVE/12CXDNgAHKzuAfe5R+rZXB/VyTMKHJYB1oRnw32S+xyYny44XO6ZPgs1uQ8eFSHLgenzjl56+8SfKnDf2wO9sH5UhqzKQKb3XghXJBQhuSfJ8NwT2SXjoemzC88S10i+G8GeZK+IOSzEea4m10akBCjiPMw2j7g9y2GYPrvIQaC3J7Gf1LPMNY/3eFoRC1PsSlICzhQxN0JA4UfI9N5D1ocrRMw7IZk+jW/TnsR143Ol1qsSQP95jPOyNLFxDv8y8TOeE4dKUkBWJE4XMa24Q04PTSJFuALvxP09FEgR+1j37fnUtOIM5+A+92SAdfeskWLiOevQex7hvLTmFKch9w7qms1ZW8NBHbb3zjoJ/ecxjqc1sek9mUqerfT2s64YsMYM8yjHszSn+JrMGjlo4vmKAhXmmMc5lpsmDOgzV9e4ssb98/QfVKJUxSF79PYxxzzOsdyIABLiOteU4dspv3JTcCQJuY/+p8o4sEMoAmsyiPBVm/8uSXqC4g+Affbn2qY5Ia04g/qPF+SfWE+GcOmRYj2q0DzGOWkDMKgiUEV6MjUsj6hCZ8u0JuSeTIpwhmfwPOF+RJU5W6g1YSgGVoT7kQz37mv3EeqNqEJnybTixOFkTYbm7s89GWqOqDJnCbXiJGWqSE+GczyDNTKsrdGTYZ155rH2pRUhIxmeq8y9UHdEFWKNeeaxHk8rYNZkEprSfEvYNqLKHBVqhwmDItCT4RceHhEhbB1xqYwiPZkazvEOrFHD+ohLZRCQFKFZDe+UbvedcGxEFTlNhqIMVaFBL7xL6RrqjlCkyvi/epltHnF7WmFDMX8/7v2OsKxwbwtrI6qMEkqxznzzmP24oeFhip8Z6o3oiXDvuy1CywHh+WyhrF+hH+RfMtnf2dyjEGvMPivMWTYb7oH1KpR/q7VV1Ho9HNC6uUb9kRDPzD9r3BHxkAVpZthzT4j1NawP1M2Bwd5cU8h1YS8eNzJJ71AV8X0KbcHaCbW5Tp+bfdZNGa4J7xcZv5mS/NZKRu/z/KP0ztf67umtPz09vf4P00a1kkfZFxgAAAAASUVORK5CYII=","$$":[
+      {"$vector":"origin","x":"25","y":"67"}
+    ]}
+  ]}
+]}

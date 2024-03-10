@@ -1,0 +1,16 @@
+{"$imgdir":"9102100.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"hideName","value":"1"},
+    {"$imgdir":"script","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"script","value":"multipet_success"}
+      ]}
+    ]}
+  ]},
+  {"$imgdir":"stand","$$":[
+    {"$canvas":"0","width":"59","height":"63","basedata":"iVBORw0KGgoAAAANSUhEUgAAADsAAAA/CAYAAABetLClAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAA0SURBVGhD7dsxAQAgDMCwWZh/scUDJyQOKqBT7Xzgl04AAAAAAAAAAAAAAAAA4NarN2K1B3b3DDnmx7BAAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"30","y":"63"},
+      {"$int":"delay","value":"1000"}
+    ]}
+  ]}
+]}

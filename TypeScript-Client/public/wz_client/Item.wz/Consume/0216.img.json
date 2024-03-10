@@ -1,0 +1,18 @@
+{"$imgdir":"0216.img","$$":[
+  {"$imgdir":"02160101","$$":[
+    {"$imgdir":"info","$$":[
+      {"$canvas":"icon","width":"31","height":"33","basedata":"iVBORw0KGgoAAAANSUhEUgAAAB8AAAAhCAYAAAAh3nDkAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAIXSURBVFhHvZYBlYNADESxUAu1UAtYwAIWsIAFLNQCFrBQC1jgMsMOF/YWWNpy8968wrLJT7Ic74oPNQb/qyZYCveXawWVwvplSkKlcRwvKWATOgwDDfC34YdQqes6wl+v18cFZEOlpmkIdvDTBZyGPp9PrqNrFdD3vS8gq4iQbq0taFmWU11Xy1kLDjAKYr5nh5FkFRDSztqCtpasripee6g6xjVzGXgsH9N4v9FYI2VHTArF4LZt2S0EIGAAebDvGGDuNbA9nKaqPCyAAVKqc4BLS1zXNaG/4G4FVseUgXMnMAeYPBxQAB+P+9K5uj8Co3PcV7ZntPcEe0lKaA4KQgGAeQOKIlBMPOoFDKjrWGBdI4a0hAgGKIajU4x5dcboLHHGHjyYdd0FI5a0SCug/3r9nvEaLBC107HAPdZtDTlIjLTA9Ubngrl+AM6CC6pxYwp49gecOOPUqLPAEH7V7fxW55/x2x1D9fyQ4N2OoS+BIeYDXAUcgbkeYO+O2ot5Bed9DE6c8Scdx2IB/A1giGC7vxIsbY5a94Bx1PbF+yYYmj+bEdif8RUde/EfgqvPeE8swIOvGvWWWMDS8TH4lvBpKfBuzu24TPgRjDyHhQiIAAQbr7A//Rm0A27NzYYRjzzIuVmAwIIqGInhabglwVYPrX3ep+Bxx7CKgAl1YK1rr0CyRn9q7DICYwscr/s4GLnkSEXxA+Z2sIUiNE5BAAAAAElFTkSuQmCC","$$":[
+        {"$vector":"origin","x":"-1","y":"33"},
+        {"$int":"z","value":"0"}
+      ]},
+      {"$canvas":"iconRaw","width":"31","height":"33","basedata":"iVBORw0KGgoAAAANSUhEUgAAAB8AAAAhCAYAAAAh3nDkAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAHTSURBVFhHxZYBsYMwEERroRZqoRawgAUsYAELWMACFrBQC1jgZ5csPfIDpC1p30ymJJB7dxeG6eVDJj++CqXCz7Ozkgq/no2oVIzjmCWBTekwDBwQny0/lIq2bSl/PB4fJ5AsFXVdU2zkLyfwsrTrOq6jaiXQ971NICkJH27NlrQoiqmqyuWsJYcYCTFe16IlSQn4sDNb0sYFq8qS11aqinHNWE48FvdpvF05sEbLDgwKQnHTNKwWQAgZRFZsK4aYzzqxuzlNZXGYADeIWOUQFy5wVVWUPsXtSqyKiROndmDe4LBySCG8329L5ar+SIzKMS/dM6N7T/AsTRHmTR4kAJkdkCIJJBO2ehFDaiqWWNfYQ1sEiiEK5agUbV6dMSqLnLEVD27ouvUDe2kLWAnt1+t5xmuxRGSnYol7rLs1xKAxYJHrjU4Vc/1AnCSXVO1GF3DvnzhyxrFWJ4kBflXt/Fann/HbFYNqvknxbsXgJDFgPMiVwJGY6172bqstjCs556E4csafVBzCBPjrxYBiN88pFput1hwyttp98c4Ug/mzGYjtGeeo2MI/BLnPeA8mYMW5Wr0FE1gq/qJYfL3iEIp+IRbTcP2NWFD6C7E4QXy5/AG36JZ9fHwGfQAAAABJRU5ErkJggg==","$$":[
+        {"$vector":"origin","x":"-1","y":"33"},
+        {"$int":"z","value":"0"}
+      ]},
+      {"$int":"tradeBlock","value":"1"},
+      {"$int":"timeLimited","value":"1"},
+      {"$int":"slotMax","value":"1"},
+      {"$int":"price","value":"1"}
+    ]}
+  ]}
+]}

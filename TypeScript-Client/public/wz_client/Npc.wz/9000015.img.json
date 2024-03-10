@@ -1,0 +1,12 @@
+{"$imgdir":"9000015.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$string":"link","value":"1012002"},
+    {"$int":"dcLeft","value":"-38"},
+    {"$int":"dcTop","value":"-73"},
+    {"$int":"dcRight","value":"2"},
+    {"$int":"dcBottom","value":"0"},
+    {"$imgdir":"speak","$$":[
+      {"$string":"0","value":"n0"}
+    ]}
+  ]}
+]}

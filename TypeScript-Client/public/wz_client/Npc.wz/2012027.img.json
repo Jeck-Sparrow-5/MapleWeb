@@ -1,0 +1,20 @@
+{"$imgdir":"2012027.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"talkMouseOnly","value":"1"},
+    {"$int":"dcLeft","value":"-10"},
+    {"$int":"dcTop","value":"-207"},
+    {"$int":"dcRight","value":"10"},
+    {"$int":"dcBottom","value":"-170"},
+    {"$int":"hideName","value":"1"},
+    {"$imgdir":"script","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"script","value":"elizaHarp1"}
+      ]}
+    ]}
+  ]},
+  {"$imgdir":"stand","$$":[
+    {"$canvas":"0","width":"4","height":"4","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAARSURBVBhXYwACQRBBNmAQBAAElQAjVVCqPwAAAABJRU5ErkJggg==","$$":[
+      {"$vector":"origin","x":"0","y":"0"}
+    ]}
+  ]}
+]}

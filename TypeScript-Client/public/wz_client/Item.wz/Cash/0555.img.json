@@ -1,0 +1,15 @@
+{"$imgdir":"0555.img","$$":[
+  {"$imgdir":"05550000","$$":[
+    {"$imgdir":"info","$$":[
+      {"$canvas":"icon","width":"28","height":"28","basedata":"iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAH3SURBVEhLtZWBcYMwDEVZgRVYgRVYgRVYgRWyQlZgBVbIClkhK1A9y58KnxvSXvl3/1RLQg87TtoEbRf7oO1qwXCUKyWnx2vr7k+Py89xfDy/+8r+Sh7BcJQrJWno84PEblq2drwnx3wZayrrMBzlSkkahuXljbc15dD6fG3NMB3qMaLZgozKOgxHuVKShnE9wiSg7JS6+qJm20i7uKPUB8NRrpRk0HQCpK4+ND++3d7dWiP1wXCUKyUZNJ8AqasPMbiZ6071UyBvb/7pM1SdiBJwrNvrJ8BbHtjPfkMRUUDViVGztTaDO0p9MBzlSkkG2dcnwUrpSKl7n4OJKAF7N4p9CIajXClJQw0mxaPl66VYU1mH4ShXSkZgBAPiR0BAfmm4C/SvefC+rkQEw1Eu+5Bnt53NqdX7G5fAwd40+mZv9c7sX+Y+l7YRu3tOJgB3SHU38m05+l7zWjXQzo4X1g5kaG/J/3a7PM6BUZ1dEMSb8rccVXtOOgWieBw1oNbyu/UpsHz7OKAEluu4U61PgTTKelDxEmAUt7Fd8/+ZLIGi/Nb+dYfx6mfgIZeB7WKnEPKCxRlvga0NoXCFgUUg2qGfWkM+NQxzm2hZSl7l3nwAsiA5mEfzlD1/YPVinpWZxczOfIBJJCnKNJfWkNLxOcwsOatpvgCXp6W9i8o28AAAAABJRU5ErkJggg==","$$":[
+        {"$vector":"origin","x":"-2","y":"28"}
+      ]},
+      {"$canvas":"iconRaw","width":"28","height":"26","basedata":"iVBORw0KGgoAAAANSUhEUgAAABwAAAAaCAYAAACkVDyJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAHPSURBVEhLtZUBkYMwEEWxgAUsYAELWMACFrCABSxgAQu1UAtcXj5Ll0za9G6OP/NnL7vLPpKmvcppv9kX7XcLhlBSTA7bc2/mh+LyPvbb49WX9mfyCIZQUkzS0B4PEpth2et+jvb5NOaU1mEIJcUkDd3yVOO0xhxaH8+96oZL3Uc0hmBGaR2GUFJM0tCvV5gJKDulbn1eY9hIvche1gdDKCkmGTQUgNStD43by/Us2xpZHwyhpJhk0FgAUrc+xOBqzDvWi0DePvjdZ2h1IorAPm/VC8DpGNiOuqGIaECrE73G0Fp1spf1wRBKikkGha9PhKWyI6WuPoGJKAJbGfk+BEMoKSZpyMFM/mj5elnMKa3DEEqKSQ/0YED8CBiQXxruAv3rMfhcZyKCIZQUPuRRDmdTtPX+ximwC2/qPYW3+mT2b+Y+pw4jTrecjAOekOxuzNNy9ZzzmjXQJhwvrBPI0DYk/9v1spWBXk24IIg35W+zV+45UxGI/HHkgLY2f1oXgenb+wEpMF37ndq6CKTRbA9avAXoxW2s1+P/zCEDeenW/nWH/uofwEvuANZLOAWXN5if8RFYhyEU7jAwD0Qn9FvbkG8NQ6iXLHmXg6rqB3JlmUGNVUldAAAAAElFTkSuQmCC","$$":[
+        {"$vector":"origin","x":"-2","y":"28"}
+      ]},
+      {"$int":"cash","value":"1"},
+      {"$int":"slotIndex","value":"0"},
+      {"$int":"addDay","value":"30"}
+    ]}
+  ]}
+]}

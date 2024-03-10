@@ -1,0 +1,19 @@
+{"$imgdir":"1204030.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$imgdir":"script","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"script","value":"Warehouse"}
+      ]}
+    ]},
+    {"$int":"dcLeft","value":"-60"},
+    {"$int":"dcTop","value":"-100"},
+    {"$int":"dcRight","value":"60"},
+    {"$int":"dcBottom","value":"0"},
+    {"$int":"hideName","value":"1"}
+  ]},
+  {"$imgdir":"stand","$$":[
+    {"$canvas":"0","width":"1","height":"60","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAEAAAA8CAYAAACn8dD6AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAATSURBVChTY/j//7/gKEEE8V8QAL9Nt0mMZh/cAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"0","y":"61"}
+    ]}
+  ]}
+]}

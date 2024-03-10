@@ -1,0 +1,19 @@
+{"$imgdir":"9201141.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"dcLeft","value":"-66"},
+    {"$int":"dcTop","value":"-113"},
+    {"$int":"dcRight","value":"94"},
+    {"$int":"dcBottom","value":"-10"},
+    {"$int":"hideName","value":"1"},
+    {"$imgdir":"script","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"script","value":"oliviaMirror3"}
+      ]}
+    ]}
+  ]},
+  {"$imgdir":"stand","$$":[
+    {"$canvas":"0","width":"4","height":"4","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAARSURBVBhXYwACQRBBNmAQBAAElQAjVVCqPwAAAABJRU5ErkJggg==","$$":[
+      {"$vector":"origin","x":"0","y":"0"}
+    ]}
+  ]}
+]}

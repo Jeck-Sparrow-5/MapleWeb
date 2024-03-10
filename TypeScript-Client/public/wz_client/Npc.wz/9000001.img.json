@@ -1,0 +1,24 @@
+{"$imgdir":"9000001.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"dcMark","value":"1"},
+    {"$imgdir":"speak","$$":[
+      {"$string":"0","value":"n0"},
+      {"$string":"1","value":"n1"}
+    ]},
+    {"$imgdir":"reg","$$":[
+      {"$int":"count","value":"0"},
+      {"$int":"map","value":"-1"}
+    ]},
+    {"$imgdir":"script","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"script","value":"Event00"}
+      ]}
+    ]}
+  ]},
+  {"$imgdir":"stand","$$":[
+    {"$canvas":"0","width":"44","height":"60","basedata":"iVBORw0KGgoAAAANSUhEUgAAACwAAAA8CAYAAAAdUliaAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAARdSURBVGhDzZmLleJIDEVJgRQ6BVIgBVIgBVIghU6BFEiBFDoFUvD4SX7lV7JsPv7s6sxd21Uq6U61TzXs7GZGM8H/JorU6XQaRfM6Ng9rnMm9A9ej0NoxSzTCeii8RqRNlwC1vcVykTaaw+FwqEAPbzU/3moIsryMbO3Pz88i0qPN9vv9AIzH/AzWiCwhPWhEuXs7F+GcrsmIomSu8KCJij4neCUdRQmEsRa9XeGzqBq8K0s+labs4sKZXMYc4W+kB8W12KdoLa2psosKf4MKgan5KPufC0MA17GcVYRjwU/ZRFgL8IT4Bq2jZO8ugYOrvI60wDdk8kq2RoFLx2g0zfPPkq/Xc1mIe31u7udJmBfJpInmNX934TYpPRBWAYxdzv6qmFxbzAiyzGNuRiYNMAcH4y3hNgmLijAWiYxShDvpOG853dqI5mTC58POYC7cXLGOoXC7mH/T2NRlp+ZGCLnoo5io9fVcjOE0gV9HiZJQfvRY2IJ7e6ZgAc9xrJ+r14XcIF31lHmM6bEIT9f1KEllcUv1XDUfIVtHLKeWRk4R5rzM4fjjuZ1KI8kWP6XRUiTCz1//jWjPQZZQOhNGeAHZrfY/Dp8zmDOV90o4iCqUhp9r1tE017bos23CawcW63M6FtfyOiH8CgjDy/WG4cWfnQDpdhAFFBvH/BQTslPnNoBPx2Tk0t/wQpbC6DnCW9E1SaTZfGyeqCgYkQXo523nhTRE8wk5wJxEkuy7H7PKLimMsGKVxCuC5JTo0rIapWkmFGGukskC1PYWy0f5rPGKx5+fJvEDDthKFlGaVp+y2mj9TFLBHL76Mw9jt0d/LKKel10nihiaqSwDcyQT5jikf+9/qwoXoSgRo00xslyMURqsKV0aUYKyGGfgHo8Ez8hTYY6zFmp7i+WjvH+6uxTAlfcK8+Mu2/ruREFtb/F5cPEANFA0KNH+sSt/5LxHvgrbesjKmd31+Sia+/3aXC9Hw5o8mmZ3fNj95Xwo4zEgSkFCaaAnA+Z4778dXRr9XeO9qGQpdrz2wkoMCKsk7vWZpwKw9U/9db6gsHK5XLxZF5CMqGSEu5zJLiKMVwANwO12M3CPaPtPQkGCZ1sLSbLk+0vQBERZjk9BabwGg93tZDGG3q7wWTS333Mqq1D253hqOU+i66p3d+bOMlJhPSUIZQ+ni4H74/k6GOupv/7o7i4ijXeX76+eEtgdXCkGyUyY40SleeUOzxVGsEABDaxJuzO4Qoi40Km66nyf078mvEqPxaPsRhTuhfCa1K9KPe/C+P8KuKKml14vyo5AWqUoxN0jFNacLYU1TMIERqRVlGDc1pj0+t80NOpdEyEKR8ke/weZLYWrnaMEhfR16SWZ4/hfamNh/ZFTiLJxvpbfXhhhTRWKQBLXmKO77M8b7jCi/Q1dPuTwgw3AfAei5PTi277D9l2OXyopSzDvaS6d5bj0didFkc3gDmdziu428q3yisEmS/FF7Hb/AMQDrRiAIxeiAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"22","y":"60"},
+      {"$int":"z","value":"0"}
+    ]}
+  ]}
+]}

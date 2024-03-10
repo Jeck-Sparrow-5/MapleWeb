@@ -1,0 +1,9 @@
+{"$imgdir":"1300010.img","$$":[
+  {"$imgdir":"info"},
+  {"$imgdir":"stand","$$":[
+    {"$canvas":"0","width":"26","height":"31","basedata":"iVBORw0KGgoAAAANSUhEUgAAABoAAAAfCAYAAAD5h919AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGySURBVEhLzZYNkYMwEIWxUAuxEAuxEAuxEAtYiAUsYAELWIiFvX1Jli4c105L2rk388rfZr95IQWGN0XKHxMVzUQ50cdgtC5EK0NmhqSw0pTW7jBaGFLCAMRODAtxJefnbrBdY8+NYesSGRuLU4dklPMdgOZHC+xqspJEGlYxGc4r37M7CEZ9Hfa6DhDoDkrR0zJVwFUQtIGCt5slkYCaL6s0pDxQcDydnOQE1E07kCTD+Xq5g26D2SCihf9Y8MxrH9db6TVpUOb1LoBxHCmEwMt/7ALbpSkgvl3fAbVE0U0bCHW1/D3tIJCARr/w+YmsiZ8FIZGzqUuiAvG2LgCRBul7hPo67HX9AuF91BtUINjCZ4nwNBcQnoet9mU9BelE74I0BCqvCtFXQNy/G+gIgX6BYswFBMC/Bp1BoAICBMb+A9Ct+aE0yDRbHJ+B9JeQArk2Bsb4HRQHGuLZoTniHJpzgOInINTDGIs+ABYYfkDmT9wNhMKxOeGc9xM3r8a+48aWAcZ4uhlXtqhrY/4E4QCRUaiTaEujR0ZjWKbvdOrknsAoOlrPvbYeB6OXuGkYfgAjaEE/8zyCrQAAAABJRU5ErkJggg==","$$":[
+      {"$vector":"origin","x":"-3","y":"31"},
+      {"$int":"delay","value":"120"}
+    ]}
+  ]}
+]}

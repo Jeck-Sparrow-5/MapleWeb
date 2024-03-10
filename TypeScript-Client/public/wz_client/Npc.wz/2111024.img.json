@@ -1,0 +1,20 @@
+{"$imgdir":"2111024.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"dcLeft","value":"0"},
+    {"$int":"dcTop","value":"-650"},
+    {"$int":"dcRight","value":"1"},
+    {"$int":"dcBottom","value":"-649"},
+    {"$int":"hideName","value":"1"},
+    {"$imgdir":"script","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"script","value":"secretNPC"}
+      ]}
+    ]},
+    {"$int":"talkMouseOnly","value":"1"}
+  ]},
+  {"$imgdir":"stand","$$":[
+    {"$canvas":"0","width":"1","height":"1","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAANSURBVBhXY2BgYBAEAAAWABJnFC3KAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"0","y":"0"}
+    ]}
+  ]}
+]}

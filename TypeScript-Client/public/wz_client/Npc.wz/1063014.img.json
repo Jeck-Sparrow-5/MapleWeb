@@ -1,0 +1,10 @@
+{"$imgdir":"1063014.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"hideName","value":"1"}
+  ]},
+  {"$imgdir":"stand","$$":[
+    {"$canvas":"0","width":"29","height":"27","basedata":"iVBORw0KGgoAAAANSUhEUgAAAB0AAAAbCAYAAACAyoQSAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGoSURBVEhLvZGBbQIxEATpKS3QQlqghbSQFtICtVALLRCN7eEXYz+fCFhp9fb5bseG3ZN0aX6rLqfT6e3gC3oG2IA1qxG073moErKm8/l8A1CC+SLWzasqzYphAFj9HI/XGv0CEOvD1/dNDdFX0idqbYt6MFDEnjP3aATNC1bErVrbogw2ULhhnqEe6jxf8itmUWlChjmACSYMK8Owr6WW0OyBUVFVpcFXYJp7e66sO5O/hnW/MCpq0TXEYNZp6oRypjyjlu6hzMGoqKoWUUP8GRnw5tapKWr0aWEJdW4KzYYMYz+CZo/mPKHmaVgV2aAUHU6xdyhlXQDKvTOaOqyKbNAUQ9iXOZh71oZZ8yIz6BAsbAalpoRaE2jNNRbYQ1EZ7oHKAMU5Idlnzwz6sd/fQdEdNANceybYGWSvfgREd0BFjZAR2Lr9XkQowM/DYRs0Rc0gvxg54xfnC9eAqAym8gIJNtRg6po93gzt5c1zLTgtCOce4CMoKgCVoN49WP8VqBpygeYLe7jhE9gmoGrYRcL5rwwemdnmf+kawAtfDRspQ2feoN3uF2GvfZMbrj3DAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"14","y":"27"}
+    ]}
+  ]}
+]}

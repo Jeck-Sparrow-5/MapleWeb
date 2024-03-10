@@ -1,0 +1,16 @@
+{"$imgdir":"0517.img","$$":[
+  {"$imgdir":"05170000","$$":[
+    {"$imgdir":"info","$$":[
+      {"$canvas":"icon","width":"31","height":"30","basedata":"iVBORw0KGgoAAAANSUhEUgAAAB8AAAAeCAYAAADU8sWcAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAJDSURBVEhLtVULsYMwEMTCs/AsPAtYwAIWYgELWMACFmqhFrCQd3vJpsc1QDoddmYnv8vt3gFtV0E84O2IMXRxG7q49i/Ov/cbUGGIYW75oYHd3cxTeGGPVgOah90jsZ+O62gJuhKvdq7FdJP4SSK9f9C5SwNN7RHUkrRU95U4z5Qu0ZUwcGrwqG265guEyyamsEEcOI3zBnZvLvdsBeO0xGley5nwDJcmVagmqqcJvoVqIs/P0NQhBhwF+vMWcW/4K8QwLypKYdsJBGToulWYAXeyijgvj8xVXyRUF3J1JNbc41zjhLiD+8v6iOvjWSV0ktwLemkYp8Le8fIsTHEMc+JEvptenIEirNXmIL1Ukrm12UMs7qFaS3bQEvvPbYuTzKG7E0cyQOciMAh1beZEMpD2Jmk5EsME1zVAVMUlrohjsx/DTkAFxQSA1gLa2twBgCNgBUM2NUo85sr8TkA8WHEc9IOIF7GQRtnT8ULcjxS3oLho78WRUMUlOYBx14Us7kERPHc78nHgHgljMFAXl2ptBdijAbuP9iIJwFbzZcIIHD3zYnLX9izElmKEgCValr7hpwp54hvmHHGI13zShZJT6MUBPcDL8Cm3KuMbCS9MqAEcwjW+gFQtv+H6L5Z2osxz1fkuiHwk1tBJcu/g4Z08xY/wV/gn7IX6j2T+lULmZOhjbBw4CgchciJ/FRSGKIJ52SefKywxzgTYLM6KEYxLoBrIpCFPxGmMNWGMoKhDYYLVkzDjCXO1fd6hIFkR7bp/8tY+gOAxXL4AAAAASUVORK5CYII=","$$":[
+        {"$vector":"origin","x":"-1","y":"30"},
+        {"$int":"z","value":"0"}
+      ]},
+      {"$canvas":"iconRaw","width":"31","height":"30","basedata":"iVBORw0KGgoAAAANSUhEUgAAAB8AAAAeCAYAAADU8sWcAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAISSURBVEhLvVULsYQwDETL04IFLGChFrCABSxg4SycBSz0ZdNuX8gVKHPD25md/tLsNrR3XQXxgI8jxtDFbeji2v9x/nnegApDDH3LmwZ2ezNP4YU9Wg1oHlaPxHxarqMl6Eq8WrkW003iJ4l0/0HlLg00lUdQS9Jyuq/EuaZ0ia6EgVODR2XTMS8QNpuYwgZx4DTOG9jdXM7ZE4zTEqd5LWvCM1yaVKGaqK4m+BKqidw/Q1OFGHAU6NdbxL3hrxDDvKgohW0lEJCh41ZhBjzJKuK8vDJXvUg4XcinIzHmHPsaJ8Qe7F/WV1xf7yqhk+T+oJuGcSrsHS/XwhTHMCdO5KfpxRkownraHKSbSjI3NnOIxT6c1pIVtMT8e9viJH3o7sSRDNC+CAxCHZs+kQykuUlKjsQwwXENEFVxiSvimOzHsBNQQTEBoLSAljZXAGALWMGQTY0Sj74y3wmIByuOhX4Q8SIWUitz2l6I+5biFhQX7b04Eqq4JAfQ7qqQxT0ogu9uW34O7CNhDAbq4nJaewLM0YCdR3mRBGCpeZnQAkffvJjclT0LsaRoIWCJkqU3/FYhT7xh9hGHeM0nVSg5hV4c0AVchrvcqowfJLwwoQawCNd4Aem0fMP1XyytROnnU+e9IPKRGEMnyX2Ci0/yFvQf6eJfycfcFjnDLQPOxFH8LbQk0hhrwhj5N1DwRLjrfgGTuSql18q8KgAAAABJRU5ErkJggg==","$$":[
+        {"$vector":"origin","x":"-1","y":"30"},
+        {"$int":"z","value":"0"}
+      ]},
+      {"$int":"slotMax","value":"1"},
+      {"$int":"cash","value":"1"}
+    ]}
+  ]}
+]}

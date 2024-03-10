@@ -1,0 +1,16 @@
+{"$imgdir":"0510.img","$$":[
+  {"$imgdir":"05100000","$$":[
+    {"$imgdir":"info","$$":[
+      {"$canvas":"icon","width":"30","height":"32","basedata":"iVBORw0KGgoAAAANSUhEUgAAAB4AAAAgCAYAAAAFQMh/AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAICSURBVFhHvZYLscMgEEWxEAvPQizUQizEQi3EQizUQi3UQi3UAm/vLpdugPSTtN2ZMwECe7JAZxp2RHT8LOL5GOJtNtC34e9HvE5GvA4/k8d4sYohhvQXchWWYpXH01fEmlQFIgXzsDznT1etiVglkqMyVlxVLeNpzebQBEyWhQBtjAmsOp/1DvFSSFkh5PuWGO2U5+WohYWMIDlYkyOXpXwtKmFLBni+mMP2PrEI1yQe/55ytLeKEbp1Y58XvwSFW6WMXCnaNvQ0OHezlLFFvjn8Vytbtr3Bw7CbzFvtwThJ5whwroA/J4A24WVDblPUkRP5xC04h1JCET/Ag3E4TLWMeBhvcTy+B9ZwHZ5dPzfph8u6OHTjd1mKc7v5pSXYttY4CH9T1Sfav8v0ruBpXWmUW8ktJDhbbm05J4unawyD/CGgEHInkdA7gad1nThOxjmcFiKIcV5on+Kc31ViyJLcbbPCX0Dqa9wFIoUAYjzjbTIKcX/uVNoUC6gMa/grwO2GGC5T3kOTUsiKS2kWSx/yhdRvc1Gto4q8xUjqt7KSipBjWQQpxfyIFVEZzbMtUWkS+23Gk+23xXmLBE2wgp/Ddom+M3Ev/AmdUMXDKtfAGpA/KFXtq0duYRDwAZXcLssOKK8+4IkYwUmf5uFWM/ASkwgWlRwaY8CvA8hFigjhH7p+twrg7SU4AAAAAElFTkSuQmCC","$$":[
+        {"$vector":"origin","x":"-2","y":"32"},
+        {"$int":"z","value":"0"}
+      ]},
+      {"$canvas":"iconRaw","width":"30","height":"31","basedata":"iVBORw0KGgoAAAANSUhEUgAAAB4AAAAfCAYAAADwbH0HAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAHmSURBVEhLvZYBkYMwEEVjoRbOAhbOAhawUAtYwEIt1EIt1EIt7OXv5qdLEloKR//MHzaB7Mtu0pmGHRLnr0mu5yCPyYyxTR8vuY9mufdfg4vcrGKAAf0GXIElWOFyOQSsSRUQofDUz8/5v6vWRKwSyVEZK66qjvNpzWZpAibLQBgx5qJZdT7rHeA5kLACyPctMOKUZ7VqYAGjkRxegiOXpVynCtiCwTxffMN4HzgClyDe/j3hiLeCIW3d0OXFq0zgViiVK0VsU2/FbzdDqS3wzfK7Vm9pe8MvZTeZt9ob83Q6RxjnCvPnBCOmedmQ2xC1ciKfuGV+QyhNEDfgjXkwDDWX/A4PGc6fGWu4Ds9TNzXd9bdlcDgNx3oOznFzp6XRttY8HH7Gakzr+AnTu4KnDWNQtpItpHG2bG35TQaPdwl9/ENAIOAOEqV3Ak8bOrCM5mu4zEAA47wQX2TK7yowYAnu2qzmLyCNVU9AhAIAMJ7yGM0FuLueFNoER6MyrOGvALcbYLAM+ZQmJZAVl9AMjmPAZ1Df5qJa50q5xUjqW1lBI5BzGQQowdzEAqhU82xLKzSBfZvxZPwxOLcoWhMs2H/DuLS+WwF+WeWSsQbOG0pV++qR2xBt2WXZYcKrDayp+iA3FMIfZoixmEgkyBEAAAAASUVORK5CYII=","$$":[
+        {"$vector":"origin","x":"-2","y":"32"},
+        {"$int":"z","value":"0"}
+      ]},
+      {"$int":"cash","value":"1"},
+      {"$string":"path","value":"Sound/Jukebox.img/Congratulation"}
+    ]}
+  ]}
+]}

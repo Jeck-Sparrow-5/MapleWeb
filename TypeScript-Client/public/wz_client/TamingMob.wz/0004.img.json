@@ -1,0 +1,9 @@
+{"$imgdir":"0004.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"speed","value":"80"},
+    {"$int":"jump","value":"100"},
+    {"$float":"fs","value":"10.0"},
+    {"$float":"swim","value":"80.0"},
+    {"$int":"fatigue","value":"5"}
+  ]}
+]}

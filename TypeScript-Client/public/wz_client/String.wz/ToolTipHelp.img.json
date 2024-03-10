@@ -1,0 +1,3812 @@
+{"$imgdir":"ToolTipHelp.img","$$":[
+  {"$imgdir":"Game","$$":[
+    {"$imgdir":"Button","$$":[
+      {"$imgdir":"Shop","$$":[
+        {"$string":"Title","value":"Cash Shop"},
+        {"$string":"Desc","value":"It's a place where, armed with Cash, you'll be able to purchase accessories, clothes, messenger item, hair salon coupons, coupons for plastic surgery, and other various items."}
+      ]},
+      {"$imgdir":"Item","$$":[
+        {"$string":"Title","value":"Item Inventory (I)"},
+        {"$string":"Desc","value":"The window that allows the character to see the items it owns.\\nThe items are categorized under Equip., Use, Set-Up, and Etc. items."}
+      ]},
+      {"$imgdir":"Equip","$$":[
+        {"$string":"Title","value":"Equipment Window (E)"},
+        {"$string":"Desc","value":"The window that shows the equipped items, and allowing the character to equip/unequip them.\\nOpen the item inventory alongside it to use the equip. items."}
+      ]},
+      {"$imgdir":"Stat","$$":[
+        {"$string":"Title","value":"Ability Window (S)"},
+        {"$string":"Desc","value":"The window that shows detailed character info and its abilities.\\nUse AP to enhance many different kinds of abilities. "}
+      ]},
+      {"$imgdir":"Skill","$$":[
+        {"$string":"Title","value":"Skill Window (K)"},
+        {"$string":"Desc","value":"The window that shows the detailed look of the skillbook owned by the character.\\nUse skill points to learn the skills available."}
+      ]},
+      {"$imgdir":"Chat","$$":[
+        {"$string":"Title","value":"Messenger Window"},
+        {"$string":"Desc","value":"The window that lets you chat with buddies within a world."}
+      ]},
+      {"$imgdir":"Menu","$$":[
+        {"$string":"Title","value":"Menu"},
+        {"$string":"Desc","value":"The window that lets you change the options or game infos.\\nCan change game and system option.\\nCan also see quest info, party info, and the community info."}
+      ]},
+      {"$imgdir":"Whisper","$$":[
+        {"$string":"Title","value":"Whisper"},
+        {"$string":"Desc","value":"Press the button to choose the character you want to whisper to.\\nPress it once more to disable whisper."}
+      ]},
+      {"$imgdir":"MapTransfer","$$":[
+        {"$imgdir":"Register","$$":[
+          {"$string":"Title","value":"Register Map"},
+          {"$string":"Desc","value":"Registers the map the character is at to the teleport list. Can save up to 5 maps."}
+        ]},
+        {"$imgdir":"RegisterEx","$$":[
+          {"$string":"Title","value":"Register Map"},
+          {"$string":"Desc","value":"Registers the map where the character is located into the Teleport List. Can register upto 10 different places."}
+        ]},
+        {"$imgdir":"Delete","$$":[
+          {"$string":"Title","value":"Delete Map"},
+          {"$string":"Desc","value":"Delete the chosen map from the list."}
+        ]},
+        {"$imgdir":"Move","$$":[
+          {"$string":"Title","value":"Move"},
+          {"$string":"Desc","value":"Teleports to the map of your choice, or to the map where the chosen character is."}
+        ]}
+      ]},
+      {"$imgdir":"KeySet","$$":[
+        {"$string":"Title","value":"Key Config."}
+      ]},
+      {"$imgdir":"QuickSlot","$$":[
+        {"$string":"Title","value":"Show Quick Slot"}
+      ]},
+      {"$imgdir":"QuickSlotD","$$":[
+        {"$string":"Title","value":"Hide Quick Slot"}
+      ]},
+      {"$imgdir":"Claim","$$":[
+        {"$string":"Title","value":"Alert GM"}
+      ]},
+      {"$imgdir":"QuestAlarm","$$":[
+        {"$string":"Desc","value":"Click on Quest Alarm button if you wish to register the current quest into the Quest Alarm. Up to 5 quests can be registered in this alarm."}
+      ]},
+      {"$imgdir":"StatAuto","$$":[
+        {"$string":"Title","value":"Stat Auto-Assign"},
+        {"$string":"Desc","value":"Distributes the remaining AP according to your level and class."}
+      ]},
+      {"$imgdir":"StatAuto1","$$":[
+        {"$string":"Title","value":"Stat Auto-Assign (Brawler)"},
+        {"$string":"Desc","value":"Distributes the remaining AP according to Brawler requirements."}
+      ]},
+      {"$imgdir":"StatAuto2","$$":[
+        {"$string":"Title","value":"Stat Auto-Assign (Gunslinger)"},
+        {"$string":"Desc","value":"Distributes the remaining AP according to Gunslinger requirements."}
+      ]}
+    ]},
+    {"$imgdir":"UIWnd","$$":[
+      {"$imgdir":"Stat","$$":[
+        {"$imgdir":"0","$$":[
+          {"$string":"Title","value":"Name of the Character"},
+          {"$string":"Desc","value":"Once the name is made,\\nthe name can't be changed."},
+          {"$vector":"lt","x":"8","y":"32"},
+          {"$vector":"rb","x":"55","y":"47"}
+        ]},
+        {"$imgdir":"1","$$":[
+          {"$string":"Title","value":"Job of the Character"},
+          {"$string":"Desc","value":"Can make the job advancement to Warrior, Bowman, Thief, Magician, or Pirate. \\nWarrior : Minimum of Level 10, Perion\\nBowman : Minimum of Level 10, Henesys\\nMagician : Minimum of Level 8, Ellinia\\nThief : Minimum of Level 10, Kerning City\\nPirate : Minimum of Level 10, The Nautilus"},
+          {"$vector":"lt","x":"8","y":"50"},
+          {"$vector":"rb","x":"55","y":"75"}
+        ]},
+        {"$imgdir":"2","$$":[
+          {"$string":"Title","value":"Level"},
+          {"$string":"Desc","value":"Accumulate enough EXP to raise the level of the character."},
+          {"$vector":"lt","x":"8","y":"78"},
+          {"$vector":"rb","x":"55","y":"93"}
+        ]},
+        {"$imgdir":"3","$$":[
+          {"$string":"Title","value":"Main Guild"},
+          {"$string":"Desc","value":"The main community of the communities the account belongs to. Press \"G\" to check guild info."},
+          {"$vector":"lt","x":"8","y":"96"},
+          {"$vector":"rb","x":"55","y":"111"}
+        ]},
+        {"$imgdir":"4","$$":[
+          {"$string":"Title","value":"Health Point"},
+          {"$string":"Desc","value":"It's a health stat, and if it reaches 0, the character dies.\\nHP decreases if either attacked by an enemy or if a certain skill is used.\\nIt can go up to the maximum of 30,000 points."},
+          {"$vector":"lt","x":"8","y":"114"},
+          {"$vector":"rb","x":"55","y":"129"}
+        ]},
+        {"$imgdir":"5","$$":[
+          {"$string":"Title","value":"Mana Point"},
+          {"$string":"Desc","value":"The stat needed to use various skills.\\nIt can go up to the maximum of 30,000 points."},
+          {"$vector":"lt","x":"8","y":"132"},
+          {"$vector":"rb","x":"55","y":"147"}
+        ]},
+        {"$imgdir":"6","$$":[
+          {"$string":"Title","value":"EXP"},
+          {"$string":"Desc","value":"The amount of experience gained. \\nObtained by killing a monster or completing a quest."},
+          {"$vector":"lt","x":"8","y":"150"},
+          {"$vector":"rb","x":"55","y":"165"}
+        ]},
+        {"$imgdir":"7","$$":[
+          {"$string":"Title","value":"Fame"},
+          {"$string":"Desc","value":"The level of fame can be increased or decreased, based on other users. Some equipments and quests require the character reach a certain level of fame."},
+          {"$vector":"lt","x":"8","y":"168"},
+          {"$vector":"rb","x":"55","y":"183"}
+        ]},
+        {"$imgdir":"8","$$":[
+          {"$string":"Title","value":"Strength (STR)"},
+          {"$string":"Desc","value":"The stat needed to use heavy weapons and/or armors.\\nIt determines the attacking ability of the warriors and pirates (Brawlers)."},
+          {"$vector":"lt","x":"8","y":"243"},
+          {"$vector":"rb","x":"55","y":"259"}
+        ]},
+        {"$imgdir":"9","$$":[
+          {"$string":"Title","value":"Dexterity (DEX)"},
+          {"$string":"Desc","value":"This stat is vital to making direct attacks using a weapon. This is the most significant stat when it comes to the strength of the attacks for warriors and pirates (Gunslingers). "},
+          {"$vector":"lt","x":"8","y":"262"},
+          {"$vector":"rb","x":"55","y":"277"}
+        ]},
+        {"$imgdir":"10","$$":[
+          {"$string":"Title","value":"Intelligence (INT)"},
+          {"$string":"Desc","value":"The higher this stat, the higher the accuracy and strenghth of your magic attack. The most important stat that determines the magic attacks for mages."},
+          {"$vector":"lt","x":"8","y":"280"},
+          {"$vector":"rb","x":"55","y":"295"}
+        ]},
+        {"$imgdir":"11","$$":[
+          {"$string":"Title","value":"Luck (LUK)"},
+          {"$string":"Desc","value":"The higher it is, the higher the avoidability is. \\nIt determines the Thief's attacking ability and the Mage's magic attack accuracy. \\nAlso, the higher it is, the less EXP a character loses by dying."},
+          {"$vector":"lt","x":"8","y":"298"},
+          {"$vector":"rb","x":"55","y":"313"}
+        ]},
+        {"$imgdir":"12","$$":[
+          {"$string":"Title","value":"AP(Ability Point)"},
+          {"$string":"Desc","value":"Amount to increase STR, DEX, INT,LUK, HP and MP. For STR, DEX, INT and LUK, every 1 AP used will increase the stats by 1.  For HP and MP, it differs pending on the jobs and characters.  5 Points will be given upon level up."},
+          {"$vector":"lt","x":"7","y":"192"},
+          {"$vector":"rb","x":"90","y":"214"}
+        ]}
+      ]},
+      {"$imgdir":"StatDetail","$$":[
+        {"$imgdir":"0","$$":[
+          {"$vector":"lt","x":"13","y":"7"},
+          {"$vector":"rb","x":"70","y":"22"},
+          {"$string":"Title","value":"Attack"},
+          {"$string":"Desc","value":"The stat that impacts the damage caused by physical attacks. This stat is related to strength (STR) for warriors and magicians, dexterity (DEX) for bowmen, strength, dexterity and luck (LUK) for thieves and strength and dexterity for pirates. The above stat and the equipment's physical attack are added to decide on the overall physical attack.  "}
+        ]},
+        {"$imgdir":"1","$$":[
+          {"$vector":"lt","x":"13","y":"25"},
+          {"$vector":"rb","x":"70","y":"40"},
+          {"$string":"Title","value":"Weapon Def."},
+          {"$string":"Desc","value":"The stat that determines the ability to defend the weapon attack.\\nBased on all equipped armors' weapon def. "}
+        ]},
+        {"$imgdir":"2","$$":[
+          {"$vector":"lt","x":"13","y":"43"},
+          {"$vector":"rb","x":"70","y":"58"},
+          {"$string":"Title","value":"Magic"},
+          {"$string":"Desc","value":"The stat that determines the success rate and the attacking ability of spells.\\nBased on INT and equipped items' magic power."}
+        ]},
+        {"$imgdir":"3","$$":[
+          {"$vector":"lt","x":"13","y":"61"},
+          {"$vector":"rb","x":"70","y":"76"},
+          {"$string":"Title","value":"Magic Def."},
+          {"$string":"Desc","value":"The stat for defending spells.\\nBased on magic def. of every armor that's been equipped."}
+        ]},
+        {"$imgdir":"4","$$":[
+          {"$vector":"lt","x":"13","y":"79"},
+          {"$vector":"rb","x":"70","y":"94"},
+          {"$string":"Title","value":"Accuracy"},
+          {"$string":"Desc","value":"The stat that determines the accuracy of weapon attack. \\nThe higher, the more accurate.\\nBased on dexterity and the equipment item options."}
+        ]},
+        {"$imgdir":"5","$$":[
+          {"$vector":"lt","x":"13","y":"97"},
+          {"$vector":"rb","x":"70","y":"112"},
+          {"$string":"Title","value":"Avoidability"},
+          {"$string":"Desc","value":"The stat that enables the character to avoid weapon damage.\\nThe higher it is, the better the character avoids weapon damage.\\nBased on dexterity, luck, and the equipment item options."}
+        ]},
+        {"$imgdir":"6","$$":[
+          {"$vector":"lt","x":"13","y":"115"},
+          {"$vector":"rb","x":"70","y":"130"},
+          {"$string":"Title","value":""},
+          {"$string":"Desc","value":""}
+        ]},
+        {"$imgdir":"7","$$":[
+          {"$vector":"lt","x":"13","y":"133"},
+          {"$vector":"rb","x":"70","y":"148"},
+          {"$string":"Title","value":"Speed"},
+          {"$string":"Desc","value":"A character's speed can increase upto 140%. Can be changed through equipment item options or skills."}
+        ]},
+        {"$imgdir":"8","$$":[
+          {"$vector":"lt","x":"13","y":"151"},
+          {"$vector":"rb","x":"70","y":"166"},
+          {"$string":"Title","value":"Jump"},
+          {"$string":"Desc","value":"A character's jump ability can increase upto 123%. \\nCan be changed through equipment item options or skills."}
+        ]}
+      ]}
+    ]}
+  ]},
+  {"$imgdir":"Mapobject","$$":[
+    {"$imgdir":"0","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Character Jump(Alt)"},
+        {"$string":"Desc","value":"Press Alt on keyboard to jump"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Move Character(Arrow Keys)"},
+        {"$string":"Desc","value":"Move around, climb up the ladder, and use portals using the arrow keys."}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Use Portal(Up)"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"To New Places..."},
+        {"$string":"Desc","value":"Move to the right to explore new grounds."}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Starting Point"}
+      ]}
+    ]},
+    {"$imgdir":"10000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Use Portal (Up)"}
+      ]}
+    ]},
+    {"$imgdir":"20000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Mushroom Town"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Snail Hunting Ground"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Nina & Sen's House"}
+      ]}
+    ]},
+    {"$imgdir":"30000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Snail Hunting Ground"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Snail Hunting Ground"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Snail Hunting Ground"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Snail Hunting Ground"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Snail Hunting Ground"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"Snail Hunting Ground"}
+      ]}
+    ]},
+    {"$imgdir":"40000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Amherst"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Southperry"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Amherst"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Southperry"}
+      ]}
+    ]},
+    {"$imgdir":"40001","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Amherst"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Southperry"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Amherst"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Southperry"}
+      ]}
+    ]},
+    {"$imgdir":"40002","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Amherst"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Southperry"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Amherst"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Southperry"}
+      ]}
+    ]},
+    {"$imgdir":"50000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Amherst"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Amherst"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Snail Hunting Ground"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Amherst"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Southperry"}
+      ]}
+    ]},
+    {"$imgdir":"60000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Armor Shop"},
+        {"$string":"Desc","value":"This is the place to purchase armors."}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Southperry --> Lith Harbor (Victoria Island)"},
+        {"$string":"Desc","value":"Fee : 150 Mesos\\n\\nGet on the ship that heads to Lith Harbor through Shanks. Once out of Maple Island, you will not be able to return here ever again."}
+      ]}
+    ]},
+    {"$imgdir":"1000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Weapon Store"},
+        {"$string":"Desc","value":"This is the place to purchase weapons."}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Department Store"},
+        {"$string":"Desc","value":"This is the place to purchase potions, scrolls, and other goods."}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Entrance to Adventurer Training Center"},
+        {"$string":"Desc","value":"Toward Southperry"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Amherst"}
+      ]}
+    ]},
+    {"$imgdir":"1010000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Split Road of Destiny"},
+        {"$string":"Desc","value":"Toward Southperry"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Adventurer Training Center"}
+      ]}
+    ]},
+    {"$imgdir":"100000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Cab Station"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Henesys Market"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Henesys Park"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Dungeon"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Henesys"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"The Hill East of Henesys"}
+      ]},
+      {"$imgdir":"6","$$":[
+        {"$string":"Title","value":"Henesys"}
+      ]},
+      {"$imgdir":"7","$$":[
+        {"$string":"Title","value":"Henesys Hunting Ground"}
+      ]},
+      {"$imgdir":"8","$$":[
+        {"$string":"Title","value":"Henesys"}
+      ]},
+      {"$imgdir":"9","$$":[
+        {"$string":"Title","value":"Maya's House"}
+      ]},
+      {"$imgdir":"10","$$":[
+        {"$string":"Title","value":"Mini Dungeon: Mushroom Castle"}
+      ]},
+      {"$imgdir":"11","$$":[
+        {"$string":"Title","value":"Dungeon (Towards Sleepywood)"}
+      ]}
+    ]},
+    {"$imgdir":"100000100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Henesys Market"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Free Market"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Weapon Store"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Department Store"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Pet Store"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"Skin Care"}
+      ]},
+      {"$imgdir":"6","$$":[
+        {"$string":"Title","value":"Hair Salon"}
+      ]},
+      {"$imgdir":"7","$$":[
+        {"$string":"Title","value":"Hair Salon"}
+      ]},
+      {"$imgdir":"8","$$":[
+        {"$string":"Title","value":"Plastic Surgery"}
+      ]},
+      {"$imgdir":"9","$$":[
+        {"$string":"Title","value":"Henesys Market"}
+      ]},
+      {"$imgdir":"10","$$":[
+        {"$string":"Title","value":"Henesys Park"}
+      ]},
+      {"$imgdir":"11","$$":[
+        {"$string":"Title","value":"Henesys"}
+      ]},
+      {"$imgdir":"12","$$":[
+        {"$string":"Title","value":"Henesys Market"}
+      ]}
+    ]},
+    {"$imgdir":"100000200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Henesys"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Henesys Park"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Pet Walkway"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Henesys"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Henesys Market"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"Henesys Game Park"}
+      ]},
+      {"$imgdir":"6","$$":[
+        {"$string":"Title","value":"Bowman Instructional School"}
+      ]},
+      {"$imgdir":"7","$$":[
+        {"$string":"Title","value":"Bowman Instructional School"}
+      ]}
+    ]},
+    {"$imgdir":"101000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Cab Station"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Weapon·Armor Shop"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Department Store"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Cab Station"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Ellinia Station"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"Magic Library"}
+      ]},
+      {"$imgdir":"6","$$":[
+        {"$string":"Title","value":"World Tour Info Desk"}
+      ]},
+      {"$imgdir":"7","$$":[
+        {"$string":"Title","value":"Marr's Forest"}
+      ]},
+      {"$imgdir":"8","$$":[
+        {"$string":"Title","value":"Sky Ferry"},
+        {"$string":"Desc","value":"The ship that passes through Ereve is at anchor."}
+      ]}
+    ]},
+    {"$imgdir":"101000300","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Henesys"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Perion"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Ellinia"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Kerning City"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Ticket Booth"}
+      ]}
+    ]},
+    {"$imgdir":"101030100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Rocky Road II"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Excavation Site I"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"East Domain of Perion"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Excavation Site I"}
+      ]}
+    ]},
+    {"$imgdir":"101030400","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Rocky Road II"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"East Rocky Mountain II"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Rocky Road I"}
+      ]}
+    ]},
+    {"$imgdir":"102000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"West Street Corner of Perion"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Cab Station"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"On the Way to Dungeon"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"East Domain of Perion"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Department Store"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"Free Market"}
+      ]},
+      {"$imgdir":"6","$$":[
+        {"$string":"Title","value":"Weapon·Armor Shop"}
+      ]},
+      {"$imgdir":"7","$$":[
+        {"$string":"Title","value":"Warriors' Sanctuary"}
+      ]},
+      {"$imgdir":"8","$$":[
+        {"$string":"Title","value":"World Tour Info Desk"}
+      ]}
+    ]},
+    {"$imgdir":"102020000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"West Domain of Perion"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"West Rocky Mountain II"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"West Street Corner of Perion"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"West Domain of Perion"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"West Rocky Mountain II"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"West Street Corner of Perion"}
+      ]},
+      {"$imgdir":"6","$$":[
+        {"$string":"Title","value":"             DANGER!             "},
+        {"$string":"Desc","value":"Danger zone from here on. Be cautious."}
+      ]}
+    ]},
+    {"$imgdir":"103000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Subway"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Key Shop"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Maple Internet Cafe"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Kerning City Pharmacy"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Kerning City Pharmacy"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"Fusion Jazz Bar"}
+      ]},
+      {"$imgdir":"6","$$":[
+        {"$string":"Title","value":"Hair Salon"}
+      ]},
+      {"$imgdir":"7","$$":[
+        {"$string":"Title","value":"Repair Shop"}
+      ]},
+      {"$imgdir":"8","$$":[
+        {"$string":"Title","value":"Naora Hosptial"}
+      ]},
+      {"$imgdir":"9","$$":[
+        {"$string":"Title","value":"Naora Hosptial"}
+      ]},
+      {"$imgdir":"10","$$":[
+        {"$string":"Title","value":"Self-Defence Item Store"}
+      ]},
+      {"$imgdir":"11","$$":[
+        {"$string":"Title","value":"Cab Station"}
+      ]},
+      {"$imgdir":"12","$$":[
+        {"$string":"Title","value":"World Tour Info Desk"}
+      ]}
+    ]},
+    {"$imgdir":"103030000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Kerning City Middle Forest II"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"L Forest III"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Three-Way Road"}
+      ]}
+    ]},
+    {"$imgdir":"104000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Ticket Booth"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Department Store"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Armor Shop"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Cab Station"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Ticket Price Guideline"},
+        {"$string":"Desc","value":"\\nPerion, Ellinia: 1200 Mesos, Henesys: 800 Mesos, Kerning City: 1000 Mesos\\n\\n\\n- 90% Discount for Beginners!!"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"Weapon Store"}
+      ]},
+      {"$imgdir":"6","$$":[
+        {"$string":"Title","value":"Info Shop"}
+      ]}
+    ]},
+    {"$imgdir":"104010000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Kerning City Middle Forest I"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Forest West of Henesys"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Thicket Around the Beach III"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Thicket Around the Beach III"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Forest West of Henesys"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"Kerning City"}
+      ]},
+      {"$imgdir":"6","$$":[
+        {"$string":"Title","value":"Danger Zone"}
+      ]},
+      {"$imgdir":"9","$$":[
+        {"$string":"Title","value":"Danger Zone"}
+      ]}
+    ]},
+    {"$imgdir":"105040000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Entrance to Henesys Dungeon"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Deep Forest"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Sleepywood"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Deep Forest Hunting Ground I"}
+      ]}
+    ]},
+    {"$imgdir":"105040300","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Hotel"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Swampy Land in a Deep Forest"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Dungeon"}
+      ]}
+    ]},
+    {"$imgdir":"200000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Free Market"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Weapon·Armor Shop"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Guild Office"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Department Store"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Orbis Station"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"Orbis Park"}
+      ]},
+      {"$imgdir":"6","$$":[
+        {"$string":"Title","value":"Orbis Station"}
+      ]},
+      {"$imgdir":"7","$$":[
+        {"$string":"Title","value":"Orbis Tower"}
+      ]},
+      {"$imgdir":"8","$$":[
+        {"$string":"Title","value":"Cloud Park"}
+      ]},
+      {"$imgdir":"9","$$":[
+        {"$string":"Title","value":"World Tour Info Desk"}
+      ]}
+    ]},
+    {"$imgdir":"200000100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Orbis"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Station"}
+      ]}
+    ]},
+    {"$imgdir":"200000110","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Station <To Ellinia>"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Orbis Station - Waiting Room"}
+      ]}
+    ]},
+    {"$imgdir":"200000120","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Station <To Ludibrium>"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Orbis Station - Waiting Room"}
+      ]}
+    ]},
+    {"$imgdir":"200000130","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Station <To Leafre>"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Orbis Station - Waiting Room"}
+      ]}
+    ]},
+    {"$imgdir":"200000140","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Station <To Mu Lung>"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Orbis Station - Waiting Room"}
+      ]}
+    ]},
+    {"$imgdir":"200010000","$$":[
+      {"$imgdir":"0"},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"The Road to Garden of 3 Colors"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Cloud Park II"}
+      ]}
+    ]},
+    {"$imgdir":"200010100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Garden of Red I"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Garden of Yellow I"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Garden of Blue I"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"The Road to Garden of 3 Colors"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Cloud Park I"}
+      ]}
+    ]},
+    {"$imgdir":"200010200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Stairway to the Sky II"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Garden of Red II"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Garden of Yellow II"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Garden of Blue II"}
+      ]}
+    ]},
+    {"$imgdir":"200082100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Orbis Tower - Basement"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Orbis Tower - Basement"}
+      ]}
+    ]},
+    {"$imgdir":"211040000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Ice Valley I"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Cold Field I"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Icy Cold Field"}
+      ]}
+    ]},
+    {"$imgdir":"211000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Orbis Tower"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"El Nath"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"El Nath Market"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Chief's Residence"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"El Nath"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"El Nath Mountain Range"}
+      ]}
+    ]},
+    {"$imgdir":"211000100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"El Nath"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"El Nath Market"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Free Market"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Weapon·Armor Shop"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Department Store"}
+      ]}
+    ]},
+    {"$imgdir":"219000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Department Store"}
+      ]}
+    ]},
+    {"$imgdir":"220000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Ludibrium - East Entrance"},
+        {"$string":"Desc","value":"On the Way to Helios Tower"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Skin Care"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Clocktower"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Hair Salon"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Ludibrium - West Entrance 1"},
+        {"$string":"Desc","value":"On the Way to Eos Tower"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"Pet Walkway"}
+      ]},
+      {"$imgdir":"6","$$":[
+        {"$string":"Title","value":"Free Market"}
+      ]},
+      {"$imgdir":"7","$$":[
+        {"$string":"Title","value":"Plastic Surgery"}
+      ]},
+      {"$imgdir":"8","$$":[
+        {"$string":"Title","value":"Department Store"}
+      ]},
+      {"$imgdir":"9","$$":[
+        {"$string":"Title","value":"Department Store"}
+      ]},
+      {"$imgdir":"10","$$":[
+        {"$string":"Title","value":"Weapon·Armor Shop"}
+      ]},
+      {"$imgdir":"11","$$":[
+        {"$string":"Title","value":"Ludibrium Station"}
+      ]},
+      {"$imgdir":"12","$$":[
+        {"$string":"Title","value":"Clocktower"}
+      ]},
+      {"$imgdir":"13","$$":[
+        {"$string":"Title","value":"Pet Walkway"}
+      ]},
+      {"$imgdir":"14","$$":[
+        {"$string":"Title","value":"Townstreet"}
+      ]},
+      {"$imgdir":"15","$$":[
+        {"$string":"Title","value":"Free Market·Plastic Surgery"}
+      ]},
+      {"$imgdir":"16","$$":[
+        {"$string":"Title","value":"Weapon Store·Department Store·Ludibrium Station"}
+      ]},
+      {"$imgdir":"17","$$":[
+        {"$string":"Title","value":"Helios Tower"}
+      ]},
+      {"$imgdir":"18","$$":[
+        {"$string":"Title","value":"World Tour Info Desk"}
+      ]}
+    ]},
+    {"$imgdir":"220000100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Ticket Booth"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Station"}
+      ]}
+    ]},
+    {"$imgdir":"220000300","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Tara and Sarah's House"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Korin's House"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Manager Karl's House"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Chloe's House"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Mation's House"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"Ludibrium - West Entrance 2"},
+        {"$string":"Desc","value":"On the Way to Eos Tower"}
+      ]},
+      {"$imgdir":"6","$$":[
+        {"$string":"Title","value":"Eos Tower"}
+      ]},
+      {"$imgdir":"7","$$":[
+        {"$string":"Title","value":"Ludibrium"}
+      ]}
+    ]},
+    {"$imgdir":"220000400","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Eos Tower"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Eos Tower"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Townstreet"}
+      ]}
+    ]},
+    {"$imgdir":"220000500","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Helios Tower"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Ludibrium"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Helios Tower"}
+      ]}
+    ]},
+    {"$imgdir":"220050300","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Warped Path of Time"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Forgotten Path of Time"}
+      ]}
+    ]},
+    {"$imgdir":"221050300","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Warped Path of Time"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Forgotten Path of Time"}
+      ]}
+    ]},
+    {"$imgdir":"221000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Free Market"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Headquarter"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Safety Zone"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Off-Limits"}
+      ]}
+    ]},
+    {"$imgdir":"221000200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Medical Office"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Weapon Provider"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Armor Provider"}
+      ]}
+    ]},
+    {"$imgdir":"221000400","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Eos Tower"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Eos Tower"}
+      ]}
+    ]},
+    {"$imgdir":"221030000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Boswell Field I"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"The Omega Sector"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Kulan  Field I"}
+      ]}
+    ]},
+    {"$imgdir":"222010000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Black Mountain <Corner>"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Korean Folk Town"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Small Pond"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Small Pond"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Korean Folk Town"}
+      ]}
+    ]},
+    {"$imgdir":"222010100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Tiger Forest I"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Entrance to Black Mountain"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Tiger Ridge"}
+      ]}
+    ]},
+    {"$imgdir":"222010200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Black Mountain Valley"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Small Pond"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Fox Ridge"}
+      ]}
+    ]},
+    {"$imgdir":"230000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Aquarium Department Store"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Aquarium Zoo"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Aquarium Market"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Aquarium"}
+      ]}
+    ]},
+    {"$imgdir":"230000001","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Aquarium Zoo"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Aquarium Department Store"}
+      ]}
+    ]},
+    {"$imgdir":"230000002","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Department Store"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Armor Shop"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Weapon Store"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Storage"}
+      ]}
+    ]},
+    {"$imgdir":"230000003","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Balrog"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"White Fang and Yeti"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Pig and Ribbon Pig"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Aquarium Zoo"}
+      ]}
+    ]},
+    {"$imgdir":"230010000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Orbis Tower"}
+      ]}
+    ]},
+    {"$imgdir":"230010400","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Aquarium"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Turban Shell Hill"}
+      ]}
+    ]},
+    {"$imgdir":"230020000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Aquarium"}
+      ]}
+    ]},
+    {"$imgdir":"230020100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"The Sharp Unknown"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Blue Seaweed Road"}
+      ]}
+    ]},
+    {"$imgdir":"230030000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Mushroom Coral Hill"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Big Fish Valley"}
+      ]}
+    ]},
+    {"$imgdir":"230030200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Korean Folk Town"}
+      ]}
+    ]},
+    {"$imgdir":"230020200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Mushroom Coral Hill"}
+      ]}
+    ]},
+    {"$imgdir":"240000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Department Store"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Weapon·Armor Store"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Free Market"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"West Forest of Leafre"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"East Forest of Leafre"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"Leafre Station"}
+      ]},
+      {"$imgdir":"6","$$":[
+        {"$string":"Title","value":"Leafre"}
+      ]},
+      {"$imgdir":"7","$$":[
+        {"$string":"Title","value":"World Tour Info Desk"}
+      ]}
+    ]},
+    {"$imgdir":"240000100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Leafre"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Ticket Booth"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Station"}
+      ]}
+    ]},
+    {"$imgdir":"240010000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Leafre"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Minar Forest : West Border"}
+      ]}
+    ]},
+    {"$imgdir":"240010100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"West Forest of Leafre"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Cranky Forest"}
+      ]}
+    ]},
+    {"$imgdir":"240010200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Steep Hill"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Steep Hill"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Minar Forest : West Border"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"The Area of Red Kentaurus"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Minar Forest : West Border"}
+      ]}
+    ]},
+    {"$imgdir":"240010300","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Forest : Forked Road"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Cranky Forest"}
+      ]}
+    ]},
+    {"$imgdir":"240010400","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Entrance to Dragon Forest"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Steep Hill"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Valley of the Antelope"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Steep Hill"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Valley of the Antelope"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"Entrance to Dragon Forest"}
+      ]}
+    ]},
+    {"$imgdir":"240010800","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Minar Forest : East Border"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Sky Nest I"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Battlefield of Water and Darkness"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Minar Forest : East Border"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Sky Nest I"}
+      ]}
+    ]},
+    {"$imgdir":"240011000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Minar Forest : East Border"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Leafre"}
+      ]}
+    ]},
+    {"$imgdir":"240020000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Battlefield of Fire and Water"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Cranky Forest"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Battlefield of Fire and Darkness"}
+      ]}
+    ]},
+    {"$imgdir":"240020300","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"The Area of Blue Kentaurus"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Entrance to Sky Nest"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"The Area of Black Kentaurus"}
+      ]}
+    ]},
+    {"$imgdir":"240030000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Forest : Forked Road"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Dragon Forest I"}
+      ]}
+    ]},
+    {"$imgdir":"240030100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Dragon Forest II"}
+      ]},
+      {"$imgdir":"7","$$":[
+        {"$string":"Title","value":"Entrance to Dragon Forest"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Entrance to Dragon Forest"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Dragon Forest II"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Burning Forest"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Disappeared Forest"}
+      ]}
+    ]},
+    {"$imgdir":"240030103","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Dragon Forest I"}
+      ]}
+    ]},
+    {"$imgdir":"240030104","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Dragon Forest I"}
+      ]}
+    ]},
+    {"$imgdir":"240030200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Dragon Forest III"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Dragon Forest I"}
+      ]}
+    ]},
+    {"$imgdir":"240030300","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Dragon Forest II"}
+      ]}
+    ]},
+    {"$imgdir":"240040000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Dragon Forest III"}
+      ]}
+    ]},
+    {"$imgdir":"240040100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Dragon Canyon"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"East Path of Canyon"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"West Path of Canyon"}
+      ]}
+    ]},
+    {"$imgdir":"240040400","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"West Path of Canyon"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"East Path of Canyon"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Entrance to Dragon Nest"}
+      ]}
+    ]},
+    {"$imgdir":"240040500","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"The Destroyed Dragon Nest"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Dead Dragon Nest"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Wyvern Canyon"}
+      ]}
+    ]},
+    {"$imgdir":"240040600","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"The Dragon Nest Left Behind"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Entrance to Cave of Life"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Dangerous Dragon Nest"}
+      ]}
+    ]},
+    {"$imgdir":"250000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"World Tour Info Desk"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Mu Lung Hair Salon"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Mu Lung Plastic Surgery"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Armor Shop"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Weapon Store"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"Mu Lung Skin Care"}
+      ]},
+      {"$imgdir":"6","$$":[
+        {"$string":"Title","value":"Mu Lung Department Store"}
+      ]},
+      {"$imgdir":"7","$$":[
+        {"$string":"Title","value":"Free Market Entrance"}
+      ]},
+      {"$imgdir":"8","$$":[
+        {"$string":"Title","value":"Mu Lung Temple"}
+      ]}
+    ]},
+    {"$imgdir":"250010301","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Snake Area"}
+      ]}
+    ]},
+    {"$imgdir":"250010500","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Peach Farm 2"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Where the Sky Forest Ends"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Foggy Forest"}
+      ]}
+    ]},
+    {"$imgdir":"250010501","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Virtuous Forest"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Peach Farm1"}
+      ]}
+    ]},
+    {"$imgdir":"250010700","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Isolated Swamp"}
+      ]}
+    ]},
+    {"$imgdir":"251000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Weapon Store"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Armor Shop"}
+      ]}
+    ]},
+    {"$imgdir":"251010400","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Bellflower Valley"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Isolated Swamp"}
+      ]}
+    ]},
+    {"$imgdir":"251010500","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Peach Farm 3"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Old Swamp"}
+      ]}
+    ]},
+    {"$imgdir":"500000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Free Market"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"World Tour Info Desk"}
+      ]}
+    ]},
+    {"$imgdir":"680000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Amoria Wedding Shop"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Saint Maple Altar"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Amoria Plastic Surgery "}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Amoria Hair Salon"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"White Wedding Altar"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"Amoria"}
+      ]},
+      {"$imgdir":"6","$$":[
+        {"$string":"Title","value":"Purple Plains 1"}
+      ]},
+      {"$imgdir":"7","$$":[
+        {"$string":"Title","value":"Wedding Cathedral"}
+      ]},
+      {"$imgdir":"8","$$":[
+        {"$string":"Title","value":"Wedding Chapel"}
+      ]}
+    ]},
+    {"$imgdir":"500020100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Outside the Entrance to the Village"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Fancy Swamp"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Small Jungle"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Outside the Entrance to the Village"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Fancy Swamp"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"Small Jungle"}
+      ]}
+    ]},
+    {"$imgdir":"701000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Department Store"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Weapon·Armor Shop"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Newspaper Tray"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Newspaper Tray"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Department Store"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"World Tour Info Desk"}
+      ]}
+    ]},
+    {"$imgdir":"740000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Weapon Store"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Armor Store"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Department Store"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Taipei Route"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Subway<Taipei>"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"World Tour Info Desk"}
+      ]}
+    ]},
+    {"$imgdir":"740000100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Exit"}
+      ]}
+    ]},
+    {"$imgdir":"740010200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Back Alley of Taipei"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Streets of Taipei II"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Streets of TaipeiⅣ"}
+      ]}
+    ]},
+    {"$imgdir":"741000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Hair Salon"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Hair Salon"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Plastic Surgery"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Plastic Surgery"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Plastic Surgery"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"Skin Care"}
+      ]}
+    ]},
+    {"$imgdir":"741000001","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Skin Care"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Plastic Surgery"}
+      ]}
+    ]},
+    {"$imgdir":"741010200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Streets of Night Market II"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Streets of Night MarketⅣ"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"In Between the Road of Night Market I"}
+      ]}
+    ]},
+    {"$imgdir":"800000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Mushroom Shrine"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Fish Cake Shop"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Yakisoba Shop"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Takoyaki Shop"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Mushroom Ramen Shop"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"Dango Shop"}
+      ]},
+      {"$imgdir":"6","$$":[
+        {"$string":"Title","value":"Mushroom Shrine"}
+      ]},
+      {"$imgdir":"7","$$":[
+        {"$string":"Title","value":"World Tour Info Desk"}
+      ]}
+    ]},
+    {"$imgdir":"800020000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Crow Forest II"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"The Animal Forest"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Mushroom Forest"}
+      ]}
+    ]},
+    {"$imgdir":"800020101","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Bamboo Forest"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Cloud Fox Mountain"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Crow Forest I"}
+      ]}
+    ]},
+    {"$imgdir":"920010100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"<Lobby>"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"<Sealed Room>"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"<Storage>"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"<Lounge>"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"<Walkway>"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"<On the Way Up>"}
+      ]}
+    ]},
+    {"$imgdir":"101030103","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Excavation Site II"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Excavation Site"}
+      ]}
+    ]},
+    {"$imgdir":"101030104","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"RemainsI"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Remains3"}
+      ]}
+    ]},
+    {"$imgdir":"540000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Changi Airport"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Central Way 1"}
+      ]}
+    ]},
+    {"$imgdir":"540000100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Central Way 2"}
+      ]}
+    ]},
+    {"$imgdir":"540000200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Central Way 3"}
+      ]}
+    ]},
+    {"$imgdir":"540000300","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Central Way 2"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Surburban Area 1"}
+      ]}
+    ]},
+    {"$imgdir":"540020000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Surburban Area 2"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Boat Quay Town"}
+      ]}
+    ]},
+    {"$imgdir":"540020100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Surburban Area 1"}
+      ]}
+    ]},
+    {"$imgdir":"541000300","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Ghost Ship 1"}
+      ]}
+    ]},
+    {"$imgdir":"100030000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Utah's pig farm"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Ellinia southern forest"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Nautilus Harbor"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Utah's Pig Farm"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Ellinia southern forest"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"Ellinia eastern forest"}
+      ]},
+      {"$imgdir":"6","$$":[
+        {"$string":"Title","value":"Nautilus Harbor"}
+      ]},
+      {"$imgdir":"7","$$":[
+        {"$string":"Title","value":"Utah's Pig Farm"}
+      ]},
+      {"$imgdir":"8","$$":[
+        {"$string":"Title","value":"Ellinia southern forest"}
+      ]},
+      {"$imgdir":"9","$$":[
+        {"$string":"Title","value":"Nautilus Harbor"}
+      ]},
+      {"$imgdir":"10","$$":[
+        {"$string":"Title","value":"Forest East of Henesys"}
+      ]}
+    ]},
+    {"$imgdir":"101040001","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Stone plate of Boogi"},
+        {"$string":"Desc","value":"You will need to destroy the resource first before you defeated Boogi "}
+      ]}
+    ]},
+    {"$imgdir":"104030000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Henesys hunting ground 1"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Henesys Western forest"}
+      ]}
+    ]},
+    {"$imgdir":"200000150","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Orbis Station waiting room"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Platform to Ariant"}
+      ]}
+    ]},
+    {"$imgdir":"200082300","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Sea Interchange"}
+      ]}
+    ]},
+    {"$imgdir":"211000200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Orbis Tower"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"ElNath"}
+      ]}
+    ]},
+    {"$imgdir":"211041100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"lich -alert-"},
+        {"$string":"Desc","value":"Lich area!! If you cannot escape from lich, dedicate teeth of zombie to grave!! Resource of lich's power is underneath.....grave.."}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Dead Tree's Forest II"}
+      ]}
+    ]},
+    {"$imgdir":"211041200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"lich -alert-"},
+        {"$string":"Desc","value":"Lich area!! If you cannot escape from lich, dedicate teeth of zombie to grave!! Resource of lich's power is underneath.....grave.."}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Dead tree;s forest I"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Dead tree;s forest III"}
+      ]}
+    ]},
+    {"$imgdir":"211041300","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"lich -alert-"},
+        {"$string":"Desc","value":"Lich area!! If you cannot escape from lich, dedicate teeth of zombie to grave!! Resource of lich's power is underneath.....grave.."}
+      ]}
+    ]},
+    {"$imgdir":"211041400","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"lich -alert-"},
+        {"$string":"Desc","value":"Lich area!! If you cannot escape from lich, dedicate teeth of zombie to grave!! Resource of lich's power is underneath.....grave.."}
+      ]}
+    ]},
+    {"$imgdir":"222010101","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Small pond"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Tiger forest II"}
+      ]}
+    ]},
+    {"$imgdir":"222010102","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Tiger forest II"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"※Prohibited to proceed "}
+      ]}
+    ]},
+    {"$imgdir":"230010100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Sea Interchange"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Red Coral Forest"}
+      ]}
+    ]},
+    {"$imgdir":"230010200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Crystal Valley"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Turban Shell Hill"}
+      ]}
+    ]},
+    {"$imgdir":"230010300","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Red Coral Forest"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Western Sea Crossroad"}
+      ]}
+    ]},
+    {"$imgdir":"260000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Outside the Ariant West Gate"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Post Ware House"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"World Tour Manual"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Ariant Platform"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Ariant Skin Care Clinic"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"Ariant Plastic Surgery"}
+      ]},
+      {"$imgdir":"6","$$":[
+        {"$string":"Title","value":"Ariant town"}
+      ]},
+      {"$imgdir":"7","$$":[
+        {"$string":"Title","value":"Free market"}
+      ]},
+      {"$imgdir":"8","$$":[
+        {"$string":"Title","value":"Ariant Palace"}
+      ]},
+      {"$imgdir":"9","$$":[
+        {"$string":"Title","value":"Ariant Weapon shop"}
+      ]},
+      {"$imgdir":"10","$$":[
+        {"$string":"Title","value":"Ariant Armor shop"}
+      ]},
+      {"$imgdir":"11","$$":[
+        {"$string":"Title","value":"Ariant Potion shop"}
+      ]},
+      {"$imgdir":"12","$$":[
+        {"$string":"Title","value":"Ext North Gate of Ariant"}
+      ]},
+      {"$imgdir":"13","$$":[
+        {"$string":"Title","value":"Ariant Hair shop"}
+      ]},
+      {"$imgdir":"14","$$":[
+        {"$string":"Title","value":"Ext East gate of Ariant"}
+      ]},
+      {"$imgdir":"15","$$":[
+        {"$string":"Title","value":"Ariant Platform"}
+      ]}
+    ]},
+    {"$imgdir":"260000200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Ridium Processing Workshop"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Ariant Market"}
+      ]}
+    ]},
+    {"$imgdir":"260010000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Ariant"}
+      ]}
+    ]},
+    {"$imgdir":"260010600","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Dry Desert"}
+      ]}
+    ]},
+    {"$imgdir":"260010700","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Ariant"}
+      ]}
+    ]},
+    {"$imgdir":"260020000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Ariant"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Camel Taxi"},
+        {"$string":"Desc","value":"Magatia 1500 Mesos"}
+      ]}
+    ]},
+    {"$imgdir":"260020700","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Camel Taxi"},
+        {"$string":"Desc","value":"Ariant 1500 Mesos"}
+      ]}
+    ]},
+    {"$imgdir":"990000200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Shelenian Ruins"}
+      ]}
+    ]},
+    {"$imgdir":"60002","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Southperry"},
+        {"$string":"Desc","value":"Southperry is a port city."}
+      ]}
+    ]},
+    {"$imgdir":"120000100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"The Ship's Control Room"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Restaurant"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Central Corridor of The Nautilus (↓)"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Training Room"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Kyrin's Control Room"},
+        {"$string":"Desc","value":"If you want to make a job advancement to becoming a pirate,  then go to the room on the left most corner..."}
+      ]}
+    ]},
+    {"$imgdir":"120000300","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Central Corridor of The Nautilus (↑)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Generator Room"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Generator Room"}
+      ]}
+    ]},
+    {"$imgdir":"211010000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Hunter's Altar"},
+        {"$string":"Desc","value":"A small altar setup by the hunters in El Nath. This was made to appease the Snow Witch when she appears enraged. If a dropped item from the snowfield is used as the sacrifice, then the witch will be appeased."}
+      ]}
+    ]},
+    {"$imgdir":"211020000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Hunter's Altar"},
+        {"$string":"Desc","value":"A small altar setup by the hunters in El Nath. This was made to appease the Snow Witch when she appears enraged. If a dropped item from the snowfield is used as the sacrifice, then the witch will be appeased."}
+      ]}
+    ]},
+    {"$imgdir":"211050000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Hunter's Altar"},
+        {"$string":"Desc","value":"A small altar setup by the hunters in El Nath. This was made to appease the Snow Witch when she appears enraged. If a dropped item from the snowfield is used as the sacrifice, then the witch will be appeased."}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Rider's Field"}
+      ]}
+    ]},
+    {"$imgdir":"229010000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Abandoned Grave"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"On the Way Back"}
+      ]}
+    ]},
+    {"$imgdir":"261020200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Poison Spray"},
+        {"$string":"Desc","value":"A poison sprayer used to defeat Rurumo. All alchemists from Alcadno should only use this to eliminate Rurumo. Who keeps taking the poison from the spray bottle?"}
+      ]}
+    ]},
+    {"$imgdir":"261020400","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Poison Spray"},
+        {"$string":"Desc","value":"A poison sprayer used to defeat Rurumo. All alchemists from Alcadno should only use this to eliminate Rurumo. Who keeps taking the poison from the spray bottle?"}
+      ]}
+    ]},
+    {"$imgdir":"261020600","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Poison Spray"},
+        {"$string":"Desc","value":"A poison sprayer used to defeat Rurumo. All alchemists from Alcadno should only use this to eliminate Rurumo. Who keeps taking the poison from the spray bottle?"}
+      ]}
+    ]},
+    {"$imgdir":"300000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Barrier Stone"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"General Shop"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Clinic"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Camp Conference Room"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Barrier Stone"}
+      ]}
+    ]},
+    {"$imgdir":"300010000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Altaire Camp"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Mossy Tree Forest "}
+      ]}
+    ]},
+    {"$imgdir":"300010200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Mossy Tree Forest Trail"},
+        {"$string":"Desc","value":"If you're a lost adventurer, go this way..."}
+      ]}
+    ]},
+    {"$imgdir":"300010300","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Western Region of Mossy Tree Forest"},
+        {"$string":"Desc","value":"The camp is beyond the western region of the forest. -Rios-"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Southern Region of Mossy Tree Forest"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Toward the Boulder Mountain"}
+      ]}
+    ]},
+    {"$imgdir":"300020000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Mossy Tree Forest Trail"},
+        {"$string":"Desc","value":"If you're a lost adventurer, go this way..."}
+      ]}
+    ]},
+    {"$imgdir":"300030000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Danger Zone.  Explorations Not Allowed!"},
+        {"$string":"Desc","value":"Due to strange occurrences as of late, explorations are not being allowed. -Athena Pierce-"}
+      ]}
+    ]},
+    {"$imgdir":"500010000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Toad Pond"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Floating Market"}
+      ]}
+    ]},
+    {"$imgdir":"500010100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Frog Pond/Floating Market"}
+      ]}
+    ]},
+    {"$imgdir":"800020110","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Watch Out for the Bamboo Warrior!"},
+        {"$string":"Desc","value":"If a cold breeze blows through the Bamboo Forest, that's when Bamboo Warrior appears! Watch out for the Bamboo Warrior that's holding a grudge. To eliminate the warrior, slash the bamboo trees in the Forest..."}
+      ]}
+    ]},
+    {"$imgdir":"800020120","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Watch Out for the Bamboo Warrior!"},
+        {"$string":"Desc","value":"If a cold breeze blows through the Bamboo Forest, that's when Bamboo Warrior appears! Watch out for the Bamboo Warrior that's holding a grudge. To eliminate the warrior, slash the bamboo trees in the Forest..."}
+      ]}
+    ]},
+    {"$imgdir":"800020130","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Watch Out for the Bamboo Warrior!"},
+        {"$string":"Desc","value":"If a cold breeze blows through the Bamboo Forest, that's when Bamboo Warrior appears! Watch out for the Bamboo Warrior that's holding a grudge. To eliminate the warrior, slash the bamboo trees in the Forest..."}
+      ]}
+    ]},
+    {"$imgdir":"100040105","$$":[
+      {"$string":"quest00","value":"Rotten Tree Trail"},
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"The Forest of Evil II"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Monkey Forest II"}
+      ]}
+    ]},
+    {"$imgdir":"120000200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Morgan's Weapons Shop"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Rodos' Armor Shop"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Conference Room"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Exit"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Gali's General Goods Shop"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"Upper Corridor of The Nautilus (↑)"}
+      ]},
+      {"$imgdir":"6","$$":[
+        {"$string":"Title","value":"Lower Corridor of The Nautilus (↓)"}
+      ]},
+      {"$imgdir":"7","$$":[
+        {"$string":"Title","value":"Bedroom"}
+      ]},
+      {"$imgdir":"8","$$":[
+        {"$string":"Title","value":"Weapon / Armor Shop"}
+      ]},
+      {"$imgdir":"9","$$":[
+        {"$string":"Title","value":"General Goods Shop / Stairs"}
+      ]},
+      {"$imgdir":"10","$$":[
+        {"$string":"Title","value":"Free Market"}
+      ]}
+    ]},
+    {"$imgdir":"222000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"General Goods Shop"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Korean Folk Town"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Black Mountain"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Black Mountain"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Weapon / Armor Shop"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"Helios Tower <Library>"}
+      ]},
+      {"$imgdir":"6","$$":[
+        {"$string":"Title","value":"Entrance to Black Mountain"}
+      ]},
+      {"$imgdir":"7","$$":[
+        {"$string":"Title","value":"Free Market Entrance"}
+      ]}
+    ]},
+    {"$imgdir":"222010300","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"222010400.000000"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Tiger Ridge"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Tower"},
+        {"$string":"Desc","value":"All those that pass Fox Valley should throw Samiho's tail from the top of the tower to pay off it's scores"}
+      ]}
+    ]},
+    {"$imgdir":"261000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Sahel"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Alcadno Society - General Store"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Zenumist Society - Weapon & Armor Shop"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Magatia Bank"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Stan's Workroom"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"Weapon & Armor Shop"}
+      ]},
+      {"$imgdir":"6","$$":[
+        {"$string":"Title","value":"Zenumist Society"}
+      ]},
+      {"$imgdir":"7","$$":[
+        {"$string":"Title","value":"General Store"}
+      ]},
+      {"$imgdir":"8","$$":[
+        {"$string":"Title","value":"Alcadno Society"}
+      ]},
+      {"$imgdir":"9","$$":[
+        {"$string":"Title","value":"Free Market Entrance"}
+      ]}
+    ]},
+    {"$imgdir":"100000002","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Pig Park"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Theme Dungeon: Mushroom Castle"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"헤네시스"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Theme Dungeon: Mushroom Castle"}
+      ]}
+    ]},
+    {"$imgdir":"100000003","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"An Empty House (Towards Henesys)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Pig Park II"}
+      ]}
+    ]},
+    {"$imgdir":"100000004","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Someone Else's House"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Pig Park (Towards Henesys)"}
+      ]}
+    ]},
+    {"$imgdir":"100000005","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Pig Park II (Towards Henesys)"}
+      ]}
+    ]},
+    {"$imgdir":"100010000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"The Forest East of Henesys (Towards Ellinia/Nautilus)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Henesys"}
+      ]}
+    ]},
+    {"$imgdir":"100020000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Mini Dungeon: Henesys Pig Farm"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Mini Dungeon: Henesys Pig Farm"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"The Forest East of Henesys (Towards Ellinia/Nautilus)"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"The Hill East of Henesys"}
+      ]}
+    ]},
+    {"$imgdir":"100040000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"The Forest of Wisdom (Towards Ellinia)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"The Forest East of Henesys (Towards Henesys/Nautilus)"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"The Forest of Wisdom (Towards Ellinia)"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"The Forest East of Henesys (Towards Henesys/Nautilus)"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"The Forest of Wisdom (Towards Ellinia)"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"The Forest East of Henesys (Towards Henesys/Nautilus)"}
+      ]}
+    ]},
+    {"$imgdir":"100040100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"The Forest South of Ellinia (Towards Henesys/Nautilus)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"The Field South of Ellinia (Towards Ellinia)"}
+      ]}
+    ]},
+    {"$imgdir":"100040101","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"The Forest of Wisdom"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Monkey Forest II"}
+      ]}
+    ]},
+    {"$imgdir":"100040103","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"The Forest of Evil I"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Monkey Forest I"}
+      ]}
+    ]},
+    {"$imgdir":"101010000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"The Tree That Grew I (Towards Perion)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Ellinia"}
+      ]}
+    ]},
+    {"$imgdir":"101010100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"The Tree That Grew II"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"The Field Up North of Ellinia (Towards Ellinia)"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"The Forest North of Ellinia (Towards Perion)"}
+      ]}
+    ]},
+    {"$imgdir":"101010101","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"The Tree That Grew III"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"The Tree That Grew I"}
+      ]}
+    ]},
+    {"$imgdir":"101010102","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Crest Of The Tree That Grew"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"The Tree That Grew II"}
+      ]}
+    ]},
+    {"$imgdir":"101010103","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"             <Warning>             "},
+        {"$string":"Desc","value":"Height: 30km above ground level. This is the highest peak of the tallest tree in Ellinia. The wind blows eastwards towards Sleepywood. Jump at your own risk."}
+      ]}
+    ]},
+    {"$imgdir":"101020000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"East Domain of Perion (Towards Perion)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"The Tree That Grew1 (Towards Ellinia)"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Tree Dungeon, Forest Up North I"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Tree Dungeon, Forest Up North I"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Tree Dungeon, Forest Up North II"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"Tree Dungeon, Forest Up North II"}
+      ]},
+      {"$imgdir":"6","$$":[
+        {"$string":"Title","value":"Tree Dungeon, Forest Up North III"}
+      ]},
+      {"$imgdir":"7","$$":[
+        {"$string":"Title","value":"Tree Dungeon, Forest Up North III"}
+      ]},
+      {"$imgdir":"8","$$":[
+        {"$string":"Title","value":"Tree Dungeon, Forest Up North IV"}
+      ]},
+      {"$imgdir":"9","$$":[
+        {"$string":"Title","value":"Tree Dungeon, Forest Up North V"}
+      ]},
+      {"$imgdir":"10","$$":[
+        {"$string":"Title","value":"Tree Dungeon, Forest Up North VI"}
+      ]},
+      {"$imgdir":"11","$$":[
+        {"$string":"Title","value":"Tree Dungeon, Forest Up North VI"}
+      ]},
+      {"$imgdir":"12","$$":[
+        {"$string":"Title","value":"Tree Dungeon, Forest Up North VII"}
+      ]},
+      {"$imgdir":"13","$$":[
+        {"$string":"Title","value":"Tree Dungeon, Forest Up North VII"}
+      ]},
+      {"$imgdir":"14","$$":[
+        {"$string":"Title","value":"Tree Dungeon, Forest Up North VIII"}
+      ]},
+      {"$imgdir":"15","$$":[
+        {"$string":"Title","value":"Tree Dungeon, Forest Up North VIII"}
+      ]},
+      {"$imgdir":"16","$$":[
+        {"$string":"Title","value":"Tree Dungeon, Forest Up North IX"}
+      ]}
+    ]},
+    {"$imgdir":"101030000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Rocky Road III (Towards Perion)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"The Forest North of Ellinia (Towards Ellinia)"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Rocky Road III (Towards Perion)"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"The Forest North of Ellinia (Towards Ellinia)"}
+      ]}
+    ]},
+    {"$imgdir":"101030101","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Excavation Site II (Towards Excavation Site)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Rocky Road III (Towards Victoria Road)"}
+      ]}
+    ]},
+    {"$imgdir":"101030102","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Excavation Site I (Towards Victoria Road)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Excavation Site III (Towards Excavation Site)"}
+      ]}
+    ]},
+    {"$imgdir":"101030200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Rocky Road I (Towards Perion)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Rocky Road III (Towards Ellinia)"}
+      ]}
+    ]},
+    {"$imgdir":"101030300","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"East Rocky Mountain I (Towards Perion)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Rocky Road II (Towards Ellinia)"}
+      ]}
+    ]},
+    {"$imgdir":"101030401","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"East Rocky Mountain I (Towards Victoria Road)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"East Rocky Mountain III"}
+      ]}
+    ]},
+    {"$imgdir":"101030402","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"East Rocky Mountain II (Towards Victoria Road)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"East Rocky Mountain IV"}
+      ]}
+    ]},
+    {"$imgdir":"101030403","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"East Rocky Mountain III (Towards Victoria Road)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"East Rocky Mountain V"}
+      ]}
+    ]},
+    {"$imgdir":"101030404","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"East Rocky Mountain IV (Towards Victoria Road)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"East Rocky Mountain VI"}
+      ]}
+    ]},
+    {"$imgdir":"101030405","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"East Rocky Mountain V (Towards Victoria Road)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"East Rocky Mountain VII"}
+      ]}
+    ]},
+    {"$imgdir":"101040000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Perion"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"East Rocky Mountain I (Towards Ellinia)"}
+      ]}
+    ]},
+    {"$imgdir":"102010000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"West Rocky Mountain I (Towards Kerning City)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Perion"}
+      ]}
+    ]},
+    {"$imgdir":"102030000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Construction Site North of Kerning City (Towards Kerning City)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"West Rocky Mountain I (Towards Perion)"}
+      ]}
+    ]},
+    {"$imgdir":"102040000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Sunset Sky (Towards Kerning City)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"West Domain of Perion (Towards Perion)"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Abandoned Subway Station"}
+      ]}
+    ]},
+    {"$imgdir":"102050000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Kerning City"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Construction Site North of Kerning City (Towards Perion)"}
+      ]}
+    ]},
+    {"$imgdir":"103010000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Kerning City"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"L Forest I (Towards Henesys/Lith Harbor)"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Kerning City"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"L Forest III (Towards Henesys/Lith Harbor)"}
+      ]}
+    ]},
+    {"$imgdir":"103020000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Kerning City Construction Site (Towards Kerning City)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"L Forest II (Towards Henesys/Lith Harbor)"}
+      ]}
+    ]},
+    {"$imgdir":"103020100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"L Forest I (Towards Kerning City)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"L Forest III (Towards Henesys/Lith Harbor)"}
+      ]}
+    ]},
+    {"$imgdir":"103020200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Kerning City Middle Forest I (Towards Henesys/Lith Harbor)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"L Forest II (Towards Kerning City)"}
+      ]}
+    ]},
+    {"$imgdir":"103030100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Kerning City Middle Forest III"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Kerning City Middle Forest I"}
+      ]}
+    ]},
+    {"$imgdir":"104000100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Lith Harbor"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Thicket Around the Beach I (Towards Victoria Road)"}
+      ]}
+    ]},
+    {"$imgdir":"104000200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Right Around Lith Harbor (Towards Lith Harbor)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Thicket Around the Beach II (Towards Victoria Road)"}
+      ]}
+    ]},
+    {"$imgdir":"104000300","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Thicket Around the Beach I (Towards Lith Harbor)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Thicket Around the Beach III (Towards Victoria Road)"}
+      ]}
+    ]},
+    {"$imgdir":"104000400","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Thicket Around the Beach II (Towards Lith Harbor)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"3-Way Road-Split (Towards Victoria Road)"}
+      ]}
+    ]},
+    {"$imgdir":"104020000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"3-Way Road-Split (Towards Kerning City/Lith Harbor)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Hill West of Henesys (Towards Henesys)"}
+      ]}
+    ]},
+    {"$imgdir":"104040000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Henesys Hunting Ground II"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Henesys"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Hill West of Henesys (Towards Lith Harbor/Kerning City)"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Henesys Hunting Ground II"}
+      ]}
+    ]},
+    {"$imgdir":"104040001","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Henesys Hunting Ground III"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Henesys Hunting Ground I"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Henesys Hunting Ground III"}
+      ]}
+    ]},
+    {"$imgdir":"104040002","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Henesys Hunting Ground II"}
+      ]}
+    ]},
+    {"$imgdir":"105030000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Swampy Land (Towards Kerning City)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Dungeon (Towards Perion)"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Swampy Land in a Deep Forest (Towards Sleepywood)"}
+      ]}
+    ]},
+    {"$imgdir":"105040100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Hunting Ground in the Deep Forest I"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Swampy Land in a Deep Forest (Towards Sleepywood)"}
+      ]}
+    ]},
+    {"$imgdir":"105040304","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Mini Dungeon: The Ruins of the Fallen Golem"}
+      ]}
+    ]},
+    {"$imgdir":"105050100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Mini Dungeon: Cave Where Mushrooms Grow"}
+      ]}
+    ]},
+    {"$imgdir":"106000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Perion"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Deep Valley II (Towards Sleepywood)"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Perion"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Deep Valley II (Towards Sleepywood)"}
+      ]}
+    ]},
+    {"$imgdir":"106000001","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Deep Valley I"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Dangerous Valley II"}
+      ]}
+    ]},
+    {"$imgdir":"106000100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Deep Valley3 (Towards Sleepywood)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"The Burnt Land1"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Deep Valley I (Towards Perion)"}
+      ]}
+    ]},
+    {"$imgdir":"106000101","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Deep Valley II"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"The Burnt Land II"}
+      ]}
+    ]},
+    {"$imgdir":"106000110","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"The Burnt Land I"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"The Burnt Land III"}
+      ]}
+    ]},
+    {"$imgdir":"106000120","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"The Burnt Land II"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"The Burnt Land IV"}
+      ]}
+    ]},
+    {"$imgdir":"106000130","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"The Burnt Land III"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"The Burnt Land V"}
+      ]}
+    ]},
+    {"$imgdir":"106000200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Deep Valley II (Towards Perion)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Path to Perion Dungeon (Towards Sleepywood)"}
+      ]}
+    ]},
+    {"$imgdir":"106000300","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Deep Forest (Towards Sleepywood)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Deep Valley III (Towards Perion)"}
+      ]}
+    ]},
+    {"$imgdir":"106010000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Henesys"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Entrance to Henesys Dungeon (Towards Sleepywood)"}
+      ]}
+    ]},
+    {"$imgdir":"106010100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Path to the Dungeon (Towards Henesys)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Hunting Ground in the Deep Forest II (Towards Sleepywood)"}
+      ]}
+    ]},
+    {"$imgdir":"106010101","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"The Entrance of Golem's Temple"}
+      ]}
+    ]},
+    {"$imgdir":"106010102","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"The Breathing Rock"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Golem's Temple I"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Golem's Temple II"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Golem's Temple III"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Golem's Temple IV"}
+      ]}
+    ]},
+    {"$imgdir":"107000500","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Dangerous Croko II (Towards Kerning City)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Deep Forest (Towards Sleepywood)"}
+      ]}
+    ]},
+    {"$imgdir":"120010000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"The Forest East of Henesys (Towards Victoria Road)"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Nautilus"}
+      ]}
+    ]},
+    {"$imgdir":"130000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Spot where Shinsoo fell asleep"}
+      ]}
+    ]},
+    {"$imgdir":"200090500","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Sky Road : Toward the Temple of Time"}
+      ]}
+    ]},
+    {"$imgdir":"200090510","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Sky Road : Toward Leafre"}
+      ]}
+    ]},
+    {"$imgdir":"221023400","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Mini Dungeon: Drummer Bunny's Lair"}
+      ]}
+    ]},
+    {"$imgdir":"240020500","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Mini Dungeon: The Round Table of Kentaurus"}
+      ]}
+    ]},
+    {"$imgdir":"240040511","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Mini Dungeon: The Restoring Memory"}
+      ]}
+    ]},
+    {"$imgdir":"240040520","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Mini Dungeon: Newt Secured Zone"}
+      ]}
+    ]},
+    {"$imgdir":"260020600","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Mini Dungeon: Hill of Sandstorms"}
+      ]}
+    ]},
+    {"$imgdir":"261020300","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Mini Dungeon: Critical Error"}
+      ]}
+    ]},
+    {"$imgdir":"270000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Road to the Future"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Road of the Present"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Road to the Past"}
+      ]}
+    ]},
+    {"$imgdir":"270000100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Air Field"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Air Field"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Temple Entrance"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Three Doors"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Temple Entrance"}
+      ]}
+    ]},
+    {"$imgdir":"270010000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Three Doors"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Door of Memory"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Road to the Past : Memory"}
+      ]}
+    ]},
+    {"$imgdir":"270010100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Past of the Verdure"}
+      ]}
+    ]},
+    {"$imgdir":"270010110","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Memory Keeper's Room"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Memory Lane 2"}
+      ]}
+    ]},
+    {"$imgdir":"270010111","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Time Observatory"}
+      ]}
+    ]},
+    {"$imgdir":"270010200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Resting Spot of Memory 1"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Resting Spot of Memory 2"}
+      ]}
+    ]},
+    {"$imgdir":"270010210","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Memory Lane 3"}
+      ]}
+    ]},
+    {"$imgdir":"270010310","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Memory Lane 4"}
+      ]}
+    ]},
+    {"$imgdir":"270010500","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Frozen Past"}
+      ]}
+    ]},
+    {"$imgdir":"270020000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Memory Lane Direction"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Door of Regrets"}
+      ]}
+    ]},
+    {"$imgdir":"270020100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Frozen Past"}
+      ]}
+    ]},
+    {"$imgdir":"270020110","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Road of Regrets 1"}
+      ]}
+    ]},
+    {"$imgdir":"270020210","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Sorcerer's Room"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Road of Regrets 2"}
+      ]}
+    ]},
+    {"$imgdir":"270020400","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Resting Spot of Regret 4"}
+      ]}
+    ]},
+    {"$imgdir":"270030000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Road to Oblivion"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Road of Regrets 5"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Door of Oblivion"}
+      ]}
+    ]},
+    {"$imgdir":"270030210","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Road to Oblivion 2"}
+      ]}
+    ]},
+    {"$imgdir":"270030300","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Resting Spot of Oblivion 3"}
+      ]}
+    ]},
+    {"$imgdir":"270030400","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Resting Spot of Oblivion 3"}
+      ]}
+    ]},
+    {"$imgdir":"270030410","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Road to Oblivion 4"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Road to Oblivion 5"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Record Keeper's Room"}
+      ]}
+    ]},
+    {"$imgdir":"270030500","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Toward the Temple Ruins"}
+      ]}
+    ]},
+    {"$imgdir":"930000800","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"          Spring of Purification            "},
+        {"$string":"Desc","value":"A spring of clean water. It appears to have the power to detoxify the Golem's Marble filled with poison inside. Let's try dropping the marble in front of the spring. poison which fills."}
+      ]}
+    ]},
+    {"$imgdir":"130000200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Training Forest"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Knights Chamber"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Department Store"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"in the direction of the Sky Ferry"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Free Market"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"Ereve Weapon Store"}
+      ]},
+      {"$imgdir":"6","$$":[
+        {"$string":"Title","value":"Department Store"}
+      ]},
+      {"$imgdir":"7","$$":[
+        {"$string":"Title","value":"Sky Ferry"},
+        {"$string":"Desc","value":"The ship that passes through Ereve is at anchor."}
+      ]}
+    ]},
+    {"$imgdir":"200000160","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Orbis Station Waiting Room"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Station to Ereve"}
+      ]}
+    ]},
+    {"$imgdir":"922230000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Exit"}
+      ]}
+    ]},
+    {"$imgdir":"925020000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Mu Lung Training Center"}
+      ]}
+    ]},
+    {"$imgdir":"980020000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Entrance of the Goldrich maze"},
+        {"$string":"Desc","value":"You're at the entrance to Mr. Goldrich's private lane. If you want to enter, please use your golden compass."}
+      ]}
+    ]},
+    {"$imgdir":"550000100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Outskirt of Muddy Banks"}
+      ]}
+    ]},
+    {"$imgdir":"551030000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Mini Dungeon: Longest Ride on ByeBye Station"}
+      ]}
+    ]},
+    {"$imgdir":"551020000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Cable Car"}
+      ]}
+    ]},
+    {"$imgdir":"551010000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Cable Car Station 1"}
+      ]}
+    ]},
+    {"$imgdir":"551000200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Hibiscus Road 2"}
+      ]}
+    ]},
+    {"$imgdir":"551000100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Hibiscus Road 1"}
+      ]}
+    ]},
+    {"$imgdir":"551000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Kampung Village"}
+      ]}
+    ]},
+    {"$imgdir":"105090311","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Mini Dungeon: Drake's Blue Cave"}
+      ]}
+    ]},
+    {"$imgdir":"970000100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Maple Studio"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Ludibrium Studio"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Ariant Studio"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Orbis Studio"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Mu Lung Studio"}
+      ]},
+      {"$imgdir":"5","$$":[
+        {"$string":"Title","value":"Magatia Studio"}
+      ]},
+      {"$imgdir":"6","$$":[
+        {"$string":"Title","value":"Ereve Studio"}
+      ]},
+      {"$imgdir":"7","$$":[
+        {"$string":"Title","value":"Cookie Studio"}
+      ]}
+    ]},
+    {"$imgdir":"2000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Armor Store"},
+        {"$string":"Desc","value":"You may purchase armors here."}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Southperry → Lith Harbor of Victoria Island"},
+        {"$string":"Desc","value":"Fee : 150 mesos\\n\\nBoard a ship headed to Lith Harbor by speaking with Shanks. Once you leave here, you won’t be able to come back."}
+      ]}
+    ]},
+    {"$imgdir":"1020000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Southperry"}
+      ]}
+    ]},
+    {"$imgdir":"106020000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Castle of King Mush"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Empty House (To Henesys)"}
+      ]}
+    ]},
+    {"$imgdir":"106020100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Mushking Castle"}
+      ]}
+    ]},
+    {"$imgdir":"106020200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Mushking Castle"}
+      ]}
+    ]},
+    {"$imgdir":"106020300","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Mushking Castle"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Barrier of the Magic Spore "},
+        {"$string":"Desc","value":"Double-click on Killer Mushroom Spore item to permanently penetrate the barrier, or use 1 Poison Spore dropped from the Poison Mushroom to temporarily break the barrier."}
+      ]}
+    ]},
+    {"$imgdir":"106020400","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Mushking Castle"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Cliff Shadows"}
+      ]}
+    ]},
+    {"$imgdir":"106020401","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Cliff Shadows"}
+      ]}
+    ]},
+    {"$imgdir":"106020402","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Cliff Shadows"}
+      ]}
+    ]},
+    {"$imgdir":"106020403","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Mushking Castle (Beware of Cliff)"}
+      ]}
+    ]},
+    {"$imgdir":"106020500","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Outside the Wall of Mushroom Castle"},
+        {"$string":"Desc","value":"Double-click on the Thorn Remover to remove the thorns from the vine, then climb on it."}
+      ]}
+    ]},
+    {"$imgdir":"106020501","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Entering Mushking Castle"},
+        {"$string":"Desc","value":"You can only enter the castle by stepping on the vine with thorns removed."}
+      ]}
+    ]},
+    {"$imgdir":"106020600","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"West Castle Tower"}
+      ]}
+    ]},
+    {"$imgdir":"106021800","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Mushroom Castle Exit"}
+      ]}
+    ]},
+    {"$imgdir":"106021300","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"East Castle Tower"}
+      ]}
+    ]},
+    {"$imgdir":"106021200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Central Castle Tower"}
+      ]}
+    ]},
+    {"$imgdir":"106021100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Central Castle Tower"}
+      ]}
+    ]},
+    {"$imgdir":"106021000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Central Castle Tower"}
+      ]}
+    ]},
+    {"$imgdir":"106020800","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"West Castle Tower"}
+      ]}
+    ]},
+    {"$imgdir":"106020700","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"West Castle Tower"}
+      ]}
+    ]},
+    {"$imgdir":"140000000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Towards Center of the Island"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"To Harbor"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Rien Library"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Weapon/Armor Store"}
+      ]},
+      {"$imgdir":"4","$$":[
+        {"$string":"Title","value":"Department Store"}
+      ]}
+    ]},
+    {"$imgdir":"140010000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Rien"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Penguin Training Center"}
+      ]}
+    ]},
+    {"$imgdir":"140010100","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Penguin Training Center"}
+      ]}
+    ]},
+    {"$imgdir":"140020000","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Penguin Port"}
+      ]}
+    ]},
+    {"$imgdir":"140020200","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Penguin Port"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Rien"}
+      ]}
+    ]},
+    {"$imgdir":"260020500","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Pyramid Dunes"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"The Ruins of Desert Nomads"}
+      ]},
+      {"$imgdir":"2","$$":[
+        {"$string":"Title","value":"Sahel 2"}
+      ]},
+      {"$imgdir":"3","$$":[
+        {"$string":"Title","value":"Pyramid Dunes"}
+      ]}
+    ]},
+    {"$imgdir":"251010402","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Mini Dungeon: Pillage of Treasure Island "}
+      ]}
+    ]},
+    {"$imgdir":"240010900","$$":[
+      {"$imgdir":"0","$$":[
+        {"$string":"Title","value":"Tera Forest"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$string":"Title","value":"Tera Forest"}
+      ]}
+    ]}
+  ]},
+  {"$imgdir":"PortalTooltip","$$":[
+    {"$imgdir":"100000100","$$":[
+      {"$string":"market00","value":"Free Market Entrance"}
+    ]},
+    {"$imgdir":"100030000","$$":[
+      {"$string":"quest00","value":"Utah's Pig Farm"}
+    ]},
+    {"$imgdir":"101030104","$$":[
+      {"$string":"pt00","value":"Hidden Relic"}
+    ]},
+    {"$imgdir":"102000000","$$":[
+      {"$string":"market00","value":"Free Market Entrance"}
+    ]},
+    {"$imgdir":"105090700","$$":[
+      {"$string":"in00","value":"Secret Shrine"}
+    ]},
+    {"$imgdir":"105090800","$$":[
+      {"$string":"in00","value":"Forgotten Shrine"}
+    ]},
+    {"$imgdir":"200000000","$$":[
+      {"$string":"market00","value":"Free Market Entrance"}
+    ]},
+    {"$imgdir":"211000100","$$":[
+      {"$string":"market00","value":"Free Market Entrance"}
+    ]},
+    {"$imgdir":"211042300","$$":[
+      {"$string":"ps00","value":"Zakum Altar"}
+    ]},
+    {"$imgdir":"220000000","$$":[
+      {"$string":"market00","value":"Free Market Entrance"}
+    ]},
+    {"$imgdir":"221000000","$$":[
+      {"$string":"market00","value":"Free Market Entrance"}
+    ]},
+    {"$imgdir":"230000000","$$":[
+      {"$string":"market01","value":"Free Market Entrance"}
+    ]},
+    {"$imgdir":"230040410","$$":[
+      {"$string":"boss00","value":"Pianus Cave"}
+    ]},
+    {"$imgdir":"240000000","$$":[
+      {"$string":"market00","value":"Free Market Entrance"}
+    ]},
+    {"$imgdir":"240010700","$$":[
+      {"$string":"pt00","value":"The Top of the Sky Nest"}
+    ]},
+    {"$imgdir":"240020100","$$":[
+      {"$string":"boss00","value":"Griffey Forest"}
+    ]},
+    {"$imgdir":"240020400","$$":[
+      {"$string":"boss00","value":"Manon Forest"}
+    ]},
+    {"$imgdir":"240040610","$$":[
+      {"$string":"in00","value":"Nine Spirit's Nest"}
+    ]},
+    {"$imgdir":"240040700","$$":[
+      {"$string":"out00","value":"Peak of the Big Nest"},
+      {"$string":"temp00","value":"Entrance to Cave of Horntail"}
+    ]},
+    {"$imgdir":"240050100","$$":[
+      {"$string":"in00","value":"1st Room of Maze"}
+    ]},
+    {"$imgdir":"240050101","$$":[
+      {"$string":"in00","value":"2nd Room of Maze"}
+    ]},
+    {"$imgdir":"240050102","$$":[
+      {"$string":"in00","value":"3rd Room of Maze"}
+    ]},
+    {"$imgdir":"240050103","$$":[
+      {"$string":"in00","value":"4th Room of Maze"}
+    ]},
+    {"$imgdir":"240050104","$$":[
+      {"$string":"in00","value":"5th Room of Maze"}
+    ]},
+    {"$imgdir":"240050105","$$":[
+      {"$string":"in00","value":"Room of Maze"}
+    ]},
+    {"$imgdir":"240050400","$$":[
+      {"$string":"temp00","value":"Entrance to the Cave of Life"}
+    ]},
+    {"$imgdir":"250000000","$$":[
+      {"$string":"market00","value":"Free Market Entrance"}
+    ]},
+    {"$imgdir":"251000000","$$":[
+      {"$string":"market00","value":"Free Market Entrance"}
+    ]},
+    {"$imgdir":"280010000","$$":[
+      {"$string":"ps01","value":"The Room of Tragedy"}
+    ]},
+    {"$imgdir":"500000000","$$":[
+      {"$string":"market00","value":"Free Market Entrance"}
+    ]},
+    {"$imgdir":"925100000","$$":[
+      {"$string":"next00","value":"Through the Head of the Ship!"}
+    ]},
+    {"$imgdir":"925100100","$$":[
+      {"$string":"next00","value":"Through the Deck I"}
+    ]},
+    {"$imgdir":"925100200","$$":[
+      {"$string":"next00","value":"Through the Deck II"}
+    ]},
+    {"$imgdir":"925100300","$$":[
+      {"$string":"next00","value":"Eliminate Pirates!"}
+    ]},
+    {"$imgdir":"925100400","$$":[
+      {"$string":"next00","value":"The Captain's Dignity"}
+    ]},
+    {"$imgdir":"910000000","$$":[
+      {"$string":"out00","value":"Entrance to Free Market"}
+    ]},
+    {"$imgdir":"261020600","$$":[
+      {"$string":"up00","value":"Research Center A-3"}
+    ]},
+    {"$imgdir":"920010100","$$":[
+      {"$string":"in00","value":"Tower of Goddess <Walkway>"},
+      {"$string":"in01","value":"Tower of Goddess <Storage>"},
+      {"$string":"in02","value":"Tower of Goddess <Lobby>"},
+      {"$string":"in03","value":"Tower of Goddess <Sealed Room>"}
+    ]},
+    {"$imgdir":"920010300","$$":[
+      {"$string":"st00","value":"Tower of Goddess <Center Tower>"}
+    ]},
+    {"$imgdir":"920010500","$$":[
+      {"$string":"st00","value":"Tower of Goddess <Center Tower>"}
+    ]},
+    {"$imgdir":"920010800","$$":[
+      {"$string":"in00","value":"Tower of Goddess <Center Tower>"}
+    ]},
+    {"$imgdir":"100040105","$$":[
+      {"$string":"quest00","value":"Dead Tree Path"}
+    ]},
+    {"$imgdir":"120000200","$$":[
+      {"$string":"market00","value":"Free Market Entrance"}
+    ]},
+    {"$imgdir":"222000000","$$":[
+      {"$string":"market00","value":"Free Market Entrance"}
+    ]},
+    {"$imgdir":"222010300","$$":[
+      {"$string":"west00","value":"Tiger Ridge"}
+    ]},
+    {"$imgdir":"261000000","$$":[
+      {"$string":"market0","value":"Free Market"}
+    ]},
+    {"$imgdir":"100020000","$$":[
+      {"$string":"MD00","value":"Mini Dungeon: Henesys Pig Farm"}
+    ]},
+    {"$imgdir":"101000000","$$":[
+      {"$string":"jobin00","value":"Magic Library"},
+      {"$string":"in04","value":"Sky Ferry"},
+      {"$string":"inERShip","value":"Sky Ferry"}
+    ]},
+    {"$imgdir":"105040304","$$":[
+      {"$string":"MD00","value":"Mini Dungeon: The Ruins of the Fallen Golem"}
+    ]},
+    {"$imgdir":"105050100","$$":[
+      {"$string":"MD00","value":"Mini Dungeon: Cave Where Mushrooms Grow"}
+    ]},
+    {"$imgdir":"221023400","$$":[
+      {"$string":"MD00","value":"Mini Dungeon: Drummer Bunny's Lair"}
+    ]},
+    {"$imgdir":"240020500","$$":[
+      {"$string":"MD00","value":"Mini Dungeon: The Round Table of Kentaurus"}
+    ]},
+    {"$imgdir":"240040511","$$":[
+      {"$string":"MD00","value":"Mini Dungeon: The Restoring Memory"}
+    ]},
+    {"$imgdir":"240040520","$$":[
+      {"$string":"MD00","value":"Mini Dungeon: Newt Secured Zone"}
+    ]},
+    {"$imgdir":"260020600","$$":[
+      {"$string":"MD00","value":"Mini Dungeon: Hill of Sandstorms"}
+    ]},
+    {"$imgdir":"261020300","$$":[
+      {"$string":"MD00","value":"Mini Dungeon: Critical Error"}
+    ]},
+    {"$imgdir":"130000200","$$":[
+      {"$string":"west00","value":"Training Forest 1"},
+      {"$string":"st00","value":"Free Market Entrance"}
+    ]},
+    {"$imgdir":"130010000","$$":[
+      {"$string":"in00","value":"Tino's Forest"},
+      {"$string":"in01","value":"Tiv's Forest"}
+    ]},
+    {"$imgdir":"130010100","$$":[
+      {"$string":"in00","value":"Timu's Forest"},
+      {"$string":"in01","value":"Tiru's Forest"}
+    ]},
+    {"$imgdir":"130010200","$$":[
+      {"$string":"west00","value":"Drill Hall Entrance"}
+    ]},
+    {"$imgdir":"240020101","$$":[
+      {"$string":"in00","value":"Remote Forest"}
+    ]},
+    {"$imgdir":"240020102","$$":[
+      {"$string":"in00","value":"Remote Forest"}
+    ]},
+    {"$imgdir":"240020401","$$":[
+      {"$string":"in00","value":"Remote Forest"}
+    ]},
+    {"$imgdir":"240020402","$$":[
+      {"$string":"in00","value":"Remote Forest"}
+    ]},
+    {"$imgdir":"130020000","$$":[
+      {"$string":"in00","value":"The 1st Drill Hall"},
+      {"$string":"in01","value":"The 2nd Drill Hall"},
+      {"$string":"in02","value":"The 3rd Drill Hall"},
+      {"$string":"in03","value":"The 4th Drill Hall"}
+    ]},
+    {"$imgdir":"240020600","$$":[
+      {"$string":"out00","value":"Griffey Forest"},
+      {"$string":"out01","value":"Manon Forest"}
+    ]},
+    {"$imgdir":"106020400","$$":[
+      {"$string":"right00","value":"Edge of Castle Wall"},
+      {"$string":"right01","value":"Steep Downhill 1"}
+    ]},
+    {"$imgdir":"106021000","$$":[
+      {"$string":"in00","value":"Castle Security Room"}
+    ]},
+    {"$imgdir":"222020400","$$":[
+      {"$string":"in00","value":"To the Past"}
+    ]},
+    {"$imgdir":"914000000","$$":[
+      {"$string":"out00","value":"On the Way to Escape"}
+    ]},
+    {"$imgdir":"914000100","$$":[
+      {"$string":"out00","value":"Burning Forest 1"}
+    ]},
+    {"$imgdir":"914000200","$$":[
+      {"$string":"west00","value":"Burning Forest 2"}
+    ]},
+    {"$imgdir":"914000210","$$":[
+      {"$string":"west00","value":"Burning Forest 3"}
+    ]},
+    {"$imgdir":"914000300","$$":[
+      {"$string":"east00","value":"Burning Forest 3"}
+    ]},
+    {"$imgdir":"914000500","$$":[
+      {"$string":"out00","value":"Burning Forest 1"}
+    ]},
+    {"$imgdir":"140090100","$$":[
+      {"$string":"west00","value":"Cold Forest 2"}
+    ]},
+    {"$imgdir":"140090200","$$":[
+      {"$string":"west00","value":"Cold Forest 3"}
+    ]},
+    {"$imgdir":"140090300","$$":[
+      {"$string":"west00","value":"Cold Forest 4"}
+    ]},
+    {"$imgdir":"140090400","$$":[
+      {"$string":"west00","value":"Cold Forest 5"}
+    ]},
+    {"$imgdir":"140000000","$$":[
+      {"$string":"market00","value":"Free Market"},
+      {"$string":"west00","value":"Field West of Rien"}
+    ]},
+    {"$imgdir":"140010000","$$":[
+      {"$string":"east00","value":"Rien"},
+      {"$string":"west00","value":"Entrance to Rien Training Center"}
+    ]},
+    {"$imgdir":"140030000","$$":[
+      {"$string":"in00","value":"Mirror of Desire"}
+    ]},
+    {"$imgdir":"140010200","$$":[
+      {"$string":"in00","value":"Mirror Cave"}
+    ]},
+    {"$imgdir":"140020200","$$":[
+      {"$string":"east00","value":"Penguin Port"}
+    ]},
+    {"$imgdir":"914020000","$$":[
+      {"$string":"out00","value":"Battle Against Maha"}
+    ]},
+    {"$imgdir":"211050000","$$":[
+      {"$string":"in00","value":"Rider's Field"}
+    ]},
+    {"$imgdir":"914030000","$$":[
+      {"$string":"out00","value":"Field of Wolves"}
+    ]},
+    {"$imgdir":"140010100","$$":[
+      {"$string":"in00","value":"Rien Training Center"}
+    ]},
+    {"$imgdir":"104000000","$$":[
+      {"$string":"in03","value":"Lith Harbor Info Shop"}
+    ]},
+    {"$imgdir":"200060000","$$":[
+      {"$string":"in00","value":"Neglected Strolling Path"}
+    ]},
+    {"$imgdir":"925040001","$$":[
+      {"$string":"out00","value":"Back Alley of Mu Lung Dojo"}
+    ]},
+    {"$imgdir":"300000010","$$":[
+      {"$string":"in00","value":"Library"}
+    ]},
+    {"$imgdir":"100000200","$$":[
+      {"$string":"in02","value":"Bowman Instructional School"}
+    ]},
+    {"$imgdir":"103000310","$$":[
+      {"$string":"out00","value":"To Kerning City"}
+    ]}
+  ]},
+  {"$imgdir":"Shop","$$":[
+    {"$imgdir":"Button","$$":[
+      {"$imgdir":"BuyAvatar","$$":[
+        {"$string":"Title","value":"Buying Equipped Items"},
+        {"$string":"Desc","value":"Buying the items that are equipped by the character. The existing items are not\\nincluded in the purchase."}
+      ]},
+      {"$imgdir":"DefaultAvatar","$$":[
+        {"$string":"Title","value":"Back to Default"},
+        {"$string":"Desc","value":"Character being put back into the state of default before walking into the cash shop."}
+      ]},
+      {"$imgdir":"Rebate","$$":[
+        {"$string":"Title","value":"Deleting Items"},
+        {"$string":"Desc","value":"Deleting cash items and saving a percentage of its price as MaplePoints"}
+      ]},
+      {"$imgdir":"ExEquip","$$":[
+        {"$string":"Title","value":"Extending Equip. Inventory"},
+        {"$string":"Desc","value":"Extending an equip. inventory by 4 slots (1 line)\\n8000 A-Cash"}
+      ]},
+      {"$imgdir":"ExConsume","$$":[
+        {"$string":"Title","value":"Extending Use Inventory"},
+        {"$string":"Desc","value":"Extending a use inventory by 4 slots (1 line)\\n8000 A-Cash"}
+      ]},
+      {"$imgdir":"ExInstall","$$":[
+        {"$string":"Title","value":"Extending Set-Up Inventory"},
+        {"$string":"Desc","value":"Extending a set-up inventory by 4 slots (1 line)\\n8000 A-Cash"}
+      ]},
+      {"$imgdir":"ExEtc","$$":[
+        {"$string":"Title","value":"Extending Etc. Inventory"},
+        {"$string":"Desc","value":"Extending an etc. inventory by 4 slots (1 line)\\n8000 A-Cash"}
+      ]},
+      {"$imgdir":"Charge","$$":[
+        {"$string":"Title","value":"Recharging Cash"},
+        {"$string":"Desc","value":"Please visit the website to charge your account."}
+      ]},
+      {"$imgdir":"Check","$$":[
+        {"$string":"Title","value":"Check Cash"},
+        {"$string":"Desc","value":"Checking the remaining Cash"}
+      ]},
+      {"$imgdir":"Coupon","$$":[
+        {"$string":"Title","value":"Using Coupon"},
+        {"$string":"Desc","value":"Exchanging the item coupon into an item."}
+      ]},
+      {"$imgdir":"TakeoffAvatar","$$":[
+        {"$string":"Title","value":"Remove All"},
+        {"$string":"Desc","value":"Remove all the items that the character is wearing."}
+      ]},
+      {"$imgdir":"GiftToken","$$":[
+        {"$string":"Title","value":"Gift Token"},
+        {"$string":"Desc","value":"Click to see \"How to Gift\" Details"}
+      ]}
+    ]}
+  ]},
+  {"$imgdir":"MTS","$$":[
+    {"$imgdir":"Button","$$":[
+      {"$imgdir":"Check","$$":[
+        {"$string":"Title","value":"Check Points"},
+        {"$string":"Desc","value":"Checking the remaining points."}
+      ]}
+    ]}
+  ]}
+]}

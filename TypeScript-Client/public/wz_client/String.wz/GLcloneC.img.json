@@ -1,0 +1,52 @@
+{"$imgdir":"GLcloneC.img","$$":[
+  {"$imgdir":"Class","$$":[
+    {"$imgdir":"0","$$":[
+      {"$string":"Class","value":"Warrior"},
+      {"$string":"Desc","value":"Warrior - at 1st job status."},
+      {"$string":"InitStatDesc","value":"AP: STR35, Unused AP: 123"},
+      {"$string":"InitSPDesc","value":"SP: All skills blank (Unused SP: 61)"},
+      {"$string":"StartMap","value":"Starting Map: Perion"},
+      {"$string":"Equip","value":"Has defense equips and weapons."},
+      {"$string":"Item","value":"Has potions, chair and 100,000 mesos."}
+    ]},
+    {"$imgdir":"1","$$":[
+      {"$string":"Class","value":"Magician"},
+      {"$string":"Desc","value":"Magician - at 1st job status."},
+      {"$string":"InitStatDesc","value":"AP: INT20,  Unused AP: 138"},
+      {"$string":"InitSPDesc","value":"SP: All skills blank (Unused SP: 67)"},
+      {"$string":"StartMap","value":"Starting Map: Ellinia"},
+      {"$string":"Equip","value":"Has defense equips and weapons."},
+      {"$string":"Item","value":"Has potions, chair and 100,000 mesos."}
+    ]},
+    {"$imgdir":"2","$$":[
+      {"$string":"Class","value":"Bowman"},
+      {"$string":"Desc","value":"Bowman - at 1st job status."},
+      {"$string":"InitStatDesc","value":"AP: DEX25, Unused AP: 133"},
+      {"$string":"InitSPDesc","value":"SP: All skills blank (Unused SP: 61)"},
+      {"$string":"StartMap","value":"Starting Map: Henesys"},
+      {"$string":"Equip","value":"Has defense equips and 2 weapons."},
+      {"$string":"Item","value":"Has potions, chair and 100,000 mesos."}
+    ]},
+    {"$imgdir":"3","$$":[
+      {"$string":"Class","value":"Thief"},
+      {"$string":"Desc","value":"Thief - at 1st job status."},
+      {"$string":"InitStatDesc","value":"AP: DEX25, Unused AP: 133"},
+      {"$string":"InitSPDesc","value":"SP: All skills blank (Unused SP: 61)"},
+      {"$string":"StartMap","value":"Starting Map: Kerning City"},
+      {"$string":"Equip","value":"Has defense equips and 2 weapons."},
+      {"$string":"Item","value":"Has potions, chair and 100,000 mesos."}
+    ]},
+    {"$imgdir":"4","$$":[
+      {"$string":"Class","value":"Pirate"},
+      {"$string":"Desc","value":"Pirate - at 1st job status."},
+      {"$string":"InitStatDesc","value":"AP: DEX20, Unused AP: 138"},
+      {"$string":"InitSPDesc","value":"SP: All skills blank (Unused SP: 61)"},
+      {"$string":"StartMap","value":"Starting Map: Nautilus"},
+      {"$string":"Equip","value":"Has defense equips and 2 weapons."},
+      {"$string":"Item","value":"Has potions, chair and 100,000 mesos."}
+    ]},
+    {"$string":"Step4_W_Desc","value":"Would you like to distribute SP to the \\n#rImproved MaxHP Increased skill?#k\\nUpon selecting this option, SP will be used and character will be created with the increased HP.\\n#rSkill Description:#k This skill boosts up the amount of increase on MaxHP after each Level Up or AP used on MaxHP; Required Skill: #bAt least Level 5 on Improving HP Recovery.#k"},
+    {"$string":"Step4_M_Desc","value":"Would you like to distribute SP to the \\n#rImproved MaxMP Increased skill?#k\\nUpon selecting this option, SP will be used and character will be created with the increased MP.\\n#rSkill Description:#k This skill boosts up the amount of increase on MaxMP after each Level Up or AP used on MaxMP; Required Skill: #bAt least Level 5 on Improving MP Recovery.#k"},
+    {"$string":"Finish_Desc","value":"All settings are complete.\\r\\nTo change previous settings, click the #bBACK#k button.\\r\\nTo proceed with the character creation, click the #bFINISH#k button.\\r\\n#rOnce the character is created, it cannot be undone.#k"}
+  ]}
+]}

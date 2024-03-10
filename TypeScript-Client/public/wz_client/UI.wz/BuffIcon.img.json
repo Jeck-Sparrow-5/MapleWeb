@@ -1,0 +1,72 @@
+{"$imgdir":"BuffIcon.img","$$":[
+  {"$imgdir":"united","$$":[
+    {"$imgdir":"anniversary","$$":[
+      {"$string":"name","value":"Congrats from Admin"},
+      {"$canvas":"0","width":"32","height":"32","basedata":"iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGRSURBVFhHxZQLkcJAEETXQixg4SxgAQtYwEIsYCEWsIAFLGAB5m12YLKZzYd87lV1Zchku7sCRch47SSX1+3+2EVktZFf4mIv6ubeKdEJ/5NxiaLH5RE1NNsSnwKe4RRdnt8ZwvEWNTTPLmBD8vugewgnMRd95mOa5arzKm9Aw8EWqOQ1IwhnCRLl86YFDtdnqyZdk6paiolgUgE19WTDFb0XgwcEowXUzCvhhYO9b8Mg/zxeoL0VYUbezqLPTMEvIL8PlRcSAwo7sPv8Gd0hGC2AvCDPXCntuGd9wS1wkP8IHuaq8xpYTwTFArnOC0twPveE6QXSK/sVzuee4Baomr6WFOBsyW9yAfRrCa8AAr/Ata8zX0PSHPSM5wmFAvJ/LTrJQdVSrJf6g1sg1G34VuBNBhQLxBLyPaE1wU/9YbCAao0i6mF9YVIBlZrksnh75PlB+TdQOOSJZ2HOGQSz3oCVDfuXAlZaALwSpWKwS4GSwC0A3oEhETw3HGwB6JTYmjxciYs9RFYb2UeXWysRwhuqw+aBEN7OPwAAAABJRU5ErkJggg==","$$":[
+        {"$vector":"origin","x":"0","y":"32"}
+      ]}
+    ]},
+    {"$imgdir":"buff","$$":[
+      {"$string":"name","value":"Increase Stats"},
+      {"$canvas":"0","width":"32","height":"32","basedata":"iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGeSURBVFhHvZQNsYNADISxgAUs1EItPAtYqIVawAIWaqEWaqEW2iywsFxzx889+GZ2yJGw2aFDi4DPSXL5PJ6vU4Rd/cqJrnEW9/Y5CzFbfrEyR+Rye3Ui4VlDjAE8Q9XtnT5DnY8tKq4PVwwRDeCZ8j6I9SHO6DKvBpveAI2JF0JniquZm35rBOjr1QHC5QT3VUpZm7kJ4OrV2QFSVM27U1iXdi0bMzVWBdizHFStLTWl6sUAe5evxQ9gPw8ln2w28FJvsCkAalWM2BxqeiYDVPaJdpIAuOKsUnOSmht7gzdIBzDVw8P4anAm2lNwLzbHHgWWAwxJ3QBDT0nNsUcBN0DZ9sO8Ap5V7CmpubAHogEoXYJaFSM2h1q9gR+gmVTL68wFXuoNIgHwVznpzx6E9sLnQ1/gBiju71FcrCFYL0lnWas3WA4w/FYANbWEN4tavcGmACA8p/CeVW+wOUAOuwJA/xEiXA6BaIDwgZwQ3nIIrHoDFIz2yPOCwKYAuQrDADcA0MEjRDQAmIU4mnA56RpnCLv6lb+webQGiuILckkGX1xxFj8AAAAASUVORK5CYII=","$$":[
+        {"$vector":"origin","x":"0","y":"32"}
+      ]}
+    ]}
+  ]},
+  {"$imgdir":"buff","$$":[
+    {"$imgdir":"incEVA","$$":[
+      {"$string":"name","value":"Avoidability"},
+      {"$canvas":"0","width":"32","height":"32","basedata":"iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGeSURBVFhHvZQNsYNADISxgAUs1EItPAtYqIVawAIWaqEWaqEW2iywsFxzx889+GZ2yJGw2aFDi4DPSXL5PJ6vU4Rd/cqJrnEW9/Y5CzFbfrEyR+Rye3Ui4VlDjAE8Q9XtnT5DnY8tKq4PVwwRDeCZ8j6I9SHO6DKvBpveAI2JF0JniquZm35rBOjr1QHC5QT3VUpZm7kJ4OrV2QFSVM27U1iXdi0bMzVWBdizHFStLTWl6sUAe5evxQ9gPw8ln2w28FJvsCkAalWM2BxqeiYDVPaJdpIAuOKsUnOSmht7gzdIBzDVw8P4anAm2lNwLzbHHgWWAwxJ3QBDT0nNsUcBN0DZ9sO8Ap5V7CmpubAHogEoXYJaFSM2h1q9gR+gmVTL68wFXuoNIgHwVznpzx6E9sLnQ1/gBiju71FcrCFYL0lnWas3WA4w/FYANbWEN4tavcGmACA8p/CeVW+wOUAOuwJA/xEiXA6BaIDwgZwQ3nIIrHoDFIz2yPOCwKYAuQrDADcA0MEjRDQAmIU4mnA56RpnCLv6lb+webQGiuILckkGX1xxFj8AAAAASUVORK5CYII=","$$":[
+        {"$vector":"origin","x":"0","y":"32"}
+      ]}
+    ]},
+    {"$imgdir":"incPAD","$$":[
+      {"$string":"name","value":"Physical Attack"},
+      {"$canvas":"0","width":"32","height":"32","basedata":"iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGeSURBVFhHvZQNsYNADISxgAUs1EItPAtYqIVawAIWaqEWaqEW2iywsFxzx889+GZ2yJGw2aFDi4DPSXL5PJ6vU4Rd/cqJrnEW9/Y5CzFbfrEyR+Rye3Ui4VlDjAE8Q9XtnT5DnY8tKq4PVwwRDeCZ8j6I9SHO6DKvBpveAI2JF0JniquZm35rBOjr1QHC5QT3VUpZm7kJ4OrV2QFSVM27U1iXdi0bMzVWBdizHFStLTWl6sUAe5evxQ9gPw8ln2w28FJvsCkAalWM2BxqeiYDVPaJdpIAuOKsUnOSmht7gzdIBzDVw8P4anAm2lNwLzbHHgWWAwxJ3QBDT0nNsUcBN0DZ9sO8Ap5V7CmpubAHogEoXYJaFSM2h1q9gR+gmVTL68wFXuoNIgHwVznpzx6E9sLnQ1/gBiju71FcrCFYL0lnWas3WA4w/FYANbWEN4tavcGmACA8p/CeVW+wOUAOuwJA/xEiXA6BaIDwgZwQ3nIIrHoDFIz2yPOCwKYAuQrDADcA0MEjRDQAmIU4mnA56RpnCLv6lb+webQGiuILckkGX1xxFj8AAAAASUVORK5CYII=","$$":[
+        {"$vector":"origin","x":"0","y":"32"}
+      ]}
+    ]},
+    {"$imgdir":"incPDD","$$":[
+      {"$string":"name","value":"Physical Defense"},
+      {"$canvas":"0","width":"32","height":"32","basedata":"iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGeSURBVFhHvZQNsYNADISxgAUs1EItPAtYqIVawAIWaqEWaqEW2iywsFxzx889+GZ2yJGw2aFDi4DPSXL5PJ6vU4Rd/cqJrnEW9/Y5CzFbfrEyR+Rye3Ui4VlDjAE8Q9XtnT5DnY8tKq4PVwwRDeCZ8j6I9SHO6DKvBpveAI2JF0JniquZm35rBOjr1QHC5QT3VUpZm7kJ4OrV2QFSVM27U1iXdi0bMzVWBdizHFStLTWl6sUAe5evxQ9gPw8ln2w28FJvsCkAalWM2BxqeiYDVPaJdpIAuOKsUnOSmht7gzdIBzDVw8P4anAm2lNwLzbHHgWWAwxJ3QBDT0nNsUcBN0DZ9sO8Ap5V7CmpubAHogEoXYJaFSM2h1q9gR+gmVTL68wFXuoNIgHwVznpzx6E9sLnQ1/gBiju71FcrCFYL0lnWas3WA4w/FYANbWEN4tavcGmACA8p/CeVW+wOUAOuwJA/xEiXA6BaIDwgZwQ3nIIrHoDFIz2yPOCwKYAuQrDADcA0MEjRDQAmIU4mnA56RpnCLv6lb+webQGiuILckkGX1xxFj8AAAAASUVORK5CYII=","$$":[
+        {"$vector":"origin","x":"0","y":"32"}
+      ]}
+    ]},
+    {"$imgdir":"incMAD","$$":[
+      {"$string":"name","value":"Magic Attack"},
+      {"$canvas":"0","width":"32","height":"32","basedata":"iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGeSURBVFhHvZQNsYNADISxgAUs1EItPAtYqIVawAIWaqEWaqEW2iywsFxzx889+GZ2yJGw2aFDi4DPSXL5PJ6vU4Rd/cqJrnEW9/Y5CzFbfrEyR+Rye3Ui4VlDjAE8Q9XtnT5DnY8tKq4PVwwRDeCZ8j6I9SHO6DKvBpveAI2JF0JniquZm35rBOjr1QHC5QT3VUpZm7kJ4OrV2QFSVM27U1iXdi0bMzVWBdizHFStLTWl6sUAe5evxQ9gPw8ln2w28FJvsCkAalWM2BxqeiYDVPaJdpIAuOKsUnOSmht7gzdIBzDVw8P4anAm2lNwLzbHHgWWAwxJ3QBDT0nNsUcBN0DZ9sO8Ap5V7CmpubAHogEoXYJaFSM2h1q9gR+gmVTL68wFXuoNIgHwVznpzx6E9sLnQ1/gBiju71FcrCFYL0lnWas3WA4w/FYANbWEN4tavcGmACA8p/CeVW+wOUAOuwJA/xEiXA6BaIDwgZwQ3nIIrHoDFIz2yPOCwKYAuQrDADcA0MEjRDQAmIU4mnA56RpnCLv6lb+webQGiuILckkGX1xxFj8AAAAASUVORK5CYII=","$$":[
+        {"$vector":"origin","x":"0","y":"32"}
+      ]}
+    ]},
+    {"$imgdir":"incMDD","$$":[
+      {"$string":"name","value":"Magic Defense"},
+      {"$canvas":"0","width":"32","height":"32","basedata":"iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGeSURBVFhHvZQNsYNADISxgAUs1EItPAtYqIVawAIWaqEWaqEW2iywsFxzx889+GZ2yJGw2aFDi4DPSXL5PJ6vU4Rd/cqJrnEW9/Y5CzFbfrEyR+Rye3Ui4VlDjAE8Q9XtnT5DnY8tKq4PVwwRDeCZ8j6I9SHO6DKvBpveAI2JF0JniquZm35rBOjr1QHC5QT3VUpZm7kJ4OrV2QFSVM27U1iXdi0bMzVWBdizHFStLTWl6sUAe5evxQ9gPw8ln2w28FJvsCkAalWM2BxqeiYDVPaJdpIAuOKsUnOSmht7gzdIBzDVw8P4anAm2lNwLzbHHgWWAwxJ3QBDT0nNsUcBN0DZ9sO8Ap5V7CmpubAHogEoXYJaFSM2h1q9gR+gmVTL68wFXuoNIgHwVznpzx6E9sLnQ1/gBiju71FcrCFYL0lnWas3WA4w/FYANbWEN4tavcGmACA8p/CeVW+wOUAOuwJA/xEiXA6BaIDwgZwQ3nIIrHoDFIz2yPOCwKYAuQrDADcA0MEjRDQAmIU4mnA56RpnCLv6lb+webQGiuILckkGX1xxFj8AAAAASUVORK5CYII=","$$":[
+        {"$vector":"origin","x":"0","y":"32"}
+      ]}
+    ]},
+    {"$imgdir":"incACC","$$":[
+      {"$string":"name","value":"Accuracy"},
+      {"$canvas":"0","width":"32","height":"32","basedata":"iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGeSURBVFhHvZQNsYNADISxgAUs1EItPAtYqIVawAIWaqEWaqEW2iywsFxzx889+GZ2yJGw2aFDi4DPSXL5PJ6vU4Rd/cqJrnEW9/Y5CzFbfrEyR+Rye3Ui4VlDjAE8Q9XtnT5DnY8tKq4PVwwRDeCZ8j6I9SHO6DKvBpveAI2JF0JniquZm35rBOjr1QHC5QT3VUpZm7kJ4OrV2QFSVM27U1iXdi0bMzVWBdizHFStLTWl6sUAe5evxQ9gPw8ln2w28FJvsCkAalWM2BxqeiYDVPaJdpIAuOKsUnOSmht7gzdIBzDVw8P4anAm2lNwLzbHHgWWAwxJ3QBDT0nNsUcBN0DZ9sO8Ap5V7CmpubAHogEoXYJaFSM2h1q9gR+gmVTL68wFXuoNIgHwVznpzx6E9sLnQ1/gBiju71FcrCFYL0lnWas3WA4w/FYANbWEN4tavcGmACA8p/CeVW+wOUAOuwJA/xEiXA6BaIDwgZwQ3nIIrHoDFIz2yPOCwKYAuQrDADcA0MEjRDQAmIU4mnA56RpnCLv6lb+webQGiuILckkGX1xxFj8AAAAASUVORK5CYII=","$$":[
+        {"$vector":"origin","x":"0","y":"32"}
+      ]}
+    ]},
+    {"$imgdir":"incCraft","$$":[
+      {"$string":"name","value":"Craft"},
+      {"$canvas":"0","width":"32","height":"32","basedata":"iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGeSURBVFhHvZQNsYNADISxgAUs1EItPAtYqIVawAIWaqEWaqEW2iywsFxzx889+GZ2yJGw2aFDi4DPSXL5PJ6vU4Rd/cqJrnEW9/Y5CzFbfrEyR+Rye3Ui4VlDjAE8Q9XtnT5DnY8tKq4PVwwRDeCZ8j6I9SHO6DKvBpveAI2JF0JniquZm35rBOjr1QHC5QT3VUpZm7kJ4OrV2QFSVM27U1iXdi0bMzVWBdizHFStLTWl6sUAe5evxQ9gPw8ln2w28FJvsCkAalWM2BxqeiYDVPaJdpIAuOKsUnOSmht7gzdIBzDVw8P4anAm2lNwLzbHHgWWAwxJ3QBDT0nNsUcBN0DZ9sO8Ap5V7CmpubAHogEoXYJaFSM2h1q9gR+gmVTL68wFXuoNIgHwVznpzx6E9sLnQ1/gBiju71FcrCFYL0lnWas3WA4w/FYANbWEN4tavcGmACA8p/CeVW+wOUAOuwJA/xEiXA6BaIDwgZwQ3nIIrHoDFIz2yPOCwKYAuQrDADcA0MEjRDQAmIU4mnA56RpnCLv6lb+webQGiuILckkGX1xxFj8AAAAASUVORK5CYII=","$$":[
+        {"$vector":"origin","x":"0","y":"32"}
+      ]}
+    ]},
+    {"$imgdir":"incJump","$$":[
+      {"$string":"name","value":"Jump"},
+      {"$canvas":"0","width":"32","height":"32","basedata":"iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGeSURBVFhHvZQNsYNADISxgAUs1EItPAtYqIVawAIWaqEWaqEW2iywsFxzx889+GZ2yJGw2aFDi4DPSXL5PJ6vU4Rd/cqJrnEW9/Y5CzFbfrEyR+Rye3Ui4VlDjAE8Q9XtnT5DnY8tKq4PVwwRDeCZ8j6I9SHO6DKvBpveAI2JF0JniquZm35rBOjr1QHC5QT3VUpZm7kJ4OrV2QFSVM27U1iXdi0bMzVWBdizHFStLTWl6sUAe5evxQ9gPw8ln2w28FJvsCkAalWM2BxqeiYDVPaJdpIAuOKsUnOSmht7gzdIBzDVw8P4anAm2lNwLzbHHgWWAwxJ3QBDT0nNsUcBN0DZ9sO8Ap5V7CmpubAHogEoXYJaFSM2h1q9gR+gmVTL68wFXuoNIgHwVznpzx6E9sLnQ1/gBiju71FcrCFYL0lnWas3WA4w/FYANbWEN4tavcGmACA8p/CeVW+wOUAOuwJA/xEiXA6BaIDwgZwQ3nIIrHoDFIz2yPOCwKYAuQrDADcA0MEjRDQAmIU4mnA56RpnCLv6lb+webQGiuILckkGX1xxFj8AAAAASUVORK5CYII=","$$":[
+        {"$vector":"origin","x":"0","y":"32"}
+      ]}
+    ]},
+    {"$imgdir":"incSpeed","$$":[
+      {"$string":"name","value":"Speed"},
+      {"$canvas":"0","width":"32","height":"32","basedata":"iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAGeSURBVFhHvZQNsYNADISxgAUs1EItPAtYqIVawAIWaqEWaqEW2iywsFxzx889+GZ2yJGw2aFDi4DPSXL5PJ6vU4Rd/cqJrnEW9/Y5CzFbfrEyR+Rye3Ui4VlDjAE8Q9XtnT5DnY8tKq4PVwwRDeCZ8j6I9SHO6DKvBpveAI2JF0JniquZm35rBOjr1QHC5QT3VUpZm7kJ4OrV2QFSVM27U1iXdi0bMzVWBdizHFStLTWl6sUAe5evxQ9gPw8ln2w28FJvsCkAalWM2BxqeiYDVPaJdpIAuOKsUnOSmht7gzdIBzDVw8P4anAm2lNwLzbHHgWWAwxJ3QBDT0nNsUcBN0DZ9sO8Ap5V7CmpubAHogEoXYJaFSM2h1q9gR+gmVTL68wFXuoNIgHwVznpzx6E9sLnQ1/gBiju71FcrCFYL0lnWas3WA4w/FYANbWEN4tavcGmACA8p/CeVW+wOUAOuwJA/xEiXA6BaIDwgZwQ3nIIrHoDFIz2yPOCwKYAuQrDADcA0MEjRDQAmIU4mnA56RpnCLv6lb+webQGiuILckkGX1xxFj8AAAAASUVORK5CYII=","$$":[
+        {"$vector":"origin","x":"0","y":"32"}
+      ]}
+    ]}
+  ]}
+]}

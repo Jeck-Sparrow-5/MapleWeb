@@ -1,0 +1,23 @@
+{"$imgdir":"9999999.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"maxHP","value":"1"},
+    {"$int":"hideHP","value":"1"},
+    {"$int":"hideName","value":"1"}
+  ]},
+  {"$imgdir":"stand","$$":[
+    {"$canvas":"0","width":"1","height":"1","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAANSURBVBhXY2BgYBAEAAAWABJnFC3KAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"0","y":"0"},
+      {"$vector":"lt","x":"0","y":"0"},
+      {"$vector":"rb","x":"0","y":"0"},
+      {"$vector":"head","x":"0","y":"0"}
+    ]}
+  ]},
+  {"$imgdir":"hit1","$$":[
+    {"$canvas":"0","width":"1","height":"1","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAANSURBVBhXY2BgYBAEAAAWABJnFC3KAAAAAElFTkSuQmCC","$$":[
+      {"$vector":"origin","x":"0","y":"0"},
+      {"$vector":"lt","x":"0","y":"0"},
+      {"$vector":"rb","x":"0","y":"0"},
+      {"$vector":"head","x":"0","y":"0"}
+    ]}
+  ]}
+]}

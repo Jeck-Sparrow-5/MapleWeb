@@ -1,0 +1,23 @@
+{"$imgdir":"9300016.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"bodyAttack","value":"1"},
+    {"$int":"level","value":"41"},
+    {"$int":"maxHP","value":"3050"},
+    {"$int":"maxMP","value":"50"},
+    {"$int":"speed","value":"-15"},
+    {"$int":"PADamage","value":"125"},
+    {"$int":"PDDamage","value":"130"},
+    {"$int":"MADamage","value":"142"},
+    {"$int":"MDDamage","value":"160"},
+    {"$int":"acc","value":"145"},
+    {"$int":"eva","value":"24"},
+    {"$int":"exp","value":"99"},
+    {"$int":"undead","value":"1"},
+    {"$int":"pushed","value":"0"},
+    {"$float":"fs","value":"10.0"},
+    {"$int":"summonType","value":"1"},
+    {"$string":"link","value":"4230114"},
+    {"$int":"hideName","value":"1"},
+    {"$int":"mobType","value":"5"}
+  ]}
+]}

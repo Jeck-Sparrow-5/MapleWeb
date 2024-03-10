@@ -1,0 +1,36 @@
+{"$imgdir":"9300187.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"bodyAttack","value":"1"},
+    {"$int":"level","value":"40"},
+    {"$int":"maxHP","value":"8000"},
+    {"$int":"maxMP","value":"100"},
+    {"$int":"speed","value":"-20"},
+    {"$int":"PADamage","value":"130"},
+    {"$int":"PDDamage","value":"160"},
+    {"$int":"MADamage","value":"165"},
+    {"$int":"MDDamage","value":"160"},
+    {"$int":"acc","value":"140"},
+    {"$int":"eva","value":"10"},
+    {"$int":"exp","value":"800"},
+    {"$int":"undead","value":"0"},
+    {"$int":"pushed","value":"300"},
+    {"$string":"elemAttr","value":"I2F2L2H2"},
+    {"$float":"fs","value":"10.0"},
+    {"$int":"summonType","value":"0"},
+    {"$string":"link","value":"9300003"},
+    {"$int":"ignoreFieldOut","value":"1"},
+    {"$imgdir":"revive","$$":[
+      {"$int":"0","value":"9300216"}
+    ]},
+    {"$imgdir":"skill","$$":[
+      {"$imgdir":"0","$$":[
+        {"$int":"skill","value":"200"},
+        {"$int":"action","value":"1"},
+        {"$int":"level","value":"106"},
+        {"$int":"effectAfter","value":"0"}
+      ]}
+    ]},
+    {"$int":"explosiveReward","value":"1"},
+    {"$int":"boss","value":"1"}
+  ]}
+]}

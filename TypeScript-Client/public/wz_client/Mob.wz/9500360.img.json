@@ -1,0 +1,31 @@
+{"$imgdir":"9500360.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"bodyAttack","value":"1"},
+    {"$int":"level","value":"105"},
+    {"$int":"maxHP","value":"3700000"},
+    {"$int":"maxMP","value":"1500"},
+    {"$int":"speed","value":"-20"},
+    {"$int":"PADamage","value":"550"},
+    {"$int":"PDDamage","value":"900"},
+    {"$int":"MADamage","value":"680"},
+    {"$int":"MDDamage","value":"850"},
+    {"$int":"acc","value":"200"},
+    {"$int":"eva","value":"39"},
+    {"$int":"exp","value":"13500"},
+    {"$int":"undead","value":"0"},
+    {"$int":"pushed","value":"5000"},
+    {"$int":"hpRecovery","value":"300"},
+    {"$int":"mpRecovery","value":"20"},
+    {"$string":"elemAttr","value":"L2S3"},
+    {"$float":"fs","value":"10.0"},
+    {"$int":"summonType","value":"1"},
+    {"$int":"boss","value":"1"},
+    {"$int":"firstAttack","value":"1"},
+    {"$int":"publicReward","value":"1"},
+    {"$int":"HPgaugeHide","value":"1"},
+    {"$int":"hpTagColor","value":"1"},
+    {"$int":"hpTagBgcolor","value":"5"},
+    {"$string":"link","value":"8180001"},
+    {"$int":"ignoreFieldOut","value":"1"}
+  ]}
+]}

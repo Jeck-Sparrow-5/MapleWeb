@@ -1,0 +1,31 @@
+{"$imgdir":"6130103.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"bodyAttack","value":"1"},
+    {"$int":"level","value":"60"},
+    {"$int":"maxHP","value":"7200"},
+    {"$int":"maxMP","value":"100"},
+    {"$int":"speed","value":"60"},
+    {"$int":"PADamage","value":"167"},
+    {"$int":"PDDamage","value":"210"},
+    {"$int":"MADamage","value":"0"},
+    {"$int":"MDDamage","value":"225"},
+    {"$int":"acc","value":"200"},
+    {"$int":"eva","value":"30"},
+    {"$int":"exp","value":"220"},
+    {"$int":"undead","value":"0"},
+    {"$int":"pushed","value":"1000"},
+    {"$string":"elemAttr","value":"I2F3"},
+    {"$string":"link","value":"6130102"},
+    {"$float":"fs","value":"10.0"},
+    {"$int":"summonType","value":"1"},
+    {"$imgdir":"default","$$":[
+      {"$canvas":"0","width":"63","height":"56","basedata":"iVBORw0KGgoAAAANSUhEUgAAAD8AAAA4CAYAAABKWiBnAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAPBSURBVGhD7ZnZceMwEESVwqbgFJSCU3AKm4JTcAqKxSk4BabgFGj2LAZutgYED5A6arvqlSAcg3nYj3WVTjPTJ6ZSW3/Y9H2XHyCS5PWni8k5+J7w6NrDJ5RjMO/I3ENHRbJcje7y+A+QZXhsIOdT//Ui8wnIP9UDjBjES/IuTvIlHiImwoKQdngeqPzre2ec379GYI2424yEVJbhfTjn4ow+wiM8xEgMlKQB9r99dJnoEUDlIe4qV5IM1h0WX/MAINW6i1ij+CwRCTMqHXGPD5CbyzKX7/7jszcwNkiUYbm53MsD5IayUBLP0sxGaebWD9Cf/37mZlhsb3HA8rd4gJE8YMESvH8rt3oAE1d5sFYYNZVoH3MzeRA1tBSvFaV2j8of8QCptXpzNbhWKV33b190PpIHqa9dktr6Dea0Mcw5uuaUanHuUt4/tTmMba07Z3yO9/lenAcan9f6TiTNpPuaJ7X32yDmXKb/fh+JO/xnLkvgO2BZrqv7nUiYSWebJ2wOnyaOBA+gf+erjNdidI8TySqpRtNwYRujGYxNEtIVcZcv/Vc5B5Ys8fJ28T6bxQpzE5irySpWJ8kvfQAWLDLU3F0eYC4SZLCHYXGHa5aIJPFpNXlu4BB5gPkpYW+ohtZ1shhD57wvn4e4k3poErsgahBrjDYXwXtAVDdLMXLOatHa4fJ+OfYopfg6i3CtENrrWA1aZ/mWD5AvKYmvCc5x7UmmxNP6bvLAL2J5zG8N1w4RcXB1Zphj6d3kHcy1SlTfEGnH9mNMe1j+z+uHfQ5sTtgc5lrm6o4kFWF7MaZ9u8nnC1NjGLeO/+nsMlNE+/aQz8XzeEf5uQ+ge1R8P/k0bp0peZdjyWgd883l9UKMW8fl9QFcjMF6NOfizeS5+FHy/gAsp2CdYfGnl1fZCNQYWJ18GcZHytceIJJVcH5gU7zIbvKROMA9kTiIZJXUd5PYpS6P5lpEhRW/V4lkFZxF4y0yuhzf0dyWqGiE3utEsgrOovEWGV2O797gmrDgFHoviEQjcBaNt4gV5CYwx43WwnuXgHv4XpUsgXNovEVy0ZL8XuCe//ILxB2cRfNbMyp6qwfgHuaCs4nVuSp6tLzevxTUIBZFD4+IGm4J7oiE1kK9TyZvtF9ngp+neA+Imp+idJ7nIoEW8B0Do/zKBr/HMaUfL+agd/Ba1PAauOYM0r/0BCwcgRqlJlS4VNv3R7UY3ldgUYoNzQU1tDmt6UTnFa9RoGlGxaNmFD2jRGdqSI2bRRspMZVof42Dczr9AHOoqOWYP93WAAAAAElFTkSuQmCC","$$":[
+        {"$vector":"origin","x":"31","y":"55"},
+        {"$vector":"lt","x":"-29","y":"-52"},
+        {"$vector":"rb","x":"30","y":"0"},
+        {"$vector":"head","x":"-16","y":"-42"},
+        {"$int":"delay","value":"500"}
+      ]}
+    ]}
+  ]}
+]}

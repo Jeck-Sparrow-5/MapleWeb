@@ -1,0 +1,32 @@
+{"$imgdir":"9500324.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"boss","value":"1"},
+    {"$int":"bodyAttack","value":"1"},
+    {"$int":"level","value":"70"},
+    {"$int":"maxHP","value":"5000000"},
+    {"$int":"maxMP","value":"1"},
+    {"$int":"speed","value":"5"},
+    {"$int":"PADamage","value":"1"},
+    {"$int":"PDDamage","value":"1"},
+    {"$int":"MADamage","value":"1"},
+    {"$int":"MDDamage","value":"1"},
+    {"$int":"acc","value":"999"},
+    {"$int":"eva","value":"999"},
+    {"$int":"exp","value":"0"},
+    {"$int":"pushed","value":"1000"},
+    {"$float":"fs","value":"10.0"},
+    {"$int":"summonType","value":"0"},
+    {"$string":"link","value":"9500323"},
+    {"$int":"removeAfter","value":"5"},
+    {"$imgdir":"ban","$$":[
+      {"$int":"banType","value":"1"},
+      {"$string":"banMsg","value":"The Cat has spotted you, so you are being kicked out of the Cheese Warehouse."},
+      {"$imgdir":"banMap","$$":[
+        {"$imgdir":"0","$$":[
+          {"$int":"field","value":"926120410"},
+          {"$string":"portal","value":"st00"}
+        ]}
+      ]}
+    ]}
+  ]}
+]}

@@ -1,0 +1,26 @@
+{"$imgdir":"9300318.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"bodyAttack","value":"1"},
+    {"$int":"level","value":"57"},
+    {"$int":"maxHP","value":"6500"},
+    {"$int":"maxMP","value":"110"},
+    {"$int":"speed","value":"-40"},
+    {"$int":"PADamage","value":"160"},
+    {"$int":"PDDamage","value":"160"},
+    {"$int":"MADamage","value":"200"},
+    {"$int":"MDDamage","value":"160"},
+    {"$int":"acc","value":"105"},
+    {"$int":"eva","value":"21"},
+    {"$int":"exp","value":"4"},
+    {"$int":"undead","value":"0"},
+    {"$int":"pushed","value":"650"},
+    {"$int":"mpRecovery","value":"2"},
+    {"$float":"fs","value":"10.0"},
+    {"$int":"summonType","value":"1"},
+    {"$string":"elemAttr","value":"L2I1H3"},
+    {"$string":"link","value":"6230500"},
+    {"$int":"firstAttack","value":"1"},
+    {"$int":"getCP","value":"4"},
+    {"$int":"boss","value":"1"}
+  ]}
+]}

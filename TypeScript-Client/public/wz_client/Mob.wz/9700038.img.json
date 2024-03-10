@@ -1,0 +1,34 @@
+{"$imgdir":"9700038.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"bodyAttack","value":"1"},
+    {"$int":"level","value":"40"},
+    {"$int":"maxHP","value":"1"},
+    {"$int":"maxMP","value":"100"},
+    {"$int":"speed","value":"-10"},
+    {"$int":"PADamage","value":"20"},
+    {"$int":"PDDamage","value":"20"},
+    {"$int":"MADamage","value":"0"},
+    {"$int":"MDDamage","value":"30"},
+    {"$int":"acc","value":"90"},
+    {"$int":"eva","value":"500"},
+    {"$string":"pushed","value":"100"},
+    {"$float":"fs","value":"10.0"},
+    {"$int":"summonType","value":"1"},
+    {"$int":"undead","value":"0"},
+    {"$int":"boss","value":"1"}
+  ]},
+  {"$imgdir":"stand","$$":[
+    {"$canvas":"0","width":"4","height":"4","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAARSURBVBhXYwACQRBBNmAQBAAElQAjVVCqPwAAAABJRU5ErkJggg==","$$":[
+      {"$vector":"origin","x":"36","y":"53"},
+      {"$int":"delay","value":"90"},
+      {"$vector":"head","x":"1","y":"-1500"}
+    ]}
+  ]},
+  {"$imgdir":"die1","$$":[
+    {"$canvas":"0","width":"4","height":"4","basedata":"iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAARSURBVBhXYwACQRBBNmAQBAAElQAjVVCqPwAAAABJRU5ErkJggg==","$$":[
+      {"$vector":"origin","x":"36","y":"53"},
+      {"$int":"delay","value":"90"},
+      {"$vector":"head","x":"1","y":"-1500"}
+    ]}
+  ]}
+]}

@@ -1,0 +1,31 @@
+{"$imgdir":"9500369.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"bodyAttack","value":"1"},
+    {"$int":"level","value":"15"},
+    {"$int":"maxHP","value":"520"},
+    {"$int":"maxMP","value":"220"},
+    {"$int":"speed","value":"-60"},
+    {"$int":"PADamage","value":"140"},
+    {"$int":"PDDamage","value":"140"},
+    {"$int":"MADamage","value":"180"},
+    {"$int":"MDDamage","value":"250"},
+    {"$int":"acc","value":"140"},
+    {"$int":"eva","value":"25"},
+    {"$int":"exp","value":"580"},
+    {"$int":"undead","value":"0"},
+    {"$int":"pushed","value":"0"},
+    {"$float":"fs","value":"10.0"},
+    {"$int":"summonType","value":"1"},
+    {"$string":"elemAttr","value":"I2L2F2H2"},
+    {"$string":"link","value":"4240000"},
+    {"$int":"fixedDamage","value":"5"},
+    {"$imgdir":"skill","$$":[
+      {"$imgdir":"0","$$":[
+        {"$int":"skill","value":"200"},
+        {"$int":"action","value":"1"},
+        {"$int":"level","value":"27"},
+        {"$int":"effectAfter","value":"0"}
+      ]}
+    ]}
+  ]}
+]}

@@ -1,0 +1,36 @@
+{"$imgdir":"3000002.img","$$":[
+  {"$imgdir":"info","$$":[
+    {"$int":"bodyAttack","value":"1"},
+    {"$int":"level","value":"30"},
+    {"$int":"maxHP","value":"800"},
+    {"$int":"maxMP","value":"175"},
+    {"$int":"speed","value":"10"},
+    {"$int":"PADamage","value":"80"},
+    {"$int":"PDDamage","value":"85"},
+    {"$int":"MADamage","value":"0"},
+    {"$int":"MDDamage","value":"105"},
+    {"$int":"acc","value":"145"},
+    {"$int":"eva","value":"25"},
+    {"$int":"exp","value":"120"},
+    {"$int":"undead","value":"0"},
+    {"$int":"pushed","value":"300"},
+    {"$float":"fs","value":"10.0"},
+    {"$int":"summonType","value":"1"},
+    {"$string":"link","value":"3000001"},
+    {"$int":"mobType","value":"5"},
+    {"$imgdir":"skill","$$":[
+      {"$imgdir":"0","$$":[
+        {"$int":"skill","value":"111"},
+        {"$int":"action","value":"1"},
+        {"$int":"level","value":"1"},
+        {"$int":"effectAfter","value":"0"}
+      ]},
+      {"$imgdir":"1","$$":[
+        {"$int":"skill","value":"120"},
+        {"$int":"action","value":"1"},
+        {"$int":"level","value":"1"},
+        {"$int":"effectAfter","value":"0"}
+      ]}
+    ]}
+  ]}
+]}

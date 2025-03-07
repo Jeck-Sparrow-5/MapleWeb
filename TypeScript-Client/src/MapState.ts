@@ -15,8 +15,8 @@ import TouchJoyStick, {
 } from "./UI/TouchJoyStick";
 
 // henesys 100000000
-// 100020100 - maps with pigs - usefull to test fast things with mobs
-// const defaultMap = 100020100; // - maps with pigs - usefull to test fast things with mobs
+// 100020100 - maps with pigs - useful to test fast things with mobs
+// const defaultMap = 100020100; // maps with pigs
 const defaultMap = 100000000; // henesys
 // const defaultMap = 104040000; // left of henesys
 // const defaultMap: number = 100040102; // elinia - monkey map
@@ -88,7 +88,6 @@ function isTouchDevice() {
   // return true;
   return (
     "ontouchstart" in window || navigator.maxTouchPoints > 0
-    //
     // || navigator.msMaxTouchPoints > 0
   );
 }
@@ -96,7 +95,6 @@ function isTouchDevice() {
 MapStateInstance.initialize = async function (map: number = defaultMap) {
   console.log("MapState.initialize", map);
 
-  this.isTouchControllsEnabled = true;
   this.isTouchControllsEnabled = isTouchDevice(); // Check if the device supports touch
   if (this.isTouchControllsEnabled) {
     this.joyStick = TouchJoyStick.init();
@@ -117,6 +115,16 @@ MapStateInstance.initialize = async function (map: number = defaultMap) {
 
   this.UIMenus = [this.statsMenu, this.inventoryMenu];
 
+  // Initialize previous keyboard state with all keys set to false.
+  this.previousKeyboardState = {
+    up: false,
+    down: false,
+    left: false,
+    right: false,
+    i: false,
+    s: false,
+  };
+
   await initializeMapState(map, true);
 };
 
@@ -126,11 +134,6 @@ MapStateInstance.doUpdate = function (
   canvas: GameCanvas
 ) {
   console.log(canvas.keys);
-  // if (this.previousKeyboardState == null) {
-  //   this.previousKeyboardState = canvas.keys;
-
-  //   return;
-  // }
   if (!!MapleMap.doneLoading) {
     MapleMap.update(msPerTick);
 
@@ -171,7 +174,6 @@ MapStateInstance.doUpdate = function (
           MyCharacter.upClickRelease();
           MyCharacter.leftClickRelease();
           MyCharacter.rightClickRelease();
-
           break;
         default:
           break;
@@ -201,11 +203,11 @@ MapStateInstance.doUpdate = function (
         MyCharacter.pickUp();
       }
 
-      if (canvas.isKeyDown("s")) {
+      // Use key transition checks (debouncing) for toggling menus.
+      if (canvas.isKeyDown("s") && !this.previousKeyboardState.s) {
         this.statsMenu.setIsHidden(!this.statsMenu.isHidden);
       }
-
-      if (canvas.isKeyDown("i")) {
+      if (canvas.isKeyDown("i") && !this.previousKeyboardState.i) {
         this.inventoryMenu.setIsHidden(!this.inventoryMenu.isHidden);
       }
 
@@ -220,7 +222,7 @@ MapStateInstance.doUpdate = function (
 
       MyCharacter.update(msPerTick);
 
-      // now unset if the key is not pressed
+      // Release key actions when keys are no longer pressed.
       if (!canvas.isKeyDown("up")) {
         MyCharacter.upClickRelease();
       }
@@ -235,6 +237,14 @@ MapStateInstance.doUpdate = function (
       }
     }
 
+    // Update the previous keyboard state at the end of the update cycle.
+    this.previousKeyboardState.i = canvas.isKeyDown("i");
+    this.previousKeyboardState.s = canvas.isKeyDown("s");
+    this.previousKeyboardState.up = canvas.isKeyDown("up");
+    this.previousKeyboardState.down = canvas.isKeyDown("down");
+    this.previousKeyboardState.left = canvas.isKeyDown("left");
+    this.previousKeyboardState.right = canvas.isKeyDown("right");
+
     let x = Camera.x + 400;
     let y = Camera.y + 300;
     //Camera.lookAt(x, y);
@@ -248,7 +258,13 @@ MapStateInstance.doUpdate = function (
   }
 };
 
-MapStateInstance.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
+MapStateInstance.doRender = function (
+  canvas: GameCanvas,
+  camera: CameraInterface,
+  lag: number,
+  msPerTick: number,
+  tdelta: number
+) {
   if (!!MapleMap.doneLoading) {
     MapleMap.render(canvas, camera, lag, msPerTick, tdelta);
 
@@ -262,7 +278,7 @@ MapStateInstance.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
 
     UIMap.doRender(canvas, camera, lag, msPerTick, tdelta);
   } else {
-    // black screen
+    // black screen (optional)
     // canvas.ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 };
@@ -273,7 +289,7 @@ declare global {
   }
 }
 
-// fix this
+// Expose MapStateInstance globally
 window.MapStateInstance = MapStateInstance;
 
 export default MapStateInstance;

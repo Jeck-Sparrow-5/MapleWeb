@@ -1062,6 +1062,7 @@ isCloseToMob = (inAllDirections = true) => {
       projectile.update(msPerTick);
     });
   }
+  
   getDrawableFrames(
     stance: any,
     frame: number,
@@ -1229,9 +1230,11 @@ isCloseToMob = (inAllDirections = true) => {
     msPerTick: number,
     tdelta: number
   ) {
-    if(this.pos.layer === 0){
-      return;
-    }
+    // Remove this condition - don't return early for layer 0
+    // if(this.pos.layer === 0){
+    //   return;
+    // }
+    
     // console.log(this.frame, `${Math.round(1000 / msPerTick)}fps`);
     // set whether the character is flipped prior to drawing
     if (this.pos.right && !this.pos.left) {
@@ -1239,7 +1242,7 @@ isCloseToMob = (inAllDirections = true) => {
     } else if (this.pos.left && !this.pos.right) {
       this.flipped = false;
     }
-
+  
     if (this.isDead) {
       this.setStance(Stance.dead);
     } else {
@@ -1280,10 +1283,10 @@ isCloseToMob = (inAllDirections = true) => {
         }
       }
     }
-
+  
     const characterIsFlipped = !!this.flipped;
     const imgdir = this.baseBody[this.stance][this.frame];
-
+  
     const imgdirFlip = !!imgdir.nGet("flip").nGet("nValue", 0);
     const frameIsFlipped = characterIsFlipped !== imgdirFlip;
     const drawableFrames = this.getDrawableFrames(
@@ -1291,7 +1294,7 @@ isCloseToMob = (inAllDirections = true) => {
       this.frame,
       frameIsFlipped
     );
-
+  
     // this is inefficient to call everything just to get it without equips, but it's temporary
     const drawableBodyFrames = this.getDrawableFrames(
       this.stance,
@@ -1299,23 +1302,23 @@ isCloseToMob = (inAllDirections = true) => {
       frameIsFlipped,
       false
     );
-
+  
     const mx = imgdir.nGet("move").nGet("nX", 0);
     const moveX = !characterIsFlipped ? mx : -mx;
     const moveY = imgdir.nGet("move").nGet("nY", 0);
     const rotate = imgdir.nGet("rotate").nGet("nValue", 0);
     const angle = !characterIsFlipped ? rotate : 360 - rotate;
-
+  
     let spriteWidth = 0;
     let spriteHeight = 0;
     let minDx = 0;
     let minDy = 0;
-
+  
     // draws all parts of the character: head, body, etc..
     drawableFrames.forEach((frame: any) => {
       const dx = Math.floor(this.pos.x + frame.x - camera.x + moveX);
       const dy = Math.floor(this.pos.y + frame.y - camera.y + moveY);
-
+  
       canvas.drawImage({
         img: frame.img,
         dx: dx,
@@ -1326,30 +1329,30 @@ isCloseToMob = (inAllDirections = true) => {
         angle,
       });
     });
-
+  
     this.bodyRects = [];
     let minX: number | null = null;
     let minY: number | null = null;
-
+  
     drawableBodyFrames.forEach((frame: any) => {
       const dx = Math.floor(this.pos.x + frame.x - camera.x + moveX);
       const dy = Math.floor(this.pos.y + frame.y - camera.y + moveY);
-
+  
       // Draw a border around the player's outline
-      const outlineColor = "blue"; // Change this to the desired border color
-      const borderWidth = 2; // Change this to the desired border width
-
-      canvas.context.strokeStyle = outlineColor;
-      canvas.context.lineWidth = borderWidth;
-      canvas.context.strokeRect(dx, dy, frame.img.width, frame.img.height);
-
+      //const outlineColor = "blue"; // Change this to the desired border color
+      //const borderWidth = 2; // Change this to the desired border width
+  
+      //canvas.context.strokeStyle = outlineColor;
+      //canvas.context.lineWidth = borderWidth;
+      //canvas.context.strokeRect(dx, dy, frame.img.width, frame.img.height);
+  
       this.bodyRects.push({
         x: dx + camera.x,
         y: dy + camera.y,
         width: frame.img.width,
         height: frame.img.height,
       });
-
+  
       if (minX === null || dx < minX) {
         minX = dx + camera.x;
       }
@@ -1357,20 +1360,20 @@ isCloseToMob = (inAllDirections = true) => {
         minY = dy + camera.y;
       }
     });
-
+  
     this.bodyStartPoistion = {
       x: minX,
       y: minY,
     };
-
+  
     this.drawName(canvas, camera, lag, msPerTick, tdelta);
-
+  
     this.drawDamageIndicator(canvas, camera, lag, msPerTick, tdelta);
-
+  
     this.projectiles.forEach((projectile: Projectile) => {
       projectile.draw(canvas, camera, lag, msPerTick, tdelta);
     });
-
+  
     const minXYPosition = findMinXY(this.bodyRects);
     const maxXYPosition = findMaxXY(this.bodyRects);
     canvas.context.fillStyle = "red";
@@ -1381,6 +1384,7 @@ isCloseToMob = (inAllDirections = true) => {
       4
     );
   }
+  
   drawName(
     canvas: GameCanvas,
     camera: CameraInterface,

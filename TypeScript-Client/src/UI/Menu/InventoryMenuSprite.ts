@@ -1,6 +1,5 @@
 import WZManager from "../../wz-utils/WZManager";
 import WZFiles from "../../Constants/enums/WZFiles";
-import GeneralMenuSprite from "./GeneralMenuSprite";
 import ClickManager from "../ClickManager";
 import { MapleStanceButton } from "../MapleStanceButton";
 import DragableMenu from "./DragableMenu";
@@ -14,19 +13,15 @@ class InventoryMenuSprite extends DragableMenu {
   inventoryNode: any;
   charecter: any;
   currentTab: MapleInventoryType = MapleInventoryType.EQUIP;
-  generalMenuSprites: GeneralMenuSprite[] = [];
   buttons: MapleStanceButton[] = [];
   isNotFirstDraw: boolean = false;
-  equipNode: any;
-  useNode: any;
-  setupNode: any;
-  etcNode: any;
-  cashNode: any;
   destroyed: boolean = false;
   delay: number = 0;
   id: number = 0;
   originalX: number = 0;
   originalY: number = 0;
+  // Holds the full composite background image.
+  fullBackgroundImage: any = null;
 
   static async fromOpts(opts: any) {
     const object = new InventoryMenuSprite(opts);
@@ -58,56 +53,73 @@ class InventoryMenuSprite extends DragableMenu {
     }
     
     this.currentTab = MapleInventoryType.EQUIP;
-    this.generalMenuSprites = [];
     this.buttons = [];
 
-    await this.loadBackgound();
+    // Load the full composite background image.
+    await this.loadBackground();
     ClickManager.addDragableMenu(this);
   }
-
-  getRect(camera: CameraInterface) {
-    if (!this.inventoryNode || !this.inventoryNode.FullBackgrnd) {
-      return {
-        x: this.x,
-        y: this.y,
-        width: 300,
-        height: 400,
-      };
-    }
-    
-    return {
-      x: this.x,
-      y: this.y,
-      width: this.inventoryNode.FullBackgrnd.nGetImage().width,
-      height: this.inventoryNode.FullBackgrnd.nGetImage().height,
-    };
-  }
-
-  setIsHidden(isHidden: boolean) {
-    this.isHidden = isHidden;
-    this.buttons.forEach((button) => {
-      button.isHidden = isHidden;
-    });
-  }
-
-  async loadBackgound() {
+  
+  async loadBackground() {
     if (!this.inventoryNode || !this.inventoryNode.FullBackgrnd) {
       console.error("Missing inventory background node");
       return;
     }
-    
     try {
-      this.generalMenuSprites.push(
-        await GeneralMenuSprite.fromOpts({
-          wzImage: this.inventoryNode.FullBackgrnd,
-          x: this.x,
-          y: this.y,
-          z: 1,
-        })
-      );
+      this.fullBackgroundImage = this.inventoryNode.FullBackgrnd.nGetImage();
     } catch (e) {
       console.error("Error loading inventory background:", e);
     }
+  }
+
+  getRect(camera: CameraInterface) {
+    if (!this.fullBackgroundImage) {
+      return { x: this.x, y: this.y, width: 300, height: 400 };
+    }
+    // Calculate the width of one region. We assume the composite image is split into 4 parts.
+    const cropWidth = this.fullBackgroundImage.width / 4;
+    const cropHeight = this.fullBackgroundImage.height;
+    return { x: this.x, y: this.y, width: cropWidth, height: cropHeight };
+  }
+
+  setIsHidden(isHidden: boolean) {
+    this.isHidden = isHidden;
+    this.buttons.forEach(button => (button.isHidden = isHidden));
+  }
+
+  // Draw only the leftmost portion of the composite background (cutting off the right side)
+  drawBackground(canvas: GameCanvas) {
+    if (!this.fullBackgroundImage) return;
+    const totalRegions = 5;
+    
+    // Always use the leftmost region (sx = 0) to preserve the original left margin.
+    canvas.drawImage({
+      img: this.fullBackgroundImage,
+      sx: 0,
+      sy: 0,
+      dx: this.x,
+      dy: this.y,
+    });
+  }
+
+  // Merge stackable items (for non-EQUIP tabs) by summing their quantities.
+  mergeStackableItems(items: any[]) {
+    const mergedMap = new Map();
+    for (const item of items) {
+      const qty = item.quantity || 1;
+      const key = item.itemId;
+      if (this.currentTab === MapleInventoryType.EQUIP) {
+        mergedMap.set(Symbol(), item);
+      } else {
+        if (mergedMap.has(key)) {
+          const existing = mergedMap.get(key);
+          existing.quantity = (existing.quantity || 1) + qty;
+        } else {
+          mergedMap.set(key, { ...item, quantity: qty });
+        }
+      }
+    }
+    return Array.from(mergedMap.values());
   }
 
   drawItems(canvas: GameCanvas) {
@@ -116,7 +128,6 @@ class InventoryMenuSprite extends DragableMenu {
       return;
     }
     
-    // Get current inventory items based on selected tab
     let items = [];
     switch (this.currentTab) {
       case MapleInventoryType.EQUIP:
@@ -138,22 +149,25 @@ class InventoryMenuSprite extends DragableMenu {
     
     console.log(`Drawing ${items.length} items for tab ${this.currentTab}`);
     
-    // Get slot positions from the WZ file if possible, or use default values
+    if (this.currentTab !== MapleInventoryType.EQUIP) {
+      items = this.mergeStackableItems(items);
+    }
+    
+    // Define the starting position and layout for item slots.
     const slotStartX = this.x + 14;
     const slotStartY = this.y + 55;
-    const slotColumns = 4;  // Number of slots per row
-    const slotRows = 6;     // Number of slots per column
-    const slotSize = 30;    // Size of each slot in pixels
-    const slotPadding = 4;  // Padding between slots
+    const slotColumns = 4;
+    const slotRows = 6;
+    const slotSize = 30;
+    const slotPadding = 4;
     
-    // Draw inventory slots and items
     for (let row = 0; row < slotRows; row++) {
       for (let col = 0; col < slotColumns; col++) {
         const slotIndex = row * slotColumns + col;
         const slotX = slotStartX + col * (slotSize + slotPadding);
         const slotY = slotStartY + row * (slotSize + slotPadding);
         
-        // Try to draw slot from WZ file if available
+        // Draw slot background (using .wz file image if available)
         if (this.inventoryNode && this.inventoryNode.SlotBackgrnd) {
           try {
             const slotImg = this.inventoryNode.SlotBackgrnd.nGetImage();
@@ -163,10 +177,9 @@ class InventoryMenuSprite extends DragableMenu {
               dy: slotY,
             });
           } catch (e) {
-            // Fallback to drawing a simple slot rectangle
             canvas.drawRect({
-              x: slotX-3,
-              y: slotY-6,
+              x: slotX,
+              y: slotY,
               width: slotSize,
               height: slotSize,
               color: "transparent",
@@ -174,10 +187,9 @@ class InventoryMenuSprite extends DragableMenu {
             });
           }
         } else {
-          // drawing the actual inventory slot rectangle
           canvas.drawRect({
-            x: slotX-3,
-            y: slotY-6,
+            x: slotX,
+            y: slotY,
             width: slotSize,
             height: slotSize,
             color: "transparent",
@@ -185,13 +197,10 @@ class InventoryMenuSprite extends DragableMenu {
           });
         }
         
-        // Draw item if exists in this slot
+        // Draw the item in this slot if present.
         if (slotIndex < items.length && items[slotIndex]) {
           const item = items[slotIndex];
-          
-          // Try to get item icon
           let icon = null;
-          
           if (item.node && item.node.iconRaw) {
             try {
               icon = item.node.iconRaw.nGetImage();
@@ -199,7 +208,6 @@ class InventoryMenuSprite extends DragableMenu {
               console.warn(`Failed to get iconRaw image for item ${item.itemId}`);
             }
           }
-          
           if (!icon && item.node && item.node.info && item.node.info.iconRaw) {
             try {
               icon = item.node.info.iconRaw.nGetImage();
@@ -208,7 +216,6 @@ class InventoryMenuSprite extends DragableMenu {
             }
           }
           
-          // If we have an icon, draw it
           if (icon) {
             try {
               canvas.drawImage({
@@ -219,20 +226,7 @@ class InventoryMenuSprite extends DragableMenu {
             } catch (e) {
               console.warn(`Failed to draw icon for item ${item.itemId}`);
             }
-            
-            // Draw quantity for stackable items
-            if (item.quantity > 1) {
-              canvas.drawText({
-                text: item.quantity.toString(),
-                x: slotX + slotSize - 5,
-                y: slotY + slotSize - 5,
-                color: "#FFFFFF",
-                align: "right",
-                fontSize: 10,
-              });
-            }
           } else {
-            // Draw placeholder text if no icon
             canvas.drawText({
               text: `${item.itemId}`,
               x: slotX + slotSize / 2,
@@ -242,16 +236,28 @@ class InventoryMenuSprite extends DragableMenu {
               fontSize: 8,
             });
           }
+          
+          // Draw quantity in the lower-right if greater than 1.
+          const quantity = item.quantity || 1;
+          if (quantity > 1) {
+            canvas.drawText({
+              text: quantity.toString(),
+              x: slotX + slotSize - 3,
+              y: slotY + slotSize - 3,
+              color: "#FFFFFF",
+              align: "right",
+              fontSize: 12,
+            });
+          }
         }
       }
     }
     
-    // Draw tabs
+    // Draw the tabs over the items.
     this.drawTabs(canvas);
   }
   
   drawTabs(canvas: GameCanvas) {
-    // Define tab positions based on the official UI
     const tabStartX = this.x + 3;
     const tabStartY = this.y + 25;
     const tabWidth = 29;
@@ -266,25 +272,21 @@ class InventoryMenuSprite extends DragableMenu {
       { type: MapleInventoryType.CASH, label: "Cash" }
     ];
     
-    // Draw tab buttons using the style from official UI
     tabs.forEach((tab, index) => {
       const tabX = tabStartX + index * (tabWidth + tabSpacing);
       const isActive = this.currentTab === tab.type;
       
-      // Try to draw tab from WZ file if available
       if (this.inventoryNode && this.inventoryNode.Tab) {
         try {
           const tabImg = isActive 
             ? this.inventoryNode.Tab.tabSelected.nGetImage()
             : this.inventoryNode.Tab.tabNormal.nGetImage();
-          
           canvas.drawImage({
             img: tabImg,
             dx: tabX,
             dy: tabStartY,
           });
         } catch (e) {
-          // Fallback to drawing a simple tab rectangle
           canvas.drawRect({
             x: tabX,
             y: tabStartY,
@@ -295,7 +297,6 @@ class InventoryMenuSprite extends DragableMenu {
           });
         }
       } else {
-        // Fallback to drawing a simple tab rectangle
         canvas.drawRect({
           x: tabX,
           y: tabStartY,
@@ -306,7 +307,6 @@ class InventoryMenuSprite extends DragableMenu {
         });
       }
       
-      // Draw tab label
       canvas.drawText({
         text: tab.label,
         x: tabX + tabWidth / 2,
@@ -319,9 +319,9 @@ class InventoryMenuSprite extends DragableMenu {
   }
   
   handleTabClick(mouseX: number, mouseY: number) {
-    const tabStartX = this.x + 10;
-    const tabStartY = this.y + 30;
-    const tabWidth = 47;
+    const tabStartX = this.x + 3;
+    const tabStartY = this.y + 25;
+    const tabWidth = 29;
     const tabHeight = 18;
     const tabSpacing = 1;
     
@@ -335,70 +335,44 @@ class InventoryMenuSprite extends DragableMenu {
     
     for (let i = 0; i < tabs.length; i++) {
       const tabX = tabStartX + i * (tabWidth + tabSpacing);
-      
-      // Check if mouse is over this tab
-      if (mouseX >= tabX && mouseX < tabX + tabWidth &&
-          mouseY >= tabStartY && mouseY < tabStartY + tabHeight) {
-        // Change the current tab
+      if (
+        mouseX >= tabX &&
+        mouseX < tabX + tabWidth &&
+        mouseY >= tabStartY &&
+        mouseY < tabStartY + tabHeight
+      ) {
         this.currentTab = tabs[i];
         console.log(`Switched to tab: ${this.currentTab}`);
         return true;
       }
     }
-    
     return false;
   }
   
   onMouseDown(mouseX: number, mouseY: number) {
     if (this.isHidden) return false;
-    
-    // Handle tab clicking
     return this.handleTabClick(mouseX, mouseY);
   }
 
   async drawText(canvas: GameCanvas) {
-    // Draw mesos with commas
     const mesosWithCommas = this.charecter.inventory.mesos
       .toString()
       .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
     canvas.drawText({
       text: mesosWithCommas,
-      //color: "#FFDD22", // Gold color for mesos
       x: this.x + 96,
       y: this.y + 270,
-      //fontWeight: "bold",
     });
-    
-    // Draw inventory count for current tab
-    let currentItems = [];
-    switch (this.currentTab) {
-      case MapleInventoryType.EQUIP:
-        currentItems = this.charecter.inventory.equip;
-        break;
-      case MapleInventoryType.USE:
-        currentItems = this.charecter.inventory.use;
-        break;
-      case MapleInventoryType.SETUP:
-        currentItems = this.charecter.inventory.setup;
-        break;
-      case MapleInventoryType.ETC:
-        currentItems = this.charecter.inventory.etc;
-        break;
-      case MapleInventoryType.CASH:
-        currentItems = this.charecter.inventory.cash;
-        break;
-    }
   }
 
   loadButtons(canvas: GameCanvas) {
-    // Only add the meso button if its sprites exist
     try {
-      if (this.inventoryNode && 
-          this.inventoryNode.BtCoin && 
-          this.inventoryNode.BtCoin.nChildren && 
-          this.inventoryNode.BtCoin.nChildren.length > 0) {
-        
+      if (
+        this.inventoryNode &&
+        this.inventoryNode.BtCoin &&
+        this.inventoryNode.BtCoin.nChildren &&
+        this.inventoryNode.BtCoin.nChildren.length > 0
+      ) {
         const dropMesoButton = new MapleStanceButton(canvas, {
           x: this.x + 8,
           y: this.y + 267,
@@ -409,7 +383,6 @@ class InventoryMenuSprite extends DragableMenu {
             console.log("drop meso not implemented");
           },
         });
-        
         ClickManager.addButton(dropMesoButton);
         this.buttons = [dropMesoButton];
       }
@@ -422,21 +395,13 @@ class InventoryMenuSprite extends DragableMenu {
   moveTo(position: Position) {
     const deltaX = position.x - this.x;
     const deltaY = position.y - this.y;
-    
     this.x = position.x;
     this.y = position.y;
-    
-    // Update button positions
     this.buttons.forEach((button) => {
       button.x += deltaX;
       button.y += deltaY;
     });
-    
-    // Reload background for new position
-    this.generalMenuSprites = [];
-    this.loadBackgound();
-    
-    // Update original position
+    this.loadBackground();
     this.originalX = position.x;
     this.originalY = position.y;
   }
@@ -447,41 +412,16 @@ class InventoryMenuSprite extends DragableMenu {
 
   update(msPerTick: number) {
     this.delay += msPerTick;
-    
-    // Update all sprites
-    this.generalMenuSprites.forEach((generalMenuSprite) => {
-      generalMenuSprite.update(msPerTick);
-    });
   }
 
-  draw(
-    canvas: GameCanvas,
-    camera: CameraInterface,
-    lag: number,
-    msPerTick: number,
-    tdelta: number
-  ) {
-    if (this.isHidden) {
-      return;
-    }
-    
-    // Initialize buttons on first draw
+  draw(canvas: GameCanvas, camera: CameraInterface, lag: number, msPerTick: number, tdelta: number) {
+    if (this.isHidden) return;
     if (!this.isNotFirstDraw) {
       this.loadButtons(canvas);
       this.isNotFirstDraw = true;
     }
-    
-    // Draw background
-    this.generalMenuSprites
-      .sort((a, b) => a.z - b.z)
-      .forEach((generalMenuSprite) => {
-        generalMenuSprite.draw(canvas, camera, lag, msPerTick, tdelta);
-      });
-    
-    // Draw inventory items and tabs
+    this.drawBackground(canvas);
     this.drawItems(canvas);
-    
-    // Draw mesos and other text
     this.drawText(canvas);
   }
 }

@@ -456,82 +456,253 @@ class MapleCharacter {
     this.isInClimbingRope = false;
   }
 
-  async attack() {
-    console.log("attack");
-    if (this.isInAttack) return;
-    this.isInAttack = true;
-    this.rightClickRelease();
-    this.leftClickRelease();
-    this.isInAlert = false;
+ /**
+ * Improved implementation of the attack method for MapleCharacter
+ */
+async attack() {
+  // Don't allow attacking if already in attack animation
+  if (this.isInAttack) return;
+  
+  // Set attack state and reset movement
+  this.isInAttack = true;
+  this.rightClickRelease();
+  this.leftClickRelease();
+  this.isInAlert = false;
 
-    console.log("Weapon Type", getEquipTypeById(this.weaponEquipId));
-    const weaponType = getEquipTypeById(this.weaponEquipId);
-    const weaponStanceByAttackType: any = WeaponTypeToStance[weaponType]!;
-    console.log(weaponStanceByAttackType);
+  // Get weapon type and corresponding stance
+  const weaponType = getEquipTypeById(this.weaponEquipId);
+  const weaponStanceByAttackType = WeaponTypeToStance[weaponType];
+  
+  console.log("Weapon Type", weaponType);
+  console.log("Weapon Stance Mapping", weaponStanceByAttackType);
 
-    // stance research:
-    // some of the stance are for skill attack, need to fine the normal one for now
-    if (this.isCloseToMob(false)) {
-      this.setStance(weaponStanceByAttackType.melee[0], 0, true, false);
-      // to play audio i need to get the id of the sounds, (currently dont have those)
-      // const jumpNode = await WZManager.get("Sound.wz/Weapon.img/Jump");
-      // const jumpAudio = jumpNode.nGetAudio();
-      // PLAY_AUDIO(jumpAudio);
-    } else {
-      // this.flipped = true means player looks right
+  if (!weaponStanceByAttackType) {
+    console.error("Unknown weapon type:", weaponType);
+    this.isInAttack = false;
+    return;
+  }
 
-      console.log("Stance", this.baseBody);
-      this.setStance(
-        weaponStanceByAttackType.range[0],
-        0,
-        true,
-        false,
-        () => {},
-        async () => {
-          playAudioForAttackByWeaponType(getEquipTypeById(this.weaponEquipId));
-
-          const jumpNode = await WZManager.get("Sound.wz/Weapon.img/Jump");
-          // const jumpAudio = jumpNode.nGetAudio();
-          // PLAY_AUDIO(jumpAudio);
-
-          const minXYPosition = findMinXY(this.bodyRects);
-          const maxXYPosition = findMaxXY(this.bodyRects);
-          const projectileSpaceFromPlayer = 15;
-
-          let xPosition = minXYPosition.minX - projectileSpaceFromPlayer;
-          if (this.flipped) {
-            xPosition = maxXYPosition.maxX + projectileSpaceFromPlayer;
-          }
-
-          // todo:
-          // 1. choose projectile by weapon type and by items in inventory
-          // 2. calculate max distance based on default and skills
-          this.projectiles.push(
-            await Projectile.fromOpts({
-              id: 2060003, // - arrow
-              // id: 2070000, // basic throwing star
-              charecter: this,
-              x: xPosition,
-              // this need to be the equip middle point
-              y: (minXYPosition.minY + maxXYPosition.maxY) / 2 + 10,
-              right: this.flipped,
-              left: !this.flipped,
-              maxDistance: 200,
-              targetMonsters: this.map!.monsters.filter(
-                (monster: Monster) => monster.dying === false
-              ),
-              weaponAttackRange: this.stats.getAttackRange(
-                this.equips,
-                getEquipTypeById(this.weaponEquipId),
-                AttackType.Swing
-              ),
-            })
-          );
-        }
-      );
+  // Choose the appropriate attack stance (melee/range)
+  let attackStance = "swingO1"; // Default stance if none available
+  
+  if (this.isCloseToMob(false)) {
+    // Use melee attack if close to monster
+    if (weaponStanceByAttackType.melee && weaponStanceByAttackType.melee.length > 0) {
+      attackStance = weaponStanceByAttackType.melee[0];
+    }
+  } else {
+    // Use ranged attack if not close to monster
+    if (weaponStanceByAttackType.range && weaponStanceByAttackType.range.length > 0) {
+      attackStance = weaponStanceByAttackType.range[0];
     }
   }
 
+  console.log("Using attack stance:", attackStance);
+  
+  // Set the stance with proper callbacks
+  this.setStance(
+    attackStance,
+    0,
+    true,  // useStanceUntilMaxFrame - ensure animation completes
+    false, // isOscillateFrames - don't oscillate, we want to complete one animation
+    () => {
+      // onFinish callback - called when animation completes
+      console.log("Attack animation finished");
+      this.isInAttack = false;
+    },
+    async () => {
+      // onLastFrame callback - called at the "hit" frame of the animation
+      console.log("Executing attack at peak frame");
+      await this.executeAttackDamage();
+    }
+  );
+}
+
+/**
+ * Execute the actual attack damage calculation and effects
+ */
+async executeAttackDamage() {
+  console.log("Executing attack damage");
+  
+  try {
+    // Play appropriate sound for the weapon
+    playAudioForAttackByWeaponType(getEquipTypeById(this.weaponEquipId));
+  } catch (error) {
+    console.error("Error playing attack sound:", error);
+  }
+
+  // Define attack range based on weapon type
+  const weaponType = getEquipTypeById(this.weaponEquipId);
+  let attackRange = 50; // Default range
+  
+  // Adjust range based on weapon type
+  switch (weaponType) {
+    case "Sword":
+      attackRange = 60;
+      break;
+    case "Bow":
+    case "Crossbow":
+      attackRange = 150;
+      break;
+    case "Claw":
+      attackRange = 100;
+      break;
+    default:
+      attackRange = 50;
+  }
+
+  // Directional attack: only hit monsters in the direction the character is facing
+  const isCharacterFacingRight = this.flipped;
+  
+  // Find all monsters within range (that are not already dying)
+  const monsters = this.map?.monsters.filter((monster: Monster) => {
+    if (monster.dying) return false;
+    
+    // Check if monster is in the right direction
+    const isMonsterOnRight = monster.pos.x > this.pos.x;
+    const isMonsterOnLeft = monster.pos.x < this.pos.x;
+    
+    // Only hit monsters in the direction we're facing
+    if ((isMonsterOnRight && !isCharacterFacingRight) || 
+        (isMonsterOnLeft && isCharacterFacingRight)) {
+      return false;
+    }
+    
+    // Calculate distance
+    const dx = monster.pos.x - this.pos.x;
+    const dy = monster.pos.y - this.pos.y;
+    
+    // Use a more generous vertical range to make hitting easier
+    // This helps with platforms where monsters might be slightly above/below
+    const horizontalDistance = Math.abs(dx);
+    const verticalDistance = Math.abs(dy);
+    
+    return horizontalDistance <= attackRange && verticalDistance <= 70;
+  }) || [];
+
+  // Log how many monsters are in range
+  console.log(`Found ${monsters.length} monsters in attack range`);
+
+  // If no monsters are hit, just play a swing sound
+  if (monsters.length === 0) {
+    try {
+      const missNode = await WZManager.get("Sound.wz/Game.img/Swing");
+      if (missNode && missNode.nGetAudio) {
+        PLAY_AUDIO(missNode.nGetAudio());
+      }
+    } catch (error) {
+      console.error("Error playing swing sound:", error);
+    }
+    return;
+  }
+
+  // Process each hit monster
+  for (const monster of monsters) {
+    try {
+      // Calculate damage based on weapon type and stats
+      const weaponAttack = this.stats.getWeaponAttack(this.equips);
+      const baseDamage = weaponAttack + (this.stats.str / 4);
+      
+      // Add some random variation (80% to 120% of base damage)
+      const randomFactor = 0.8 + Math.random() * 0.4;
+      
+      // Calculate final damage (ensure it's at least 1)
+      const damage = Math.max(1, Math.floor(baseDamage * randomFactor));
+      
+      console.log(`Dealing ${damage} damage to monster`);
+      
+      // Apply knockback in the direction we're facing
+      const knockbackDirection = isCharacterFacingRight ? 1 : -1;
+      
+      // Apply the damage to the monster
+      monster.hit(damage, knockbackDirection, this);
+      
+      // Visual feedback: display hit effect at monster position
+      this.createHitEffect(monster.pos.x, monster.pos.y);
+    } catch (error) {
+      console.error("Error processing monster hit:", error);
+    }
+  }
+  
+  // Play hit sound
+  try {
+    const hitNode = await WZManager.get("Sound.wz/Game.img/Hit");
+    if (hitNode && hitNode.nGetAudio) {
+      PLAY_AUDIO(hitNode.nGetAudio());
+    }
+  } catch (error) {
+    console.error("Error playing hit sound:", error);
+  }
+  
+  // Check for item drops after the attack
+  this.checkForItemDropPickup(true);
+}
+
+/**
+ * Create a visual hit effect at the specified position
+ */
+async createHitEffect(x, y) {
+  try {
+    // This is a placeholder for creating hit effects
+    // You would typically load a sprite sheet and animate it
+    // For now, we'll just log that we want to create an effect
+    console.log(`Creating hit effect at (${x}, ${y})`);
+    
+    // In the future, you could implement something like:
+    // const hitEffect = await HitEffect.fromOpts({
+    //   x: x, y: y, type: "normal"
+    // });
+    // this.map.addEffect(hitEffect);
+  } catch (error) {
+    console.error("Error creating hit effect:", error);
+  }
+}
+
+/**
+ * Improved implementation of isCloseToMob for more accurate distance detection
+ */
+isCloseToMob = (inAllDirections = true) => {
+  if (!this.map || !this.map.monsters || this.map.monsters.length === 0) {
+    return false;
+  }
+
+  // Filter monsters by direction if not checking in all directions
+  const monstersToConsider = inAllDirections
+    ? this.map.monsters
+    : this.map.monsters.filter((monster: Monster) => {
+        const isMonsterOnRight = monster.pos.x > this.pos.x;
+        const isMonsterOnLeft = monster.pos.x < this.pos.x;
+        const isPlayerFacingRight = this.flipped;
+
+        return (
+          (isMonsterOnRight && isPlayerFacingRight) ||
+          (isMonsterOnLeft && !isPlayerFacingRight)
+        );
+      });
+
+  // Use a more generous distance check
+  const HORIZONTAL_DISTANCE = 80;
+  const VERTICAL_DISTANCE = 60;
+
+  // Check if any monster is within attack range
+  const isCloseToMonster = monstersToConsider.some((monster: Monster) => {
+    // Skip dead/dying monsters
+    if (monster.dying || monster.destroyed) {
+      return false;
+    }
+    
+    // Calculate horizontal and vertical distances separately
+    const horizontalDistance = Math.abs(monster.pos.x - this.pos.x);
+    const verticalDistance = Math.abs(monster.pos.y - this.pos.y);
+    
+    // Consider monster in range if both horizontal and vertical distances are within limits
+    return horizontalDistance <= HORIZONTAL_DISTANCE && verticalDistance <= VERTICAL_DISTANCE;
+  });
+
+  return isCloseToMonster;
+};
+  
+  
   async pickUp() {
     console.log("pickUp");
     this.checkForItemDropPickup();
@@ -846,7 +1017,6 @@ class MapleCharacter {
       itemDrop.goToPlayer(this.pos.vx, this.pos.vy);
       itemDrop.isAlreadyPickedUp = true;
       console.log("itemDrop", itemDrop);
-
       // this is async
       this.inventory.addToInventory(itemDrop.itemFile.nName, itemDrop.amount);
 

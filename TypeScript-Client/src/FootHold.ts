@@ -63,13 +63,13 @@ class Foothold {
     // lag: number,
     // msPerTick: number
   ): void {
-    canvas.drawLine({
-      x1: this.x1 - camera.x,
-      x2: this.x2 - camera.x,
-      y1: this.y1 - camera.y,
-      y2: this.y2 - camera.y,
-      color: "#00ff00",
-    });
+    //canvas.drawLine({
+    //  x1: this.x1 - camera.x,
+    //  x2: this.x2 - camera.x,
+    //  y1: this.y1 - camera.y,
+    //  y2: this.y2 - camera.y,
+    //  color: "#00ff00",
+    //});
   }
 }
 

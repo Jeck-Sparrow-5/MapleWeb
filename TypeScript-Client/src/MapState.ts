@@ -1,10 +1,7 @@
 import MapleMap from "./MapleMap";
 import MyCharacter from "./MyCharacter";
 import Camera, { CameraInterface } from "./Camera";
-// import UIMap from "./UI/uimap";
 import { enterBrowserFullscreen } from "./Config";
-// import StatsMenuSprite from "./UI/Menu/StatsMenuSprite";
-// import InventoryMenuSprite from "./UI/Menu/InventoryMenuSprite";
 import GameCanvas from "./GameCanvas";
 import UIMap from "./UI/UIMap";
 import StatsMenuSprite from "./UI/Menu/StatsMenuSprite";
@@ -15,8 +12,8 @@ import TouchJoyStick, {
 } from "./UI/TouchJoyStick";
 
 // henesys 100000000
-// 100020100 - maps with pigs - usefull to test fast things with mobs
-// const defaultMap = 100020100; // - maps with pigs - usefull to test fast things with mobs
+// 100020100 - maps with pigs - useful to test fast things with mobs
+// const defaultMap = 100020100; // maps with pigs
 const defaultMap = 100000000; // henesys
 // const defaultMap = 104040000; // left of henesys
 // const defaultMap: number = 100040102; // elinia - monkey map
@@ -54,7 +51,6 @@ export interface MapState {
 const MapStateInstance = {} as MapState;
 
 async function initializeMapState(map = defaultMap, isFirstUpdate = false) {
-  console.log(`initializeMapState(${map}, isFirstUpdate: ${isFirstUpdate}`);
   await MyCharacter.load();
   MyCharacter.activate();
   // Henesys
@@ -63,7 +59,7 @@ async function initializeMapState(map = defaultMap, isFirstUpdate = false) {
   MyCharacter.map = MapleMap;
 
   if (isFirstUpdate) {
-    // todo
+    // todo: additional UI initialization if needed
     await UIMap.initialize();
   }
 
@@ -79,24 +75,14 @@ async function initializeMapState(map = defaultMap, isFirstUpdate = false) {
 }
 
 MapStateInstance.changeMap = async function (map = defaultMap) {
-  console.log("MapState changed to", map);
   await initializeMapState(map);
 };
 
 function isTouchDevice() {
-  // debug
-  // return true;
-  return (
-    "ontouchstart" in window || navigator.maxTouchPoints > 0
-    //
-    // || navigator.msMaxTouchPoints > 0
-  );
+  return "ontouchstart" in window || navigator.maxTouchPoints > 0;
 }
 
 MapStateInstance.initialize = async function (map: number = defaultMap) {
-  console.log("MapState.initialize", map);
-
-  this.isTouchControllsEnabled = true;
   this.isTouchControllsEnabled = isTouchDevice(); // Check if the device supports touch
   if (this.isTouchControllsEnabled) {
     this.joyStick = TouchJoyStick.init();
@@ -117,7 +103,27 @@ MapStateInstance.initialize = async function (map: number = defaultMap) {
 
   this.UIMenus = [this.statsMenu, this.inventoryMenu];
 
+  // Initialize previous keyboard state with all keys set to false.
+  this.previousKeyboardState = {
+    up: false,
+    down: false,
+    left: false,
+    right: false,
+    i: false,
+    s: false,
+  };
+
   await initializeMapState(map, true);
+
+  // --- Attach click event listener to the canvas element using the correct id ---
+  const canvasElement = document.getElementById("game"); // updated to "game"
+  if (canvasElement) {
+    canvasElement.addEventListener("click", (event) => {
+      MapleMap.handleClick(event, canvasElement, Camera);
+    });
+  } else {
+    console.warn("Canvas element with id 'game' not found.");
+  }
 };
 
 MapStateInstance.doUpdate = function (
@@ -125,18 +131,10 @@ MapStateInstance.doUpdate = function (
   camera: CameraInterface,
   canvas: GameCanvas
 ) {
-  console.log(canvas.keys);
-  // if (this.previousKeyboardState == null) {
-  //   this.previousKeyboardState = canvas.keys;
-
-  //   return;
-  // }
   if (!!MapleMap.doneLoading) {
     MapleMap.update(msPerTick);
 
     if (this.isTouchControllsEnabled) {
-      console.log(this.joyStick.cardinalDirection);
-
       switch (this.joyStick.cardinalDirection) {
         case JoyStickDirections.N:
           MyCharacter.upClick();
@@ -171,12 +169,10 @@ MapStateInstance.doUpdate = function (
           MyCharacter.upClickRelease();
           MyCharacter.leftClickRelease();
           MyCharacter.rightClickRelease();
-
           break;
         default:
           break;
       }
-
       MyCharacter.update(msPerTick);
     } else {
       if (canvas.isKeyDown("up")) {
@@ -201,17 +197,14 @@ MapStateInstance.doUpdate = function (
         MyCharacter.pickUp();
       }
 
-      if (canvas.isKeyDown("s")) {
+      if (canvas.isKeyDown("s") && !this.previousKeyboardState.s) {
         this.statsMenu.setIsHidden(!this.statsMenu.isHidden);
       }
-
-      if (canvas.isKeyDown("i")) {
+      if (canvas.isKeyDown("i") && !this.previousKeyboardState.i) {
         this.inventoryMenu.setIsHidden(!this.inventoryMenu.isHidden);
       }
 
       if (canvas.isKeyDown("esc")) {
-        console.log("escape");
-        // hide the last menu that is not hidden
         const notHiddenMenus = this.UIMenus.filter((menu) => !menu.isHidden);
         if (notHiddenMenus.length > 0) {
           notHiddenMenus[notHiddenMenus.length - 1].setIsHidden(true);
@@ -220,7 +213,6 @@ MapStateInstance.doUpdate = function (
 
       MyCharacter.update(msPerTick);
 
-      // now unset if the key is not pressed
       if (!canvas.isKeyDown("up")) {
         MyCharacter.upClickRelease();
       }
@@ -235,9 +227,13 @@ MapStateInstance.doUpdate = function (
       }
     }
 
-    let x = Camera.x + 400;
-    let y = Camera.y + 300;
-    //Camera.lookAt(x, y);
+    this.previousKeyboardState.i = canvas.isKeyDown("i");
+    this.previousKeyboardState.s = canvas.isKeyDown("s");
+    this.previousKeyboardState.up = canvas.isKeyDown("up");
+    this.previousKeyboardState.down = canvas.isKeyDown("down");
+    this.previousKeyboardState.left = canvas.isKeyDown("left");
+    this.previousKeyboardState.right = canvas.isKeyDown("right");
+
     Camera.lookAt(MyCharacter.pos.x, MyCharacter.pos.y - 78);
 
     UIMap.doUpdate(msPerTick, camera, canvas);
@@ -248,7 +244,13 @@ MapStateInstance.doUpdate = function (
   }
 };
 
-MapStateInstance.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
+MapStateInstance.doRender = function (
+  canvas: GameCanvas,
+  camera: CameraInterface,
+  lag: number,
+  msPerTick: number,
+  tdelta: number
+) {
   if (!!MapleMap.doneLoading) {
     MapleMap.render(canvas, camera, lag, msPerTick, tdelta);
 
@@ -261,9 +263,6 @@ MapStateInstance.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
     });
 
     UIMap.doRender(canvas, camera, lag, msPerTick, tdelta);
-  } else {
-    // black screen
-    // canvas.ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 };
 
@@ -273,7 +272,7 @@ declare global {
   }
 }
 
-// fix this
+// Expose MapStateInstance globally
 window.MapStateInstance = MapStateInstance;
 
 export default MapStateInstance;

@@ -9,7 +9,7 @@ import NPC from "./NPC";
 import Monster from "./Monster";
 
 import AudioManager from "./Audio/AudioManager";
-import Camera, { CameraInterface } from "./Camera"; //debugging
+import Camera, { CameraInterface } from "./Camera"; // debugging
 import Timer from "./Timer";
 import MapleCharacter from "./MapleCharacter";
 import DropItemSprite from "./DropItem/DropItemSprite";
@@ -58,10 +58,15 @@ export interface MapleMap {
     msPerTick: number,
     tdelta: number
   ) => void;
+  // New: click handling for NPCs.
+  handleClick: (
+    event: MouseEvent,
+    canvasElement: HTMLElement,
+    camera: CameraInterface
+  ) => void;
 }
 
 const MapleMap = {} as MapleMap;
-
 const minLoadTimeInSeconds = 1;
 
 MapleMap.load = async function (id: number | string) {
@@ -91,8 +96,8 @@ MapleMap.load = async function (id: number | string) {
 
   this.footholds = this.loadFootholds(this.wzNode.foothold);
   this.boundaries = this.loadBoundaries(this.wzNode, this.footholds);
-  Camera.setBoundaries(this.boundaries); //debugging
-  Camera.lookAt(this.boundaries.left, this.boundaries.top); //debugging
+  Camera.setBoundaries(this.boundaries); // debugging
+  Camera.lookAt(this.boundaries.left, this.boundaries.top); // debugging
   this.backgrounds = await this.loadBackgrounds(this.wzNode.back);
   this.tiles = await this.loadTiles(this.wzNode);
   this.objects = await this.loadObjects(this.wzNode);
@@ -143,10 +148,7 @@ MapleMap.getLocationAboveFoothold = function (footholdId: any) {
   const foothold = this.footholds[footholdId];
   if (!foothold) return null;
 
-  // Calculate the x-coordinate at the middle of the foothold
   const x = (foothold.x1 + foothold.x2) / 2;
-
-  // Calculate the y-coordinate above the target foothold
   const y = foothold.y1;
 
   return { x, y };
@@ -177,7 +179,6 @@ MapleMap.loadBackgrounds = async function (wzNode) {
     if (!backNode.bS.nValue) {
       continue;
     }
-
     const bg = await Background.fromWzNode(backNode);
     backgrounds.push(bg);
   }
@@ -268,9 +269,8 @@ MapleMap.loadObjects = async function (wzNode) {
 let footholds: any = [];
 async function initializeMonster(opts: any) {
   const mob = await Monster.fromOpts(opts);
-  // console.log('spawning monster', opts, mob, footholds);
   const whichFoothold = footholds[mob.fh];
-  if (!!whichFoothold) {
+  if (whichFoothold) {
     mob.layer = whichFoothold.layer;
   }
   return mob;
@@ -300,20 +300,22 @@ MapleMap.loadMonsters = async function (wzNode) {
       maxX: mobNode.rx1.nValue,
       map: this,
     });
-
-    // for debugging- will load only 1 monster
-    // return;
   }
   currentMonsters = this.monsters;
 };
 
+// --- Modified NPC spawning to include position and dialogue support ---
 MapleMap.spawnNPC = async function (opts = {}) {
   const npc = await NPC.fromOpts(opts);
+  // Set a position property using x and cy (vertical center) for rendering and click detection.
+  npc.pos = { x: opts.x, y: opts.cy };
   const whichFoothold = this.footholds[npc.fh];
-  if (!!whichFoothold) {
+  if (whichFoothold) {
     npc.layer = whichFoothold.layer;
   }
-
+  console.log(
+    `Spawned NPC ${opts.id} at (${npc.pos.x}, ${npc.pos.y})`
+  );
   this.npcs.push(npc);
 };
 
@@ -327,7 +329,7 @@ MapleMap.loadNPCs = async function (wzNode) {
       x: npcNode.x.nValue,
       cy: npcNode.cy.nValue,
       f: npcNode.nGet("f").nGet("nValue", 0),
-      fh: npcNode.fh.nValue,
+      fh: npcNode.fh.nValue
     });
   }
 };
@@ -360,7 +362,6 @@ MapleMap.loadBoundaries = function (wzNode, footholds) {
   };
 };
 
-// for exmaple near henesys this will return henesys map
 MapleMap.getNearbyTownMapId = function () {
   if (this.isTown) {
     return this.id;
@@ -374,7 +375,7 @@ MapleMap.update = function (msPerTick) {
     return;
   }
 
-  // handle destroyed objects
+  // Remove destroyed monsters.
   this.monsters = this.monsters.filter((m: Monster) => !m.destroyed);
 
   this.backgrounds.forEach((bg: Background) => bg.update(msPerTick));
@@ -387,7 +388,6 @@ MapleMap.update = function (msPerTick) {
   this.itemDrops = this.itemDrops.filter(
     (drop: DropItemSprite) => !drop.destroyed
   );
-
   this.itemDrops.forEach((drop: DropItemSprite) => {
     drop.update(msPerTick);
   });
@@ -404,11 +404,9 @@ MapleMap.render = function (
     return;
   }
 
-  // handle destroyed objects
-  // this.monsters = this.monsters.filter(m => !m.destroyed);
   currentMonsters = currentMonsters.filter((m) => !m.destroyed);
-
-  const draw = (obj: any) => obj.draw(canvas, camera, lag, msPerTick, tdelta);
+  const draw = (obj: any) =>
+    obj.draw(canvas, camera, lag, msPerTick, tdelta);
 
   this.backgrounds.filter((bg: Background) => !bg.front).forEach(draw);
 
@@ -421,22 +419,16 @@ MapleMap.render = function (
     this.npcs.filter(inCurrentLayer).forEach(draw);
   }
 
-  // how about obj.layer = null?
-  const notInAnyLayer = (obj: Monster) => !(obj.layer >= 0 && obj.layer <= 7);
-
+  const notInAnyLayer = (obj: any) => !(obj.layer >= 0 && obj.layer <= 7);
   currentMonsters.filter(notInAnyLayer).forEach(draw);
   this.monsters.filter(notInAnyLayer).forEach(draw);
-
   this.characters.filter(notInAnyLayer).forEach(draw);
-
   this.npcs.filter(notInAnyLayer).forEach(draw);
 
   this.portals.forEach(draw);
-
   this.backgrounds.filter((bg: Background) => !!bg.front).forEach(draw);
 
-  // draw speech bubbles
-  // draw levelup
+  // Draw level-up bubbles for characters.
   const drawLevelUp = (c: MapleCharacter) => {
     const levelUpFrame = c.levelUpFrames[c.levelUpFrame];
     canvas.drawImage({
@@ -448,9 +440,6 @@ MapleMap.render = function (
   this.characters
     .filter((c: MapleCharacter) => !!c.levelingUp)
     .forEach(drawLevelUp);
-  // draw damage
-
-  Object.values(this.footholds).forEach(draw);
 
   if (this.PlayerCharacter) {
     this.PlayerCharacter.draw(canvas, camera, lag, msPerTick, tdelta);
@@ -466,12 +455,40 @@ MapleMap.render = function (
   this.clickManagerObjects.forEach((obj: Obj) => {
     obj.draw(canvas, camera, lag, msPerTick, tdelta);
   });
+
+  Object.values(this.footholds).forEach(draw);
 };
 
-// const getCurrentMonsters = () => currentMonsters;
-// const getFootholds = () => footholds;
-// MapleMap.getCurrentMonsters = getCurrentMonsters;
-// MapleMap.getFootholds = getFootholds;
-// window.MapleMap = MapleMap;
+// --- New: Simple click handler for NPCs ---
+// When a click occurs, convert mouse coordinates into canvas coordinates,
+// check each NPC (assumed to be a 56x70 rectangle), and if clicked, log the NPC and set its dialogue flag.
+MapleMap.handleClick = function (
+  event: MouseEvent,
+  canvasElement: HTMLElement,
+  camera: CameraInterface
+) {
+  const rect = canvasElement.getBoundingClientRect();
+  const mouseX = event.clientX - rect.left;
+  const mouseY = event.clientY - rect.top;
+  console.log("Click detected at:", mouseX, mouseY);
+  
+  this.npcs.forEach((npc: any) => {
+    if (!npc.pos) return;
+    // Convert NPC's world position to canvas coordinates.
+    const npcX = npc.pos.x - camera.x - 25;
+    const npcY = npc.pos.y - camera.y - 70;
+    //console.log(`Checking NPC ${npc.id}: screen coords (${npcX}, ${npcY})`);
+    // Check if the mouse click is within the NPC's bounding box (56x70).
+    if (
+      mouseX >= npcX &&
+      mouseX <= npcX + 56 &&
+      mouseY >= npcY &&
+      mouseY <= npcY + 70
+    ) {
+      console.log(`Clicked on NPC ${npc.id}:`, npc);
+    }
+  });
+};
+
 
 export default MapleMap;

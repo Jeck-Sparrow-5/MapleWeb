@@ -33,15 +33,19 @@ class NPC {
   delay: number = 0;
   nextDelay: number = 0;
   layer: number = 0;
+  // Added property to control dialogue bubble display.
+  showDialog: boolean = false;
 
   static async fromOpts(opts: any) {
     const npc = new NPC(opts);
     await npc.load();
     return npc;
   }
+  
   constructor(opts: any) {
     this.opts = opts;
   }
+  
   async load() {
     const opts = this.opts;
 
@@ -72,6 +76,12 @@ class NPC {
 
     this.strings = await this.loadStrings(this.id);
 
+    // Optionally, if your NPC WZ data has a "speak" node,
+    // you might want to store it in this.strings.speak. For example:
+    if (npcFile.nGet("speak")) {
+      this.strings.speak = npcFile.nGet("speak").nGet("nValue", "Hello!");
+    }
+
     this.floating = npcFile.info.nGet("float").nGet("nValue", 0);
 
     this.mapleTv = npcFile.info.nGet("MapleTV").nGet("nValue", 0);
@@ -95,6 +105,7 @@ class NPC {
 
     this.setFrame("stand", 0);
   }
+  
   async loadStrings(id: number) {
     const stringFile: any = await WZManager.get("String.wz/Npc.img");
     const npcStrings = stringFile.nGet(id);
@@ -103,6 +114,7 @@ class NPC {
       return acc;
     }, {});
   }
+  
   loadStance(
     wzNode: any = {},
     stance: string = "stand"
@@ -122,7 +134,7 @@ class NPC {
         const Frame = frame.nTagName === "uol" ? frame.nResolveUOL() : frame;
         frames.push(Frame);
       } else {
-        console.log(`Unhandled frame=${frame.nTagName} for cls=NPC `, this);
+        console.log(`Unhandled frame=${frame.nTagName} for NPC `, this);
       }
     });
 
@@ -130,6 +142,7 @@ class NPC {
       frames,
     };
   }
+  
   setFrame(stance = "stand", frame = 0, carryOverDelay = 0) {
     const s = !this.stances[stance] ? "stand" : stance;
     const f = !this.stances[s].frames[frame] ? 0 : frame;
@@ -140,6 +153,7 @@ class NPC {
     this.delay = carryOverDelay;
     this.nextDelay = stanceFrame.nGet("delay").nGet("nValue", 100);
   }
+  
   setTvAdFrame(stance = 0, frame = 0, carryOverDelay = 0) {
     const s = !this.tvAdStances[stance] ? 0 : stance;
     const f = !this.tvAdStances[s].frames[frame] ? 0 : frame;
@@ -150,25 +164,7 @@ class NPC {
     this.tvAdDelay = carryOverDelay;
     this.tvAdNextDelay = stanceFrame.nGet("delay").nGet("nValue", 100);
   }
-  updateTvAd(msPerTick: number) {
-    if (!!this.mapleTv) {
-      this.tvAdDelay += msPerTick;
-      if (this.tvAdDelay > this.tvAdNextDelay) {
-        this.setTvAdFrame(
-          this.tvAdStance,
-          this.tvAdFrame + 1,
-          this.tvAdDelay - this.tvAdNextDelay
-        );
-      }
-    }
-  }
-  update(msPerTick: number) {
-    this.delay += msPerTick;
-    if (this.delay > this.nextDelay) {
-      this.setFrame(this.stance, this.frame + 1, this.delay - this.nextDelay);
-    }
-    this.updateTvAd(msPerTick);
-  }
+  
   draw(
     canvas: GameCanvas,
     camera: CameraInterface,
@@ -194,6 +190,7 @@ class NPC {
     this.drawName(canvas, camera, lag, msPerTick, tdelta);
     this.drawTvAd(canvas, camera, lag, msPerTick, tdelta);
   }
+  
   drawName(
     canvas: GameCanvas,
     camera: CameraInterface,
@@ -257,6 +254,7 @@ class NPC {
       canvas.drawText(funcOpts);
     }
   }
+  
   drawTvAd(
     canvas: GameCanvas,
     camera: CameraInterface,
@@ -284,6 +282,63 @@ class NPC {
       dx: this.x - camera.x + ((this.mapleTvMsgX - 0x10000) % 0x10000),
       dy: this.cy - camera.y + this.mapleTvMsgY,
     });
+  }
+  
+  // --- New: Draw dialogue bubble ---
+  drawDialogueBubble(
+    canvas: GameCanvas,
+    camera: CameraInterface,
+    lag: number,
+    msPerTick: number,
+    tdelta: number
+  ) {
+    // Use the "speak" string if available; otherwise default.
+    const dialogueText = this.strings.speak || "Hello!";
+    // Calculate the screen position above the NPC. Adjust offsets as needed.
+    const bubbleWidth = 100;
+    const bubbleHeight = 40;
+    const npcScreenX = this.x - camera.x;
+    const npcScreenY = this.cy - camera.y;
+    // Draw a bubble background above the NPC.
+    canvas.drawRect({
+      x: npcScreenX - bubbleWidth / 2,
+      y: npcScreenY - bubbleHeight - 10,
+      width: bubbleWidth,
+      height: bubbleHeight,
+      color: "black",
+      alpha: 0.7,
+      angle: 0,
+    });
+    // Draw the dialogue text in the center of the bubble.
+    canvas.drawText({
+      text: dialogueText,
+      x: npcScreenX,
+      y: npcScreenY - bubbleHeight / 2 - 10,
+      color: "#FFFFFF",
+      align: "center",
+      fontSize: 12,
+    });
+  }
+  
+  updateTvAd(msPerTick: number) {
+    if (!!this.mapleTv) {
+      this.tvAdDelay += msPerTick;
+      if (this.tvAdDelay > this.tvAdNextDelay) {
+        this.setTvAdFrame(
+          this.tvAdStance,
+          this.tvAdFrame + 1,
+          this.tvAdDelay - this.tvAdNextDelay
+        );
+      }
+    }
+  }
+  
+  update(msPerTick: number) {
+    this.delay += msPerTick;
+    if (this.delay > this.nextDelay) {
+      this.setFrame(this.stance, this.frame + 1, this.delay - this.nextDelay);
+    }
+    this.updateTvAd(msPerTick);
   }
 }
 

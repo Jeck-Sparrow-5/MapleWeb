@@ -1229,6 +1229,9 @@ isCloseToMob = (inAllDirections = true) => {
     msPerTick: number,
     tdelta: number
   ) {
+    if(this.pos.layer === 0){
+      return;
+    }
     // console.log(this.frame, `${Math.round(1000 / msPerTick)}fps`);
     // set whether the character is flipped prior to drawing
     if (this.pos.right && !this.pos.left) {
@@ -1280,9 +1283,9 @@ isCloseToMob = (inAllDirections = true) => {
 
     const characterIsFlipped = !!this.flipped;
     const imgdir = this.baseBody[this.stance][this.frame];
+
     const imgdirFlip = !!imgdir.nGet("flip").nGet("nValue", 0);
     const frameIsFlipped = characterIsFlipped !== imgdirFlip;
-
     const drawableFrames = this.getDrawableFrames(
       this.stance,
       this.frame,

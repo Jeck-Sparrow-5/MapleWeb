@@ -162,23 +162,78 @@ class Monster {
     this.DamageIndicator = new DamageIndicator();
     await this.DamageIndicator.initialize();
   }
-  async addDrops() {
+  
+  /**
+ * Enhanced version of the addDrops method for the Monster class
+ * This should be integrated into your existing Monster class
+ */
+async addDrops() {
+  try {
+    // Get random drop items from the monster's drop table
     const monsterDropEntries = await DropRandomizer.getRandomDropItems(
       this.id,
-      false
+      this.isBoss
     );
 
-    // need to make drops apear next to each other
-    monsterDropEntries.forEach(async (monsterDropEntry) => {
+    // If no drops were generated, add a small amount of mesos by default (optional)
+    if (monsterDropEntries.length === 0 && Math.random() < 0.3) {
+      // 30% chance to drop a small amount of mesos
+      const minMesos = 10;
+      const maxMesos = 100;
+      const mesoAmount = Math.floor(minMesos + Math.random() * (maxMesos - minMesos));
+      
+      // Add mesos drop directly
       this.map.addItemDrop(
         await DropItemSprite.fromOpts({
-          id: monsterDropEntry.itemId,
+          id: 0, // 0 indicates mesos
           monster: this,
-          amount: monsterDropEntry.chosenAmount,
+          amount: mesoAmount,
         })
       );
-    });
+      return;
+    }
+
+    // Calculate drop positions - add slight offset to each drop
+    // so they don't all appear in the exact same spot
+    const baseX = this.pos.x;
+    const baseY = this.pos.y;
+    const dropSpacing = 20; // Pixels between drops
+    
+    // Create drops with position offsets
+    for (let i = 0; i < monsterDropEntries.length; i++) {
+      const monsterDropEntry = monsterDropEntries[i];
+      
+      // Calculate offset positions (place items in a small arc)
+      const offsetX = (i - Math.floor(monsterDropEntries.length / 2)) * dropSpacing;
+      
+      try {
+        // Create the drop item with position offset
+        const dropItem = await DropItemSprite.fromOpts({
+          id: monsterDropEntry.itemId,
+          monster: {
+            ...this,
+            pos: {
+              x: baseX + offsetX,
+              y: baseY,
+              vx: this.pos.vx / 2,
+              vy: this.pos.vy
+            }
+          },
+          amount: monsterDropEntry.chosenAmount,
+        });
+        
+        // Add it to the map
+        if (dropItem && !dropItem.destroyed) {
+          this.map.addItemDrop(dropItem);
+        }
+      } catch (err) {
+        console.error(`Error creating drop for item ${monsterDropEntry.itemId}:`, err);
+      }
+    }
+  } catch (error) {
+    console.error("Error in Monster.addDrops:", error);
   }
+}
 
   updatePosition(x: number, y: number) {
     this.pos.x = x;
@@ -214,18 +269,29 @@ class Monster {
       console.log("no sound", name);
     }
   }
+  
+  /**
+   * Fixed version of the die method for the Monster class
+   * This should be integrated into your existing Monster class
+   */
   die(responsibleMapleCharacter: any) {
     this.setFrame(!this.stances.die ? "die1" : "die");
     this.playAudio("Die");
     this.dying = true;
     this.isMovementEnabled = false;
 
-    // todo
-    // 1. need to summon drops
-    this.addDrops();
+    // Add drops with a slight delay to prevent them from being destroyed
+    // before they can be properly initialized
+    setTimeout(() => {
+      this.addDrops();
+    }, 100);
 
-    responsibleMapleCharacter.addExp(this.mobFile.info.exp.nValue);
+    // Award experience to the player who killed the monster
+    if (responsibleMapleCharacter) {
+      responsibleMapleCharacter.addExp(this.mobFile.info.exp.nValue);
+    }
   }
+
   destroy() {
     this.destroyed = true;
     // delete this;

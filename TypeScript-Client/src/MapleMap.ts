@@ -312,9 +312,12 @@ MapleMap.loadMonsters = async function (wzNode) {
 
 // --- Modified NPC spawning to include position and dialogue support ---
 MapleMap.spawnNPC = async function (opts = {}) {
+  // Add a reference to the map in the NPC options
+  opts.map = this;
+  
   const npc = await NPC.fromOpts(opts);
-  // Set a position property using x and cy (vertical center) for rendering and click detection.
-  npc.pos = { x: opts.x, y: opts.cy };
+  // Position already set in NPC.load() method now
+  
   const whichFoothold = this.footholds[npc.fh];
   if (whichFoothold) {
     npc.layer = whichFoothold.layer;
@@ -322,6 +325,7 @@ MapleMap.spawnNPC = async function (opts = {}) {
   console.log(
     `Spawned NPC ${opts.id} at (${npc.pos.x}, ${npc.pos.y})`
   );
+  
   this.npcs.push(npc);
 };
 
@@ -478,11 +482,11 @@ MapleMap.handleClick = function (
 
   this.npcs.forEach(async (npc: any) => {
     if (!npc.pos) return;
-    // Convert NPC's world position to canvas coordinates.
-    const npcX = npc.pos.x - camera.x - 25;
-    const npcY = npc.pos.y - camera.y - 70;
-    //console.log(`Checking NPC ${npc.id}: screen coords (${npcX}, ${npcY})`);
-    // Check if the mouse click is within the NPC's bounding box (56x70).
+    // Convert NPC's world position to canvas coordinates
+    const npcX = npc.x - camera.x - 25; // Center the hitbox
+    const npcY = npc.cy - camera.y - 70; // Adjust for NPC height
+    
+    // Check if the mouse click is within the NPC's bounding box (56x70)
     if (
       mouseX >= npcX &&
       mouseX <= npcX + 56 &&

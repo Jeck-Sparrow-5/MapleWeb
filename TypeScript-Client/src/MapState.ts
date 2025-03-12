@@ -11,6 +11,7 @@ import TouchJoyStick, {
   JoyStick,
   JoyStickDirections,
 } from "./UI/TouchJoyStick";
+import ClickManager from "./UI/ClickManager";
 
 // henesys 100000000
 // 100020100 - maps with pigs - useful to test fast things with mobs
@@ -82,11 +83,14 @@ MapStateInstance.initialize = async function (map: number = defaultMap) {
     charecter: MyCharacter,
     isHidden: true,
   });
+  
+  // We'll use ClickManager's GameCanvas reference instead
   this.inventoryMenu = await InventoryMenuSprite.fromOpts({
     x: 400,
     y: 200,
     charecter: MyCharacter,
     isHidden: true,
+    canvas: ClickManager.GameCanvas, // Pass the canvas for mouse interaction
   });
 
   this.UIMenus = [this.statsMenu, this.inventoryMenu];

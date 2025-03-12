@@ -244,71 +244,106 @@ class NPC {
   }
 
   // Define taxi destinations based on the current map and NPC's location
-  setupTaxiDestinations() {
-    const currentMapId = this.opts.map?.id || 0;
+  // Replace the setupTaxiDestinations method in NPC.ts with this implementation
+
+// Define taxi destinations based on the current map and NPC's location
+setupTaxiDestinations() {
+  // Clear existing destinations
+  this.taxiDestinations = [];
+  
+  // Get the current map ID (ensure it's a number)
+  const currentMapId = Number(this.opts?.map?.id || 0);
+  
+  console.log("Setting up taxi destinations for map ID:", currentMapId);
+  
+  // First digit of map ID determines region
+  const firstDigit = Math.floor(currentMapId / 100000000);
+  
+  // Victoria Island Taxi destinations (100000000 series)
+  if (firstDigit === 1) {
+    // Default Victoria Island destinations
+    const victoriaDestinations = [
+      { mapId: 100000000, name: "Henesys", cost: 1000 },
+      { mapId: 101000000, name: "Ellinia", cost: 1000 },
+      { mapId: 102000000, name: "Perion", cost: 1000 },
+      { mapId: 103000000, name: "Kerning City", cost: 1000 },
+      { mapId: 104000000, name: "Lith Harbor", cost: 800 },
+      { mapId: 120000000, name: "Nautilus Harbor", cost: 1200 }
+    ];
     
-    // Clear existing destinations
-    this.taxiDestinations = [];
-    
-    // Get the area of the current map to determine available destinations
-    const firstDigit = Math.floor(currentMapId / 100000000);
-    
-    // Victoria Island Taxi destinations (100000000 series)
-    if (firstDigit === 1) {
-      // Default Victoria Island destinations
-      const victoriaDestinations = [
-        { mapId: 100000000, name: "Henesys", cost: 1000 },
-        { mapId: 101000000, name: "Ellinia", cost: 1000 },
-        { mapId: 102000000, name: "Perion", cost: 1000 },
-        { mapId: 103000000, name: "Kerning City", cost: 1000 },
-        { mapId: 104000000, name: "Lith Harbor", cost: 800 },
-        { mapId: 120000000, name: "Nautilus Harbor", cost: 1200 }
-      ];
-      
-      // Remove the current map from destinations
-      this.taxiDestinations = victoriaDestinations.filter(dest => dest.mapId !== currentMapId);
-    }
-    // Ossyria Taxi destinations (200000000 series)
-    else if (firstDigit === 2) {
-      const ossyriaDestinations = [
-        { mapId: 200000000, name: "Orbis", cost: 1200 },
-        { mapId: 211000000, name: "El Nath", cost: 1200 },
-        { mapId: 220000000, name: "Ludibrium", cost: 1200 },
-        { mapId: 221000000, name: "Omega Sector", cost: 1500 },
-        { mapId: 222000000, name: "Korean Folk Town", cost: 1500 },
-        { mapId: 230000000, name: "Aquarium", cost: 1500 },
-        { mapId: 240000000, name: "Leafre", cost: 1500 },
-        { mapId: 250000000, name: "Mu Lung", cost: 1500 },
-        { mapId: 251000000, name: "Herb Town", cost: 1500 }
-      ];
-      
-      // Remove the current map from destinations
-      this.taxiDestinations = ossyriaDestinations.filter(dest => dest.mapId !== currentMapId);
-    }
-    // Default case: if we're in an unknown area, offer a mix of popular destinations
-    else {
-      this.taxiDestinations = [
-        { mapId: 100000000, name: "Henesys", cost: 1500 },
-        { mapId: 101000000, name: "Ellinia", cost: 1500 },
-        { mapId: 102000000, name: "Perion", cost: 1500 },
-        { mapId: 103000000, name: "Kerning City", cost: 1500 },
-        { mapId: 104000000, name: "Lith Harbor", cost: 1500 },
-        { mapId: 200000000, name: "Orbis", cost: 2000 },
-        { mapId: 211000000, name: "El Nath", cost: 2000 },
-        { mapId: 220000000, name: "Ludibrium", cost: 2000 }
-      ];
-    }
+    // Remove the current map from destinations
+    this.taxiDestinations = victoriaDestinations.filter(dest => dest.mapId !== currentMapId);
   }
+  // Ossyria Taxi destinations (200000000 series)
+  else if (firstDigit === 2) {
+    const ossyriaDestinations = [
+      { mapId: 200000000, name: "Orbis", cost: 1200 },
+      { mapId: 211000000, name: "El Nath", cost: 1200 },
+      { mapId: 220000000, name: "Ludibrium", cost: 1200 },
+      { mapId: 221000000, name: "Omega Sector", cost: 1500 },
+      { mapId: 230000000, name: "Aquarium", cost: 1500 },
+      { mapId: 240000000, name: "Leafre", cost: 1500 }
+    ];
+    
+    // Remove the current map from destinations
+    this.taxiDestinations = ossyriaDestinations.filter(dest => dest.mapId !== currentMapId);
+  }
+  // Default case: if we're in an unknown area, offer a mix of popular destinations
+  else {
+    this.taxiDestinations = [
+      { mapId: 100000000, name: "Henesys", cost: 1500 },
+      { mapId: 101000000, name: "Ellinia", cost: 1500 },
+      { mapId: 102000000, name: "Perion", cost: 1500 },
+      { mapId: 103000000, name: "Kerning City", cost: 1500 },
+      { mapId: 104000000, name: "Lith Harbor", cost: 1500 },
+      { mapId: 200000000, name: "Orbis", cost: 2000 }
+    ];
+  }
+  
+  // Always ensure we have at least one destination
+  if (this.taxiDestinations.length === 0) {
+    console.warn("No valid destinations found, adding default destinations");
+    this.taxiDestinations = [
+      { mapId: 100000000, name: "Henesys", cost: 1000 },
+      { mapId: 104000000, name: "Lith Harbor", cost: 800 }
+    ];
+  }
+  
+  console.log("Taxi destinations set up:", this.taxiDestinations);
+}
   
   // Handle taxi functionality when this NPC is clicked
   showTaxiDialog() {
-    if (!this.isTaxi || !window.ClickManager?.GameCanvas) return;
+    if (!this.isTaxi) return;
     
-    // Show the taxi UI with this NPC's destinations
-    TaxiUI.show(window.ClickManager.GameCanvas, this.taxiDestinations);
-    
-    // Hide NPC chat balloon when showing the taxi dialog
-    this.showDialog = false;
+    // Import both module dependencies directly to ensure they're available
+    import('./UI/TaxiUI').then(TaxiUIModule => {
+      const TaxiUI = TaxiUIModule.default;
+      
+      // Get the GameCanvas from the map's player character which is more reliably available
+      if (this.opts.map && this.opts.map.PlayerCharacter) {
+        // Use the UI's ClickManager instance which has the GameCanvas
+        import('./UI/ClickManager').then(ClickManagerModule => {
+          const ClickManager = ClickManagerModule.default;
+          if (ClickManager.GameCanvas) {
+            // Show the taxi UI with this NPC's destinations
+            console.log("Showing taxi dialog with destinations:", this.taxiDestinations);
+            TaxiUI.show(ClickManager.GameCanvas, this.taxiDestinations);
+            
+            // Hide NPC chat balloon when showing the taxi dialog
+            this.showDialog = false;
+          } else {
+            console.error("Could not access GameCanvas for taxi dialog");
+            // Fallback to showing dialog
+            this.showDialog = true;
+          }
+        });
+      } else {
+        console.error("Could not access map or player character for taxi dialog");
+        // Fallback to showing dialog
+        this.showDialog = true;
+      }
+    });
   }
 
   loadStance(wzNode: any = {}, stance: string = "stand") {
@@ -474,273 +509,266 @@ class NPC {
   }
 
   // Draw a MapleStory style chat balloon using ChatBalloon.img (9-slice + arrow).
-  drawChatBalloon(canvas: GameCanvas, camera: CameraInterface) {
-    if (!this.chatBalloon) return;
-    
-    // CRITICAL: All drawing in this method must use screen coordinates
-    // Screen coordinates = world coordinates - camera position
-    // This ensures everything moves together with the camera
+  // In NPC.ts, replace the drawChatBalloon method with this fixed version
 
-    // Get the NPC's dialogue text
-    let text = "";
-    
-    // If we have a list of dialogues, select one randomly
-    if (this.strings.dialogues && this.strings.dialogues.length > 0) {
-      // Use a consistent dialogue selection based on time
-      const dialogueIndex = Math.floor(Date.now() / this.dialogDuration) % this.strings.dialogues.length;
-      text = this.strings.dialogues[dialogueIndex];
-    }
-    // Fallback to speak property if no dialogues or if already set
-    else if (this.strings.speak) {
-      text = this.strings.speak;
-    }
-    // If nothing else is available, use name for greeting
-    else if (this.strings.name) {
-      if (this.strings.func) {
-        text = `Hello, I am ${this.strings.name}, the ${this.strings.func}!`;
-      } else {
-        text = `Hello, I am ${this.strings.name}!`;
-      }
-    } 
-    // Ultimate fallback
-    else {
-      text = "Hello, traveler!";
-    }
+drawChatBalloon(canvas: GameCanvas, camera: CameraInterface) {
+  // Check if we have the chat balloon images and if we should show the dialog
+  if (!this.chatBalloon || !this.showDialog) return;
+  
+  // CRITICAL: All drawing in this method must use screen coordinates
+  // Screen coordinates = world coordinates - camera position
+  // This ensures everything moves together with the camera
 
-    // Check if the text is too long and wrap it
-    const maxWidth = 160; // Maximum width in pixels
-    const words = text.split(' ');
-    const lines = [];
-    let currentLine = '';
-
-    for (const word of words) {
-      const testLine = currentLine ? `${currentLine} ${word}` : word;
-      const testOpts = { text: testLine, fontSize: 12 };
-      const testWidth = canvas.measureText(testOpts).width;
-      
-      if (testWidth > maxWidth) {
-        lines.push(currentLine);
-        currentLine = word;
-      } else {
-        currentLine = testLine;
-      }
-    }
-    
-    if (currentLine) {
-      lines.push(currentLine);
-    }
-
-    // Calculate balloon dimensions based on wrapped text
-    const textHeight = 16; // approximate line height
-    const totalTextHeight = textHeight * lines.length;
-    const paddingX = 12;
-    const paddingY = 8;
-    
-    // Find the widest line for the balloon width
-    let maxLineWidth = 0;
-    for (const line of lines) {
-      const lineOpts = { text: line, fontSize: 12 };
-      const lineWidth = canvas.measureText(lineOpts).width;
-      maxLineWidth = Math.max(maxLineWidth, lineWidth);
-    }
-
-    // The total balloon size is text size + padding
-    // Ensure we have enough padding for the 9-slice corners
-    const cornerSize = 6;
-    const minWidth = 100;
-    const minHeight = 40;
-    
-    // Add extra padding to ensure corners don't get cut off
-    const balloonW = Math.max(maxLineWidth + paddingX * 2 + cornerSize * 2, minWidth); 
-    const balloonH = Math.max(totalTextHeight + paddingY * 2 + cornerSize * 2, minHeight);
-
-    // ESSENTIAL FIX: Convert NPC world coordinates to screen coordinates
-    // Both the balloon and arrow MUST use the same coordinate system
-    // This ensures they move together as one unit
-    const npcScreenX = this.x - camera.x;
-    const npcScreenY = this.cy - camera.y;
-    
-    // Keep pos property synced (not directly related to balloon issue)
-    this.pos.x = this.x; 
-    this.pos.y = this.cy;
-
-    // let's define top-left corner
-    // We’ll shift the balloon up 40 px, say, plus half of the balloon height
-    // CRITICAL FIX: Position balloon based on NPC's screen coordinates
-    // This ensures the balloon and arrow stay aligned properly when camera moves
-    const canvasWidth = canvas.width || 800;
-    const canvasHeight = canvas.height || 600;
-    
-    // Center balloon horizontally above NPC
-    const balloonCenterX = npcScreenX;
-    const balloonX = Math.max(20, Math.min(canvasWidth - balloonW - 20, balloonCenterX - balloonW / 2));
-    
-    // Position balloon at a fixed offset above the NPC rather than absolute position
-    const offsetY = 120; // Distance above NPC head
-    const balloonY = Math.max(20, Math.min(canvasHeight - balloonH - 20, npcScreenY - offsetY));
-
-    // The corners in style0 are typically 6x6,
-    // edges are typically 12 wide or 6 wide, etc.
-    // We'll draw corners, edges, center, arrow. 
-    // For a variable size balloon, we tile edges if needed.
-
-    // 1) corners
-    // NW corner
-    canvas.drawImage({
-      img: this.chatBalloon.nw,
-      dx: balloonX,
-      dy: balloonY,
-    });
-    // NE corner
-    canvas.drawImage({
-      img: this.chatBalloon.ne,
-      dx: balloonX + balloonW - cornerSize,
-      dy: balloonY,
-    });
-    // SW corner
-    canvas.drawImage({
-      img: this.chatBalloon.sw,
-      dx: balloonX,
-      dy: balloonY + balloonH - cornerSize,
-    });
-    // SE corner
-    canvas.drawImage({
-      img: this.chatBalloon.se,
-      dx: balloonX + balloonW - cornerSize,
-      dy: balloonY + balloonH - cornerSize,
-    });
-
-    // 2) top edge
-    const topEdgeWidth = balloonW - cornerSize * 2;
-    // The "n" piece is 12 wide (?), we can tile it horizontally
-    let tileX = balloonX + cornerSize;
-    const tileY_top = balloonY;
-    const nImg = this.chatBalloon.n; // top edge
-    const nImgW = nImg.width; // typically 12 or so
-    while (tileX < balloonX + balloonW - cornerSize) {
-      const drawW = Math.min(nImgW, balloonX + balloonW - cornerSize - tileX);
-      canvas.drawImage({
-        img: nImg,
-        sx: 0,
-        sy: 0,
-        sWidth: drawW,
-        sHeight: nImg.height,
-        dx: tileX,
-        dy: tileY_top,
-        dWidth: drawW,
-        dHeight: nImg.height,
-      });
-      tileX += drawW;
-    }
-
-    // 3) bottom edge
-    const sImg = this.chatBalloon.s; // bottom edge
-    const sImgW = sImg.width;
-    tileX = balloonX + cornerSize;
-    const tileY_bottom = balloonY + balloonH - sImg.height; 
-    while (tileX < balloonX + balloonW - cornerSize) {
-      const drawW = Math.min(sImgW, balloonX + balloonW - cornerSize - tileX);
-      canvas.drawImage({
-        img: sImg,
-        sx: 0,
-        sy: 0,
-        dx: tileX,
-        dy: tileY_bottom,
-      });
-      tileX += drawW;
-    }
-
-    // 4) left edge
-    const wImg = this.chatBalloon.w;
-    const wImgH = wImg.height;
-    let tileY = balloonY + cornerSize;
-    while (tileY < balloonY + balloonH - cornerSize) {
-      const drawH = Math.min(wImgH, balloonY + balloonH - cornerSize - tileY);
-      canvas.drawImage({
-        img: wImg,
-        sx: 0,
-        sy: 0,
-        dx: balloonX,
-        dy: tileY,
-      });
-      tileY += drawH;
-    }
-
-    // 5) right edge
-    const eImg = this.chatBalloon.e;
-    const eImgH = eImg.height;
-    tileY = balloonY + cornerSize;
-    const rightX = balloonX + balloonW - eImg.width;
-    while (tileY < balloonY + balloonH - cornerSize) {
-      const drawH = Math.min(eImgH, balloonY + balloonH - cornerSize - tileY);
-      canvas.drawImage({
-        img: eImg,
-        sx: 0,
-        sy: 0,
-        dx: rightX,
-        dy: tileY,
-      });
-      tileY += drawH;
-    }
-
-    // 6) center fill
-    const cImg = this.chatBalloon.c;
-    const centerX = balloonX + cornerSize;
-    const centerY = balloonY + cornerSize;
-    const centerW = balloonW - cornerSize * 2;
-    const centerH = balloonH - cornerSize * 2;
-
-    // We'll tile the "c" image to fill the rectangle if needed
-    const cImgW = cImg.width;
-    const cImgH = cImg.height;
-    let fillY = centerY;
-    while (fillY < centerY + centerH) {
-      let fillX = centerX;
-      const rowH = Math.min(cImgH, centerY + centerH - fillY);
-      while (fillX < centerX + centerW) {
-        const colW = Math.min(cImgW, centerX + centerW - fillX);
-        canvas.drawImage({
-          img: cImg,
-          sx: 0,
-          sy: 0,
-          dx: fillX,
-          dy: fillY,
-        });
-        fillX += colW;
-      }
-      fillY += rowH;
-    }
-
-    // 7) arrow - pointing from balloon to NPC
-    const arrowImg = this.chatBalloon.arrow;
-    const arrowW = arrowImg.width;
-    const arrowH = arrowImg.height;
-    
-    // Position arrow directly above NPC, attached to the balloon bottom
-    // CRITICAL FIX: Make sure arrow is ALWAYS centered above the NPC, regardless of balloon position
-    const arrowX = npcScreenX - arrowW / 2; // Center aligned with NPC
-    const arrowY = balloonY + balloonH - 1; // Connect arrow to balloon bottom edge
-    canvas.drawImage({
-      img: arrowImg,
-      dx: arrowX,
-      dy: arrowY,
-    });
-
-    // 8) Draw the wrapped text
-    const lineStartY = balloonY + paddingY + 2; // Add a slight offset from top
-    
-    lines.forEach((line, index) => {
-      canvas.drawText({
-        text: line,
-        x: balloonX + balloonW / 2,
-        y: lineStartY + (index * textHeight),
-        color: "#000000",
-        align: "center",
-        fontSize: 12,
-        fontWeight: "normal",
-      });
-    });
+  // Get the NPC's screen position (world position adjusted for camera)
+  const npcScreenX = this.x - camera.x;
+  const npcScreenY = this.cy - camera.y;
+  
+  // Get the dialogue text correctly from this.strings.speak or dialogues
+  let text = "";
+  
+  // If we have a list of dialogues, select one randomly
+  if (this.strings.dialogues && this.strings.dialogues.length > 0) {
+    // Use a consistent dialogue selection based on time
+    const dialogueIndex = Math.floor(Date.now() / this.dialogDuration) % this.strings.dialogues.length;
+    text = this.strings.dialogues[dialogueIndex];
   }
+  // Fallback to speak property if no dialogues or if already set
+  else if (this.strings.speak) {
+    text = this.strings.speak;
+  }
+  // If nothing else is available, use name for greeting
+  else if (this.strings.name) {
+    if (this.strings.func) {
+      text = `Hello, I am ${this.strings.name}, the ${this.strings.func}!`;
+    } else {
+      text = `Hello, I am ${this.strings.name}!`;
+    }
+  } 
+  // Ultimate fallback
+  else {
+    text = "Hello, traveler!";
+  }
+
+  // Check if the text is too long and wrap it
+  const maxWidth = 160; // Maximum width in pixels
+  const words = text.split(' ');
+  const lines = [];
+  let currentLine = '';
+
+  for (const word of words) {
+    const testLine = currentLine ? `${currentLine} ${word}` : word;
+    const testOpts = { text: testLine, fontSize: 12 };
+    const testWidth = canvas.measureText(testOpts).width;
+    
+    if (testWidth > maxWidth) {
+      lines.push(currentLine);
+      currentLine = word;
+    } else {
+      currentLine = testLine;
+    }
+  }
+  
+  if (currentLine) {
+    lines.push(currentLine);
+  }
+
+  // Calculate balloon dimensions based on wrapped text
+  const textHeight = 16; // approximate line height
+  const totalTextHeight = textHeight * lines.length;
+  const paddingX = 12;
+  const paddingY = 8;
+  
+  // Find the widest line for the balloon width
+  let maxLineWidth = 0;
+  for (const line of lines) {
+    const lineOpts = { text: line, fontSize: 12 };
+    const lineWidth = canvas.measureText(lineOpts).width;
+    maxLineWidth = Math.max(maxLineWidth, lineWidth);
+  }
+
+  // The total balloon size is text size + padding
+  // Ensure we have enough padding for the 9-slice corners
+  const cornerSize = 6;
+  const minWidth = 100;
+  const minHeight = 40;
+  
+  // Add extra padding to ensure corners don't get cut off
+  const balloonW = Math.max(maxLineWidth + paddingX * 2 + cornerSize * 2, minWidth); 
+  const balloonH = Math.max(totalTextHeight + paddingY * 2 + cornerSize * 2, minHeight);
+
+  // Position balloon above NPC, using screen coordinates
+  // Get canvas dimensions for bounds checking
+  const canvasWidth = canvas.game?.width || 800;
+  const canvasHeight = canvas.game?.height || 600;
+  
+  // Center balloon horizontally above NPC
+  const balloonCenterX = npcScreenX;
+  const balloonX = Math.max(20, Math.min(canvasWidth - balloonW - 20, balloonCenterX - balloonW / 2));
+  
+  // Position balloon at a fixed offset above the NPC
+  const offsetY = 120; // Distance above NPC head
+  const balloonY = Math.max(20, Math.min(canvasHeight - balloonH - 20, npcScreenY - offsetY));
+
+  // Draw the balloon parts using 9-slice
+  // 1) Draw corners
+  canvas.drawImage({
+    img: this.chatBalloon.nw,
+    dx: balloonX,
+    dy: balloonY,
+  });
+  
+  canvas.drawImage({
+    img: this.chatBalloon.ne,
+    dx: balloonX + balloonW - cornerSize,
+    dy: balloonY,
+  });
+  
+  canvas.drawImage({
+    img: this.chatBalloon.sw,
+    dx: balloonX,
+    dy: balloonY + balloonH - cornerSize,
+  });
+  
+  canvas.drawImage({
+    img: this.chatBalloon.se,
+    dx: balloonX + balloonW - cornerSize,
+    dy: balloonY + balloonH - cornerSize,
+  });
+
+  // 2) Draw top edge (tile horizontally)
+  let tileX = balloonX + cornerSize;
+  const tileY_top = balloonY;
+  const nImg = this.chatBalloon.n;
+  const nImgW = nImg.width;
+  
+  while (tileX < balloonX + balloonW - cornerSize) {
+    const drawW = Math.min(nImgW, balloonX + balloonW - cornerSize - tileX);
+    canvas.drawImage({
+      img: nImg,
+      sx: 0,
+      sy: 0,
+      sWidth: drawW,
+      sHeight: nImg.height,
+      dx: tileX,
+      dy: tileY_top,
+      dWidth: drawW,
+      dHeight: nImg.height,
+    });
+    tileX += drawW;
+  }
+
+  // 3) Draw bottom edge (tile horizontally)
+  const sImg = this.chatBalloon.s;
+  const sImgW = sImg.width;
+  tileX = balloonX + cornerSize;
+  const tileY_bottom = balloonY + balloonH - sImg.height;
+  
+  while (tileX < balloonX + balloonW - cornerSize) {
+    const drawW = Math.min(sImgW, balloonX + balloonW - cornerSize - tileX);
+    canvas.drawImage({
+      img: sImg,
+      sx: 0,
+      sy: 0,
+      dx: tileX,
+      dy: tileY_bottom,
+    });
+    tileX += drawW;
+  }
+
+  // 4) Draw left edge (tile vertically)
+  const wImg = this.chatBalloon.w;
+  const wImgH = wImg.height;
+  let tileY = balloonY + cornerSize;
+  
+  while (tileY < balloonY + balloonH - cornerSize) {
+    const drawH = Math.min(wImgH, balloonY + balloonH - cornerSize - tileY);
+    canvas.drawImage({
+      img: wImg,
+      sx: 0,
+      sy: 0,
+      dx: balloonX,
+      dy: tileY,
+    });
+    tileY += drawH;
+  }
+
+  // 5) Draw right edge (tile vertically)
+  const eImg = this.chatBalloon.e;
+  const eImgH = eImg.height;
+  tileY = balloonY + cornerSize;
+  const rightX = balloonX + balloonW - eImg.width;
+  
+  while (tileY < balloonY + balloonH - cornerSize) {
+    const drawH = Math.min(eImgH, balloonY + balloonH - cornerSize - tileY);
+    canvas.drawImage({
+      img: eImg,
+      sx: 0,
+      sy: 0,
+      dx: rightX,
+      dy: tileY,
+    });
+    tileY += drawH;
+  }
+
+  // 6) Draw center (tile both horizontally and vertically)
+  const cImg = this.chatBalloon.c;
+  const centerX = balloonX + cornerSize;
+  const centerY = balloonY + cornerSize;
+  const centerW = balloonW - cornerSize * 2;
+  const centerH = balloonH - cornerSize * 2;
+  
+  const cImgW = cImg.width;
+  const cImgH = cImg.height;
+  let fillY = centerY;
+  
+  while (fillY < centerY + centerH) {
+    let fillX = centerX;
+    const rowH = Math.min(cImgH, centerY + centerH - fillY);
+    
+    while (fillX < centerX + centerW) {
+      const colW = Math.min(cImgW, centerX + centerW - fillX);
+      canvas.drawImage({
+        img: cImg,
+        sx: 0,
+        sy: 0,
+        dx: fillX,
+        dy: fillY,
+      });
+      fillX += colW;
+    }
+    fillY += rowH;
+  }
+
+  // 7) Draw arrow pointing to NPC
+  const arrowImg = this.chatBalloon.arrow;
+  const arrowW = arrowImg.width;
+  const arrowH = arrowImg.height;
+  
+  // CRITICAL: Position arrow directly above NPC, not relative to balloon
+  const arrowX = npcScreenX - arrowW / 2; // Center aligned with NPC
+  const arrowY = balloonY + balloonH - 1; // Connect to bottom of balloon
+  
+  canvas.drawImage({
+    img: arrowImg,
+    dx: arrowX,
+    dy: arrowY,
+  });
+
+  // 8) Draw text lines centered in balloon
+  const lineStartY = balloonY + paddingY + 2;
+  
+  lines.forEach((line, index) => {
+    canvas.drawText({
+      text: line,
+      x: balloonX + balloonW / 2, // Center horizontally
+      y: lineStartY + (index * textHeight),
+      color: "#000000",
+      align: "center",
+      fontSize: 12,
+      fontWeight: "normal",
+    });
+  });
+}
 
   updateTvAd(msPerTick: number) {
     if (!!this.mapleTv) {
@@ -755,73 +783,79 @@ class NPC {
     }
   }
 
-  update(msPerTick: number) {
-    // Animate NPC stance
-    this.delay += msPerTick;
-    if (this.delay > this.nextDelay) {
-      this.setFrame(this.stance, this.frame + 1, this.delay - this.nextDelay);
-    }
+  // In NPC.ts, replace the update method with this fixed version
 
-    // CRITICAL: Ensure position consistency - this keeps balloons properly positioned
-    this.pos.x = this.x;
-    this.pos.y = this.cy;
+update(msPerTick: number) {
+  // Animate NPC stance
+  this.delay += msPerTick;
+  if (this.delay > this.nextDelay) {
+    this.setFrame(this.stance, this.frame + 1, this.delay - this.nextDelay);
+  }
 
-    // MapleTV animation
-    this.updateTvAd(msPerTick);
+  // CRITICAL: Ensure position consistency for balloons
+  this.pos.x = this.x;
+  this.pos.y = this.cy;
+
+  // MapleTV animation if present
+  this.updateTvAd(msPerTick);
+  
+  // Global limit on how many NPCs can talk at once
+  const MAX_TALKING_NPCS = 1; // Only allow one NPC to talk at a time
+  
+  // If this NPC is already showing a dialog, update its timer
+  if (this.showDialog) {
+    this.dialogTimer += msPerTick;
     
-    // Global limit on how many NPCs can talk at once
-    const MAX_TALKING_NPCS = 1; // Only allow one NPC to talk at a time
+    // If we've shown dialog for long enough, hide it
+    if (this.dialogTimer - this.lastDialogTime > this.dialogDuration) {
+      this.showDialog = false;
+      // Reset the timer for the next conversation
+      this.dialogTimer = 0;
+    }
+    return; // Skip the rest of the logic if already showing dialog
+  }
+  
+  // Skip dialog updates for taxi NPCs - they don't show automatic dialogue
+  if (this.isTaxi) return;
+  
+  // Update dialog timer for NPCs with dialogue
+  if (this.strings && (this.strings.speak || (this.strings.dialogues && this.strings.dialogues.length > 0))) {
+    this.dialogTimer += msPerTick;
     
-    // If this NPC is already showing a dialog, update its timer
-    if (this.showDialog) {
-      this.dialogTimer += msPerTick;
-      // If we've shown dialog for long enough, hide it
-      if (this.dialogTimer - this.lastDialogTime > this.dialogDuration) {
-        this.showDialog = false;
-        // Reset the timer for the next conversation
-        this.dialogTimer = 0;
+    // Add a random initial delay for each NPC to prevent all NPCs from talking at once
+    if (!this.initialDelayPassed) {
+      // Calculate a unique delay based on NPC ID to stagger conversations
+      const initialDelay = 2000 + (this.id % 6) * 1000;
+      if (this.dialogTimer > initialDelay) {
+        this.initialDelayPassed = true;
+        // Randomize the dialog timer so NPCs don't all get in sync
+        this.dialogTimer = Math.random() * this.dialogInterval;
       }
-      return; // Skip the rest of the logic if already showing dialog
+      return;
     }
     
-    // Update dialog timer for NPCs with dialogue
-    if (this.strings.speak) {
-      this.dialogTimer += msPerTick;
-      
-      // Add a random initial delay (between 2-8s) for each NPC to prevent all NPCs from talking at once
-      if (!this.initialDelayPassed) {
-        // Calculate a unique delay based on NPC ID to stagger conversations
-        const initialDelay = 2000 + (this.id % 6) * 1000;
-        if (this.dialogTimer > initialDelay) {
-          this.initialDelayPassed = true;
-          // Randomize the dialog timer so NPCs don't all get in sync
-          this.dialogTimer = Math.random() * this.dialogInterval;
-        }
-        return;
-      }
-      
-      // Check if dialog should be shown
-      if (!this.showDialog) {
-        // If we haven't shown dialog in a while, show it, but only if we're allowed
-        if (this.dialogTimer > this.dialogInterval) {
-          // Get all NPCs from the MapleMap
-          // Skip showing dialog if we already have too many NPCs showing dialog
-          const map = this.opts.map; // Access the map through the opts
-          if (map && map.npcs) {
-            const talkingNPCs = map.npcs.filter((npc: any) => npc.showDialog).length;
-            if (talkingNPCs < MAX_TALKING_NPCS) {
-              this.showDialog = true;
-              this.lastDialogTime = this.dialogTimer;
-            }
-          } else {
-            // If we can't check other NPCs, just show dialog
+    // Check if dialog should be shown
+    if (!this.showDialog) {
+      // If we haven't shown dialog in a while, show it (only if we're allowed)
+      if (this.dialogTimer > this.dialogInterval) {
+        // Get all NPCs from the MapleMap
+        // Skip showing dialog if we already have too many NPCs showing dialog
+        const map = this.opts.map; // Access the map through the opts
+        if (map && map.npcs) {
+          const talkingNPCs = map.npcs.filter((npc: any) => npc.showDialog).length;
+          if (talkingNPCs < MAX_TALKING_NPCS) {
             this.showDialog = true;
             this.lastDialogTime = this.dialogTimer;
           }
+        } else {
+          // If we can't check other NPCs, just show dialog
+          this.showDialog = true;
+          this.lastDialogTime = this.dialogTimer;
         }
       }
     }
   }
+}
 }
 
 export default NPC;

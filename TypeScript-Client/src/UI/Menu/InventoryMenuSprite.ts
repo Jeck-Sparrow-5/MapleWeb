@@ -7,6 +7,7 @@ import { MapleInventoryType } from "../../Constants/Inventory/MapleInventory";
 import { CameraInterface } from "../../Camera";
 import { Position } from "../../Effects/DamageIndicator";
 import GameCanvas from "../../GameCanvas";
+import DropItemSprite from "../../DropItem/DropItemSprite";
 
 class InventoryMenuSprite extends DragableMenu {
   opts: any;
@@ -17,6 +18,7 @@ class InventoryMenuSprite extends DragableMenu {
   isNotFirstDraw: boolean = false;
   destroyed: boolean = false;
   delay: number = 0;
+  map: any;
   id: number = 0;
   originalX: number = 0;
   originalY: number = 0;
@@ -45,6 +47,7 @@ class InventoryMenuSprite extends DragableMenu {
     this.isHidden = opts.isHidden;
     this.charecter = opts.charecter;
 
+
     try {
       this.inventoryNode = await WZManager.get(`${WZFiles.UI}/UIWindow.img/Item`);
       console.log("Loaded inventory UI node:", this.inventoryNode);
@@ -58,6 +61,48 @@ class InventoryMenuSprite extends DragableMenu {
     // Load the full composite background image.
     await this.loadBackground();
     ClickManager.addDragableMenu(this);
+  }
+
+  async dropMesos(amount: number = 10) {
+    console.log(this.charecter);
+    if (this.charecter.inventory.mesos < amount) {
+      console.warn("Not enough mesos to drop.");
+      return;
+    }
+  
+    const dropPosition = {
+      x: this.charecter.pos.x,
+      y: this.charecter.pos.y,
+      vx: 0,
+      vy: 0,
+    };
+  
+    try {
+      // Reduce mesos from inventory
+      this.charecter.inventory.mesos -= amount;
+      
+      // Create a DropItemSprite for the mesos
+      const mesosDrop = await DropItemSprite.fromOpts({
+        id: 0, // 0 is used for mesos in the DropItemSprite class
+        amount: amount,
+        monster: {
+          pos: {
+            x: this.charecter.pos.x,
+            y: this.charecter.pos.y - 20, // Drop slightly above character
+            vx: 0,
+            vy: 0
+          }
+        }
+      });
+      
+      // Add the drop to the map
+      if (this.charecter.map && !mesosDrop.destroyed) {
+        this.charecter.map.addItemDrop(mesosDrop);
+        console.log(`Dropped ${amount} mesos`);
+      }
+    } catch (err) {
+      console.error("Error dropping mesos:", err);
+    }
   }
 
   async loadBackground() {
@@ -380,7 +425,7 @@ class InventoryMenuSprite extends DragableMenu {
           isRelativeToCamera: true,
           isPartOfUI: true,
           onClick: () => {
-            console.log("drop meso not implemented");
+            this.showMesoDropDialog();
           },
         });
         ClickManager.addButton(dropMesoButton);
@@ -404,6 +449,181 @@ class InventoryMenuSprite extends DragableMenu {
     this.loadBackground();
     this.originalX = position.x;
     this.originalY = position.y;
+  }
+  
+  // Custom MapleStory-style meso drop dialog
+  showMesoDropDialog() {
+    // Create a div to overlay the entire page
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    overlay.style.zIndex = '1000';
+    overlay.style.display = 'flex';
+    overlay.style.justifyContent = 'center';
+    overlay.style.alignItems = 'center';
+    
+    // Create the dialog box
+    const dialogBox = document.createElement('div');
+    dialogBox.style.width = '250px';
+    dialogBox.style.padding = '10px';
+    dialogBox.style.backgroundColor = '#EBE2CA';
+    dialogBox.style.border = '2px solid #A67C52';
+    dialogBox.style.borderRadius = '5px';
+    dialogBox.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
+    dialogBox.style.display = 'flex';
+    dialogBox.style.flexDirection = 'column';
+    dialogBox.style.alignItems = 'center';
+    dialogBox.style.position = 'relative';
+    
+    // Add title
+    const title = document.createElement('div');
+    title.textContent = 'Drop Mesos';
+    title.style.width = '100%';
+    title.style.color = '#4A2511';
+    title.style.fontWeight = 'bold';
+    title.style.marginBottom = '10px';
+    title.style.textAlign = 'center';
+    title.style.fontSize = '14px';
+    dialogBox.appendChild(title);
+    
+    // Add close button
+    const closeButton = document.createElement('div');
+    closeButton.innerHTML = '&times;';
+    closeButton.style.position = 'absolute';
+    closeButton.style.top = '5px';
+    closeButton.style.right = '10px';
+    closeButton.style.cursor = 'pointer';
+    closeButton.style.fontSize = '18px';
+    closeButton.style.color = '#4A2511';
+    closeButton.style.fontWeight = 'bold';
+    closeButton.onclick = () => {
+      document.body.removeChild(overlay);
+    };
+    dialogBox.appendChild(closeButton);
+    
+    // Add message
+    const message = document.createElement('div');
+    message.textContent = 'How many mesos would you like to drop?';
+    message.style.width = '100%';
+    message.style.color = '#4A2511';
+    message.style.marginBottom = '10px';
+    message.style.textAlign = 'center';
+    message.style.fontSize = '12px';
+    dialogBox.appendChild(message);
+    
+    // Add input field
+    const inputContainer = document.createElement('div');
+    inputContainer.style.display = 'flex';
+    inputContainer.style.alignItems = 'center';
+    inputContainer.style.marginBottom = '15px';
+    
+    const mesoIcon = document.createElement('div');
+    mesoIcon.textContent = '💰';
+    mesoIcon.style.marginRight = '5px';
+    mesoIcon.style.fontSize = '16px';
+    inputContainer.appendChild(mesoIcon);
+    
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.value = '10';
+    input.min = '1';
+    input.max = this.charecter.inventory.mesos.toString();
+    input.style.width = '150px';
+    input.style.padding = '5px';
+    input.style.border = '1px solid #A67C52';
+    input.style.borderRadius = '3px';
+    input.style.backgroundColor = '#F5F0E0';
+    input.style.color = '#4A2511';
+    input.style.fontSize = '12px';
+    input.style.textAlign = 'right';
+    inputContainer.appendChild(input);
+    
+    dialogBox.appendChild(inputContainer);
+    
+    // Add max button
+    const maxButton = document.createElement('button');
+    maxButton.textContent = 'Max';
+    maxButton.style.padding = '3px 10px';
+    maxButton.style.backgroundColor = '#D0A870';
+    maxButton.style.border = '1px solid #A67C52';
+    maxButton.style.borderRadius = '3px';
+    maxButton.style.color = '#4A2511';
+    maxButton.style.marginBottom = '15px';
+    maxButton.style.cursor = 'pointer';
+    maxButton.style.fontSize = '12px';
+    maxButton.onclick = () => {
+      input.value = this.charecter.inventory.mesos.toString();
+    };
+    dialogBox.appendChild(maxButton);
+    
+    // Add buttons container
+    const buttonsContainer = document.createElement('div');
+    buttonsContainer.style.display = 'flex';
+    buttonsContainer.style.justifyContent = 'space-between';
+    buttonsContainer.style.width = '100%';
+    
+    // Add OK button
+    const okButton = document.createElement('button');
+    okButton.textContent = 'OK';
+    okButton.style.padding = '5px 20px';
+    okButton.style.backgroundColor = '#D0A870';
+    okButton.style.border = '1px solid #A67C52';
+    okButton.style.borderRadius = '3px';
+    okButton.style.color = '#4A2511';
+    okButton.style.cursor = 'pointer';
+    okButton.style.fontSize = '12px';
+    okButton.onclick = () => {
+      const amount = parseInt(input.value);
+      if (amount > 0 && amount <= this.charecter.inventory.mesos) {
+        document.body.removeChild(overlay);
+        this.dropMesos(amount);
+      } else if (amount <= 0) {
+        message.textContent = 'Please enter a valid amount!';
+        message.style.color = '#CC0000';
+      } else {
+        message.textContent = 'You don\'t have enough mesos!';
+        message.style.color = '#CC0000';
+      }
+    };
+    buttonsContainer.appendChild(okButton);
+    
+    // Add Cancel button
+    const cancelButton = document.createElement('button');
+    cancelButton.textContent = 'Cancel';
+    cancelButton.style.padding = '5px 20px';
+    cancelButton.style.backgroundColor = '#D0A870';
+    cancelButton.style.border = '1px solid #A67C52';
+    cancelButton.style.borderRadius = '3px';
+    cancelButton.style.color = '#4A2511';
+    cancelButton.style.cursor = 'pointer';
+    cancelButton.style.fontSize = '12px';
+    cancelButton.onclick = () => {
+      document.body.removeChild(overlay);
+    };
+    buttonsContainer.appendChild(cancelButton);
+    
+    dialogBox.appendChild(buttonsContainer);
+    
+    // Add dialog to overlay
+    overlay.appendChild(dialogBox);
+    
+    // Add overlay to document
+    document.body.appendChild(overlay);
+    
+    // Focus the input field
+    input.focus();
+    input.select();
+    
+    // Submit on Enter key
+    input.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        okButton.click();
+      }
+    });
   }
 
   destroy() {

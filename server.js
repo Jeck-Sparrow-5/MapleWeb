@@ -160,9 +160,7 @@ function handlePlayerInfo(playerId, playerInfo) {
   const player = players.get(playerId);
   if (!player) return;
   
-  console.log(`Received player info for ${playerId}:`, playerInfo);
-  
-  // Always convert mapId to number
+  // ALWAYS convert mapId to number
   playerInfo.mapId = Number(playerInfo.mapId);
   
   // Update player info
@@ -171,47 +169,17 @@ function handlePlayerInfo(playerId, playerInfo) {
     id: playerId
   };
   
-  // Store map ID (as number) for filtering broadcasts
-  player.mapId = Number(playerInfo.mapId);
+  // Store map ID for filtering broadcasts
+  player.mapId = playerInfo.mapId;
   
-  console.log(`Player ${playerId} is in map ${player.mapId} (${typeof player.mapId})`);
-  console.log(`Total players in system: ${players.size}`);
-  
-  // Log all players in same map
-  console.log(`Players in map ${player.mapId}:`);
-  for (const [id, p] of players.entries()) {
-    if (Number(p.mapId) === Number(player.mapId)) {
-      console.log(`- Player ${id} (${p.info?.name || 'unnamed'})`);
-    }
-  }
-  
-  // Notify other players about the new player
+  // Notify other players in the same map about this player
   broadcastToMap(player.mapId, {
     type: 'player_joined',
     player: player.info
   }, playerId);
   
-  // Send the current player list to the new player
+  // Send player list to the new player
   sendPlayerList(playerId);
-  
-  // IMPORTANT: Make sure this player also knows about all other players
-  // This ensures that if two players connect almost simultaneously, they see each other
-  for (const [id, p] of players.entries()) {
-    if (id !== playerId && p.info && Number(p.mapId) === Number(player.mapId)) {
-      console.log(`Telling player ${playerId} about player ${id}`);
-      sendToPlayer(player.ws, {
-        type: 'player_joined',
-        player: p.info
-      });
-    }
-  }
-  
-  // Debug - Send player list to everyone to force refresh
-  for (const [id, p] of players.entries()) {
-    if (Number(p.mapId) === Number(player.mapId)) {
-      sendPlayerList(id);
-    }
-  }
 }
 
 // Handle player position and state updates
@@ -219,80 +187,71 @@ function handlePlayerUpdate(playerId, updateData) {
   const player = players.get(playerId);
   if (!player || !player.info) return;
   
-  try {
-    // Validate update data
-    if (!updateData || typeof updateData !== 'object') {
-      console.warn(`Invalid update data from player ${playerId}`);
-      return;
-    }
-    
-    // Ensure required fields exist
-    if (updateData.mapId === undefined) {
-      updateData.mapId = player.mapId || player.info.mapId;
-    }
-    
-    // Update player info with validation
-    const updatedInfo = { ...player.info };
-    
-    // Update position safely
-    if (typeof updateData.x === 'number' && !isNaN(updateData.x)) {
-      updatedInfo.x = updateData.x;
-    }
-    if (typeof updateData.y === 'number' && !isNaN(updateData.y)) {
-      updatedInfo.y = updateData.y;
-    }
-    
-    // Update other properties
-    if (updateData.stance) updatedInfo.stance = updateData.stance;
-    if (updateData.frame !== undefined) updatedInfo.frame = updateData.frame;
-    if (updateData.flipped !== undefined) updatedInfo.flipped = updateData.flipped;
-    if (updateData.attacking !== undefined) updatedInfo.attacking = updateData.attacking;
-    
-    // Save updated info
-    player.info = updatedInfo;
-    
-    // Track if player changed maps
-    const mapChanged = player.mapId !== updateData.mapId;
-    if (mapChanged) {
-      // Notify players in old map that player left
-      broadcastToMap(player.mapId, {
-        type: 'player_left',
-        id: playerId
-      }, playerId);
-      
-      // Update player's map
-      player.mapId = updateData.mapId;
-      
-      // Notify players in new map that player joined
-      broadcastToMap(player.mapId, {
-        type: 'player_joined',
-        player: player.info
-      }, playerId);
-      
-      // Send updated player list to the player
-      sendPlayerList(playerId);
-    } else {
-      // Use rate limiting for position updates to reduce network traffic
-      const now = Date.now();
-      const timeSinceLastBroadcast = now - (player.lastBroadcast || 0);
-      const broadcastInterval = 100; // milliseconds
-      
-      if (timeSinceLastBroadcast >= broadcastInterval) {
-        // Broadcast update to other players in the same map
-        broadcastToMap(player.mapId, {
-          type: 'player_update',
-          player: player.info
-        }, playerId);
-        
-        player.lastBroadcast = now;
-      }
-    }
-    
-    // Update last update time
-    player.lastUpdate = Date.now();
-  } catch (error) {
-    console.error(`Error handling player update for ${playerId}:`, error);
+  // Ensure mapId is always a number
+  if (updateData.mapId !== undefined) {
+    updateData.mapId = Number(updateData.mapId);
+  } else {
+    updateData.mapId = Number(player.mapId || player.info.mapId);
   }
+  
+  // Update player info
+  const updatedInfo = { ...player.info };
+  
+  // Update position
+  if (updateData.x !== undefined) updatedInfo.x = updateData.x;
+  if (updateData.y !== undefined) updatedInfo.y = updateData.y;
+  
+  // Update other properties
+  if (updateData.stance) updatedInfo.stance = updateData.stance;
+  if (updateData.frame !== undefined) updatedInfo.frame = updateData.frame;
+  if (updateData.flipped !== undefined) updatedInfo.flipped = updateData.flipped;
+  if (updateData.attacking !== undefined) updatedInfo.attacking = updateData.attacking;
+  
+  // Check if player changed maps
+  const currentMapId = Number(player.mapId);
+  const newMapId = updateData.mapId;
+  
+  if (currentMapId !== newMapId) {
+    console.log(`Player ${playerId} changed maps: ${currentMapId} -> ${newMapId}`);
+    
+    // Notify players in old map that this player left
+    broadcastToMap(currentMapId, {
+      type: 'player_left',
+      id: playerId
+    }, playerId);
+    
+    // Update map ID
+    player.mapId = newMapId;
+    updatedInfo.mapId = newMapId;
+    
+    // Notify players in new map about this player
+    broadcastToMap(newMapId, {
+      type: 'player_joined',
+      player: updatedInfo
+    }, playerId);
+    
+    // Send updated player list to this player
+    sendPlayerList(playerId);
+  } else {
+    // Rate limit broadcasts for position updates
+    const now = Date.now();
+    const timeSinceLastBroadcast = now - (player.lastBroadcast || 0);
+    const broadcastInterval = 100; // milliseconds
+    
+    if (timeSinceLastBroadcast >= broadcastInterval) {
+      // Broadcast update to players in same map
+      broadcastToMap(player.mapId, {
+        type: 'player_update',
+        player: updatedInfo
+      }, playerId);
+      
+      player.lastBroadcast = now;
+    }
+  }
+  
+  // Save updated info
+  player.info = updatedInfo;
+  player.lastUpdate = Date.now();
 }
 
 // Handle monster damage
@@ -358,19 +317,16 @@ function sendPlayerList(playerId) {
   const player = players.get(playerId);
   if (!player || !player.ws) return;
   
-  console.log(`Sending player list to ${playerId} in map ${player.mapId}`);
+  // Get player's current map ID
+  const playerMapId = Number(player.mapId);
   
-  // Collect all players' info
+  // Filter players in the same map
   const playerList = [];
   for (const [id, p] of players.entries()) {
-    // Only include players with info
-    if (p.info) {
-      console.log(`Adding player ${id} to list with mapId=${p.info.mapId}`);
+    if (p.info && Number(p.mapId) === playerMapId) {
       playerList.push(p.info);
     }
   }
-  
-  console.log(`Total players in list: ${playerList.length}`);
   
   // Send player list
   sendToPlayer(player.ws, {
@@ -391,27 +347,29 @@ function sendToPlayer(ws, message) {
 }
 
 // Broadcast message to all players in a map
+// Key changes to fix in server.js
+
+// 1. Fix the broadcastToMap function
 function broadcastToMap(mapId, message, excludePlayerId = null) {
-  // Convert mapId to number to ensure consistent comparison
+  // IMPORTANT: Convert mapId to number to ensure consistent comparison
   const numericMapId = Number(mapId);
-  
-  // Log all available players for debugging
-  console.log(`Broadcasting to map ${numericMapId}, excluding player ${excludePlayerId}`);
-  console.log(`Available players: ${Array.from(players.keys()).join(', ')}`);
   
   for (const [id, player] of players.entries()) {
     // Skip excluded player
     if (id === excludePlayerId) continue;
     
-    // Convert player's mapId to number for comparison
-    const playerMapId = Number(player.mapId);
+    // Get the player's current map ID and convert to number
+    let playerMapId = player.mapId;
+    if (player.info && player.info.mapId) {
+      playerMapId = player.info.mapId;
+    }
     
-    console.log(`Checking player ${id} in map ${playerMapId} against target map ${numericMapId}`);
+    // CRITICAL: Compare as numbers, not strings
+    const playerMapIdNumeric = Number(playerMapId);
     
     // Only send to players in the same map
-    if (playerMapId === numericMapId && player.ws.readyState === WebSocket.OPEN) {
+    if (playerMapIdNumeric === numericMapId && player.ws.readyState === WebSocket.OPEN) {
       try {
-        console.log(`Broadcasting message to player ${id}`);
         player.ws.send(JSON.stringify(message));
       } catch (error) {
         console.error(`Error broadcasting to player ${id}:`, error);

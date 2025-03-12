@@ -34,6 +34,7 @@ export interface MapleMap {
   itemDrops: any;
   PlayerCharacter: any;
   doneLoading: boolean;
+  changeMap: any;
   load: (id: number | string) => Promise<void>;
   addItemDrop: (itemDrop: any) => void;
   loadFootholds: (wzNode: any) => any;
@@ -329,6 +330,29 @@ MapleMap.spawnNPC = async function (opts = {}) {
   this.npcs.push(npc);
 };
 
+MapleMap.changeMap = async function (newMapId: number) {
+  console.log(`Changing map to ${newMapId}`);
+  
+  // Optionally, clear current map state
+  this.npcs = [];
+  this.monsters = [];
+  this.characters = [];
+  this.itemDrops = [];
+  
+  // (Optionally stop background music, reset timers, etc.)
+  // For example:
+  // AudioManager.stopBackgroundMusic();
+
+  // Load the new map data
+  await this.load(newMapId);
+  
+  // Update camera boundaries based on the new map's boundaries
+  Camera.setBoundaries(this.boundaries);
+  
+  // Optionally, reposition the camera or update any UI elements as needed
+  console.log(`Map changed to ${newMapId}`);
+};
+
 MapleMap.loadNPCs = async function (wzNode) {
   for (const npcNode of wzNode.nChildren.filter(
     (n: any) => n.type.nValue === "n"
@@ -339,7 +363,8 @@ MapleMap.loadNPCs = async function (wzNode) {
       x: npcNode.x.nValue,
       cy: npcNode.cy.nValue,
       f: npcNode.nGet("f").nGet("nValue", 0),
-      fh: npcNode.fh.nValue
+      fh: npcNode.fh.nValue,
+      map: this
     });
   }
 };

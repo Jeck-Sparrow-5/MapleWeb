@@ -6,6 +6,7 @@ import { Physics } from "./Physics";
 import Monster from "./Monster";
 import Inventory from "./Inventory/Inventory";
 import Stats from "./Stats/Stats";
+import { JobsMainType } from "./Constants/Jobs";
 
 interface PlayerState {
   id: string;
@@ -72,14 +73,26 @@ class MySocket {
   serverUrl: string = "ws://localhost:3001"; // Default development server
   lastUpdate: number = 0;
   updateInterval: number = 50; // 50ms = 20 updates per second
+  connectionStatusElement: HTMLElement | null = null;
   
   constructor() {}
 
   async initialize() {
+    console.log("Initializing WebSocket connection...");
+    
+    // Create a connection status indicator
+    this.createConnectionStatusIndicator();
+    
     // Check if we are in production and use the appropriate server URL
     if (window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") {
       // Use production server (deployed WebSocket server)
-      this.serverUrl = `wss://${window.location.hostname}:3001`;
+      // Fix: Use the same hostname but different port
+      this.serverUrl = `ws://${window.location.hostname}:3001`;
+      
+      // If the site is served over HTTPS, WebSocket should use WSS
+      if (window.location.protocol === 'https:') {
+        this.serverUrl = `wss://${window.location.hostname}:3001`;
+      }
     }
 
     console.log(`Connecting to WebSocket server at ${this.serverUrl}`);
@@ -97,8 +110,65 @@ class MySocket {
     });
   }
   
+  createConnectionStatusIndicator() {
+    // Create a status element to show connection state
+    this.connectionStatusElement = document.createElement('div');
+    this.connectionStatusElement.style.position = 'fixed';
+    this.connectionStatusElement.style.bottom = '10px';
+    this.connectionStatusElement.style.right = '10px';
+    this.connectionStatusElement.style.padding = '5px 10px';
+    this.connectionStatusElement.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+    this.connectionStatusElement.style.color = '#fff';
+    this.connectionStatusElement.style.fontFamily = 'Arial, sans-serif';
+    this.connectionStatusElement.style.fontSize = '14px';
+    this.connectionStatusElement.style.borderRadius = '5px';
+    this.connectionStatusElement.style.zIndex = '9999';
+    this.connectionStatusElement.innerText = 'Connecting...';
+    
+    document.body.appendChild(this.connectionStatusElement);
+    this.updateConnectionStatus('connecting');
+  }
+  
+  updateConnectionStatus(status: 'connecting' | 'connected' | 'disconnected' | 'error') {
+    if (!this.connectionStatusElement) return;
+    
+    switch (status) {
+      case 'connecting':
+        this.connectionStatusElement.innerText = '🔄 Connecting...';
+        this.connectionStatusElement.style.backgroundColor = 'rgba(255, 165, 0, 0.7)'; // Orange
+        break;
+      case 'connected':
+        this.connectionStatusElement.innerText = '🟢 Connected';
+        this.connectionStatusElement.style.backgroundColor = 'rgba(0, 128, 0, 0.7)'; // Green
+        // Make it fade out after 5 seconds
+        setTimeout(() => {
+          if (this.connectionStatusElement) {
+            this.connectionStatusElement.style.opacity = '0.5';
+          }
+        }, 5000);
+        break;
+      case 'disconnected':
+        this.connectionStatusElement.innerText = '🔴 Disconnected';
+        this.connectionStatusElement.style.backgroundColor = 'rgba(255, 0, 0, 0.7)'; // Red
+        this.connectionStatusElement.style.opacity = '1';
+        break;
+      case 'error':
+        this.connectionStatusElement.innerText = '⚠️ Connection Error';
+        this.connectionStatusElement.style.backgroundColor = 'rgba(255, 0, 0, 0.7)'; // Red
+        this.connectionStatusElement.style.opacity = '1';
+        break;
+    }
+  }
+  
   connectSocket() {
     try {
+      this.updateConnectionStatus('connecting');
+      
+      // Close any existing connection first
+      if (this.socket) {
+        this.socket.close();
+      }
+      
       this.socket = new WebSocket(this.serverUrl);
       
       this.socket.onopen = this.handleSocketOpen.bind(this);
@@ -107,6 +177,7 @@ class MySocket {
       this.socket.onerror = this.handleSocketError.bind(this);
     } catch (error) {
       console.error("Failed to connect to WebSocket server:", error);
+      this.updateConnectionStatus('error');
       this.handleReconnect();
     }
   }
@@ -115,9 +186,15 @@ class MySocket {
     console.log("Connected to WebSocket server");
     this.isConnected = true;
     this.reconnectAttempts = 0;
+    this.updateConnectionStatus('connected');
     
     // Initial registration with the server
     this.sendPlayerInfo();
+    
+    // Also request the current player list
+    this.sendMessage({
+      type: "get_player_list"
+    });
   }
   
   handleSocketMessage(event: MessageEvent) {
@@ -163,12 +240,14 @@ class MySocket {
   handleSocketClose(event: CloseEvent) {
     console.log("WebSocket connection closed:", event.code, event.reason);
     this.isConnected = false;
+    this.updateConnectionStatus('disconnected');
     this.handleReconnect();
   }
   
   handleSocketError(event: Event) {
     console.error("WebSocket error:", event);
     this.isConnected = false;
+    this.updateConnectionStatus('error');
   }
   
   handleReconnect() {
@@ -181,17 +260,29 @@ class MySocket {
       }, this.reconnectInterval);
     } else {
       console.error("Max reconnect attempts reached. Please refresh the page.");
+      if (this.connectionStatusElement) {
+        this.connectionStatusElement.innerText = '❌ Connection failed - Please refresh';
+      }
     }
   }
   
   sendMessage(message: any) {
     if (this.isConnected && this.socket && this.socket.readyState === WebSocket.OPEN) {
-      this.socket.send(JSON.stringify(message));
+      try {
+        this.socket.send(JSON.stringify(message));
+      } catch (error) {
+        console.error("Error sending message:", error);
+      }
+    } else {
+      console.warn("Cannot send message: WebSocket not connected");
     }
   }
   
   sendPlayerInfo() {
-    if (!MyCharacter || !MyCharacter.stats) return;
+    if (!MyCharacter || !MyCharacter.stats) {
+      console.warn("Cannot send player info: MyCharacter not initialized");
+      return;
+    }
     
     // Always convert mapId to number to ensure consistent behavior
     const mapId = Number(MapleMap.id);
@@ -207,12 +298,12 @@ class MySocket {
       name: MyCharacter.name || "Player",
       hair: MyCharacter.hair || 30030,
       face: MyCharacter.face || 20000,
-      skin: MyCharacter.skinColor || 0,  // Use skinColor not skin
+      skin: MyCharacter.skinColor || 0,
       mapId: mapId,
       level: MyCharacter.stats.level,
-      job: MyCharacter.stats.job,
-      hp: MyCharacter.stats.hp,
-      maxHp: MyCharacter.stats.maxHp,
+      job: MyCharacter.job || JobsMainType.Beginner,
+      hp: MyCharacter.hp,
+      maxHp: MyCharacter.maxHp,
       attacking: false
     };
     
@@ -241,7 +332,11 @@ class MySocket {
       frame: MyCharacter.frame,
       flipped: MyCharacter.flipped,
       mapId: mapId,
-      attacking: MyCharacter.attacking || false
+      attacking: MyCharacter.isInAttack || false,
+      onGround: !!MyCharacter.pos.fh, // Add this to indicate if player is on ground
+      // Add more physics state if needed
+      vx: MyCharacter.pos.vx,
+      vy: MyCharacter.pos.vy
     };
     
     this.sendMessage({
@@ -298,8 +393,15 @@ class MySocket {
   handlePlayerJoined(data: any) {
     const playerData = data.player;
     
+    // Ensure mapId is a number for consistent comparison
+    const playerMapId = Number(playerData.mapId);
+    const currentMapId = Number(MapleMap.id);
+    
     // Only add players in the same map
-    if (playerData.mapId !== MapleMap.id) return;
+    if (playerMapId !== currentMapId) {
+      console.log(`Ignoring player ${playerData.id} because they are in map ${playerMapId} and we are in ${currentMapId}`);
+      return;
+    }
     
     console.log(`Player joined: ${playerData.name} (${playerData.id})`);
     
@@ -335,14 +437,10 @@ class MySocket {
     const currentMapId = Number(MapleMap.id);
     
     console.log(`Received player list with ${playerList.length} players`);
-    console.log("Current map ID:", currentMapId, "Type:", typeof currentMapId);
-    
-    // Display raw player list for debugging
-    console.log("All players in list:", playerList);
+    console.log("Current map ID:", currentMapId);
     
     // First, remove any players that are no longer in the list
     const currentIds = new Set(playerList.map((p: any) => p.id));
-    console.log("Current IDs in player list:", [...currentIds]);
     
     for (const [id, player] of this.otherPlayers.entries()) {
       if (!currentIds.has(id) && id !== this.playerId) {
@@ -357,35 +455,23 @@ class MySocket {
       }
     }
     
-    console.log("Current other players:", [...this.otherPlayers.keys()]);
-    
     // Then add/update all players from the list
     for (const playerData of playerList) {
       // Skip ourselves
       if (playerData.id === this.playerId) {
-        console.log(`Skipping our own player ID: ${playerData.id}`);
         continue;
       }
       
       // Ensure mapId is converted to a number for consistent comparison
       const playerMapId = Number(playerData.mapId);
       
-      // Debug - show mapId to see if it's matching
-      console.log(`Player ${playerData.id} is in map ${playerMapId} (${typeof playerMapId}), we are in ${currentMapId} (${typeof currentMapId})`);
-      
-      // Only add players in the same map - use number comparison
+      // Only add players in the same map
       if (playerMapId !== currentMapId) {
-        console.log(`Skipping player ${playerData.id} as they are in map ${playerMapId} and we are in ${currentMapId}`);
         continue;
       }
       
-      console.log(`Adding/Updating player ${playerData.id} in map ${playerMapId}`);
       this.addOrUpdateOtherPlayer(playerData);
     }
-    
-    // Debug - show all characters in the map after updates
-    console.log(`MapleMap.characters count: ${MapleMap.characters.length}`);
-    console.log(`otherPlayers count: ${this.otherPlayers.size}`);
   }
   
   async addOrUpdateOtherPlayer(playerData: PlayerState) {
@@ -405,7 +491,7 @@ class MySocket {
           name: playerData.name || "Player",
           hair: playerData.hair || 30030,
           face: playerData.face || 20000,
-          skinColor: playerData.skin || 0,  // This is the key fix - providing skinColor
+          skinColor: playerData.skin || 0,  // Use skin as skinColor
           stance: playerData.stance || "stand1",
           frame: playerData.frame || 0,
           flipped: playerData.flipped || false,
@@ -425,56 +511,50 @@ class MySocket {
             mesos: 0
           })
         });
-        
-        // Set initial position with no velocity to prevent unwanted movement
+        // assign map to character
+        character.map = MapleMap;
+        // Set initial position
         character.pos = new Physics(playerData.x, playerData.y);
+
         
-        // Disable automatic physics updates for other players to prevent jitter
-        if (character.pos.update && typeof character.pos.update === 'function') {
-          const originalUpdate = character.pos.update;
-          character.pos.update = function(msPerTick: number) {
-            // Only apply minimal physics for other players
-            // This prevents unwanted gravity/physics effects
-            if (character.pos.vx !== undefined && character.pos.x !== undefined) {
-              character.pos.x += character.pos.vx * msPerTick / 1000;
-            }
-            if (character.pos.vy !== undefined && character.pos.y !== undefined) {
-              character.pos.y += character.pos.vy * msPerTick / 1000;
-            }
-            
-            // Gradually reduce velocity to stop movement
-            if (character.pos.vx !== undefined) {
-              character.pos.vx *= 0.9;
-            }
-            if (character.pos.vy !== undefined) {
-              character.pos.vy *= 0.9;
-            }
-            
-            // Stop movement completely when velocity is very small
-            if (Math.abs(character.pos.vx || 0) < 0.1) character.pos.vx = 0;
-            if (Math.abs(character.pos.vy || 0) < 0.1) character.pos.vy = 0;
-          };
-        }
+        
+        // Override physics update to make movement smoother
+        const originalUpdate = character.pos.update;
+        character.pos.update = function(msPerTick: number) {
+          // Simple physics that prioritizes visual smoothness over accuracy
+          
+          // Apply position changes based on velocity
+          this.x += this.vx * (msPerTick / 1000);
+          this.y += this.vy * (msPerTick / 1000);
+          
+          // Gradually reduce velocity (damping)
+          this.vx *= 0.9;
+          this.vy *= 0.9;
+          
+          // Stop completely if velocity is very small
+          if (Math.abs(this.vx) < 0.1) this.vx = 0;
+          if (Math.abs(this.vy) < 0.1) this.vy = 0;
+        };
         
         // Load assets for this character
         await character.load();
         
-        // Attach basic equips to make other players look proper
+        // Attach basic equips
         try {
-          if (character.attachEquip && typeof character.attachEquip === 'function') {
-            // Pants
-            character.attachEquip(5, 1060002);
-            // Shirt
-            character.attachEquip(4, 1040002);
-            // Beginner weapon
-            character.attachEquip(10, 1302000);
-          }
+          // Pants
+          await character.attachEquip(5, 1060002);
+          // Shirt
+          await character.attachEquip(4, 1040002);
+          // Beginner weapon
+          await character.attachEquip(10, 1302000);
         } catch (error) {
-          console.error("Failed to attach default equipment to player:", error);
+          console.error("Failed to attach equipment to player:", error);
         }
         
-        // Add to our tracking and to the map
+        // Add to tracking
         this.otherPlayers.set(playerId, character);
+        
+        // Add to map characters
         MapleMap.characters.push(character);
         
         console.log(`Added player ${character.name} to the map`);
@@ -486,20 +566,44 @@ class MySocket {
       try {
         const character = this.otherPlayers.get(playerId)!;
         
-        // Update position using movement interpolation (handled in handlePlayerUpdate)
-        // We don't directly set position here to avoid jumps
+        // Calculate movement vector for smooth interpolation
+        const dx = playerData.x - character.pos.x;
+        const dy = playerData.y - character.pos.y;
         
-        // Update appearance and stats
+        // For large position changes (teleporting), update directly
+        const isLargeMovement = Math.abs(dx) > 100 || Math.abs(dy) > 100;
+        
+        if (isLargeMovement) {
+          character.pos.x = playerData.x;
+          character.pos.y = playerData.y;
+          character.pos.vx = 0;
+          character.pos.vy = 0;
+        } else {
+          // Set velocity for smooth movement (reach target in about 3-5 frames)
+          character.pos.vx = dx * 0.3;
+          character.pos.vy = dy * 0.3;
+          
+          // Cap maximum velocity
+          const maxSpeed = 300;
+          character.pos.vx = Math.max(Math.min(character.pos.vx, maxSpeed), -maxSpeed);
+          character.pos.vy = Math.max(Math.min(character.pos.vy, maxSpeed), -maxSpeed);
+        }
+        
+        // Update appearance and animation state
         if (playerData.stance) character.stance = playerData.stance;
         if (playerData.frame !== undefined) character.frame = playerData.frame;
         if (playerData.flipped !== undefined) character.flipped = playerData.flipped;
         
-        // Update stats if available and stats exists
-        if (character.stats) {
-          if (playerData.level) character.stats.level = playerData.level;
-          if (playerData.job) character.stats.job = playerData.job;
-          if (playerData.hp) character.stats.hp = playerData.hp;
-          if (playerData.maxHp) character.stats.maxHp = playerData.maxHp;
+        // Handle attacking state
+        if (playerData.attacking && !character.isInAttack) {
+          // Trigger attack animation
+          if (character.attack && typeof character.attack === 'function') {
+            try {
+              character.attack();
+            } catch (error) {
+              console.error("Error animating attack:", error);
+            }
+          }
         }
       } catch (error) {
         console.error(`Failed to update character for player ${playerId}:`, error);
@@ -514,81 +618,57 @@ class MySocket {
     if (playerData.id === this.playerId) return;
     
     // Skip players in other maps
-    if (playerData.mapId !== MapleMap.id) return;
+    const playerMapId = Number(playerData.mapId);
+    const currentMapId = Number(MapleMap.id);
+    
+    if (playerMapId !== currentMapId) return;
     
     const playerId = playerData.id;
     
     if (this.otherPlayers.has(playerId)) {
       const character = this.otherPlayers.get(playerId)!;
       
-      try {
-        // Use smoother position updates with interpolation
-        if (playerData.x !== undefined && playerData.y !== undefined) {
-          // Calculate position difference
-          const dx = playerData.x - character.pos.x;
-          const dy = playerData.y - character.pos.y;
-          
-          // Only apply direct position changes for significant movements (teleporting)
-          const significantMove = Math.abs(dx) > 100 || Math.abs(dy) > 100;
-          
-          if (significantMove) {
-            // Large jump - apply directly
-            character.pos.x = playerData.x;
-            character.pos.y = playerData.y;
-            
-            // Reset velocity to prevent unwanted movement
-            if (character.pos.vx !== undefined) character.pos.vx = 0;
-            if (character.pos.vy !== undefined) character.pos.vy = 0;
-          } else {
-            // Small movement - smooth using velocity
-            // Set target position through velocity over multiple frames
-            if (character.pos.vx !== undefined) {
-              // Set velocity to reach target in ~3 frames
-              character.pos.vx = dx / 3;
-            } else {
-              // Direct position update if no velocity support
-              character.pos.x = playerData.x;
-            }
-            
-            if (character.pos.vy !== undefined) {
-              character.pos.vy = dy / 3;
-            } else {
-              character.pos.y = playerData.y;
-            }
-            
-            // Ensure we're not going too fast
-            const maxSpeed = 300; // Maximum speed in pixels per second
-            if (character.pos.vx !== undefined) {
-              character.pos.vx = Math.max(Math.min(character.pos.vx, maxSpeed), -maxSpeed);
-            }
-            if (character.pos.vy !== undefined) {
-              character.pos.vy = Math.max(Math.min(character.pos.vy, maxSpeed), -maxSpeed);
-            }
-          }
-        }
+      // Update position with smoother interpolation
+      if (playerData.x !== undefined && playerData.y !== undefined) {
+        // Calculate position difference
+        const dx = playerData.x - character.pos.x;
+        const dy = playerData.y - character.pos.y;
         
-        // Only update other properties if they exist
-        if (playerData.stance) character.stance = playerData.stance;
-        if (playerData.frame !== undefined) character.frame = playerData.frame;
-        if (playerData.flipped !== undefined) character.flipped = playerData.flipped;
-        
-        // Handle player attacking animation
-        if (playerData.attacking) {
-          // Implement attack animation for other players
-          if (character.attack && typeof character.attack === 'function') {
-            try {
-              character.attack();
-            } catch (error) {
-              console.error("Error animating other player attack:", error);
-            }
-          }
+        // Handle large position changes (teleporting)
+        if (Math.abs(dx) > 100 || Math.abs(dy) > 100) {
+          character.pos.x = playerData.x;
+          character.pos.y = playerData.y;
+          character.pos.vx = 0;
+          character.pos.vy = 0;
+        } else {
+          // Set velocity for smoother movement
+          character.pos.vx = dx * 0.3;
+          character.pos.vy = dy * 0.3;
         }
-      } catch (error) {
-        console.error("Error updating other player:", error);
       }
-    } else {
-      // If we get an update for a player we don't know, request full player list
-      this.sendMessage({ type: "get_player_list" });
+      
+      // Important: Properly update stance and animation state
+      if (playerData.stance) {
+        character.setStance(playerData.stance, playerData.frame || 0);
+      }
+      
+      // Update flipped state (facing direction)
+      if (playerData.flipped !== undefined) {
+        character.flipped = playerData.flipped;
+      }
+      
+      // Handle foothold (ground) state
+      // This is crucial for fixing the "stuck in air" issue
+      if (playerData.onGround) {
+        // Set a foothold if player is on ground
+        if (!character.pos.fh) {
+          // Create a basic foothold if needed
+          character.pos.fh = { id: 1, x1: 0, x2: 1000, y1: character.pos.y, y2: character.pos.y };
+        }
+      } else {
+        // Clear foothold if player is in air
+        character.pos.fh = null;
+      }
     }
   }
   
@@ -596,7 +676,7 @@ class MySocket {
     const monsterData = data.monster;
     
     // Skip monsters in other maps
-    if (monsterData.mapId !== MapleMap.id) return;
+    if (Number(monsterData.mapId) !== Number(MapleMap.id)) return;
     
     // Find the monster in our map
     const monster = MapleMap.monsters.find(m => m.id === monsterData.id);
@@ -609,7 +689,10 @@ class MySocket {
       
       // If the monster was killed, mark it for destruction
       if (monsterData.hp <= 0) {
-        monster.destroyed = true;
+        monster.dying = true;
+        setTimeout(() => {
+          monster.destroyed = true;
+        }, 1000);
       }
     }
   }
@@ -618,7 +701,7 @@ class MySocket {
     const damageEvent = data.damage;
     
     // Skip events in other maps
-    if (damageEvent.mapId !== MapleMap.id) return;
+    if (Number(damageEvent.mapId) !== Number(MapleMap.id)) return;
     
     // Find the monster in our map
     const monster = MapleMap.monsters.find(m => m.id === damageEvent.targetId);
@@ -626,17 +709,8 @@ class MySocket {
     if (monster) {
       // Apply damage from other player
       if (damageEvent.sourceId !== this.playerId) {
-        monster.hp -= damageEvent.damage;
-        
-        // Show damage number from other player
-        if (monster.DamageIndicator) {
-          monster.DamageIndicator.createDamageNumber(damageEvent.damage, false);
-        }
-        
-        // If the monster is killed, mark it for destruction
-        if (monster.hp <= 0) {
-          monster.destroyed = true;
-        }
+        // Apply the damage
+        monster.hit(damageEvent.damage, 1, null);
       }
     }
   }
@@ -645,7 +719,7 @@ class MySocket {
     const chatMessage = data.message;
     
     // Skip messages in other maps
-    if (chatMessage.mapId !== MapleMap.id) return;
+    if (Number(chatMessage.mapId) !== Number(MapleMap.id)) return;
     
     // Find the player
     if (chatMessage.playerId === this.playerId) {
@@ -653,22 +727,30 @@ class MySocket {
       return;
     }
     
-    // Show message above other player
+    // Display chat message above other player
     const player = this.otherPlayers.get(chatMessage.playerId);
     if (player) {
-      // Show chat balloon above player
-      if (window.UIMap && window.UIMap.showPlayerChatBalloon) {
-        window.UIMap.showPlayerChatBalloon(chatMessage.message, player);
+      try {
+        // Show chat balloon
+        player.chatMessage = chatMessage.message;
+        player.showChatBalloon = true;
+        
+        // Hide after 5 seconds
+        player.chatBalloonTimer = Date.now();
+        player.chatBalloonDuration = 5000;
+        
+        setTimeout(() => {
+          player.showChatBalloon = false;
+        }, 5000);
+      } catch (error) {
+        console.error("Error displaying chat message:", error);
       }
     }
   }
   
   startUpdateLoop() {
     // Send position updates at regular intervals
-    const updateInterval = this.updateInterval;
-    
-    // Use a longer interval to reduce network traffic - update only 10 times per second
-    this.updateInterval = 100; // 100ms = 10 updates per second
+    const updateInterval = 100; // 100ms = 10 updates per second
     
     // Store previous position to only send updates when something changed
     let lastPosX = 0;
@@ -691,7 +773,7 @@ class MySocket {
           MyCharacter.stance !== lastStance ||
           MyCharacter.frame !== lastFrame ||
           MyCharacter.flipped !== lastFlipped ||
-          MyCharacter.attacking
+          MyCharacter.isInAttack
         );
         
         if (posChanged || stateChanged) {
@@ -707,19 +789,7 @@ class MySocket {
       } catch (error) {
         console.error("Error in update loop:", error);
       }
-    }, this.updateInterval);
-  }
-  
-  // Helper method to check if a player is in the same map
-  isPlayerInSameMap(playerData: any): boolean {
-    return playerData.mapId === MapleMap.id;
-  }
-}
-
-// Declare global type for window with UIMap
-declare global {
-  interface Window {
-    UIMap: any;
+    }, updateInterval);
   }
 }
 

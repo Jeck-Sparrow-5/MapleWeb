@@ -606,8 +606,17 @@ drawChatBalloon(canvas: GameCanvas, camera: CameraInterface) {
   const balloonX = Math.max(20, Math.min(canvasWidth - balloonW - 20, balloonCenterX - balloonW / 2));
   
   // Position balloon at a fixed offset above the NPC
-  const offsetY = 120; // Distance above NPC head
+  const offsetY = 150; // Distance above NPC head
   const balloonY = Math.max(20, Math.min(canvasHeight - balloonH - 20, npcScreenY - offsetY));
+
+
+  // If NPC is off screen (with a small margin), skip drawing the balloon.
+  if (
+    npcScreenX < -50 || npcScreenX > canvasWidth + 50 ||
+    npcScreenY < -50 || npcScreenY > canvasHeight + 50
+  ) {
+    return;
+  }
 
   // Draw the balloon parts using 9-slice
   // 1) Draw corners

@@ -943,6 +943,7 @@ isCloseToMob = (inAllDirections = true) => {
   }
 
   checkForMobsHit = () => {
+    if (!this.map) return;
     if (!this.isDead) {
       const currentTime = new Date().getTime();
 
@@ -1021,6 +1022,7 @@ isCloseToMob = (inAllDirections = true) => {
   };
 
   checkForItemDropPickup = (AllowMultiPickupAtOnce = false) => {
+    if (!this.map) return;
     const itemDrops: DropItemSprite[] = this.map!.itemDrops.filter(
       (itemDrop: DropItemSprite) => {
         if (itemDrop.isAlreadyPickedUp) {

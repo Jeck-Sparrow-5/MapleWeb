@@ -7,6 +7,7 @@ export interface TaxiDestination {
   mapId: number;
   name: string;
   cost: number;
+  destinations?: TaxiDestination[];
 }
 
 export interface TaxiDialog {
@@ -31,36 +32,34 @@ const TaxiUI: TaxiDialog = {
   y: 0,
   width: 300,
   height: 260,
-  show: async function(canvas: GameCanvas, destinations: TaxiDestination[]) {
+  
+  show: function(canvas: GameCanvas, destinations: TaxiDestination[]) {
     // Return if already visible
     if (this.isVisible) return;
     
+    console.log("TaxiUI.show called with", destinations?.length || 0, "destinations");
+    
     this.isVisible = true;
-    this.destinations = destinations;
+    this.destinations = Array.isArray(destinations) ? destinations : [];
     this.selectedIndex = -1;
     this.hoverIndex = -1;
     
     // Center the dialog on screen
-    this.x = (canvas.width - this.width) / 2;
-    this.y = (canvas.height - this.height) / 2;
+    this.x = (canvas.game?.width || 800) / 2 - this.width / 2;
+    this.y = (canvas.game?.height || 600) / 2 - this.height / 2;
     
     // Load taxi UI elements if not loaded yet
     if (!this.backgroundImg) {
       try {
-        const uiNode = await WZManager.get("UI.wz/UIWindow.img/Taxi");
-        this.backgroundImg = uiNode.backgrnd.nGetImage();
-        this.titleImg = uiNode.title.nGetImage();
-        this.driverImg = uiNode.driver.nGetImage();
+        WZManager.get("UI.wz/UIWindow.img/Taxi").then(uiNode => {
+          this.backgroundImg = uiNode.backgrnd.nGetImage();
+          this.titleImg = uiNode.title.nGetImage();
+          this.driverImg = uiNode.driver.nGetImage();
+        }).catch(e => {
+          console.error("Error loading taxi UI:", e);
+        });
       } catch (e) {
         console.error("Error loading taxi UI:", e);
-        
-        // Create fallback UI elements
-        this.backgroundImg = {
-          width: this.width,
-          height: this.height
-        };
-        this.titleImg = { width: 100, height: 30 };
-        this.driverImg = { width: 80, height: 80 };
       }
     }
     
@@ -73,22 +72,25 @@ const TaxiUI: TaxiDialog = {
       this.playerMesos = 0;
     }
     
-    // Preload map names if needed
-    this.destinations.forEach(async (dest) => {
-      if (!dest.name) {
-        try {
-          const mapNames = await window.MapStateInstance.getMapName(dest.mapId);
-          dest.name = mapNames.mapName;
-        } catch (e) {
-          dest.name = `Map ${dest.mapId}`;
-        }
-      }
-    });
+    // Ensure we have at least some destinations
+    if (!this.destinations || this.destinations.length === 0) {
+      console.warn("No taxi destinations provided, adding default destinations");
+      this.destinations = [
+        { mapId: 100000000, name: "Henesys", cost: 1000 },
+        { mapId: 101000000, name: "Ellinia", cost: 1000 },
+        { mapId: 102000000, name: "Perion", cost: 1000 },
+        { mapId: 103000000, name: "Kerning City", cost: 1000 },
+        { mapId: 104000000, name: "Lith Harbor", cost: 800 }
+      ];
+    }
+    
+    console.log("TaxiUI shown with", this.destinations.length, "destinations");
   },
   
   hide: function() {
     this.isVisible = false;
     this.selectedIndex = -1;
+    console.log("TaxiUI hidden");
   },
   
   update: function(msPerTick: number) {
@@ -111,7 +113,9 @@ const TaxiUI: TaxiDialog = {
           const itemY = listY + (i * itemHeight);
           if (mouseY >= itemY && mouseY <= itemY + itemHeight) {
             this.hoverIndex = i;
-            return;
+            break;  // Exit the loop but continue with the update logic
+          } else {
+            this.hoverIndex = -1; // Optionally reset if no match is found
           }
         }
       }
@@ -119,7 +123,7 @@ const TaxiUI: TaxiDialog = {
       this.hoverIndex = -1;
       
       // Check for mouse clicks
-      if (canvas.mouseDown && !canvas.mousePrevDown) {
+      if (canvas.clicked && !this.prevClicked) {
         // Check if clicked on a destination
         if (this.hoverIndex !== -1) {
           this.selectedIndex = this.hoverIndex;
@@ -133,7 +137,7 @@ const TaxiUI: TaxiDialog = {
         
         if (mouseX >= okButtonX && mouseX <= okButtonX + okButtonWidth &&
             mouseY >= okButtonY && mouseY <= okButtonY + okButtonHeight) {
-          this.teleportToSelectedDestination();
+            MapStateInstance.changeMap(dest.mapId);
         }
         
         // Check if clicked on the Close button
@@ -146,18 +150,24 @@ const TaxiUI: TaxiDialog = {
           this.hide();
         }
       }
+      
+      // Store current click state for next frame
+      this.prevClicked = canvas.clicked;
     }
   },
   
   teleportToSelectedDestination: function() {
-    if (this.selectedIndex === -1) return;
+    if (this.selectedIndex === -1) {
+      console.log("No destination selected");
+      return;
+    }
     
     const dest = this.destinations[this.selectedIndex];
+    console.log("Teleporting to", dest.name, "(Map ID:", dest.mapId, ")");
     
     // Check if player has enough mesos
     if (this.playerMesos < dest.cost) {
-      console.log("Not enough mesos to travel!");
-      // Show error message
+      console.log("Not enough mesos to travel! Need", dest.cost, "but have", this.playerMesos);
       return;
     }
     
@@ -169,7 +179,6 @@ const TaxiUI: TaxiDialog = {
     }
     
     // Teleport to destination
-    console.log(`Teleporting to map ${dest.mapId}`);
     this.hide();
     MapStateInstance.changeMap(dest.mapId);
   },
@@ -181,8 +190,8 @@ const TaxiUI: TaxiDialog = {
     canvas.drawRect({
       x: 0,
       y: 0,
-      width: canvas.width,
-      height: canvas.height,
+      width: canvas.game?.width || 1280,
+      height: canvas.game?.height || 720,
       color: "#000000",
       alpha: 0.5
     });
@@ -212,8 +221,8 @@ const TaxiUI: TaxiDialog = {
         height: this.height,
         color: "#A67C52",
         alpha: 1,
-        lineWidth: 2,
-        fill: false
+        stroke: "#A67C52",
+        strokeWidth: 2
       });
     }
     
@@ -268,8 +277,8 @@ const TaxiUI: TaxiDialog = {
       height: itemHeight * this.destinations.length,
       color: "#A67C52",
       alpha: 1,
-      lineWidth: 1,
-      fill: false
+      stroke: "#A67C52",
+      strokeWidth: 1
     });
     
     // Draw destination items
@@ -327,7 +336,7 @@ const TaxiUI: TaxiDialog = {
           y2: itemY + itemHeight,
           color: "#A67C52",
           alpha: 0.5,
-          lineWidth: 1
+          width: 1
         });
       }
     }
@@ -354,8 +363,8 @@ const TaxiUI: TaxiDialog = {
       height: okButtonHeight,
       color: "#A67C52",
       alpha: 1,
-      lineWidth: 1,
-      fill: false
+      stroke: "#A67C52",
+      strokeWidth: 1
     });
     
     canvas.drawText({
@@ -392,5 +401,15 @@ const TaxiUI: TaxiDialog = {
     });
   }
 };
+
+// Make TaxiUI globally accessible for easier access
+declare global {
+  interface Window {
+    TaxiUI: typeof TaxiUI;
+  }
+}
+
+// Expose TaxiUI to global scope
+window.TaxiUI = TaxiUI;
 
 export default TaxiUI;

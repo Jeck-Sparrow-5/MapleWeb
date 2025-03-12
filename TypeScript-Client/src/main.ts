@@ -5,6 +5,7 @@ import Timer from "./Timer";
 import WZManager from "./wz-utils/WZManager";
 import Camera from "./Camera";
 import SessionManager from "./SessionManager";
+import MySocket from "./mysocket";
 import StateManager from "./StateManager";
 import LoginState from "./LoginState";
 import GameCanvas from "./GameCanvas";

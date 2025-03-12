@@ -171,34 +171,42 @@ UIMap.doUpdate = function (msPerTick, camera, canvas) {
     this.chat.addSubmitListener(() => {
       const msg = this.chat!.input.value;
       this.chat!.input.value = "";
-      if (msg[0] === "!") {
-        const [command, ...commandArgs] = msg.split(" ");
-        console.log(command, commandArgs);
-        switch (command) {
-          case "!level": {
-            const level = Number(commandArgs[0]);
-            if (!Number.isInteger(level) || level > 250 || level < 1) {
+      
+      if (msg.trim()) {
+        if (msg[0] === "!") {
+          // Handle command inputs
+          const [command, ...commandArgs] = msg.split(" ");
+          console.log(command, commandArgs);
+          switch (command) {
+            case "!level": {
+              const level = Number(commandArgs[0]);
+              if (!Number.isInteger(level) || level > 250 || level < 1) {
+                break;
+              }
+              if (level > MyCharacter.stats.level) {
+                MyCharacter.playLevelUp();
+              }
+              MyCharacter.stats.level = level;
               break;
             }
-            if (level > MyCharacter.stats.level) {
-              MyCharacter.playLevelUp();
-            }
-            MyCharacter.stats.level = level;
-            break;
-          }
-          case "!map": {
-            const mapId = Number(commandArgs[0]);
-            if (!Number.isInteger(mapId)) {
+            case "!map": {
+              const mapId = Number(commandArgs[0]);
+              if (!Number.isInteger(mapId)) {
+                break;
+              }
+              MapleMap.load(mapId);
               break;
             }
-            MapleMap.load(mapId);
-            break;
+            default: {
+              break;
+            }
           }
-          default: {
-            break;
-          }
+        } else {
+          // Regular chat message - show in a chat balloon
+          this.showPlayerChatBalloon(msg);
         }
       }
+      
       canvas.releaseFocusInput();
     });
     this.firstUpdate = false;
@@ -414,6 +422,289 @@ UIMap.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
   });
 
   UICommon.doRender(canvas, camera, lag, msPerTick, tdelta);
+  
+  // Draw chat balloon if player has one
+  if (MapleMap.PlayerCharacter && 
+      MapleMap.PlayerCharacter.showChatBalloon && 
+      MapleMap.PlayerCharacter.drawChatBalloon) {
+    MapleMap.PlayerCharacter.drawChatBalloon(canvas, camera);
+  }
+};
+
+// Function to show player chat balloon
+UIMap.showPlayerChatBalloon = function(message) {
+  // Make sure the player character exists
+  if (!MapleMap.PlayerCharacter) return;
+  
+  // If the character doesn't have the chat balloon methods/properties yet, add them
+  const player = MapleMap.PlayerCharacter;
+  
+  // If we need to add the chat balloon functionality to the player
+  if (!player.chatMessage) {
+    // Initialize chat balloon properties
+    player.chatMessage = "";
+    player.showChatBalloon = false;
+    player.chatBalloonTimer = 0;
+    player.chatBalloonDuration = 5000; // Show for 5 seconds
+    
+    // Add update method for chat balloon to player
+    const originalDoUpdate = player.doUpdate || function() {};
+    player.doUpdate = function(msPerTick) {
+      // Call original update if it exists
+      if (originalDoUpdate && typeof originalDoUpdate === 'function') {
+        originalDoUpdate.call(this, msPerTick);
+      }
+      
+      // Update chat balloon timer
+      if (this.showChatBalloon) {
+        this.chatBalloonTimer += msPerTick;
+        if (this.chatBalloonTimer >= this.chatBalloonDuration) {
+          this.showChatBalloon = false;
+          this.chatBalloonTimer = 0;
+        }
+      }
+    };
+    
+    // Add draw method for chat balloon
+    player.drawChatBalloon = function(canvas, camera) {
+      if (!this.chatBalloon || !this.chatMessage || !this.showChatBalloon) return;
+      
+      // Check if the text is too long and wrap it
+      const maxWidth = 160; // Maximum width in pixels
+      const words = this.chatMessage.split(' ');
+      const lines = [];
+      let currentLine = '';
+  
+      for (const word of words) {
+        const testLine = currentLine ? `${currentLine} ${word}` : word;
+        const testOpts = { text: testLine, fontSize: 12 };
+        const testWidth = canvas.measureText(testOpts).width;
+        
+        if (testWidth > maxWidth) {
+          lines.push(currentLine);
+          currentLine = word;
+        } else {
+          currentLine = testLine;
+        }
+      }
+      
+      if (currentLine) {
+        lines.push(currentLine);
+      }
+  
+      // Calculate balloon dimensions based on wrapped text
+      const textHeight = 16; // approximate line height
+      const totalTextHeight = textHeight * lines.length;
+      const paddingX = 12;
+      const paddingY = 8;
+      
+      // Find the widest line for the balloon width
+      let maxLineWidth = 0;
+      for (const line of lines) {
+        const lineOpts = { text: line, fontSize: 12 };
+        const lineWidth = canvas.measureText(lineOpts).width;
+        maxLineWidth = Math.max(maxLineWidth, lineWidth);
+      }
+  
+      // The total balloon size is text size + padding
+      const cornerSize = 6;
+      const minWidth = 100;
+      const minHeight = 40;
+      
+      // Add extra padding to ensure corners don't get cut off
+      const balloonW = Math.max(maxLineWidth + paddingX * 2 + cornerSize * 2, minWidth); 
+      const balloonH = Math.max(totalTextHeight + paddingY * 2 + cornerSize * 2, minHeight);
+  
+      // Convert character world coordinates to screen coordinates
+      const playerScreenX = this.pos.x - camera.x;
+      const playerScreenY = this.pos.y - camera.y;
+      
+      // Position balloon above player
+      const balloonCenterX = playerScreenX;
+      const balloonX = Math.max(20, Math.min(800 - balloonW - 20, balloonCenterX - balloonW / 2));
+      const balloonY = Math.max(20, Math.min(600 - balloonH - 20, playerScreenY - 120 - balloonH));
+  
+      // Draw corners
+      canvas.drawImage({
+        img: this.chatBalloon.nw,
+        dx: balloonX,
+        dy: balloonY,
+      });
+      canvas.drawImage({
+        img: this.chatBalloon.ne,
+        dx: balloonX + balloonW - cornerSize,
+        dy: balloonY,
+      });
+      canvas.drawImage({
+        img: this.chatBalloon.sw,
+        dx: balloonX,
+        dy: balloonY + balloonH - cornerSize,
+      });
+      canvas.drawImage({
+        img: this.chatBalloon.se,
+        dx: balloonX + balloonW - cornerSize,
+        dy: balloonY + balloonH - cornerSize,
+      });
+  
+      // Draw top edge
+      let tileX = balloonX + cornerSize;
+      const tileY_top = balloonY;
+      const nImg = this.chatBalloon.n;
+      const nImgW = nImg.width;
+      while (tileX < balloonX + balloonW - cornerSize) {
+        const drawW = Math.min(nImgW, balloonX + balloonW - cornerSize - tileX);
+        canvas.drawImage({
+          img: nImg,
+          sx: 0,
+          sy: 0,
+          sWidth: drawW,
+          sHeight: nImg.height,
+          dx: tileX,
+          dy: tileY_top,
+          dWidth: drawW,
+          dHeight: nImg.height,
+        });
+        tileX += drawW;
+      }
+  
+      // Draw bottom edge
+      const sImg = this.chatBalloon.s;
+      const sImgW = sImg.width;
+      tileX = balloonX + cornerSize;
+      const tileY_bottom = balloonY + balloonH - sImg.height; 
+      while (tileX < balloonX + balloonW - cornerSize) {
+        const drawW = Math.min(sImgW, balloonX + balloonW - cornerSize - tileX);
+        canvas.drawImage({
+          img: sImg,
+          sx: 0,
+          sy: 0,
+          dx: tileX,
+          dy: tileY_bottom,
+        });
+        tileX += drawW;
+      }
+  
+      // Draw left edge
+      const wImg = this.chatBalloon.w;
+      const wImgH = wImg.height;
+      let tileY = balloonY + cornerSize;
+      while (tileY < balloonY + balloonH - cornerSize) {
+        const drawH = Math.min(wImgH, balloonY + balloonH - cornerSize - tileY);
+        canvas.drawImage({
+          img: wImg,
+          sx: 0,
+          sy: 0,
+          dx: balloonX,
+          dy: tileY,
+        });
+        tileY += drawH;
+      }
+  
+      // Draw right edge
+      const eImg = this.chatBalloon.e;
+      const eImgH = eImg.height;
+      tileY = balloonY + cornerSize;
+      const rightX = balloonX + balloonW - eImg.width;
+      while (tileY < balloonY + balloonH - cornerSize) {
+        const drawH = Math.min(eImgH, balloonY + balloonH - cornerSize - tileY);
+        canvas.drawImage({
+          img: eImg,
+          sx: 0,
+          sy: 0,
+          dx: rightX,
+          dy: tileY,
+        });
+        tileY += drawH;
+      }
+  
+      // Draw center fill
+      const cImg = this.chatBalloon.c;
+      const centerX = balloonX + cornerSize;
+      const centerY = balloonY + cornerSize;
+      const centerW = balloonW - cornerSize * 2;
+      const centerH = balloonH - cornerSize * 2;
+      const cImgW = cImg.width;
+      const cImgH = cImg.height;
+      
+      let fillY = centerY;
+      while (fillY < centerY + centerH) {
+        let fillX = centerX;
+        const rowH = Math.min(cImgH, centerY + centerH - fillY);
+        while (fillX < centerX + centerW) {
+          const colW = Math.min(cImgW, centerX + centerW - fillX);
+          canvas.drawImage({
+            img: cImg,
+            sx: 0,
+            sy: 0,
+            dx: fillX,
+            dy: fillY,
+          });
+          fillX += colW;
+        }
+        fillY += rowH;
+      }
+  
+      // Draw arrow
+      const arrowImg = this.chatBalloon.arrow;
+      const arrowW = arrowImg.width;
+      const arrowH = arrowImg.height;
+      const arrowX = balloonCenterX - arrowW / 2;
+      const arrowY = balloonY + balloonH - 1;
+      canvas.drawImage({
+        img: arrowImg,
+        dx: arrowX,
+        dy: arrowY,
+      });
+  
+      // Draw text lines
+      const lineStartY = balloonY + paddingY + 2;
+      lines.forEach((line, index) => {
+        canvas.drawText({
+          text: line,
+          x: balloonX + balloonW / 2,
+          y: lineStartY + (index * textHeight),
+          color: "#000000",
+          align: "center",
+          fontSize: 12,
+          fontWeight: "normal",
+        });
+      });
+    };
+  }
+  
+  // Update the chat balloon loading if needed
+  if (!player.chatBalloon) {
+    // Load chat balloon images if not already loaded
+    WZManager.get("UI.wz/ChatBalloon.img").then((chatBalloonFile) => {
+      const style0 = chatBalloonFile["0"]; // Use style "0" (same as NPCs)
+      
+      // Store chat balloon parts for easy usage
+      player.chatBalloon = {
+        nw: style0.nw.nGetImage(),
+        ne: style0.ne.nGetImage(),
+        sw: style0.sw.nGetImage(),
+        se: style0.se.nGetImage(),
+        n: style0.n.nGetImage(),
+        s: style0.s.nGetImage(),
+        w: style0.w.nGetImage(),
+        e: style0.e.nGetImage(),
+        c: style0.c.nGetImage(),
+        arrow: style0.arrow.nGetImage(),
+      };
+      
+      // Now that we have the chat balloon loaded, show the message
+      player.chatMessage = message;
+      player.showChatBalloon = true;
+      player.chatBalloonTimer = 0;
+    }).catch(e => {
+      console.error("Error loading chat balloon images:", e);
+    });
+  } else {
+    // Chat balloon already loaded, just show the message
+    player.chatMessage = message;
+    player.showChatBalloon = true;
+    player.chatBalloonTimer = 0;
+  }
 };
 
 export default UIMap;

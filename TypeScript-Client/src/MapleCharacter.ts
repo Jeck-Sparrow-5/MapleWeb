@@ -48,6 +48,13 @@ class MapleCharacter {
   hair: any = null;
   Face: any = null;
   face: number = 20000;
+  
+  // Chat balloon properties
+  chatBalloon: any = null; // Will hold the balloon image parts
+  chatMessage: string = ""; // Current chat message
+  showChatBalloon: boolean = false; // Whether to show the balloon
+  chatBalloonTimer: number = 0; // Timer to track balloon display duration
+  chatBalloonDuration: number = 5000; // Show chat balloon for 5 seconds
   faceExpr: string = "blink";
   faceFrame: number = 0;
   faceDelay: number = 0;
@@ -210,6 +217,28 @@ class MapleCharacter {
     await this.setFace(this.face);
     await this.setHair(this.hair);
     this.setStance(this.stance);
+
+    // Load chat balloon images (same as in NPC class)
+    try {
+      const chatBalloonFile: any = await WZManager.get("UI.wz/ChatBalloon.img");
+      const style0 = chatBalloonFile["0"]; // We'll use style "0" (same as NPCs)
+      
+      // Store chat balloon parts for easy usage
+      this.chatBalloon = {
+        nw: style0.nw.nGetImage(),
+        ne: style0.ne.nGetImage(),
+        sw: style0.sw.nGetImage(),
+        se: style0.se.nGetImage(),
+        n: style0.n.nGetImage(),
+        s: style0.s.nGetImage(),
+        w: style0.w.nGetImage(),
+        e: style0.e.nGetImage(),
+        c: style0.c.nGetImage(),
+        arrow: style0.arrow.nGetImage(),
+      };
+    } catch (e) {
+      console.error("Error loading chat balloon images:", e);
+    }
 
     this.projectiles = [];
     this.DamageIndicator = new DamageIndicator();

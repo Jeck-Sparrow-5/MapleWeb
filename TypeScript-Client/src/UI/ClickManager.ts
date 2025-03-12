@@ -226,4 +226,14 @@ ClickManager.clearButton = function () {
   this.buttons.clear();
 };
 
+// Make ClickManager globally accessible for easier access
+declare global {
+  interface Window {
+    ClickManager: ClickManagerInterface;
+  }
+}
+
+// Expose ClickManager to global scope
+window.ClickManager = ClickManager;
+
 export default ClickManager;

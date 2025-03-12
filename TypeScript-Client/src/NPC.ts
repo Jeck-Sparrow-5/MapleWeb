@@ -314,36 +314,98 @@ setupTaxiDestinations() {
   
   // Handle taxi functionality when this NPC is clicked
   showTaxiDialog() {
-    if (!this.isTaxi) return;
+    if (!this.isTaxi) {
+      console.log("This NPC is not a taxi:", this.id);
+      return;
+    }
     
-    // Import both module dependencies directly to ensure they're available
-    import('./UI/TaxiUI').then(TaxiUIModule => {
-      const TaxiUI = TaxiUIModule.default;
+    console.log("Showing taxi dialog for NPC:", this.id, "with name:", this.strings.name);
+    
+    // Get existing GameCanvas from MapStateInstance if ClickManager is not available
+    let gameCanvas = null;
+    
+    if (window.ClickManager && window.ClickManager.GameCanvas) {
+      console.log("ClickManager and GameCanvas are available");
+      gameCanvas = window.ClickManager.GameCanvas;
+    } else if (window.MapStateInstance && window.MapStateInstance.doRender) {
+      // Try to get canvas from current state
+      console.log("Trying to get GameCanvas from MapStateInstance");
+      // This approach assumes the canvas is passed to doRender
+      const doRenderOriginal = window.MapStateInstance.doRender;
+      let capturedCanvas = null;
       
-      // Get the GameCanvas from the map's player character which is more reliably available
-      if (this.opts.map && this.opts.map.PlayerCharacter) {
-        // Use the UI's ClickManager instance which has the GameCanvas
-        import('./UI/ClickManager').then(ClickManagerModule => {
-          const ClickManager = ClickManagerModule.default;
-          if (ClickManager.GameCanvas) {
-            // Show the taxi UI with this NPC's destinations
-            console.log("Showing taxi dialog with destinations:", this.taxiDestinations);
-            TaxiUI.show(ClickManager.GameCanvas, this.taxiDestinations);
-            
-            // Hide NPC chat balloon when showing the taxi dialog
-            this.showDialog = false;
-          } else {
-            console.error("Could not access GameCanvas for taxi dialog");
-            // Fallback to showing dialog
-            this.showDialog = true;
-          }
-        });
-      } else {
-        console.error("Could not access map or player character for taxi dialog");
-        // Fallback to showing dialog
+      window.MapStateInstance.doRender = function(canvas, ...args) {
+        capturedCanvas = canvas;
+        window.MapStateInstance.doRender = doRenderOriginal;
+        doRenderOriginal.call(window.MapStateInstance, canvas, ...args);
+      };
+      
+      // Wait briefly for the next render cycle
+      setTimeout(() => {
+        if (capturedCanvas) {
+          console.log("Successfully captured GameCanvas");
+          this.continueTaxiDialog(capturedCanvas);
+        } else {
+          console.error("Could not capture GameCanvas");
+          this.showDialog = true;
+        }
+      }, 50);
+      
+      return;
+    }
+    
+    if (gameCanvas) {
+      this.continueTaxiDialog(gameCanvas);
+    } else {
+      console.error("Could not access any GameCanvas for taxi dialog");
+      this.showDialog = true;
+    }
+  }
+  
+  // Helper method to continue with taxi dialog once we have a canvas
+  continueTaxiDialog(gameCanvas) {
+    // Make sure we have destinations
+    if (!this.taxiDestinations || this.taxiDestinations.length === 0) {
+      console.log("No destinations available, setting up default destinations");
+      this.setupTaxiDestinations();
+    }
+    
+    // Show the taxi UI with this NPC's destinations
+    console.log("Showing taxi dialog with destinations:", this.taxiDestinations);
+    
+    // Directly access the global TaxiUI instance
+    if (window.TaxiUI) {
+      console.log("TaxiUI is available, attempting to show it");
+      console.log("TaxiUI before showing:", JSON.stringify({
+        isVisible: window.TaxiUI.isVisible,
+        hasDestinations: window.TaxiUI.destinations?.length || 0
+      }));
+      
+      try {
+        // Ensure that the map property is set correctly
+        if (!this.opts.map && window.MapStateInstance) {
+          console.log("Setting map on NPC from MapStateInstance");
+          this.opts.map = window.MapStateInstance;
+        }
+      
+        window.TaxiUI.show(gameCanvas, this.taxiDestinations);
+        console.log("TaxiUI show method called successfully");
+        
+        // Hide NPC chat balloon when showing the taxi dialog
+        this.showDialog = false;
+        
+        // Check if TaxiUI is visible after calling show
+        setTimeout(() => {
+          console.log("TaxiUI visibility after timeout:", window.TaxiUI.isVisible);
+        }, 500);
+      } catch (error) {
+        console.error("Error showing TaxiUI:", error);
         this.showDialog = true;
       }
-    });
+    } else {
+      console.error("TaxiUI is not available globally");
+      this.showDialog = true;
+    }
   }
 
   loadStance(wzNode: any = {}, stance: string = "stand") {

@@ -521,7 +521,14 @@ MapleMap.handleClick = function (
       console.log(`Clicked on NPC ${npc.id}:`, npc);
       if (npc.isTaxi) {
         console.log("This is a taxi NPC!");
-        npc.showTaxiDialog();
+        // Make sure TaxiUI is loaded before showing dialog
+        import('./UI/TaxiUI').then(() => {
+          npc.showTaxiDialog();
+        }).catch(err => {
+          console.error("Error loading TaxiUI:", err);
+          npc.showDialog = true;
+          npc.lastDialogTime = npc.dialogTimer;
+        });
       } else {
         await this.npcDialog.changeText(npc.id, null, npc.strings.name, 'Hello');
         this.npcDialog.setIsHidden(false);

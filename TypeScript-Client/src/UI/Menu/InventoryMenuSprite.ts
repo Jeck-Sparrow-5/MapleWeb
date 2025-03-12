@@ -186,12 +186,12 @@ class InventoryMenuSprite extends DragableMenu {
   }
 
   async loadBackground() {
-    if (!this.inventoryNode || !this.inventoryNode.FullBackgrnd) {
+    if (!this.inventoryNode || !this.inventoryNode.backgrnd) {
       console.error("Missing inventory background node");
       return;
     }
     try {
-      this.fullBackgroundImage = this.inventoryNode.FullBackgrnd.nGetImage();
+      this.fullBackgroundImage = this.inventoryNode.backgrnd.nGetImage();
     } catch (e) {
       console.error("Error loading inventory background:", e);
     }

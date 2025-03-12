@@ -494,8 +494,13 @@ MapleMap.handleClick = function (
       mouseY <= npcY + 70
     ) {
       console.log(`Clicked on NPC ${npc.id}:`, npc);
-      await this.npcDialog.changeText(npc.id, null, npc.strings.name, 'Hello');
-      this.npcDialog.setIsHidden(false);
+      if (npc.isTaxi) {
+        console.log("This is a taxi NPC!");
+        npc.showTaxiDialog();
+      } else {
+        await this.npcDialog.changeText(npc.id, null, npc.strings.name, 'Hello');
+        this.npcDialog.setIsHidden(false);
+      }
     }
   });
 };

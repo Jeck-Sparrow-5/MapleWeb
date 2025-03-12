@@ -204,6 +204,13 @@ UIMap.doUpdate = function (msPerTick, camera, canvas) {
         } else {
           // Regular chat message - show in a chat balloon
           this.showPlayerChatBalloon(msg);
+          
+          // Send chat message to other players via socket
+          import('../mysocket').then(({ default: MySocket }) => {
+            MySocket.sendChatMessage(msg);
+          }).catch(err => {
+            console.error("Failed to import MySocket for chat:", err);
+          });
         }
       }
       
@@ -423,7 +430,7 @@ UIMap.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
 
   UICommon.doRender(canvas, camera, lag, msPerTick, tdelta);
   
-  // Draw chat balloon if player has one
+  // Draw chat balloon if player has one - MUST be drawn LAST to appear on top of everything
   if (MapleMap.PlayerCharacter && 
       MapleMap.PlayerCharacter.showChatBalloon && 
       MapleMap.PlayerCharacter.drawChatBalloon) {
@@ -432,12 +439,15 @@ UIMap.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
 };
 
 // Function to show player chat balloon
-UIMap.showPlayerChatBalloon = function(message) {
-  // Make sure the player character exists
-  if (!MapleMap.PlayerCharacter) return;
+UIMap.showPlayerChatBalloon = function(message, character = null) {
+  // Use provided character or default to player character
+  const targetCharacter = character || MapleMap.PlayerCharacter;
+  
+  // Make sure the character exists
+  if (!targetCharacter) return;
   
   // If the character doesn't have the chat balloon methods/properties yet, add them
-  const player = MapleMap.PlayerCharacter;
+  const player = targetCharacter;
   
   // If we need to add the chat balloon functionality to the player
   if (!player.chatMessage) {
@@ -521,8 +531,10 @@ UIMap.showPlayerChatBalloon = function(message) {
       
       // Position balloon above player
       const balloonCenterX = playerScreenX;
-      const balloonX = Math.max(20, Math.min(800 - balloonW - 20, balloonCenterX - balloonW / 2));
-      const balloonY = Math.max(20, Math.min(600 - balloonH - 20, playerScreenY - 120 - balloonH));
+      const balloonX = Math.max(20, Math.min(canvas.width - balloonW - 20, balloonCenterX - balloonW / 2));
+      // Position balloon at a fixed offset above the player rather than absolute position
+      const offsetY = 120; // Distance above player head
+      const balloonY = Math.max(20, Math.min(canvas.height - balloonH - 20, playerScreenY - offsetY));
   
       // Draw corners
       canvas.drawImage({
@@ -648,7 +660,8 @@ UIMap.showPlayerChatBalloon = function(message) {
       const arrowImg = this.chatBalloon.arrow;
       const arrowW = arrowImg.width;
       const arrowH = arrowImg.height;
-      const arrowX = balloonCenterX - arrowW / 2;
+      // Make sure arrow is ALWAYS centered above the player, regardless of balloon position
+      const arrowX = playerScreenX - arrowW / 2;
       const arrowY = balloonY + balloonH - 1;
       canvas.drawImage({
         img: arrowImg,

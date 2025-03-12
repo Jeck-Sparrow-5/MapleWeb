@@ -2,6 +2,7 @@ import WZManager from "./wz-utils/WZManager";
 import Random from "./Random";
 import GameCanvas from "./GameCanvas";
 import { CameraInterface } from "./Camera";
+import TaxiUI, { TaxiDestination } from "./UI/TaxiUI";
 
 class NPC {
   opts: any;
@@ -19,6 +20,10 @@ class NPC {
   stances: any = {};
   strings: any = {};
   floating: number = 0;
+  
+  // NPC type flags
+  isTaxi: boolean = false;
+  taxiDestinations: TaxiDestination[] = [];
 
   // MapleTV
   mapleTv: number = 0;
@@ -129,6 +134,23 @@ class NPC {
       }
     }
 
+    // Check if this is a taxi NPC based on function or name
+    if (this.strings.func && 
+        (this.strings.func.toLowerCase().includes('taxi') || 
+         this.strings.func.toLowerCase().includes('cab'))) {
+      this.isTaxi = true;
+      this.setupTaxiDestinations();
+    } else if (this.strings.name && 
+              (this.strings.name.toLowerCase().includes('taxi') || 
+               this.strings.name.toLowerCase().includes('cab') ||
+               this.strings.name.toLowerCase().includes('driver'))) {
+      this.isTaxi = true;
+      this.setupTaxiDestinations();
+    } else if (this.id === 1022000) { // Special case: Henesys regular cab
+      this.isTaxi = true;
+      this.setupTaxiDestinations();
+    }
+
     // Some NPCs "float"
     this.floating = npcFile.info.nGet("float").nGet("nValue", 0);
 
@@ -219,6 +241,74 @@ class NPC {
       console.error(`Error loading strings for NPC ${id}:`, e);
       return {};
     }
+  }
+
+  // Define taxi destinations based on the current map and NPC's location
+  setupTaxiDestinations() {
+    const currentMapId = this.opts.map?.id || 0;
+    
+    // Clear existing destinations
+    this.taxiDestinations = [];
+    
+    // Get the area of the current map to determine available destinations
+    const firstDigit = Math.floor(currentMapId / 100000000);
+    
+    // Victoria Island Taxi destinations (100000000 series)
+    if (firstDigit === 1) {
+      // Default Victoria Island destinations
+      const victoriaDestinations = [
+        { mapId: 100000000, name: "Henesys", cost: 1000 },
+        { mapId: 101000000, name: "Ellinia", cost: 1000 },
+        { mapId: 102000000, name: "Perion", cost: 1000 },
+        { mapId: 103000000, name: "Kerning City", cost: 1000 },
+        { mapId: 104000000, name: "Lith Harbor", cost: 800 },
+        { mapId: 120000000, name: "Nautilus Harbor", cost: 1200 }
+      ];
+      
+      // Remove the current map from destinations
+      this.taxiDestinations = victoriaDestinations.filter(dest => dest.mapId !== currentMapId);
+    }
+    // Ossyria Taxi destinations (200000000 series)
+    else if (firstDigit === 2) {
+      const ossyriaDestinations = [
+        { mapId: 200000000, name: "Orbis", cost: 1200 },
+        { mapId: 211000000, name: "El Nath", cost: 1200 },
+        { mapId: 220000000, name: "Ludibrium", cost: 1200 },
+        { mapId: 221000000, name: "Omega Sector", cost: 1500 },
+        { mapId: 222000000, name: "Korean Folk Town", cost: 1500 },
+        { mapId: 230000000, name: "Aquarium", cost: 1500 },
+        { mapId: 240000000, name: "Leafre", cost: 1500 },
+        { mapId: 250000000, name: "Mu Lung", cost: 1500 },
+        { mapId: 251000000, name: "Herb Town", cost: 1500 }
+      ];
+      
+      // Remove the current map from destinations
+      this.taxiDestinations = ossyriaDestinations.filter(dest => dest.mapId !== currentMapId);
+    }
+    // Default case: if we're in an unknown area, offer a mix of popular destinations
+    else {
+      this.taxiDestinations = [
+        { mapId: 100000000, name: "Henesys", cost: 1500 },
+        { mapId: 101000000, name: "Ellinia", cost: 1500 },
+        { mapId: 102000000, name: "Perion", cost: 1500 },
+        { mapId: 103000000, name: "Kerning City", cost: 1500 },
+        { mapId: 104000000, name: "Lith Harbor", cost: 1500 },
+        { mapId: 200000000, name: "Orbis", cost: 2000 },
+        { mapId: 211000000, name: "El Nath", cost: 2000 },
+        { mapId: 220000000, name: "Ludibrium", cost: 2000 }
+      ];
+    }
+  }
+  
+  // Handle taxi functionality when this NPC is clicked
+  showTaxiDialog() {
+    if (!this.isTaxi || !window.ClickManager?.GameCanvas) return;
+    
+    // Show the taxi UI with this NPC's destinations
+    TaxiUI.show(window.ClickManager.GameCanvas, this.taxiDestinations);
+    
+    // Hide NPC chat balloon when showing the taxi dialog
+    this.showDialog = false;
   }
 
   loadStance(wzNode: any = {}, stance: string = "stand") {
@@ -485,8 +575,9 @@ class NPC {
     const balloonCenterX = npcScreenX;
     const balloonX = Math.max(20, Math.min(canvasWidth - balloonW - 20, balloonCenterX - balloonW / 2));
     
-    // Position balloon high enough above NPC
-    const balloonY = Math.max(20, Math.min(canvasHeight - balloonH - 20, npcScreenY - 120 - balloonH));
+    // Position balloon at a fixed offset above the NPC rather than absolute position
+    const offsetY = 120; // Distance above NPC head
+    const balloonY = Math.max(20, Math.min(canvasHeight - balloonH - 20, npcScreenY - offsetY));
 
     // The corners in style0 are typically 6x6,
     // edges are typically 12 wide or 6 wide, etc.
@@ -626,9 +717,8 @@ class NPC {
     const arrowH = arrowImg.height;
     
     // Position arrow directly above NPC, attached to the balloon bottom
-    // CRITICAL FIX: Center arrow using the same npcScreenX as the balloon positioning
-    // This ensures that the two components move together when camera moves
-    const arrowX = balloonCenterX - arrowW / 2; // Center aligned with NPC
+    // CRITICAL FIX: Make sure arrow is ALWAYS centered above the NPC, regardless of balloon position
+    const arrowX = npcScreenX - arrowW / 2; // Center aligned with NPC
     const arrowY = balloonY + balloonH - 1; // Connect arrow to balloon bottom edge
     canvas.drawImage({
       img: arrowImg,
@@ -672,7 +762,7 @@ class NPC {
       this.setFrame(this.stance, this.frame + 1, this.delay - this.nextDelay);
     }
 
-    // Ensure position consistency
+    // CRITICAL: Ensure position consistency - this keeps balloons properly positioned
     this.pos.x = this.x;
     this.pos.y = this.cy;
 

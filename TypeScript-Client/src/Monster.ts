@@ -11,6 +11,7 @@ import DropItemSprite from "./DropItem/DropItemSprite";
 import DropRandomizer from "./DropItem/DropRandomizer";
 import GameCanvas from "./GameCanvas";
 import { CameraInterface } from "./Camera";
+import MySocket from "./mysocket";
 
 class Monster {
   opts: any;
@@ -347,6 +348,13 @@ async addDrops() {
     knockBackDirection: number,
     responsibleMapleCharacter: any
   ) {
+    // Send damage event to the server for synchronization with other players
+    try {
+      MySocket.sendMonsterDamage(this.id, damage);
+    } catch (error) {
+      console.error("Error sending monster damage to server:", error);
+    }
+    
     if (this.hp - damage <= 0) {
       this.isInHit = true;
       this.pos.right = false;

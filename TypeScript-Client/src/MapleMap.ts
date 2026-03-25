@@ -34,6 +34,7 @@ export interface MapleMap {
   itemDrops: any;
   PlayerCharacter: any;
   doneLoading: boolean;
+  changeMap: any;
   load: (id: number | string) => Promise<void>;
   addItemDrop: (itemDrop: any) => void;
   loadFootholds: (wzNode: any) => any;
@@ -312,9 +313,12 @@ MapleMap.loadMonsters = async function (wzNode) {
 
 // --- Modified NPC spawning to include position and dialogue support ---
 MapleMap.spawnNPC = async function (opts = {}) {
+  // Add a reference to the map in the NPC options
+  opts.map = this;
+  
   const npc = await NPC.fromOpts(opts);
-  // Set a position property using x and cy (vertical center) for rendering and click detection.
-  npc.pos = { x: opts.x, y: opts.cy };
+  // Position already set in NPC.load() method now
+  
   const whichFoothold = this.footholds[npc.fh];
   if (whichFoothold) {
     npc.layer = whichFoothold.layer;
@@ -322,7 +326,31 @@ MapleMap.spawnNPC = async function (opts = {}) {
   console.log(
     `Spawned NPC ${opts.id} at (${npc.pos.x}, ${npc.pos.y})`
   );
+  
   this.npcs.push(npc);
+};
+
+MapleMap.changeMap = async function (newMapId: number) {
+  console.log(`Changing map to ${newMapId}`);
+  
+  // Optionally, clear current map state
+  this.npcs = [];
+  this.monsters = [];
+  this.characters = [];
+  this.itemDrops = [];
+  
+  // (Optionally stop background music, reset timers, etc.)
+  // For example:
+  // AudioManager.stopBackgroundMusic();
+
+  // Load the new map data
+  await this.load(newMapId);
+  
+  // Update camera boundaries based on the new map's boundaries
+  Camera.setBoundaries(this.boundaries);
+  
+  // Optionally, reposition the camera or update any UI elements as needed
+  console.log(`Map changed to ${newMapId}`);
 };
 
 MapleMap.loadNPCs = async function (wzNode) {
@@ -335,7 +363,8 @@ MapleMap.loadNPCs = async function (wzNode) {
       x: npcNode.x.nValue,
       cy: npcNode.cy.nValue,
       f: npcNode.nGet("f").nGet("nValue", 0),
-      fh: npcNode.fh.nValue
+      fh: npcNode.fh.nValue,
+      map: this
     });
   }
 };
@@ -478,11 +507,11 @@ MapleMap.handleClick = function (
 
   this.npcs.forEach(async (npc: any) => {
     if (!npc.pos) return;
-    // Convert NPC's world position to canvas coordinates.
-    const npcX = npc.pos.x - camera.x - 25;
-    const npcY = npc.pos.y - camera.y - 70;
-    //console.log(`Checking NPC ${npc.id}: screen coords (${npcX}, ${npcY})`);
-    // Check if the mouse click is within the NPC's bounding box (56x70).
+    // Convert NPC's world position to canvas coordinates
+    const npcX = npc.x - camera.x - 25; // Center the hitbox
+    const npcY = npc.cy - camera.y - 70; // Adjust for NPC height
+    
+    // Check if the mouse click is within the NPC's bounding box (56x70)
     if (
       mouseX >= npcX &&
       mouseX <= npcX + 56 &&
@@ -490,8 +519,20 @@ MapleMap.handleClick = function (
       mouseY <= npcY + 70
     ) {
       console.log(`Clicked on NPC ${npc.id}:`, npc);
-      await this.npcDialog.changeText(npc.id, null, npc.strings.name, 'Hello');
-      this.npcDialog.setIsHidden(false);
+      if (npc.isTaxi) {
+        console.log("This is a taxi NPC!");
+        // Make sure TaxiUI is loaded before showing dialog
+        import('./UI/TaxiUI').then(() => {
+          npc.showTaxiDialog();
+        }).catch(err => {
+          console.error("Error loading TaxiUI:", err);
+          npc.showDialog = true;
+          npc.lastDialogTime = npc.dialogTimer;
+        });
+      } else {
+        await this.npcDialog.changeText(npc.id, null, npc.strings.name, 'Hello');
+        this.npcDialog.setIsHidden(false);
+      }
     }
   });
 };

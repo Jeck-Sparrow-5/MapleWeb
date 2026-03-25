@@ -5,6 +5,7 @@ import Timer from "./Timer";
 import WZManager from "./wz-utils/WZManager";
 import Camera from "./Camera";
 import SessionManager from "./SessionManager";
+import MySocket from "./mysocket";
 import StateManager from "./StateManager";
 import LoginState from "./LoginState";
 import GameCanvas from "./GameCanvas";
@@ -24,15 +25,15 @@ const startGame = async () => {
     color: "#000000",
   });
   gameWrapper!.style.cursor = "none";
-  if (config.websocketUrl) {
-    await SessionManager.initialize(config.websocketUrl);
-  }
+  // SessionManager is for Cosmic (Java server) via websocat — disabled for Node.js server
+  // if (config.websocketUrl) {
+  //   await SessionManager.initialize(config.websocketUrl);
+  // }
   StateManager.initialize();
   ClickManager.initialize(canvas);
   WZManager.initialize();
   Camera.initialize();
   Timer.initialize();
-  // await MySocket.initialize();
   await StateManager.setState(LoginState, canvas);
 
   let Loop = new GameLoop(canvas);

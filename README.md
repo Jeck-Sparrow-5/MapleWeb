@@ -18,8 +18,84 @@ All graphics and sound assets are rights reserved to Nexon. This open source pro
 8. Converted the project to TypeScript to facilitate easier future development (Note: This is not perfect but required several days to complete).
 9. Added touch controls for mobile devices.
 10. EXP is accurate, and player can level up by killing mobs.
-11. Mobs drop items on death
-12. Player can pick up items from the map (Still need to improve this)
+11. Mobs drop items on death.
+12. Player can pick up items from the map (Still need to improve this).
+13. **Multiplayer support** with real-time player interaction, chat, and synchronized monster combat.
+14. Cab/Taxi transportation system between towns.
+
+## Multiplayer Features
+
+The game now supports real-time multiplayer with the following features:
+
+- Multiple players can join the same map and see each other
+- Players can chat with each other using chat bubbles
+- Monster combat is synchronized between players
+- Players can see other players attacking monsters
+- Monster drops are visible to all players
+
+## Setup Instructions for Multiplayer
+
+### Prerequisites
+
+- Node.js (v14 or newer)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository
+2. Install server dependencies:
+```bash
+npm install
+```
+
+3. Install client dependencies:
+```bash
+cd TypeScript-Client
+npm install
+cd ..
+```
+
+## Running the Game
+
+### Development Mode
+
+1. Start the multiplayer server:
+```bash
+npm run dev
+```
+
+2. In a separate terminal, start the client:
+```bash
+cd TypeScript-Client
+npm run dev
+```
+
+3. Open your browser and navigate to `http://localhost:5173`
+
+### Production Build
+
+1. Build the client:
+```bash
+cd TypeScript-Client
+npm run build
+cd ..
+```
+
+2. Start the server which will serve the client files:
+```bash
+npm start
+```
+
+3. Open your browser and navigate to `http://localhost:3001`
+
+## Game Controls
+
+- Arrow keys: Move character
+- Ctrl: Attack
+- Alt: Jump
+- Z: Pick up items
+- Enter: Open chat window
+- Esc: Close menus
 
 ![Screenshot 2024-03-10 at 1 18 04 PM](https://github.com/Jeck-Sparrow-5/MapleWeb/assets/162882278/a865ca04-ff39-41df-8e58-04a457825e10)
 ![Screenshot 2024-03-10 at 1 17 28 PM](https://github.com/Jeck-Sparrow-5/MapleWeb/assets/162882278/6231bd8f-d593-44d4-96d6-83cd72dad603)

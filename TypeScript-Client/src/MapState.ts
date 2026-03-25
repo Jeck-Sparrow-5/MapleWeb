@@ -11,6 +11,9 @@ import TouchJoyStick, {
   JoyStick,
   JoyStickDirections,
 } from "./UI/TouchJoyStick";
+import ClickManager from "./UI/ClickManager";
+import TaxiUI from "./UI/TaxiUI";
+import WZManager from "./wz-utils/WZManager";
 
 // henesys 100000000
 // 100020100 - maps with pigs - useful to test fast things with mobs
@@ -26,6 +29,8 @@ export interface MapState extends UIState {
   statsMenu: StatsMenuSprite;
   inventoryMenu: InventoryMenuSprite;
   UIMenus: any[];
+  PlayerCharacter: any; // Reference to MyCharacter
+  getMapName: (mapId: number) => Promise<{ streetName: string, mapName: string }>;
   previousKeyboardState: {
     up: boolean;
     down: boolean;
@@ -70,6 +75,45 @@ function isTouchDevice() {
   return "ontouchstart" in window || navigator.maxTouchPoints > 0;
 }
 
+// Function to get map names from the String.wz/Map.img file
+MapStateInstance.getMapName = async function(mapId: number) {
+  try {
+    const strMap = await WZManager.get("String.wz/Map.img");
+    
+    const firstDigit = Math.floor(mapId / 100000000);
+    const firstTwoDigits = Math.floor(mapId / 10000000);
+    const firstThreeDigits = Math.floor(mapId / 1000000);
+    
+    let area = "maple";
+    if (firstTwoDigits === 54) {
+      area = "singapore";
+    } else if (firstDigit === 9) {
+      area = "etc";
+    } else if (firstDigit === 8) {
+      area = "jp";
+    } else if (firstThreeDigits === 682) {
+      area = "HalloweenGL";
+    } else if (firstTwoDigits === 60 || firstTwoDigits === 61) {
+      area = "MasteriaGL";
+    } else if (firstTwoDigits === 67 || firstTwoDigits === 68) {
+      area = "weddingGL";
+    } else if (firstDigit === 2) {
+      area = "ossyria";
+    } else if (firstDigit === 1) {
+      area = "victoria";
+    }
+    
+    const nameNode = strMap[area]?.[mapId];
+    const streetName = nameNode?.streetName?.nValue || "";
+    const mapName = nameNode?.mapName?.nValue || `Map ${mapId}`;
+    
+    return { streetName, mapName };
+  } catch (error) {
+    console.error(`Error getting map name for ${mapId}:`, error);
+    return { streetName: "", mapName: `Map ${mapId}` };
+  }
+};
+
 MapStateInstance.initialize = async function (map: number = defaultMap) {
   this.isTouchControllsEnabled = isTouchDevice(); // Check if the device supports touch
   if (this.isTouchControllsEnabled) {
@@ -82,14 +126,20 @@ MapStateInstance.initialize = async function (map: number = defaultMap) {
     charecter: MyCharacter,
     isHidden: true,
   });
+  
+  // We'll use ClickManager's GameCanvas reference instead
   this.inventoryMenu = await InventoryMenuSprite.fromOpts({
     x: 400,
     y: 200,
     charecter: MyCharacter,
     isHidden: true,
+    canvas: ClickManager.GameCanvas, // Pass the canvas for mouse interaction
   });
 
   this.UIMenus = [this.statsMenu, this.inventoryMenu];
+  
+  // Set a reference to the player character for TaxiUI
+  this.PlayerCharacter = MyCharacter;
 
   // Initialize previous keyboard state with all keys set to false.
   this.previousKeyboardState = {
@@ -121,6 +171,13 @@ MapStateInstance.doUpdate = function (
 ) {
   if (!!MapleMap.doneLoading) {
     MapleMap.update(msPerTick);
+
+    // Update TaxiUI
+    if (TaxiUI.isVisible) {
+      TaxiUI.update(msPerTick);
+      // Don't return early, continue updating the game state
+      // This allows the TaxiUI to handle clicks while game runs in background
+    }
 
     if (this.isTouchControllsEnabled) {
       switch (this.joyStick.cardinalDirection) {
@@ -193,9 +250,14 @@ MapStateInstance.doUpdate = function (
       }
 
       if (canvas.isKeyDown("esc")) {
-        const notHiddenMenus = this.UIMenus.filter((menu) => !menu.isHidden);
-        if (notHiddenMenus.length > 0) {
-          notHiddenMenus[notHiddenMenus.length - 1].setIsHidden(true);
+        // First check if taxi UI is open
+        if (TaxiUI.isVisible) {
+          TaxiUI.hide();
+        } else {
+          const notHiddenMenus = this.UIMenus.filter((menu) => !menu.isHidden);
+          if (notHiddenMenus.length > 0) {
+            notHiddenMenus[notHiddenMenus.length - 1].setIsHidden(true);
+          }
         }
       }
 
@@ -251,6 +313,14 @@ MapStateInstance.doRender = function (
     });
 
     UIMap.doRender(canvas, camera, lag, msPerTick, tdelta);
+    
+    // Draw TaxiUI on top of everything else
+    if (TaxiUI.isVisible) {
+      console.log("MapState is rendering TaxiUI");
+      TaxiUI.render(canvas, camera);
+    } else {
+      // console.log("TaxiUI is not visible in MapState render");
+    }
   }
 };
 

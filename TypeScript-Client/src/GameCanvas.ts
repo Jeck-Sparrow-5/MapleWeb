@@ -341,6 +341,9 @@ class GameCanvas {
    * @param {int} [opts.angle=0] - Degrees clockwise rotation.
    * @param {float} [opts.alpha=1] - Opacity.
    * @param {string} [opts.color='#000000'] - Color.
+   * @param {int} [opts.radius=0] - Border radius for rounded corners.
+   * @param {string} [opts.stroke=''] - Stroke color (if empty, no stroke).
+   * @param {int} [opts.strokeWidth=1] - Stroke width.
    */
   drawRect(opts: {
     x?: number;
@@ -350,6 +353,9 @@ class GameCanvas {
     angle?: number;
     alpha?: number;
     color?: string;
+    radius?: number;
+    stroke?: string;
+    strokeWidth?: number;
   }) {
     const x = opts.x || 0;
     const y = opts.y || 0;
@@ -358,6 +364,9 @@ class GameCanvas {
     const angle = opts.angle || 0;
     const alpha = opts.alpha || 1;
     const color = opts.color || "#000000";
+    const radius = opts.radius || 0;
+    const stroke = opts.stroke || "";
+    const strokeWidth = opts.strokeWidth || 1;
 
     this.context.save();
 
@@ -365,7 +374,20 @@ class GameCanvas {
     this.context.fillStyle = color;
     this.context.translate(x, y);
     this.context.rotate(((angle % 360) * Math.PI) / 180);
-    this.context.fillRect(0, 0, width, height);
+    
+    try {
+      // Standard rectangle - for safety, always start with this
+      this.context.fillRect(0, 0, width, height);
+      
+      // Add stroke if specified
+      if (stroke) {
+        this.context.strokeStyle = stroke;
+        this.context.lineWidth = strokeWidth;
+        this.context.strokeRect(0, 0, width, height);
+      }
+    } catch (e) {
+      console.error("Error in drawRect:", e);
+    }
 
     this.context.restore();
   }
@@ -382,6 +404,8 @@ class GameCanvas {
    * @param {int} [opts.fontSize=12] - Font size.
    * @param {string} [opts.fontFamily='Arial'] - Font family.
    * @param {string} [opts.align='left'] - Alignment relative to destination x.
+   * @param {string} [opts.stroke=''] - Stroke color (if empty, no stroke).
+   * @param {int} [opts.strokeWidth=1] - Stroke width.
    */
   drawText(opts: {
     text?: string;
@@ -393,6 +417,8 @@ class GameCanvas {
     fontSize?: number;
     fontFamily?: string;
     align?: string;
+    stroke?: string;
+    strokeWidth?: number;
   }) {
     const text = opts.text || "";
     const x = opts.x || 0;
@@ -403,17 +429,24 @@ class GameCanvas {
     const fontSize = opts.fontSize || 12;
     const fontFamily = opts.fontFamily || "Arial";
     const textAlign = opts.align || "left";
+    const stroke = opts.stroke || "";
+    const strokeWidth = opts.strokeWidth || 1;
 
     this.context.save();
 
-    this.context.textBaseline = "top";
-    this.context.fillStyle = color;
-    this.context.font = `${fontWeight} ${fontStyle} ${fontSize}px ${fontFamily}`;
-
-    // todo: fix this
-    this.context.textAlign = textAlign as CanvasTextAlign;
-
-    this.context.fillText(text, x, y);
+    try {
+      this.context.textBaseline = "top";
+      this.context.fillStyle = color;
+      this.context.font = `${fontWeight} ${fontStyle} ${fontSize}px ${fontFamily}`;
+  
+      // todo: fix this
+      this.context.textAlign = textAlign as CanvasTextAlign;
+      
+      // Simply draw the text for now - simplify to minimize errors
+      this.context.fillText(text, x, y);
+    } catch (e) {
+      console.error("Error in drawText:", e);
+    }
 
     this.context.restore();
   }

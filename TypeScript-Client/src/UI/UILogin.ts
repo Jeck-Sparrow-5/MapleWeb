@@ -14,8 +14,7 @@ import LoginPacket from '../Net/Packets/LoginPacket';
 import UILoginNotice, { NoticeType, NoticeMessage } from './UILoginNotice';
 import UILoginTOS from './UILoginTOS';
 import config from '../Config';
-import MyCharacter from '../MyCharacter';
-import MapleCharacter from '../MapleCharacter';
+import MapleStandingCharacter from '../MapleStandingCharacter';
 import DebugDrag from './DebugDrag';
 
 interface UILoginInterface {
@@ -95,7 +94,7 @@ interface UILoginInterface {
   showNotice: (noticeType: NoticeType, noticeMessage: NoticeMessage | null) => void;
   uiLoginTOS: UILoginTOS | null;
   showTOS: () => void;
-  characters: MapleCharacter[];
+  characters: MapleStandingCharacter[];
   selectedCharIndex: number;
   charSelectNameTag: any;
   charAnimFrame: number;
@@ -109,7 +108,7 @@ interface UILoginInterface {
   startButton: MapleStanceButton | null;
   drawCharacterSelect: (canvas: GameCanvas, camera: any, lag: number, msPerTick: number, tdelta: number) => void;
   // Create character
-  newChar: MapleCharacter | null;
+  newChar: MapleStandingCharacter | null;
   newCharOptions: {
     skinColors: number[];
     hairs: number[];
@@ -148,8 +147,17 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   this.channelButtons = [];
   this.channelSelectAnimation = null;
   this.selectedChannelIndex = null;
-  this.characters = [MyCharacter];
+  this.characters = [];
   this.selectedCharIndex = 0;
+  // Load default character for char select preview
+  MapleStandingCharacter.fromAppearance({
+    name: 'Player',
+    skinColor: 0,
+    hairId: 30030,
+    faceId: 20000,
+    flipped: true,
+    equipIds: [1040002, 1060002, 1302000],
+  }).then(ch => { this.characters = [ch]; }).catch(() => {});
   this.charAnimFrame = 0;
   this.charAnimDelay = 0;
   this.charSelected = false;
@@ -428,6 +436,14 @@ UILogin.initialize = async function (canvas: GameCanvas) {
 UILogin.doUpdate = function (msPerTick, camera, canvas) {
   UICommon.doUpdate(msPerTick);
 
+  // Update standing character animations (blink, idle oscillation)
+  for (const ch of this.characters) {
+    ch.update(msPerTick);
+  }
+  if (this.newChar) {
+    this.newChar.update(msPerTick);
+  }
+
   const wasScrollActive = this.scrollOpenAnimation.active;
   this.scrollOpenAnimation.update(msPerTick);
   if (this.channelSelectAnimation) {
@@ -643,15 +659,14 @@ UILogin.drawCharacterSelect = function (canvas, camera, lag, msPerTick, tdelta) 
   // Update debug drag system
   DebugDrag.update(canvas.mouseX, canvas.mouseY, canvas.clicked);
 
-  // Advance the character idle animation
+  // Advance glow animation counter (used for empty slots)
   this.charAnimDelay += msPerTick;
-  if (this.charAnimDelay >= 200) {
+  if (this.charAnimDelay >= 120) {
     this.charAnimDelay = 0;
     this.charAnimFrame++;
   }
 
   const char = this.characters[this.selectedCharIndex];
-  if (!char || !char.baseBody) return;
 
   // Character base screen position (player offset: -133, -9)
   const baseCharScreenX = 10 - 133 - camera.x;
@@ -660,10 +675,6 @@ UILogin.drawCharacterSelect = function (canvas, camera, lag, msPerTick, tdelta) 
   const charPos = DebugDrag.get('character');
   const charScreenX = charPos.x;
   const charScreenY = charPos.y;
-
-  const stance = 'stand1';
-  const maxFrames = char.baseBody[stance]?.nChildren?.length || 3;
-  const frame = this.charAnimFrame % maxFrames;
 
   const charSelectNode = this.uiLogin.nGet('CharSelect');
   const CHAR_SLOT_SPACING = 80;
@@ -710,15 +721,15 @@ UILogin.drawCharacterSelect = function (canvas, camera, lag, msPerTick, tdelta) 
           }
         }
 
-        // Draw the character sprite
+        // Draw the character sprite (frame/stance managed by MapleStandingCharacter.update)
         if (slotChar && slotChar.baseBody) {
-          const drawableFrames = slotChar.getDrawableFrames(stance, frame, true);
+          const drawableFrames = slotChar.getDrawableFrames(slotChar.stance, slotChar.frame, slotChar.flipped);
           drawableFrames.forEach((f: any) => {
             canvas.drawImage({
               img: f.img,
               dx: Math.floor(slotX + f.x),
               dy: Math.floor(slotY + f.y),
-              flipped: true,
+              flipped: slotChar.flipped,
             });
           });
         }
@@ -834,6 +845,10 @@ UILogin.drawCharacterSelect = function (canvas, camera, lag, msPerTick, tdelta) 
         if (mx >= slotX - 30 && mx <= slotX + 30 &&
             my >= charScreenY - 60 && my <= charScreenY + 10) {
           if (i < this.characters.length) {
+            // Deselect previous
+            if (this.charSelected && this.selectedCharIndex !== i) {
+              this.characters[this.selectedCharIndex]?.setStance('stand1', 0, true);
+            }
             this.selectedCharIndex = i;
             this.charSelected = true;
             this.charSelectEffectFrame = 0;
@@ -841,6 +856,8 @@ UILogin.drawCharacterSelect = function (canvas, camera, lag, msPerTick, tdelta) 
             this.charSelectScrollState = 'opening';
             this.charSelectScrollFrame = 0;
             this.charSelectScrollDelay = 0;
+            // Switch selected character to walk animation
+            this.characters[i].setStance('walk1', 0, false);
             // Enable the start button
             if (this.startButton) {
               this.startButton.stance = 'normal';
@@ -908,7 +925,7 @@ UILogin.drawCharacterSelect = function (canvas, camera, lag, msPerTick, tdelta) 
           }
 
           // Draw stat values only (labels are baked into charInfo2 image)
-          const stats = char.stats;
+          const stats = char.stat;
           const infoX = scrollX + 50;
           const infoY = scrollY + 38;
           const lineH = 17;
@@ -923,7 +940,7 @@ UILogin.drawCharacterSelect = function (canvas, camera, lag, msPerTick, tdelta) 
           ];
           // Right column values: Fame, (empty), INT, LUK
           const rightValues = [
-            `${char.fame || 0}`,
+            '0', // fame not tracked on standing character
             '',
             `${stats?.int || 4}`,
             `${stats?.luk || 4}`,
@@ -1012,24 +1029,15 @@ UILogin.initCreateCharacter = function () {
   };
   window.addEventListener('keydown', this._createCharKeyHandler, true);
 
-  // Create preview character async with proper stats
-  (async () => {
-    const Stats = (await import('../Stats/Stats')).default;
-    const Inventory = (await import('../Inventory/Inventory')).default;
-    this.newChar = new MapleCharacter({
-      name: 'New Character',
-      skinColor: 0,
-      hair: 30030,
-      face: 20000,
-      stats: new Stats({
-        str: 4, dex: 4, int: 4, luk: 4,
-        abilityPoints: 0, maxHp: 50, maxMp: 5,
-        jobType: 0, job: 'Beginner', level: 1,
-      }),
-      inventory: new Inventory({ mesos: 0 }),
-    });
-    await this.newChar.load();
-  })();
+  // Create preview character using MapleStandingCharacter (no physics needed)
+  MapleStandingCharacter.fromAppearance({
+    name: 'New Character',
+    skinColor: 0,
+    hairId: 30030,
+    faceId: 20000,
+    flipped: true,
+    equipIds: [1040002, 1060002, 1302000],
+  }).then(ch => { this.newChar = ch; }).catch(() => {});
 };
 
 UILogin.cleanupCreateCharacter = function () {
@@ -1053,6 +1061,17 @@ UILogin.confirmCreateCharacter = function () {
 };
 
 UILogin.updateNewCharAppearance = async function () {
+  if (!this.newChar || !this.newCharOptions) return;
+  const o = this.newCharOptions;
+  await this.newChar.setSkinColor(o.skinColors[o.skinIndex] ?? 0);
+  await this.newChar.setFace(o.faces[o.faceIndex] ?? 20000);
+  await this.newChar.setHair(o.hairs[o.hairIndex] ?? 30030);
+  await this.newChar.setEquipsByIds([
+    o.tops[o.topIndex],
+    o.bottoms[o.bottomIndex],
+    o.shoes[o.shoesIndex],
+    o.weapons[o.weaponIndex],
+  ].filter(Boolean));
 };
 
 UILogin.drawCreateCharacter = function (canvas: any, camera: any, lag: number, msPerTick: number, tdelta: number) {
@@ -1065,18 +1084,10 @@ UILogin.drawCreateCharacter = function (canvas: any, camera: any, lag: number, m
   const newCharNode = this.uiLogin.nGet('NewChar');
 
   // --- Character preview (always shown) ---
+  // Animation is handled by newChar.update() called in doUpdate
   if (this.newChar && this.newChar.baseBody) {
-    this.charAnimDelay += msPerTick;
-    if (this.charAnimDelay >= 200) {
-      this.charAnimDelay = 0;
-      this.charAnimFrame++;
-    }
-    const stance = 'stand1';
-    const maxFrames = this.newChar.baseBody[stance]?.nChildren?.length || 3;
-    const frame = this.charAnimFrame % maxFrames;
-
     try {
-      const drawableFrames = this.newChar.getDrawableFrames(stance, frame, true);
+      const drawableFrames = this.newChar.getDrawableFrames(this.newChar.stance, this.newChar.frame, this.newChar.flipped);
       DebugDrag.register('newCharPreview', 395, 356, 60, 80);
       const p = DebugDrag.get('newCharPreview');
 

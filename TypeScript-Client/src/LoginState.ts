@@ -45,10 +45,18 @@ const LoginState: LoginState = {
 
     if (subState !== LoginSubState.LOGIN_SCREEN) {
       UILogin.removeInputs();
+    } else {
+      UILogin.placeInputs();
+      UILogin.viewAllCharacterButton.isHidden = true;
+      UILogin.channelBackButton.isHidden = true;
     }
 
     if (subState === LoginSubState.WORLD_SELECT) {
+      UILogin.resetWorld();
+      UILogin.createWorldButtons();
       UILogin.startSelectWorldChannelImgSlideIn();
+      UILogin.viewAllCharacterButton.isHidden = false;
+      UILogin.channelBackButton.isHidden = false;
     }
     if (previousState === LoginSubState.WORLD_SELECT) {
       UILogin.startSelectWorldChannelImgFadeOut();

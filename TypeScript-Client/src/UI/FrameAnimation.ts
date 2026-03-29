@@ -4,8 +4,10 @@ import { CameraInterface } from '../Camera';
 
 export default class FrameAnimation {
   active: boolean = false;
+  repeat: boolean = false;
   x: number;
   y: number;
+  private isRelativeToCamera: boolean;
   private frame: number = 0;
   private readonly frames: any[] = [];
   private zigzag: boolean;
@@ -13,8 +15,10 @@ export default class FrameAnimation {
   private nextDelay: number = 0;
   private wzNode: WZNode;
 
-  constructor(wzNode: any, x: number, y: number) {
+  constructor(wzNode: any, x: number, y: number, isRelativeToCamera = false, repeat = false) {
     this.wzNode = wzNode;
+    this.isRelativeToCamera = isRelativeToCamera;
+    this.repeat = repeat;
     const frameIds = [];
     for (const child of wzNode.nChildren) {
       const id = Number.parseInt(child.nName);
@@ -48,6 +52,8 @@ export default class FrameAnimation {
 
     if (!finishedLoop) {
       this.setFrame(nextFrame, carryOverDelay);
+    } else if (this.repeat) {
+      this.setFrame(0, carryOverDelay);
     } else {
       this.active = false;
     }
@@ -71,11 +77,19 @@ export default class FrameAnimation {
     let dx = this.x;
     let dy = this.y;
 
-    canvas.drawImage({
-      img: currentImage,
-      dx: dx - camera.x,
-      dy: dy - camera.y,
-    });
+    if (this.isRelativeToCamera) {
+      canvas.drawImage({
+        img: currentImage,
+        dx: dx,
+        dy: dy,
+      });
+    } else {
+      canvas.drawImage({
+        img: currentImage,
+        dx: dx - camera.x,
+        dy: dy - camera.y,
+      });
+    }
   }
 
   reset() {

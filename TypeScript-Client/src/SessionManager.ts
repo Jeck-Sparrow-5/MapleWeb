@@ -1,14 +1,12 @@
 import { Cryptography } from './Net/Cryptography';
-import { InPacketOpcode } from './Net/InPacket';
-import { OutPacket, OutPacketOpcode } from './Net/OutPacket';
-import UILogin from './UI/UILogin';
-import {NoticeMessage, NoticeType} from './UI/UILoginNotice';
+import { MessageProcessor } from './Net/MessageProcessor';
 
 class SessionManager {
   private static instance: SessionManager | null = null;
   private websocket: WebSocket | null = null;
   private isFirstMessage: boolean = true;
   private crypto: Cryptography | null = null;
+  private messageProcessor: MessageProcessor | null = null;
 
   private constructor() {}
 
@@ -58,35 +56,14 @@ class SessionManager {
 
   private setupCrypto(data: ArrayBuffer): void {
     this.crypto = new Cryptography(new Uint8Array(data));
+    this.messageProcessor = new MessageProcessor(this.crypto);
   }
 
   private handleMessage(data: ArrayBuffer): void {
-    const bytes = new Uint8Array(data);
-    const payloadLength = this.crypto!.checkLength(bytes);
-    console.log('payloadLength:', payloadLength);
-    const payload = bytes.subarray(Cryptography.HEADER_LENGTH);
-    this.crypto!.decrypt(payload, payloadLength);
-    console.log('decrypted:', payload);
-
-    const view = new DataView(payload.buffer);
-    const opcode = view.getUint16(Cryptography.HEADER_LENGTH, true);
-    console.debug('opcode:', opcode);
-    switch (opcode) { // @todo: split it into a separate class
-      case InPacketOpcode.LOGIN_STATUS:
-        const reasonCode = view.getUint8(Cryptography.HEADER_LENGTH + 2);
-        console.log('Login status is:', reasonCode);
-        if (reasonCode === 23) {
-          UILogin.showTOS();
-        } else {
-          UILogin.showNotice(NoticeType.NORMAL, reasonCode as NoticeMessage);
-        }
-        break;
-      case InPacketOpcode.PING:
-        new OutPacket(OutPacketOpcode.PONG).dispatch();
-        break;
-      default:
-        console.warn('Unhandled opcode:', opcode);
-        break;
+    if (this.messageProcessor) {
+      this.messageProcessor.processMessage(data);
+    } else {
+      console.error('MessageProcessor not initialized');
     }
   }
 
@@ -112,13 +89,13 @@ class SessionManager {
       this.crypto!.createHeader(header, bytes.length);
       this.crypto!.encrypt(bytes, bytes.length);
 
-      console.log('header packet bytes:', header);
-      console.log('Login packet after encrypt:', bytes);
+      console.log('header bytes:', header);
+      console.log('data after encrypt:', bytes);
 
       this.websocket!.send(header.buffer);
-      console.log('header packet sent');
+      console.log('header sent');
       this.websocket!.send(bytes.buffer);
-      console.log('login packet sent');
+      console.log('data sent');
       return true;
     } catch (error) {
       console.error('Failed to send message:', error);

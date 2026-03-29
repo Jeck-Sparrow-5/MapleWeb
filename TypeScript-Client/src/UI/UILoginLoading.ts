@@ -4,22 +4,20 @@ import ClickManager from './ClickManager';
 import {MapleStanceButton} from './MapleStanceButton';
 import GameCanvas from '../GameCanvas';
 import {CameraInterface} from '../Camera';
+import FrameAnimation from './FrameAnimation';
 
-export default class UILoginTOS {
-  private uiLoginTOS: any = null;
-  private uiLoginBtOk: any = null;
-  private uiLoginBtCancel: any = null;
-  private stringEULA: any = null;
+export default class UILoginLoading {
+  private uiLoginLoading: any = null;
+  private barAnimation: FrameAnimation | null = null;
   opts: any;
   x: number = 0;
   y: number = 0;
   isHidden: boolean;
   buttons: MapleButton[];
-  okHandler: (() => void) | null = null;
   cancelHandler: (() => void) | null = null;
 
   static async fromOpts(opts: any) {
-    const object = new UILoginTOS(opts);
+    const object = new UILoginLoading(opts);
     await object.load();
     return object;
   }
@@ -28,8 +26,7 @@ export default class UILoginTOS {
     this.x = opts.x || 0;
     this.y = opts.y || 0;
     this.isHidden = typeof opts.isHidden !== 'undefined' ? opts.isHidden : true;
-    this.okHandler = opts.okHandler || null;
-    this.cancelHandler = opts.cancelHandler || null;
+    this.cancelHandler = typeof opts.cancelHandler === 'function' ? opts.cancelHandler : null;
     this.opts = opts;
     this.buttons = [];
   }
@@ -39,10 +36,8 @@ export default class UILoginTOS {
     this.x = opts.x;
     this.y = opts.y;
 
-    this.uiLoginTOS = await WZManager.get('UI.wz/Login.img/TOS');
-    this.uiLoginBtOk = await WZManager.get('UI.wz/Login.img/BtOk');
-    this.uiLoginBtCancel = await WZManager.get('UI.wz/Login.img/BtCancel');
-    this.stringEULA = await WZManager.get('String.wz/EULA.img/EULA');
+    this.uiLoginLoading = await WZManager.get('UI.wz/Login.img/Notice/Loading');
+    this.barAnimation = new FrameAnimation(this.uiLoginLoading.bar, this.x + 130, this.y + 98, true, true);
     this.loadButtons();
   }
 
@@ -51,32 +46,24 @@ export default class UILoginTOS {
       ClickManager.removeButton(button);
     });
     this.buttons = [];
-    const okButton = new MapleStanceButton(null, {
-      x: this.x + 265,
-      y: this.y + 374,
-      isRelativeToCamera: true,
-      isPartOfUI: true,
-      img: this.uiLoginBtOk.nChildren,
-      onClick: () => {
-        this.setIsHidden(true);
-        typeof this.okHandler === 'function' && this.okHandler();
-      },
-    });
-    this.buttons.push(okButton);
     const cancelButton = new MapleStanceButton(null, {
-      x: this.x + 340,
-      y: this.y + 374,
+      x: this.x + 190,
+      y: this.y + 40,
       isRelativeToCamera: true,
       isPartOfUI: true,
-      img: this.uiLoginBtCancel.nChildren,
+      img: this.uiLoginLoading.BtCancel.nChildren,
       onClick: () => {
-        this.setIsHidden(true);
+        typeof this.cancelHandler === 'function' && this.cancelHandler();
       },
     });
     this.buttons.push(cancelButton);
     this.buttons.forEach((button) => {
       ClickManager.addButton(button);
     });
+  }
+
+  update(msPerTick: number) {
+    this.barAnimation?.update(msPerTick);
   }
 
   draw(
@@ -90,10 +77,12 @@ export default class UILoginTOS {
       return;
     }
     canvas.drawImage({
-      img: this.uiLoginTOS.nGet('0').nGetImage(),
+      img: this.uiLoginLoading.backgrnd.nGetImage(),
       dx: this.x,
       dy: this.y,
     });
+
+    this.barAnimation?.draw(canvas, camera, lag, msPerTick, tdelta);
 
     this.buttons.forEach((obj) => {
       obj.draw(canvas, camera, lag, msPerTick, tdelta);
@@ -105,5 +94,11 @@ export default class UILoginTOS {
     this.buttons.forEach((button) => {
       button.isHidden = isHidden;
     });
+    if (!isHidden) {
+      if (this.barAnimation) {
+        this.barAnimation.reset();
+        this.barAnimation.active = true;
+      }
+    }
   }
 }

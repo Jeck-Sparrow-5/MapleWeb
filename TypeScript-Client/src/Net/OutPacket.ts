@@ -2,6 +2,9 @@ import SessionManager from '../SessionManager';
 
 export enum OutPacketOpcode {
   LOGIN = 1,
+  CHARACTER_LIST_REQUEST = 5,
+  ACCEPT_TOS = 7,
+  SERVER_LIST_REQUEST = 11,
   PONG = 24,
 }
 

@@ -9,6 +9,7 @@ import SessionManager from '../../SessionManager';
 import PlayerLoginPacket from '../Packets/PlayerLoginPacket';
 import MyCharacter from '../../MyCharacter';
 import { keyBindings } from '../../UI/UIKeyConfig';
+import { hotbarSlots } from '../../UI/UISkillHotbar';
 
 // opcode 306 — shop buy/sell result
 export class ConfirmShopTransactionHandler extends PacketHandler {
@@ -59,11 +60,14 @@ export class KeymapHandler extends PacketHandler {
     for (let i = 0; i < KEY_COUNT; i++) {
       const type = data.getUint8(offset); offset += 1;
       const action = data.getInt32(offset, true); offset += 4;
-      if (type === 6 && actionToName[action]) {
-        // Map server action ID to our key binding name
-        const bindingName = actionToName[action];
-        // Key index i roughly maps to keyboard key code (simplified)
-        // We don't overwrite — server keymap is informational for now
+
+      if (type === 1 && action > 0) {
+        // type 1 = skill — map key index to hotbar slot 0-9
+        // Key indices 2-11 roughly correspond to keys 1-0
+        const hotbarIdx = i - 2;
+        if (hotbarIdx >= 0 && hotbarIdx < 10) {
+          hotbarSlots[hotbarIdx] = action;
+        }
       }
     }
   }

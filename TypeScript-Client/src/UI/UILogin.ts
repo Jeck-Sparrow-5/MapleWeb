@@ -251,7 +251,13 @@ UILogin.initialize = async function (canvas: GameCanvas) {
     isRelativeToCamera: true,
     isHidden: true,
     onClick: async () => {
-      console.log('View All Characters button clicked!');
+      // View All Characters — request char list for all worlds at once (VAC)
+      // For now: prompt for world ID and request char list
+      const worldId = this.selectedWorldId ?? 0;
+      if (config.websocketUrl && worldId !== null) {
+        this.showLoading();
+        new CharacterListRequestPacket(worldId, this.selectedChannelIndex ?? 0 + 1).dispatch();
+      }
     },
   });
   ClickManager.addButton(this.viewAllCharacterButton);

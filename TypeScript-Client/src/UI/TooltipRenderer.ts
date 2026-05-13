@@ -1,4 +1,5 @@
 import WZManager from '../wz-utils/WZManager';
+import { getItemNameSync } from '../wz-utils/ItemNameLoader';
 import GameCanvas from '../GameCanvas';
 
 interface TooltipLine {
@@ -24,10 +25,11 @@ const TooltipRenderer = {
     this.pending = { lines, x: mouseX, y: mouseY };
   },
 
-  drawItemTooltip(canvas: GameCanvas, itemId: number, itemName: string, mouseX: number, mouseY: number) {
+  drawItemTooltip(canvas: GameCanvas, itemId: number, _itemName: string, mouseX: number, mouseY: number) {
+    const name = getItemNameSync(itemId);
     const lines: TooltipLine[] = [
-      { text: itemName, color: '#FFFFFF' },
-      { text: `ID: ${itemId}`, color: '#888888' },
+      { text: name, color: '#FFFFFF' },
+      { text: `ID: ${itemId}`, color: '#666688' },
     ];
     this.show(lines, mouseX, mouseY);
   },

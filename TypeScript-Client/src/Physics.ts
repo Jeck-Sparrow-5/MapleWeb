@@ -126,11 +126,9 @@ class Physics {
 
     this.isClimbing = false;
   }
-  attack() {
-    // TODO
-    // this need to use the job data like
-    // archer can not attack while jumping
-    // assasin can attack while jumping
+  attack(canAttackWhileJumping = false) {
+    // Subclasses use this to gate attack based on jump state
+    // Physics itself doesn't block — MapleCharacter checks isInAttack
   }
   climbUp() {
     this.isClimbing = true;

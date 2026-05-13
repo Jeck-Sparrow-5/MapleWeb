@@ -127,16 +127,36 @@ MapleMap.load = async function (id: number | string) {
   try {
     const reactorNode = this.wzNode.reactor;
     if (reactorNode?.nChildren) {
-      reactorNode.nChildren.forEach((r: any) => {
+      for (const r of reactorNode.nChildren) {
+        const reactorId = parseInt(r.id?.nValue ?? '0');
+        let frames: any[] = [];
+        let origin = { x: 0, y: 0 };
+        try {
+          const strId = `${reactorId}`.padStart(7, '0');
+          const wzR = await WZManager.get(`Reactor.wz/${strId}.img`);
+          const state0 = wzR?.nGet('0');
+          if (state0?.nChildren) {
+            frames = state0.nChildren.map((f: any) => ({
+              img: f.nGetImage?.(),
+              ox: f.origin?.nX ?? 0,
+              oy: f.origin?.nY ?? 0,
+              delay: parseInt(f.delay?.nValue ?? '100'),
+            })).filter((f: any) => f.img);
+          }
+        } catch (_) {}
+
         this.reactors.push({
-          id: parseInt(r.id?.nValue ?? '0'),
+          id: reactorId,
           name: r.name?.nValue ?? '',
           x: parseInt(r.x?.nValue ?? '0'),
           y: parseInt(r.y?.nValue ?? '0'),
           oId: parseInt(r.nName ?? '0'),
           activated: false,
+          frames,
+          frame: 0,
+          delay: 0,
         });
-      });
+      }
     }
   } catch (_) {}
 
@@ -230,8 +250,30 @@ MapleMap.loadBackgrounds = async function (wzNode) {
 MapleMap.loadPortals = async function (wzNode) {
   const portals = [];
 
+  // Build map name lookup for portal destination labels
+  let mapNames: Record<number, string> = {};
+  try {
+    const strMap = await WZManager.get('String.wz/Map.img');
+    const walkMapNames = (node: any) => {
+      if (!node?.nChildren) return;
+      node.nChildren.forEach((child: any) => {
+        const id = parseInt(child.nName);
+        if (!isNaN(id)) {
+          const name = child.mapName?.nValue ?? child.nGet?.('mapName')?.nValue ?? '';
+          if (name) mapNames[id] = name;
+        } else {
+          walkMapNames(child);
+        }
+      });
+    };
+    walkMapNames(strMap);
+  } catch (_) {}
+
   for (const portalNode of wzNode.nChildren) {
     const portal = await Portal.fromWzNode(portalNode);
+    if (portal.toMap > 0 && mapNames[portal.toMap]) {
+      (portal as any).toMapName = mapNames[portal.toMap];
+    }
     portals.push(portal);
   }
 
@@ -422,6 +464,17 @@ MapleMap.update = function (msPerTick) {
   this.characters.forEach((chr: MapleCharacter) => chr.update(msPerTick));
   this.portals.forEach((p: Portal) => p.update(msPerTick));
 
+  // Advance reactor animation frames
+  this.reactors?.forEach((r: any) => {
+    if (r.activated || !r.frames?.length) return;
+    r.delay = (r.delay ?? 0) + msPerTick;
+    const frame = r.frames[r.frame ?? 0];
+    if (r.delay >= (frame?.delay ?? 100)) {
+      r.delay = 0;
+      r.frame = ((r.frame ?? 0) + 1) % r.frames.length;
+    }
+  });
+
   this.itemDrops = this.itemDrops.filter(
     (drop: DropItemSprite) => !drop.destroyed
   );
@@ -494,13 +547,18 @@ MapleMap.render = function (
     if (r.activated) return;
     const rx = r.x - camera.x;
     const ry = r.y - camera.y;
-    canvas.context.save();
-    canvas.context.fillStyle = 'rgba(255,200,50,0.6)';
-    canvas.context.strokeStyle = '#FFDD00';
-    canvas.context.lineWidth = 1;
-    canvas.context.fillRect(rx - 15, ry - 30, 30, 30);
-    canvas.context.strokeRect(rx - 15, ry - 30, 30, 30);
-    canvas.context.restore();
+    const frame = r.frames?.[r.frame ?? 0];
+    if (frame?.img) {
+      canvas.context.drawImage(frame.img, rx - (frame.ox ?? 0), ry - (frame.oy ?? 0));
+    } else {
+      // Fallback yellow box
+      canvas.context.save();
+      canvas.context.fillStyle = 'rgba(255,200,50,0.6)';
+      canvas.context.strokeStyle = '#FFDD00';
+      canvas.context.fillRect(rx - 15, ry - 30, 30, 30);
+      canvas.context.strokeRect(rx - 15, ry - 30, 30, 30);
+      canvas.context.restore();
+    }
   });
 
   // Hit flash effects

@@ -2,6 +2,7 @@ import WZManager from '../wz-utils/WZManager';
 import { getItemIconSync } from '../wz-utils/ItemIconLoader';
 import { ShopBuyPacket, ShopSellPacket } from '../Net/Packets/ShopPacket';
 import SessionManager from '../SessionManager';
+import { OutPacket, OutPacketOpcode } from '../Net/OutPacket';
 import { MapleStanceButton } from './MapleStanceButton';
 import ClickManager from './ClickManager';
 import DragableMenu from './Menu/DragableMenu';
@@ -80,7 +81,12 @@ class UIShop extends DragableMenu {
         x: this.x + this.W - 15, y: this.y + 2,
         img: btExit.nChildren,
         isRelativeToCamera: true, isPartOfUI: true,
-        onClick: () => UIShop.close(),
+        onClick: () => {
+          if (SessionManager.isConnected()) {
+            new OutPacket(OutPacketOpcode.NPC_SHOP_CLOSE).dispatch();
+          }
+          UIShop.close();
+        },
       });
       ClickManager.addButton(closeBtn);
       this.buttons.push(closeBtn);

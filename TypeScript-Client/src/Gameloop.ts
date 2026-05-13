@@ -47,9 +47,8 @@ class GameLoop {
     this.lag += Timer.delta;
     while (this.lag >= this.msPerTick) {
       this.lag -= this.msPerTick;
-      Timer.tdelta += this.msPerTick;
-      // TODO: fix ordering of these variables
       this.doUpdate(this.msPerTick, Camera, this.gameCanvas);
+      Timer.tdelta += this.msPerTick;
     }
     this.doRender(
       this.gameCanvas,

@@ -354,9 +354,6 @@ async addDrops() {
       this.hp = 0;
       this.die(responsibleMapleCharacter);
     } else {
-      // todo:
-      // 2. calcualte crit chance
-
       this.hp -= damage;
       this.playAudio(MobSounds.Damage);
       if (damage > 0) {
@@ -693,9 +690,14 @@ async addDrops() {
       4
     );
 
-    // todo :
-    // this need to be displayed only few seconds after being hit
+    // Show HP bar only for a few seconds after being hit
     if (this.isShotHpBar) {
+      if (!this.afterHitShowHpBarTimer) {
+        this.afterHitShowHpBarTimer = setTimeout(() => {
+          this.isShotHpBar = false;
+          this.afterHitShowHpBarTimer = null;
+        }, this.afterHitShowHpBarTime || 3000);
+      }
       this.drawHealthBar(canvas, camera, lag, msPerTick, tdelta, originY);
       this.drawName(canvas, camera, lag, msPerTick, tdelta);
     }

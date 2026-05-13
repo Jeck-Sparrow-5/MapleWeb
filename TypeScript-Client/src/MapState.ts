@@ -19,7 +19,8 @@ import UIWorldMap from "./UI/UIWorldMap";
 import UIChannel from "./UI/UIChannel";
 import UIStorage from "./UI/UIStorage";
 import { UseItemPacket } from "./Net/Packets/ItemPackets";
-import UISkillHotbar, { useHotbarSlot } from "./UI/UISkillHotbar";
+import UISkillHotbar, { useHotbarSlot, selectHotbarSlot, assignSkillToSelectedSlot } from "./UI/UISkillHotbar";
+import { drawSkillEffects, showSkillEffect } from "./UI/SkillEffectRenderer";
 import NameTagRenderer from "./UI/NameTagRenderer";
 import ChatBubbleRenderer from "./UI/ChatBubbleRenderer";
 import TooltipRenderer from "./UI/TooltipRenderer";
@@ -269,7 +270,10 @@ MapStateInstance.doUpdate = function (
       const numberKeys = ['1','2','3','4','5','6','7','8','9','0'] as const;
       numberKeys.forEach((key, idx) => {
         if (canvas.isKeyDown(key) && !(this.previousKeyboardState as any)[key]) {
-          useHotbarSlot(idx);
+          const skillId = useHotbarSlot(idx);
+          if (skillId && MyCharacter.pos) {
+            showSkillEffect(MyCharacter.pos.x, MyCharacter.pos.y - 40, skillId);
+          }
         }
       });
       // F1-F10 = slots 10-19
@@ -341,6 +345,21 @@ MapStateInstance.doUpdate = function (
             new UseItemPacket(slot, mpPot.itemId).dispatch();
             (this as any)._lastAutoPot = now;
           }
+        }
+      }
+    }
+
+    // Hotbar slot selection on click
+    if (canvas.clicked) {
+      const slotSize = 32; const gap = 2; const count = 10;
+      const totalW = count * (slotSize + gap) - gap;
+      const startX = Math.floor((800 - totalW) / 2);
+      const hbarY  = 800 - 85 + (0); // config.originalHeight - 85
+      for (let i = 0; i < count; i++) {
+        const sx = startX + i * (slotSize + gap);
+        if (canvas.mouseX >= sx && canvas.mouseX < sx + slotSize &&
+            canvas.mouseY >= hbarY && canvas.mouseY < hbarY + slotSize) {
+          selectHotbarSlot(i);
         }
       }
     }
@@ -418,6 +437,7 @@ MapStateInstance.doRender = function (
     UIStatusMessenger.draw(canvas);
     this.miniMap.draw(canvas);
     UIGameMenu.draw(canvas, camera, lag, msPerTick, tdelta);
+    drawSkillEffects(canvas, camera);
     ChatBubbleRenderer.update();
     UISkillHotbar.draw(canvas);
     TooltipRenderer.draw(canvas); // always last so it renders on top

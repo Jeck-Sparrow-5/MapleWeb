@@ -1,5 +1,7 @@
 import MyCharacter from "../MyCharacter";
 import WZManager from "../wz-utils/WZManager";
+import UIKeyConfig from "./UIKeyConfig";
+import UIGameMenu from "./UIGameMenu";
 import ChatPacket from "../Net/Packets/ChatPacket";
 import SessionManager from "../SessionManager";
 import ChatBubbleRenderer from "./ChatBubbleRenderer";
@@ -20,6 +22,7 @@ interface ChatEntry {
 
 const CHAT_MAX = 20;
 const CHAT_VISIBLE_DURATION = 8000;
+let chatScrollOffset = 0; // positive = scrolled up into history
 
 export interface UIMapInterface {
   statusBarLevelDigits: any[];
@@ -108,8 +111,7 @@ UIMap.addButtons = function (canvas) {
     isRelativeToCamera: true,
     isPartOfUI: true,
     onClick: () => {
-      // console.log("Current stance: ", self.stance);
-      console.log("equip click!");
+      UIGameMenu.toggle();
     },
   });
   ClickManager.addButton(quickSlot);
@@ -122,8 +124,7 @@ UIMap.addButtons = function (canvas) {
     isRelativeToCamera: true,
     isPartOfUI: true,
     onClick: () => {
-      // console.log("Current stance: ", self.stance);
-      console.log("keyboard settings click!");
+      UIKeyConfig.toggle();
     },
   });
   ClickManager.addButton(keyboardlKey);
@@ -136,8 +137,7 @@ UIMap.addButtons = function (canvas) {
     isRelativeToCamera: true,
     isPartOfUI: true,
     onClick: () => {
-      // console.log("Current stance: ", self.stance);
-      console.log("equip click!");
+      MapState.skillBook?.setIsHidden(!MapState.skillBook?.isHidden);
     },
   });
   ClickManager.addButton(skillKey);
@@ -367,12 +367,18 @@ UIMap.drawNumbers = function (canvas, hp, maxHp, mp, maxMp, exp, maxExp) {
 };
 
 UIMap.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
-  // Chat history — last 8 visible lines above chat input
+  // Scroll chat with mouse wheel when hovering over chat area
+  if (canvas.scrolledUp)   chatScrollOffset = Math.min(chatScrollOffset + 1, Math.max(0, this.chatHistory.length - 8));
+  if (canvas.scrolledDown) chatScrollOffset = Math.max(chatScrollOffset - 1, 0);
+
+  // Chat history — 8 visible lines above chat input
   const now = Date.now();
   const chatBaseY = 524 + startUIPosition.y;
-  const visibleMsgs = this.chatHistory
-    .filter((m) => now - m.timestamp < CHAT_VISIBLE_DURATION)
-    .slice(-8);
+  // When scrolled, show history; when not, show recent+fading
+  const allMsgs = chatScrollOffset > 0
+    ? this.chatHistory.slice(-(8 + chatScrollOffset), -chatScrollOffset || undefined)
+    : this.chatHistory.filter((m) => now - m.timestamp < CHAT_VISIBLE_DURATION).slice(-8);
+  const visibleMsgs = allMsgs;
   visibleMsgs.forEach((m, i) => {
     const age = now - m.timestamp;
     const alpha = age > CHAT_VISIBLE_DURATION - 1000

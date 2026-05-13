@@ -1,5 +1,6 @@
 import WZManager from '../wz-utils/WZManager';
 import TooltipRenderer from './TooltipRenderer';
+import UISkillHotbar, { assignSkillToSelectedSlot } from './UISkillHotbar';
 import { MapleStanceButton } from './MapleStanceButton';
 import ClickManager from './ClickManager';
 import DragableMenu from './Menu/DragableMenu';
@@ -226,9 +227,22 @@ class UISkillBook extends DragableMenu {
 
     this.buttons.forEach((b) => b.draw(canvas, camera, lag, ms, td));
 
-    // Skill tooltip on hover
+    // Right-click skill → assign to selected hotbar slot
     const mx = (canvas as any).mouseX;
     const my = (canvas as any).mouseY;
+    if ((canvas as any).rightClicked && mx !== undefined) {
+      const visibleSkillsR = this.skills.slice(this.scroll, this.scroll + 8);
+      visibleSkillsR.forEach((sk, i) => {
+        const sy = this.y + 30 + i * 30;
+        if (mx >= this.x + 8 && mx < this.x + this.W - 30 && my >= sy - 14 && my < sy + 16) {
+          assignSkillToSelectedSlot(sk.id);
+          // Preload icon into hotbar cache
+          if (sk.icon) UISkillHotbar.slotIcons.set(sk.id, sk.icon);
+        }
+      });
+    }
+
+    // Skill tooltip on hover
     if (mx !== undefined) {
       const visibleSkills = this.skills.slice(this.scroll, this.scroll + 8);
       visibleSkills.forEach((sk, i) => {

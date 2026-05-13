@@ -15,8 +15,6 @@ export class DamageRange {
 const defaultCritChance = 0.05;
 const defaultCritDamagePercent = 1.0;
 
-// todo
-// 1. this not considering skills yet
 class Stats {
   opts: any;
   str: number;

@@ -7,6 +7,15 @@ import WZManager from '../wz-utils/WZManager';
 
 // Slots 0-9 mapped to keys 1-9,0. Slots 10-19 mapped to F1-F10.
 export const hotbarSlots: (number | null)[] = new Array(20).fill(null);
+export let selectedHotbarSlot = 0;
+
+export function selectHotbarSlot(i: number) {
+  selectedHotbarSlot = Math.max(0, Math.min(19, i));
+}
+
+export function assignSkillToSelectedSlot(skillId: number) {
+  hotbarSlots[selectedHotbarSlot] = skillId;
+}
 
 // skillId → { endTime, totalMs }
 export const cooldowns = new Map<number, { endTime: number; totalMs: number }>();
@@ -26,14 +35,15 @@ export function setHotbarSlot(slot: number, skillId: number | null) {
   hotbarSlots[slot] = skillId;
 }
 
-export function useHotbarSlot(slot: number) {
+export function useHotbarSlot(slot: number): number | null {
   const skillId = hotbarSlots[slot];
-  if (skillId === null) return;
+  if (skillId === null) return null;
   const level = skillLevels.get(skillId) ?? 0;
-  if (level === 0) return;
+  if (level === 0) return null;
   if (SessionManager.isConnected()) {
     new UseSkillPacket(skillId, level).dispatch();
   }
+  return skillId;
 }
 
 const UISkillHotbar = {
@@ -57,9 +67,11 @@ const UISkillHotbar = {
 
       canvas.context.save();
       canvas.context.fillStyle = 'rgba(0,0,0,0.65)';
-      canvas.context.strokeStyle = '#445566';
+      canvas.context.strokeStyle = i === selectedHotbarSlot ? '#FFDD00' : '#445566';
+      canvas.context.lineWidth = i === selectedHotbarSlot ? 2 : 1;
       canvas.context.fillRect(sx, y, slotSize, slotSize);
       canvas.context.strokeRect(sx, y, slotSize, slotSize);
+      canvas.context.lineWidth = 1;
 
       if (skillId !== null) {
         const icon = this.slotIcons.get(skillId);

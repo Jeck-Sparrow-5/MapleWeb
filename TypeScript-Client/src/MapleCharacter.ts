@@ -295,33 +295,6 @@ class MapleCharacter {
     }
   }
 
-  isCloseToMob = (inAllDirections = true) => {
-    const monstersToConsider = inAllDirections
-      ? this.map!.monsters
-      : this.map!.monsters.filter((monster: Monster) => {
-          const isMonsterOnRight = monster.pos.x > this.pos.x;
-          const isMonsterOnLeft = monster.pos.x < this.pos.x;
-          const isPlayerFacingRight = this.flipped;
-
-          return (
-            (isMonsterOnRight && isPlayerFacingRight) ||
-            (isMonsterOnLeft && !isPlayerFacingRight)
-          );
-        });
-
-    console.log(monstersToConsider.length, this.map!.monsters.length);
-
-    const isCloseToMonster = monstersToConsider.some((monster: Monster) => {
-      const distance = Math.sqrt(
-        (monster.pos.x - this.pos.x) ** 2 + (monster.pos.y - this.pos.y) ** 2
-      );
-
-      return distance <= this.maxCloseToMobDistance;
-    });
-
-    return isCloseToMonster;
-  };
-
   async setFace(face = 20000) {
     this.Face = await WZManager.get(`Character.wz/Face/000${face}.img`);
     this.face = face;
@@ -537,24 +510,11 @@ async executeAttackDamage() {
   }
 
   // Define attack range based on weapon type
-  const weaponType = getEquipTypeById(this.weaponEquipId);
-  let attackRange = 50; // Default range
-  
-  // Adjust range based on weapon type
-  switch (weaponType) {
-    case "Sword":
-      attackRange = 60;
-      break;
-    case "Bow":
-    case "Crossbow":
-      attackRange = 150;
-      break;
-    case "Claw":
-      attackRange = 100;
-      break;
-    default:
-      attackRange = 50;
-  }
+  const weaponTypeStr = String(getEquipTypeById(this.weaponEquipId));
+  let attackRange = 50;
+  if (weaponTypeStr.includes('Bow') || weaponTypeStr.includes('Crossbow')) attackRange = 150;
+  else if (weaponTypeStr.includes('Claw')) attackRange = 100;
+  else if (weaponTypeStr.includes('Sword') || weaponTypeStr.includes('Axe')) attackRange = 60;
 
   // Directional attack: only hit monsters in the direction the character is facing
   const isCharacterFacingRight = this.flipped;

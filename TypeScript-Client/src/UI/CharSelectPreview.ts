@@ -21,7 +21,7 @@ export async function getPreview(char: Character): Promise<MapleCharacter | null
       mp: char.stat.mp,
       maxMp: char.stat.maxMp,
       exp: char.stat.exp,
-      fame: char.stat.fame,
+      fame: 0,
       Hair: char.look.hair,
       inventory: new Inventory({}),
       stats: new Stats({

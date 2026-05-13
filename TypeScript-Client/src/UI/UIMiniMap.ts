@@ -2,7 +2,7 @@ import GameCanvas from '../GameCanvas';
 import MapleMap from '../MapleMap';
 import MyCharacter from '../MyCharacter';
 import WZManager from '../wz-utils/WZManager';
-import MapleStanceButton from './MapleStanceButton';
+import { MapleStanceButton } from './MapleStanceButton';
 import ClickManager from './ClickManager';
 import config from '../Config';
 

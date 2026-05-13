@@ -36,7 +36,7 @@ const LoginState: LoginState = {
     Camera.setTopLeft(initialPos.x, initialPos.y);
 
     this.currentSubState = LoginSubState.LOGIN_SCREEN;
-    await UILogin.initialize(canvas);
+    await UILogin.initialize(canvas!);
   },
 
   async switchToSubState(subState: LoginSubState): Promise<void> {

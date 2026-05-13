@@ -8,7 +8,7 @@ interface WZManager {
   initialize: () => void;
   load: (filename: string) => Promise<void>;
   pathExists: (thePath: string) => boolean;
-  get: (thePath: string) => Promise<WZNode | undefined>;
+  get: (thePath: string) => Promise<any>;
 }
 
 const WZManager: WZManager = {

@@ -70,8 +70,8 @@ export default class UINpcTalk {
     this.fill   = this.utilDlgExNode.c;
     this.bottom = this.utilDlgExNode.s;
     this.nameTag = this.utilDlgExNode.bar;
-    this.width = this.top?.nGetImage().width;
-    this.height = this.top?.nGetImage().height + this.fillCount * this.fill?.nGetImage().height + this.bottom?.nGetImage().height;
+    this.width = (this.top?.nGetImage() as any)?.width ?? 0;
+    this.height = ((this.top?.nGetImage() as any)?.height ?? 0) + this.fillCount * ((this.fill?.nGetImage() as any)?.height ?? 0) + ((this.bottom?.nGetImage() as any)?.height ?? 0);
 
     this.loadButtons();
     ClickManager.addDragableMenu(this);
@@ -162,36 +162,32 @@ export default class UINpcTalk {
     if (this.isHidden) return;
 
     const leftPadding = 20;
+    const topImg:    any = this.top?.nGetImage();
+    const fillImg:   any = this.fill?.nGetImage();
+    const botImg:    any = this.bottom?.nGetImage();
+    const tagImg:    any = this.nameTag?.nGetImage();
+    const topH  = topImg?.height  ?? 0;
+    const fillH = fillImg?.height ?? 0;
+    const botH  = botImg?.height  ?? 0;
 
-    canvas.drawImage({ img: this.top?.nGetImage(), dx: this.x, dy: this.y });
+    canvas.drawImage({ img: topImg, dx: this.x, dy: this.y });
     for (let i = 0; i < this.fillCount; i++) {
-      canvas.drawImage({
-        img: this.fill?.nGetImage(),
-        dx: this.x,
-        dy: this.y + this.top?.nGetImage().height + i * this.fill?.nGetImage().height,
-      });
+      canvas.drawImage({ img: fillImg, dx: this.x, dy: this.y + topH + i * fillH });
     }
-    canvas.drawImage({
-      img: this.bottom?.nGetImage(),
-      dx: this.x,
-      dy: this.y + this.top?.nGetImage().height + this.fillCount * this.fill?.nGetImage().height,
-    });
+    canvas.drawImage({ img: botImg, dx: this.x, dy: this.y + topH + this.fillCount * fillH });
 
-    if (this.speaker?.stand?.[0]) {
-      const speakerImg = this.speaker.stand[0].nGetImage();
-      const midH = Math.floor((this.top?.nGetImage().height + this.fillCount * this.fill?.nGetImage().height) / 2);
-      const finalH = speakerImg.height > midH ? speakerImg.height : midH;
+    const spk: any = (this.speaker as any)?.stand?.[0];
+    if (spk) {
+      const speakerImg: any = spk.nGetImage();
+      const midH  = Math.floor((topH + this.fillCount * fillH) / 2);
+      const finalH = speakerImg?.height > midH ? speakerImg.height : midH;
       canvas.drawImage({
         img: speakerImg,
-        dx: this.x + leftPadding + Math.floor(this.nameTag?.nGetImage().width / 2) - Math.floor(speakerImg.width / 2),
-        dy: this.y + this.top?.nGetImage().height,
+        dx: this.x + leftPadding + Math.floor((tagImg?.width ?? 0) / 2) - Math.floor((speakerImg?.width ?? 0) / 2),
+        dy: this.y + topH,
       });
-      canvas.drawImage({
-        img: this.nameTag?.nGetImage(),
-        dx: this.x + leftPadding,
-        dy: this.y + this.top?.nGetImage().height + finalH,
-      });
-      canvas.drawText({ text: this.name, color: '#FFFFFF', x: this.x + leftPadding + Math.floor(this.nameTag?.nGetImage().width / 2), y: this.y + this.top?.nGetImage().height + 5 + finalH, align: 'center' });
+      canvas.drawImage({ img: tagImg, dx: this.x + leftPadding, dy: this.y + topH + finalH });
+      canvas.drawText({ text: this.name, color: '#FFFFFF', x: this.x + leftPadding + Math.floor((tagImg?.width ?? 0) / 2), y: this.y + topH + 5 + finalH, align: 'center' });
     }
 
     // Wrap text
@@ -256,14 +252,16 @@ export default class UINpcTalk {
       this.speaker = await WZManager.get(`Npc.wz/${strId}.img`);
     } catch (_) {}
 
-    while (
-      (this.speaker?.stand?.[0].nGetImage().height ?? 0) + (this.nameTag?.nGetImage().height ?? 0) + 5 >
-      this.fillCount * (this.fill?.nGetImage().height ?? 1)
-    ) {
+    const spkH  = ((this.speaker as any)?.stand?.[0]?.nGetImage() as any)?.height ?? 0;
+    const tagH  = (this.nameTag?.nGetImage() as any)?.height ?? 0;
+    const fillH = (this.fill?.nGetImage() as any)?.height ?? 1;
+    while (spkH + tagH + 5 > this.fillCount * fillH) {
       this.fillCount++;
     }
 
-    this.height = (this.top?.nGetImage().height ?? 0) + this.fillCount * (this.fill?.nGetImage().height ?? 1) + (this.bottom?.nGetImage().height ?? 0);
+    const topH = (this.top?.nGetImage() as any)?.height ?? 0;
+    const botH = (this.bottom?.nGetImage() as any)?.height ?? 0;
+    this.height = topH + this.fillCount * fillH + botH;
     this.loadButtons();
   }
 }

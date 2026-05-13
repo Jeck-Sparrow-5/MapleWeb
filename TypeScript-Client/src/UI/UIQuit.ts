@@ -1,5 +1,5 @@
 import WZManager from '../wz-utils/WZManager';
-import MapleStanceButton from './MapleStanceButton';
+import { MapleStanceButton } from './MapleStanceButton';
 import ClickManager from './ClickManager';
 import GameCanvas from '../GameCanvas';
 import StateManager from '../StateManager';

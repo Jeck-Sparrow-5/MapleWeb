@@ -1,5 +1,5 @@
 import WZManager from '../wz-utils/WZManager';
-import MapleStanceButton from './MapleStanceButton';
+import { MapleStanceButton } from './MapleStanceButton';
 import ClickManager from './ClickManager';
 import GameCanvas from '../GameCanvas';
 import GenderPacket from '../Net/Packets/GenderPacket';
@@ -16,6 +16,7 @@ interface UIGenderInterface {
   initialize: (canvas: GameCanvas) => Promise<void>;
   draw: (canvas: GameCanvas) => void;
   destroy: () => void;
+  confirm: () => void;
 }
 
 const UIGender = {} as UIGenderInterface;

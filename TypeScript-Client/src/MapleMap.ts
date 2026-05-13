@@ -1,6 +1,7 @@
 import WZManager from "./wz-utils/WZManager";
 import SessionManager from "./SessionManager";
 import { NpcTalkPacket } from "./Net/Packets/NpcInteractPacket";
+import NpcTalkType from "./Constants/NpcTalkType";
 import NameTagRenderer from "./UI/NameTagRenderer";
 import ChatBubbleRenderer from "./UI/ChatBubbleRenderer";
 
@@ -346,14 +347,12 @@ MapleMap.loadMonsters = async function (wzNode) {
 MapleMap.spawnNPC = async function (opts = {}) {
   const npc = await NPC.fromOpts(opts);
   // Set a position property using x and cy (vertical center) for rendering and click detection.
-  npc.pos = { x: opts.x, y: opts.cy };
+  (npc as any).pos = { x: opts.x, y: opts.cy };
   const whichFoothold = this.footholds[npc.fh];
   if (whichFoothold) {
     npc.layer = whichFoothold.layer;
   }
-  console.log(
-    `Spawned NPC ${opts.id} at (${npc.pos.x}, ${npc.pos.y})`
-  );
+  console.log(`Spawned NPC ${opts.id} at (${opts.x}, ${opts.cy})`);
   this.npcs.push(npc);
 };
 
@@ -587,9 +586,11 @@ MapleMap.render = function (
 
   // Name tags above NPCs
   this.npcs.forEach((npc: any) => {
+    const nx = npc.x ?? (npc as any).pos?.x ?? 0;
+    const ny = (npc.cy ?? (npc as any).pos?.y ?? 0) - 80;
     const name = npc.strings?.name ?? '';
-    if (name) NameTagRenderer.draw(canvas, camera, npc.x, npc.cy - 80, name, '5');
-    ChatBubbleRenderer.draw(canvas, camera, npc.oId ?? npc.id, npc.x, npc.cy - 80);
+    if (name) NameTagRenderer.draw(canvas, camera, nx, ny, name, '5');
+    ChatBubbleRenderer.draw(canvas, camera, npc.oId ?? npc.id, nx, ny);
   });
 
   // Name tags + bubbles above other players
@@ -671,7 +672,7 @@ MapleMap.handleClick = function (
       if (SessionManager.isConnected()) {
         new NpcTalkPacket(npc.oId ?? npc.id).dispatch();
       } else {
-        await this.npcDialog.changeText(npc.id, null, npc.strings?.name ?? 'NPC', 'Hello');
+        await this.npcDialog.changeText(npc.id, NpcTalkType.TextOnly, npc.strings?.name ?? 'NPC', 'Hello');
         this.npcDialog.setIsHidden(false);
       }
     }

@@ -18,6 +18,7 @@ import UIUserList from "./UI/UIUserList";
 import UIWorldMap from "./UI/UIWorldMap";
 import UIChannel from "./UI/UIChannel";
 import UIStorage from "./UI/UIStorage";
+import { UseItemPacket } from "./Net/Packets/ItemPackets";
 import UISkillHotbar, { useHotbarSlot } from "./UI/UISkillHotbar";
 import NameTagRenderer from "./UI/NameTagRenderer";
 import ChatBubbleRenderer from "./UI/ChatBubbleRenderer";
@@ -99,16 +100,19 @@ function isTouchDevice() {
   return "ontouchstart" in window || navigator.maxTouchPoints > 0;
 }
 
-MapStateInstance.initialize = async function (map: number = defaultMap) {
-  this.isTouchControllsEnabled = isTouchDevice(); // Check if the device supports touch
+MapStateInstance.initialize = async function (gameCanvas?: GameCanvas) {
+  // StateManager passes the GameCanvas as first arg; fall back to DOM lookup
+  const canvas: GameCanvas = gameCanvas ?? (document.getElementById('game') as any);
+
+  this.isTouchControllsEnabled = isTouchDevice();
   if (this.isTouchControllsEnabled) {
     this.joyStick = TouchJoyStick.init();
   }
 
-  await UIQuit.initialize(canvas!);
+  await UIQuit.initialize(canvas);
   this.quitDialog = UIQuit;
 
-  await UIMiniMap.initialize(canvas!);
+  await UIMiniMap.initialize(canvas);
   this.miniMap = UIMiniMap;
 
   this.skillBook = await UISkillBook.fromOpts({ x: 300, y: 150, isHidden: true, canvas });
@@ -120,13 +124,13 @@ MapStateInstance.initialize = async function (map: number = defaultMap) {
   await ChatBubbleRenderer.initialize();
   await TooltipRenderer.initialize();
   await UIPartyHP.initialize();
-  await UIOptionMenu.initialize(canvas!);
-  await UIKeyConfig.initialize(canvas!);
-  await UIChannel.initialize(canvas!);
+  await UIOptionMenu.initialize(canvas);
+  await UIKeyConfig.initialize(canvas);
+  await UIChannel.initialize(canvas);
   this.userList = await UIUserList.fromOpts({ x: 400, y: 80, isHidden: true, canvas });
   this.worldMap = await UIWorldMap.fromOpts({ x: 80, y: 80, isHidden: true, canvas });
 
-  await UIGameMenu.initialize(canvas!, {
+  await UIGameMenu.initialize(canvas, {
     onQuit: () => this.quitDialog?.show(),
     onChannel: () => UIChannel.show(),
   });
@@ -158,7 +162,7 @@ MapStateInstance.initialize = async function (map: number = defaultMap) {
     i: false, s: false, k: false, e: false, q: false, m: false,
   };
 
-  await initializeMapState(map, true);
+  await initializeMapState(defaultMap, true);
 
   // --- Attach click event listener to the canvas element using the correct id ---
   const canvasElement = document.getElementById("game"); // updated to "game"
@@ -322,7 +326,7 @@ MapStateInstance.doUpdate = function (
           });
           if (hpPot) {
             const slot = inv.use.indexOf(hpPot) + 1;
-            const { UseItemPacket } = require('./Net/Packets/ItemPackets');
+            // UseItemPacket imported at top
             new UseItemPacket(slot, hpPot.itemId).dispatch();
             (this as any)._lastAutoPot = now;
           }
@@ -333,7 +337,7 @@ MapStateInstance.doUpdate = function (
           });
           if (mpPot) {
             const slot = inv.use.indexOf(mpPot) + 1;
-            const { UseItemPacket } = require('./Net/Packets/ItemPackets');
+            // UseItemPacket imported at top
             new UseItemPacket(slot, mpPot.itemId).dispatch();
             (this as any)._lastAutoPot = now;
           }

@@ -6,6 +6,7 @@ import UIStatusMessenger from '../../UI/UIStatusMessenger';
 import UIBuffList from '../../UI/UIBuffList';
 import { setCooldown } from '../../UI/UISkillHotbar';
 import { partyMembers, PartyMember } from '../../UI/UIPartyHP';
+import { buddyList } from '../../UI/UIUserList';
 
 function readString(data: DataView, offset: number): { str: string; offset: number } {
   const len = data.getUint16(offset, true); offset += 2;
@@ -91,7 +92,6 @@ export class BuddyListHandler extends PacketHandler {
     const op = data.getUint8(offset); offset += 1;
     if (op !== 7) return; // 7 = full buddy list update
 
-    const { buddyList } = require('../../UI/UIUserList');
     buddyList.length = 0;
 
     const count = data.getUint8(offset); offset += 1;

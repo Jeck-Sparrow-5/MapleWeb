@@ -48,8 +48,9 @@ class WZNode {
    * @param defaultValue - Default value to return if the key is not found.
    * @returns Value corresponding to the key or the default value.
    */
-  nGet(key: string, defaultValue: WZNode = new WZNode({ $imgdir: "" })) {
-    return key in this ? this[key as keyof this] : defaultValue;
+  nGet(key: string | number, defaultValue?: any): any {
+    const k = String(key);
+    return k in this ? (this as any)[k] : defaultValue;
   }
 
   /**

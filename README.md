@@ -37,12 +37,7 @@ Implementation is still in progress. When the environment variable is not set, i
 
 As this game is running on a browser, it needs to communicate with the server using WebSocket. While most of the server emulator use TCP sockets, a protocol converter is required for this client to connect to a server.
 
-[websocat](https://github.com/vi/websocat) can be used to convert the TCP socket to a WebSocket connection.
-
-The command to run websocat is as follows, refer to websocat's documentation for more details:
-```bash
-websocat --binary ws-l:127.0.0.1:8089 tcp:127.0.0.1:8484
-```
+The proxy is built into the Vite dev server as a plugin — no separate process needed. Running `npm run dev` inside `TypeScript-Client/` automatically starts the WebSocket bridge on `ws://127.0.0.1:8089` and forwards traffic to the Maple TCP server at `127.0.0.1:8484`. The ports can be overridden with environment variables `WS_PORT`, `TCP_HOST`, and `TCP_PORT`.
 
 ### Server Emulator (v83)
 

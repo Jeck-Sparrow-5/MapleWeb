@@ -1,0 +1,12 @@
+{
+  "name": "maple-ws-proxy",
+  "version": "1.0.0",
+  "description": "WebSocket to TCP proxy for MapleWeb",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}

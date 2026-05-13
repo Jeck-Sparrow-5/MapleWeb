@@ -4,7 +4,26 @@ export enum OutPacketOpcode {
   LOGIN = 1,
   CHARACTER_LIST_REQUEST = 5,
   ACCEPT_TOS = 7,
+  SET_GENDER = 8,
   SERVER_LIST_REQUEST = 11,
+  MOVE_PLAYER = 41,
+  CHATTEXT_SEND = 49,
+  USE_ITEM = 44,
+  USE_SKILL = 91,
+  EQUIP_ITEM = 87,
+  DROP_ITEM = 90,
+  UNEQUIP_ITEM = 88,
+  ATTACK_CLOSE = 44,
+  ATTACK_RANGED = 45,
+  CHANGE_MAP = 38,
+  NPC_TALK = 58,
+  NPC_TALK_MORE = 59,
+  NPC_SHOP = 62,
+  PICKUP_ITEM = 110,
+  DELETE_CHAR = 23,
+  CHECK_CHAR_NAME = 21,
+  SELECT_CHARACTER = 19,
+  PLAYER_LOGIN = 20,
   PONG = 24,
 }
 
@@ -28,6 +47,13 @@ export class OutPacket {
 
   protected writeByte(value: number): void {
     this.buffer.push(value & 0xFF);
+  }
+
+  protected writeInt(value: number): void {
+    this.buffer.push(value & 0xFF);
+    this.buffer.push((value >> 8) & 0xFF);
+    this.buffer.push((value >> 16) & 0xFF);
+    this.buffer.push((value >> 24) & 0xFF);
   }
 
   protected writeString(str: string): void {

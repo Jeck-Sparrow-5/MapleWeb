@@ -7,6 +7,7 @@ class SessionManager {
   private isFirstMessage: boolean = true;
   private crypto: Cryptography | null = null;
   private messageProcessor: MessageProcessor | null = null;
+  private websocketUrl: string | null = null;
 
   private constructor() {}
 
@@ -18,6 +19,7 @@ class SessionManager {
   }
 
   initialize(websocketUrl: string): Promise<void> {
+    this.websocketUrl = websocketUrl;
     return new Promise((resolve, reject) => {
       try {
         this.websocket = new WebSocket(websocketUrl);
@@ -76,6 +78,13 @@ class SessionManager {
       this.websocket.close();
       this.websocket = null;
     }
+  }
+
+  async reconnect(channelPort: number): Promise<void> {
+    this.disconnect();
+    if (!this.websocketUrl) return;
+    const base = this.websocketUrl.split('?')[0];
+    await this.initialize(`${base}?port=${channelPort}`);
   }
 
   sendMessage(bytes: Uint8Array): boolean {

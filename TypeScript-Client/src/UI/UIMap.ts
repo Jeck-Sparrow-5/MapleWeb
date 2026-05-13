@@ -1,5 +1,8 @@
 import MyCharacter from "../MyCharacter";
 import WZManager from "../wz-utils/WZManager";
+import ChatPacket from "../Net/Packets/ChatPacket";
+import SessionManager from "../SessionManager";
+import ChatBubbleRenderer from "./ChatBubbleRenderer";
 import UICommon from "./UICommon";
 import MapleInput from "./MapleInput";
 import MapleMap from "../MapleMap";
@@ -9,10 +12,21 @@ import ClickManager from "./ClickManager";
 import MapState from "../MapState";
 import GameCanvas from "../GameCanvas";
 
+interface ChatEntry {
+  text: string;
+  color: string;
+  timestamp: number;
+}
+
+const CHAT_MAX = 20;
+const CHAT_VISIBLE_DURATION = 8000;
+
 export interface UIMapInterface {
   statusBarLevelDigits: any[];
   firstUpdate: boolean;
   chat: MapleInput | null;
+  chatHistory: ChatEntry[];
+  addChatMessage: (text: string, color: string) => void;
   statusBg: any;
   statusBg2: any;
   bars: any;
@@ -56,6 +70,7 @@ UIMap.initialize = async function () {
 
   this.firstUpdate = true;
   this.chat = null;
+  this.chatHistory = [];
 
   const statusBar: any = await WZManager.get("UI.wz/StatusBar.img");
   this.statusBg = statusBar.base.backgrnd.nGetImage();
@@ -171,6 +186,14 @@ UIMap.doUpdate = function (msPerTick, camera, canvas) {
     this.chat.addSubmitListener(() => {
       const msg = this.chat!.input.value;
       this.chat!.input.value = "";
+      if (msg && msg[0] !== '!') {
+        ChatBubbleRenderer.show(MyCharacter.id ?? 0, msg);
+        if (SessionManager.isConnected()) {
+          new ChatPacket(msg).dispatch();
+        } else {
+          this.addChatMessage(`${MyCharacter.name}: ${msg}`, '#FFFFFF');
+        }
+      }
       if (msg[0] === "!") {
         const [command, ...commandArgs] = msg.split(" ");
         console.log(command, commandArgs);
@@ -209,6 +232,13 @@ UIMap.doUpdate = function (msPerTick, camera, canvas) {
     this.chat!.input.focus();
   }
   UICommon.doUpdate(msPerTick);
+};
+
+UIMap.addChatMessage = function (text, color = '#FFFFFF') {
+  this.chatHistory.push({ text, color, timestamp: Date.now() });
+  if (this.chatHistory.length > CHAT_MAX) {
+    this.chatHistory.shift();
+  }
 };
 
 UIMap.drawLevel = function (canvas, level) {
@@ -337,6 +367,27 @@ UIMap.drawNumbers = function (canvas, hp, maxHp, mp, maxMp, exp, maxExp) {
 };
 
 UIMap.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
+  // Chat history — last 8 visible lines above chat input
+  const now = Date.now();
+  const chatBaseY = 524 + startUIPosition.y;
+  const visibleMsgs = this.chatHistory
+    .filter((m) => now - m.timestamp < CHAT_VISIBLE_DURATION)
+    .slice(-8);
+  visibleMsgs.forEach((m, i) => {
+    const age = now - m.timestamp;
+    const alpha = age > CHAT_VISIBLE_DURATION - 1000
+      ? Math.max(0, 1 - (age - (CHAT_VISIBLE_DURATION - 1000)) / 1000)
+      : 1;
+    canvas.context.save();
+    canvas.context.globalAlpha = alpha;
+    canvas.context.font = '12px Arial';
+    canvas.context.fillStyle = '#000000';
+    canvas.context.fillText(m.text, 7, chatBaseY - (visibleMsgs.length - 1 - i) * 14 + 1);
+    canvas.context.fillStyle = m.color;
+    canvas.context.fillText(m.text, 6, chatBaseY - (visibleMsgs.length - 1 - i) * 14);
+    canvas.context.restore();
+  });
+
   canvas.drawImage({
     img: this.statusBg,
     dx: 0,

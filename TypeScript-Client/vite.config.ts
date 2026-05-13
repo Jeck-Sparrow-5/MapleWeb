@@ -12,8 +12,14 @@ function tcpProxyPlugin(): Plugin {
 
       const wss = new WebSocketServer({ host: "127.0.0.1", port: WS_PORT });
 
-      wss.on("connection", (ws) => {
-        const tcp = net.createConnection({ host: TCP_HOST, port: TCP_PORT });
+      wss.on("connection", (ws, req) => {
+        const url = new URL(req.url ?? "/", `http://127.0.0.1`);
+        const tcpPort = parseInt(url.searchParams.get("port") ?? String(TCP_PORT));
+        const tcp = net.createConnection({ host: TCP_HOST, port: tcpPort });
+
+        tcp.on("connect", () => {
+          console.log(`[proxy] TCP connected to ${TCP_HOST}:${tcpPort}`);
+        });
 
         tcp.on("data", (data) => {
           if (ws.readyState === WebSocket.OPEN) ws.send(data);

@@ -18,6 +18,10 @@ import UILoginLoading from './UILoginLoading';
 import AcceptTOSPacket from '../Net/Packets/AcceptTOSPacket';
 import World from '../Net/Models/World';
 import CharacterListRequestPacket from '../Net/Packets/CharacterListRequestPacket';
+import SelectCharPacket from '../Net/Packets/SelectCharPacket';
+import UIRaceSelect from './UIRaceSelect';
+import { DeleteCharPacket } from '../Net/Packets/DeleteCharPacket';
+import { drawPreview, clearCache } from './CharSelectPreview';
 import Channel from '../Net/Models/Channel';
 import { Character } from '../Net/Models/Character';
 
@@ -107,6 +111,11 @@ interface UILoginInterface {
   viewAllCharacterButton: MapleButton;
   characters: Character[];
   selectedCharacterId: number | null;
+  characterSlotButtons: MapleButton[];
+  createCharacterSlotButtons: () => void;
+  clearCharacterSlotButtons: () => void;
+  saveIdEnabled: boolean;
+  currentCharPage: number;
 }
 
 const UILogin = {} as UILoginInterface;
@@ -126,6 +135,10 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   this.selectedWorldImage = this.uiLogin.nGet('Common').selectWorld.nGetImage();
   this.worlds = [];
   this.characters = [];
+  this.characterSlotButtons = [];
+  this.selectedCharacterId = null;
+  this.currentCharPage = 0;
+  this.saveIdEnabled = !!localStorage.getItem('maple_saved_id');
 
   this.worldButtonImages = new Map<number, WZNode>();
   this.worldImages = new Map<number, WZNode>();
@@ -151,7 +164,13 @@ UILogin.initialize = async function (canvas: GameCanvas) {
     y: -1360,
     img: this.uiLogin.nGet('CharSelect').nGet('BtSelect').nChildren,
     onClick: async () => {
-      await LoginState.enterGame();
+      if (!config.websocketUrl) {
+        await LoginState.enterGame();
+        return;
+      }
+      if (this.selectedCharacterId !== null) {
+        new SelectCharPacket(this.selectedCharacterId).dispatch();
+      }
     },
   });
   ClickManager.addButton(startButton);
@@ -161,7 +180,7 @@ UILogin.initialize = async function (canvas: GameCanvas) {
     y: -1325,
     img: this.uiLogin.nGet('CharSelect').nGet('BtNew').nChildren,
     onClick: async () => {
-      console.log('Create character button clicked!');
+      UIRaceSelect.show(canvas);
     },
   });
   ClickManager.addButton(createCharacterButton);
@@ -171,11 +190,58 @@ UILogin.initialize = async function (canvas: GameCanvas) {
     y: -1275,
     img: this.uiLogin.nGet('CharSelect').nGet('BtDelete').nChildren,
     onClick: async () => {
-      console.log('Delete character button clicked!');
+      if (this.selectedCharacterId === null) return;
+      const birthday = prompt('Enter birthday (YYYYMMDD) to confirm deletion:');
+      if (!birthday) return;
+      if (config.websocketUrl) {
+        new DeleteCharPacket(this.selectedCharacterId, birthday).dispatch();
+      } else {
+        this.characters = this.characters.filter((c) => c.stat.characterId !== this.selectedCharacterId);
+        this.selectedCharacterId = this.characters[0]?.stat.characterId ?? null;
+        this.createCharacterSlotButtons();
+      }
     },
   });
   ClickManager.addButton(deleteCharacterButton);
   this.behindFrameButtons.add(deleteCharacterButton);
+
+  // Page left (BtPageL) — world x=(CHAR_SLOT_X_START - 50), y around char slots
+  const pageLeftNode = this.uiLogin.nGet('CharSelect')?.nGet('BtPageL');
+  if (pageLeftNode) {
+    const pageLeftBtn = new MapleStanceButton(canvas, {
+      x: CHAR_SLOT_X_START - 50,
+      y: CHAR_SLOT_Y - 60,
+      img: pageLeftNode.nChildren,
+      onClick: () => {
+        if (this.currentCharPage > 0) {
+          this.currentCharPage--;
+          this.clearCharacterSlotButtons();
+          this.createCharacterSlotButtons();
+        }
+      },
+    });
+    ClickManager.addButton(pageLeftBtn);
+    this.behindFrameButtons.add(pageLeftBtn);
+  }
+
+  const pageRightNode = this.uiLogin.nGet('CharSelect')?.nGet('BtPageR');
+  if (pageRightNode) {
+    const pageRightBtn = new MapleStanceButton(canvas, {
+      x: CHAR_SLOT_X_START + CHAR_SLOTS * CHAR_SLOT_X_STEP + 10,
+      y: CHAR_SLOT_Y - 60,
+      img: pageRightNode.nChildren,
+      onClick: () => {
+        const maxPage = Math.max(0, Math.ceil(this.characters.length / CHAR_SLOTS) - 1);
+        if (this.currentCharPage < maxPage) {
+          this.currentCharPage++;
+          this.clearCharacterSlotButtons();
+          this.createCharacterSlotButtons();
+        }
+      },
+    });
+    ClickManager.addButton(pageRightBtn);
+    this.behindFrameButtons.add(pageRightBtn);
+  }
 
   this.viewAllCharacterButton = new MapleStanceButton(canvas, {
     x: 0,
@@ -221,12 +287,87 @@ UILogin.initialize = async function (canvas: GameCanvas) {
         await LoginState.switchToSubState(LoginSubState.WORLD_SELECT);
         return;
       }
+      if (this.saveIdEnabled && this.inputUsn?.input.value) {
+        localStorage.setItem('maple_saved_id', this.inputUsn.input.value);
+      }
       this.showLoading();
       new LoginPacket(this.inputUsn?.input.value, this.inputPwd?.input.value).dispatch();
     },
   });
   ClickManager.addButton(loginButton);
   this.behindFrameButtons.add(loginButton);
+
+  // Save ID (BtLoginIDSave 76x23) — canvas ~(422,270)
+  const saveIdButton = new MapleStanceButton(canvas, {
+    x: 50,
+    y: -38,
+    img: this.uiLogin.nGet('Title').nGet('BtLoginIDSave').nChildren,
+    onClick: () => {
+      this.saveIdEnabled = !this.saveIdEnabled;
+      if (this.saveIdEnabled) {
+        localStorage.setItem('maple_saved_id', this.inputUsn?.input.value ?? '');
+      } else {
+        localStorage.removeItem('maple_saved_id');
+        localStorage.removeItem('maple_saved_pw');
+      }
+    },
+  });
+  ClickManager.addButton(saveIdButton);
+  this.behindFrameButtons.add(saveIdButton);
+
+  // Forgot ID (BtLoginIDLost 82x23) — canvas ~(422,294)
+  const forgotIdButton = new MapleStanceButton(canvas, {
+    x: 50,
+    y: -14,
+    img: this.uiLogin.nGet('Title').nGet('BtLoginIDLost').nChildren,
+    onClick: () => {
+      this.showNotice(NoticeType.NORMAL, null);
+    },
+  });
+  ClickManager.addButton(forgotIdButton);
+  this.behindFrameButtons.add(forgotIdButton);
+
+  // Forgot Password (BtPasswdLost 66x23) — canvas ~(505,294)
+  const forgotPwButton = new MapleStanceButton(canvas, {
+    x: 133,
+    y: -14,
+    img: this.uiLogin.nGet('Title').nGet('BtPasswdLost').nChildren,
+    onClick: () => {
+      this.showNotice(NoticeType.NORMAL, null);
+    },
+  });
+  ClickManager.addButton(forgotPwButton);
+  this.behindFrameButtons.add(forgotPwButton);
+
+  // Register (BtNew 92x38) — canvas ~(595,270)
+  const newAccountButton = new MapleStanceButton(canvas, {
+    x: 223,
+    y: -38,
+    img: this.uiLogin.nGet('Title').nGet('BtNew').nChildren,
+    onClick: () => {
+      this.showNotice(NoticeType.NORMAL, null);
+    },
+  });
+  ClickManager.addButton(newAccountButton);
+  this.behindFrameButtons.add(newAccountButton);
+
+  // Quit (BtQuit 84x38) — canvas ~(595,310)
+  const quitButton = new MapleStanceButton(canvas, {
+    x: 223,
+    y: 2,
+    img: this.uiLogin.nGet('Title').nGet('BtQuit').nChildren,
+    onClick: () => {
+      window.close();
+    },
+  });
+  ClickManager.addButton(quitButton);
+  this.behindFrameButtons.add(quitButton);
+
+  // Auto-fill saved ID
+  const savedId = localStorage.getItem('maple_saved_id');
+  if (savedId && this.inputUsn) {
+    this.inputUsn.input.value = savedId;
+  }
 
   this.uiLoginNotice = await UILoginNotice.fromOpts({
     x: 220,
@@ -297,6 +438,42 @@ UILogin.initialize = async function (canvas: GameCanvas) {
     currentX: 0,
     alpha: 1,
   };
+};
+
+const CHAR_SLOTS = 3;
+const CHAR_SLOT_X_START = -280; // world x of slot 0 (canvas ~92 at charselect camera)
+const CHAR_SLOT_X_STEP = 140;   // world px between slots
+const CHAR_SLOT_Y = -1380;      // world y of click area
+
+UILogin.clearCharacterSlotButtons = function () {
+  this.characterSlotButtons.forEach((btn) => ClickManager.removeButton(btn));
+  this.characterSlotButtons = [];
+};
+
+UILogin.createCharacterSlotButtons = function () {
+  this.clearCharacterSlotButtons();
+
+  // Default selection = first character
+  if (this.characters.length > 0 && this.selectedCharacterId === null) {
+    this.selectedCharacterId = this.characters[0].stat.characterId;
+  }
+
+  const pageStart = (this.currentCharPage ?? 0) * CHAR_SLOTS;
+  this.characters.slice(pageStart, pageStart + CHAR_SLOTS).forEach((char, i) => {
+    const wx = CHAR_SLOT_X_START + i * CHAR_SLOT_X_STEP;
+    const btn = new MapleStanceButton(this.gameCanvas, {
+      x: wx,
+      y: CHAR_SLOT_Y,
+      img: this.uiLogin.nGet('CharSelect').nGet('BtSelect').nChildren,
+      isHidden: true, // invisible hit-area; character drawn separately in doRender
+      onClick: () => {
+        this.selectedCharacterId = char.stat.characterId;
+      },
+    });
+    ClickManager.addButton(btn);
+    this.characterSlotButtons.push(btn);
+    this.behindFrameButtons.add(btn);
+  });
 };
 
 UILogin.resetWorld = function () {
@@ -562,22 +739,32 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
     });
   }
 
-  if (this.characters.length > 0) {
-    // @todo: draw character
-    // @todo: pagination
-    const character = this.characters[0];
-    canvas.drawImage({
-      img: this.uiLogin.CharSelect.adventure.nGet('0').nGetImage(),
-      dx: -155 - camera.x,
-      dy: -1295 - camera.y,
+  const pageStart = (this.currentCharPage ?? 0) * CHAR_SLOTS;
+  this.characters.slice(pageStart, pageStart + CHAR_SLOTS).forEach((char, i) => {
+    const wx = CHAR_SLOT_X_START + i * CHAR_SLOT_X_STEP;
+    const cx = wx - camera.x;
+    const cy = CHAR_SLOT_Y - camera.y;
+    const isSelected = char.stat.characterId === this.selectedCharacterId;
+
+    if (isSelected) {
+      canvas.context.save();
+      canvas.context.globalAlpha = 0.25;
+      canvas.context.fillStyle = '#FFFFFF';
+      canvas.context.fillRect(cx - 30, cy - 140, 120, 200);
+      canvas.context.restore();
+    }
+
+    // Draw actual character sprite (async, falls back to class badge on first frame)
+    drawPreview(canvas, camera, char, wx, CHAR_SLOT_Y, 16).catch(() => {
+      const classImg = this.uiLogin.nGet('CharSelect')?.nGet('adventure')?.nGet('0')?.nGetImage();
+      if (classImg) canvas.drawImage({ img: classImg, dx: cx, dy: cy });
     });
-    canvas.drawText({
-      text: character.stat.characterName,
-      color: '#FFFFFF',
-      x: -130 - camera.x,
-      y: -1115 - camera.y,
-    });
-  }
+
+    canvas.drawText({ text: char.stat.characterName, color: '#FFFFFF', x: cx + 20, y: cy + 20 });
+    canvas.drawText({ text: `Lv.${char.stat.level}`, color: '#FFFF88', x: cx + 20, y: cy + 34 });
+  });
+
+  UIRaceSelect.draw(canvas);
 
   canvas.drawText({
     text: "Ver. 0.83",
@@ -628,6 +815,10 @@ UILogin.placeInputs = function () {
     color: "#ffffff",
     type: "password",
   });
+  const savedId = localStorage.getItem('maple_saved_id');
+  if (savedId && this.inputUsn) {
+    this.inputUsn.input.value = savedId;
+  }
 }
 
 UILogin.removeInputs = function () {

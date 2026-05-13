@@ -1,4 +1,6 @@
 import WZManager from "./wz-utils/WZManager";
+import AttackPacket from "./Net/Packets/AttackPacket";
+import SessionManager from "./SessionManager";
 import PLAY_AUDIO from "./Audio/PlayAudio";
 import { Physics } from "./Physics";
 import Stance from "./Constants/enums/Stance";
@@ -71,6 +73,7 @@ class MapleCharacter {
   bodyRects: any = [];
   bodyStartPoistion: any = { x: 0, y: 0 };
   isInAttack: boolean = false;
+  currentAttackStance: string = 'swingO1';
   isInAlert: boolean = false;
   isInPortal: boolean = false;
   isInClimbingRope: boolean = false;
@@ -497,8 +500,9 @@ async attack() {
     }
   }
 
+  this.currentAttackStance = attackStance;
   console.log("Using attack stance:", attackStance);
-  
+
   // Set the stance with proper callbacks
   this.setStance(
     attackStance,
@@ -624,6 +628,19 @@ async executeAttackDamage() {
     }
   }
   
+  // Send attack packet to server
+  if (SessionManager.isConnected() && monsters.length > 0) {
+    const isRanged = this.currentAttackStance?.includes('shoot') || this.currentAttackStance?.includes('bow');
+    const entries = monsters.map((m: any) => ({
+      mobObjectId: m.oId ?? 0,
+      hitCount: 1,
+      damages: [Math.max(1, Math.floor(
+        this.stats.getWeaponAttack(this.equips) * (0.8 + Math.random() * 0.4)
+      ))],
+    }));
+    new AttackPacket(isRanged, 0, 0, 0, entries).dispatch();
+  }
+
   // Play hit sound
   try {
     const hitNode = await WZManager.get("Sound.wz/Game.img/Hit");
@@ -706,6 +723,17 @@ isCloseToMob = (inAllDirections = true) => {
   async pickUp() {
     console.log("pickUp");
     this.checkForItemDropPickup();
+    // Send pickup packet to server
+    if (SessionManager.isConnected() && this.map?.itemDrops?.length) {
+      const nearestDrop = this.map.itemDrops.find((d: any) => {
+        const dist = Math.abs(d.x - this.pos.x) + Math.abs((d.y ?? d.cy ?? 0) - this.pos.y);
+        return dist < 80;
+      });
+      if (nearestDrop?.objectId) {
+        const { default: PickupItemPacket } = await import('./Net/Packets/PickupItemPacket');
+        new PickupItemPacket(nearestDrop.objectId).dispatch();
+      }
+    }
   }
 
   setAlert() {
@@ -779,6 +807,20 @@ isCloseToMob = (inAllDirections = true) => {
       PLAY_AUDIO(jumpAudio);
 
       if (this.map!.id !== portal.toMap) {
+        if (SessionManager.isConnected()) {
+          // Let server handle map change
+          const { OutPacket, OutPacketOpcode } = await import('./Net/OutPacket');
+          const pkt = new OutPacket(OutPacketOpcode.CHANGE_MAP);
+          // write: portal name (string) + target mapId (int)
+          (pkt as any).writeInt(portal.toMap);
+          (pkt as any).writeByte(portal.portalId ?? 0);
+          (pkt as any).writeByte(0); // unknown
+          (pkt as any).writeShort(0); // x
+          (pkt as any).writeShort(0); // y
+          pkt.dispatch();
+          this.isInPortal = false;
+          return; // server will respond with SET_FIELD
+        }
         await this.map!.load(portal.toMap);
       }
 

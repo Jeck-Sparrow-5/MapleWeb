@@ -1,5 +1,6 @@
 import { PacketHandler } from '../PacketHandler';
 import { Cryptography } from '../Cryptography';
+import { clearCache } from '../../UI/CharSelectPreview';
 import UILogin from '../../UI/UILogin';
 import LoginState, {LoginSubState} from '../../LoginState';
 import { Character, Look, Rank, Stat } from '../Models/Character';
@@ -52,7 +53,10 @@ export class CharacterListHandler extends PacketHandler {
     console.log('pic:', pic);
     console.log('slots:', slots);
     UILogin.hideLoading();
+    clearCache();
     UILogin.characters = characters;
+    UILogin.selectedCharacterId = characters.length > 0 ? characters[0].stat.characterId : null;
+    UILogin.createCharacterSlotButtons();
     await LoginState.switchToSubState(LoginSubState.CHARACTER_SELECT);
   }
 

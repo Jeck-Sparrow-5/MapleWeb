@@ -1,4 +1,8 @@
 import WZManager from "./wz-utils/WZManager";
+import SessionManager from "./SessionManager";
+import { NpcTalkPacket } from "./Net/Packets/NpcInteractPacket";
+import NameTagRenderer from "./UI/NameTagRenderer";
+import ChatBubbleRenderer from "./UI/ChatBubbleRenderer";
 
 import Background from "./Background";
 import Foothold from "./FootHold";
@@ -84,9 +88,11 @@ MapleMap.load = async function (id: number | string) {
   this.isTown = !!this.wzNode.info.town.nValue;
   console.log(`is town: ${this.isTown}`);
   console.log("Map WZ Node:", this.wzNode);
+  // Clear previous map entities
   this.npcs = [];
   this.monsters = [];
   this.characters = [];
+  this.itemDrops = [];
 
   if (!this.PlayerCharacter) {
     this.PlayerCharacter = null;
@@ -104,8 +110,11 @@ MapleMap.load = async function (id: number | string) {
   this.objects = await this.loadObjects(this.wzNode);
   this.portals = await this.loadPortals(this.wzNode.portal);
   this.names = await this.loadNames(id as number);
-  await this.loadNPCs(this.wzNode.life);
-  await this.loadMonsters(this.wzNode.life);
+  // Only load WZ-defined NPCs/mobs when offline; server sends SPAWN packets when connected
+  if (!SessionManager.isConnected()) {
+    await this.loadNPCs(this.wzNode.life);
+    await this.loadMonsters(this.wzNode.life);
+  }
 
   Timer.doReset();
 
@@ -458,6 +467,47 @@ MapleMap.render = function (
     drop.draw(canvas, camera);
   });
 
+  // Name tags above NPCs
+  this.npcs.forEach((npc: any) => {
+    const name = npc.strings?.name ?? '';
+    if (name) NameTagRenderer.draw(canvas, camera, npc.x, npc.cy - 80, name, '5');
+    ChatBubbleRenderer.draw(canvas, camera, npc.oId ?? npc.id, npc.x, npc.cy - 80);
+  });
+
+  // Name tags + bubbles above other players
+  this.characters.forEach((char: any) => {
+    if (!char.pos) return;
+    NameTagRenderer.draw(canvas, camera, char.pos.x, char.pos.y - 90, char.name ?? '', '3');
+    ChatBubbleRenderer.draw(canvas, camera, char.id, char.pos.x, char.pos.y - 90);
+  });
+
+  // Player name tag + bubble
+  if (this.PlayerCharacter?.pos) {
+    const pc = this.PlayerCharacter as any;
+    NameTagRenderer.draw(canvas, camera, pc.pos.x, pc.pos.y - 90, pc.name ?? '', '3');
+    ChatBubbleRenderer.draw(canvas, camera, pc.id ?? 0, pc.pos.x, pc.pos.y - 90);
+  }
+
+  // Portal name on hover
+  if (canvas.mouseX !== undefined && canvas.mouseY !== undefined) {
+    this.portals.forEach((portal: any) => {
+      if (!portal.toMapName) return;
+      const px = portal.x - camera.x;
+      const py = portal.y - camera.y;
+      if (Math.abs(canvas.mouseX - px) < 30 && Math.abs(canvas.mouseY - py) < 30) {
+        canvas.context.save();
+        canvas.context.fillStyle = 'rgba(0,0,0,0.75)';
+        canvas.context.fillRect(px - 40, py - 22, 80, 16);
+        canvas.context.fillStyle = '#FFFFFF';
+        canvas.context.font = '10px Arial';
+        canvas.context.textAlign = 'center';
+        canvas.context.fillText(portal.toMapName, px, py - 9);
+        canvas.context.textAlign = 'left';
+        canvas.context.restore();
+      }
+    });
+  }
+
   Object.values(this.footholds).forEach(draw);
 
   this.npcDialog.draw(canvas, camera, lag, msPerTick, tdelta);
@@ -490,8 +540,12 @@ MapleMap.handleClick = function (
       mouseY <= npcY + 70
     ) {
       console.log(`Clicked on NPC ${npc.id}:`, npc);
-      await this.npcDialog.changeText(npc.id, null, npc.strings.name, 'Hello');
-      this.npcDialog.setIsHidden(false);
+      if (SessionManager.isConnected()) {
+        new NpcTalkPacket(npc.oId ?? npc.id).dispatch();
+      } else {
+        await this.npcDialog.changeText(npc.id, null, npc.strings?.name ?? 'NPC', 'Hello');
+        this.npcDialog.setIsHidden(false);
+      }
     }
   });
 };

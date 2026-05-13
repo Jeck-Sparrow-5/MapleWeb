@@ -3,6 +3,7 @@ import WZFiles from "../../Constants/enums/WZFiles";
 import ClickManager from "../ClickManager";
 import { MapleStanceButton } from "../MapleStanceButton";
 import DragableMenu from "./DragableMenu";
+import TooltipRenderer from "../TooltipRenderer";
 import { MapleInventoryType } from "../../Constants/Inventory/MapleInventory";
 import { CameraInterface } from "../../Camera";
 import { Position } from "../../Effects/DamageIndicator";
@@ -351,7 +352,80 @@ class InventoryMenuSprite extends DragableMenu {
 
   onMouseDown(mouseX: number, mouseY: number) {
     if (this.isHidden) return false;
-    return this.handleTabClick(mouseX, mouseY);
+    if (this.handleTabClick(mouseX, mouseY)) return true;
+
+    // Double-click detection for item use/equip
+    const now = Date.now();
+    const slotStartX = this.x + 14;
+    const slotStartY = this.y + 55;
+    const slotSize = 30;
+    const slotPadding = 4;
+    const cols = 4;
+    const rows = 6;
+
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        const sx = slotStartX + col * (slotSize + slotPadding);
+        const sy = slotStartY + row * (slotSize + slotPadding);
+        if (mouseX >= sx && mouseX < sx + slotSize && mouseY >= sy && mouseY < sy + slotSize) {
+          const slotIndex = row * cols + col;
+          const items = this.getItemsForCurrentTab();
+          if (slotIndex < items.length && items[slotIndex]) {
+            const item = items[slotIndex];
+            if ((this as any)._lastClickSlot === slotIndex && now - (this as any)._lastClickTime < 400) {
+              // Double-click — use or equip
+              this.useOrEquipItem(item, slotIndex);
+            }
+            (this as any)._lastClickSlot = slotIndex;
+            (this as any)._lastClickTime = now;
+          }
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  private getItemsForCurrentTab(): any[] {
+    const inv = this.charecter?.inventory;
+    if (!inv) return [];
+    switch (this.currentTab) {
+      case 1: return inv.equip || [];  // MapleInventoryType.EQUIP = 1
+      case 2: return inv.use || [];
+      case 3: return inv.setup || [];
+      case 4: return inv.etc || [];
+      case 5: return inv.cash || [];
+      default: return inv.equip || [];
+    }
+  }
+
+  private async useOrEquipItem(item: any, slotIndex: number) {
+    const { default: SessionManager } = await import('../../SessionManager');
+    if (!SessionManager.isConnected()) return;
+    const itemId = item.itemId;
+    const invType = this.currentTabNumber();
+    if (invType === 2) {
+      // USE tab — use item (potion etc.)
+      const { UseItemPacket } = await import('../../Net/Packets/ItemPackets');
+      new UseItemPacket(slotIndex + 1, itemId).dispatch();
+    } else if (invType === 1) {
+      // EQUIP tab — equip item
+      const { EquipItemPacket } = await import('../../Net/Packets/ItemPackets');
+      new EquipItemPacket(slotIndex + 1, -1).dispatch(); // -1 = auto-equip
+    }
+  }
+
+  private currentTabNumber(): number {
+    // MapleInventoryType enum values
+    const { MapleInventoryType } = require('../../Constants/Inventory/MapleInventory');
+    switch (this.currentTab) {
+      case MapleInventoryType.EQUIP: return 1;
+      case MapleInventoryType.USE:   return 2;
+      case MapleInventoryType.SETUP: return 3;
+      case MapleInventoryType.ETC:   return 4;
+      case MapleInventoryType.CASH:  return 5;
+      default: return 1;
+    }
   }
 
   async drawText(canvas: GameCanvas) {
@@ -426,6 +500,30 @@ class InventoryMenuSprite extends DragableMenu {
     this.buttons.forEach((obj) => {
       obj.draw(canvas, camera, lag, msPerTick, tdelta);
     });
+
+    // Tooltip on hover
+    const mx = canvas.mouseX;
+    const my = canvas.mouseY;
+    if (mx !== undefined && my !== undefined) {
+      const slotStartX = this.x + 14;
+      const slotStartY = this.y + 55;
+      const slotSize = 30;
+      const slotPadding = 4;
+      const items = this.getItemsForCurrentTab();
+      for (let row = 0; row < 6; row++) {
+        for (let col = 0; col < 4; col++) {
+          const sx = slotStartX + col * (slotSize + slotPadding);
+          const sy = slotStartY + row * (slotSize + slotPadding);
+          if (mx >= sx && mx < sx + slotSize && my >= sy && my < sy + slotSize) {
+            const idx = row * 4 + col;
+            const item = items[idx];
+            if (item) {
+              TooltipRenderer.drawItemTooltip(canvas, item.itemId, `Item ${item.itemId}`, mx, my);
+            }
+          }
+        }
+      }
+    }
   }
 }
 

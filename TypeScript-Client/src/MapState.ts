@@ -17,6 +17,7 @@ import UIKeyConfig from "./UI/UIKeyConfig";
 import UIUserList from "./UI/UIUserList";
 import UIWorldMap from "./UI/UIWorldMap";
 import UIChannel from "./UI/UIChannel";
+import UIStorage from "./UI/UIStorage";
 import UISkillHotbar, { useHotbarSlot } from "./UI/UISkillHotbar";
 import NameTagRenderer from "./UI/NameTagRenderer";
 import ChatBubbleRenderer from "./UI/ChatBubbleRenderer";
@@ -57,16 +58,8 @@ export interface MapState extends UIState {
   skillBook: UISkillBook;
   equipInventory: UIEquipInventory;
   questLog: UIQuestLog;
-  previousKeyboardState: { up: boolean; down: boolean; left: boolean; right: boolean; i: boolean; s: boolean; k: boolean; e: boolean; q: boolean; m: boolean };
   UIMenus: any[];
-  previousKeyboardState: {
-    up: boolean;
-    down: boolean;
-    left: boolean;
-    right: boolean;
-    i: boolean;
-    s: boolean;
-  };
+  previousKeyboardState: { up: boolean; down: boolean; left: boolean; right: boolean; i: boolean; s: boolean; k: boolean; e: boolean; q: boolean; m: boolean; [key: string]: boolean };
 }
 
 const MapStateInstance = {} as MapState;
@@ -286,6 +279,8 @@ MapStateInstance.doUpdate = function (
       if (canvas.isKeyDown("esc")) {
         if (!this.quitDialog.isHidden) {
           this.quitDialog.hide();
+        } else if (MapleMap.npcDialog && !MapleMap.npcDialog.isHidden) {
+          MapleMap.npcDialog.close(0);
         } else {
           const notHiddenMenus = this.UIMenus.filter((menu) => !menu.isHidden);
           if (notHiddenMenus.length > 0) {
@@ -422,6 +417,9 @@ MapStateInstance.doRender = function (
     ChatBubbleRenderer.update();
     UISkillHotbar.draw(canvas);
     TooltipRenderer.draw(canvas); // always last so it renders on top
+    if (UIStorage.instance && !UIStorage.instance.isHidden) {
+      UIStorage.instance.draw(canvas, camera, lag, msPerTick, tdelta);
+    }
     UINotice.draw(canvas);
     UICharInfo.draw(canvas);
     this.quitDialog.draw(canvas);

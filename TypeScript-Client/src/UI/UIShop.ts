@@ -1,4 +1,5 @@
 import WZManager from '../wz-utils/WZManager';
+import { getItemIconSync } from '../wz-utils/ItemIconLoader';
 import { ShopBuyPacket, ShopSellPacket } from '../Net/Packets/ShopPacket';
 import SessionManager from '../SessionManager';
 import { MapleStanceButton } from './MapleStanceButton';
@@ -182,8 +183,9 @@ class UIShop extends DragableMenu {
       canvas.context.fillStyle = selected ? 'rgba(100,130,200,0.8)' : 'rgba(40,50,80,0.7)';
       canvas.context.fillRect(this.x + 6, iy, this.W - 12, 28);
       canvas.context.restore();
-      if (item.icon) {
-        try { canvas.context.drawImage(item.icon, this.x + 8, iy + 1, 26, 26); } catch (_) {}
+      const shopIcon = item.icon ?? getItemIconSync(item.itemId);
+      if (shopIcon) {
+        try { canvas.context.drawImage(shopIcon, this.x + 8, iy + 1, 26, 26); } catch (_) {}
       }
       canvas.drawText({ text: item.name.substring(0, 22), color: '#FFFFFF', x: this.x + 36, y: iy + 11, fontSize: 10 });
       canvas.drawText({ text: `${item.price} meso`, color: '#FFEE66', x: this.x + 36, y: iy + 22, fontSize: 9 });

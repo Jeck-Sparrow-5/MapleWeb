@@ -1,4 +1,6 @@
 import WZManager from '../wz-utils/WZManager';
+import { OutPacket, OutPacketOpcode } from '../Net/OutPacket';
+import SessionManager from '../SessionManager';
 import { MapleStanceButton } from './MapleStanceButton';
 import ClickManager from './ClickManager';
 import DragableMenu from './Menu/DragableMenu';
@@ -52,7 +54,15 @@ class UIUserList extends DragableMenu {
         x: this.x + 10, y: this.y + this.H - 28,
         img: btAddFriend.nChildren,
         isRelativeToCamera: true, isPartOfUI: true,
-        onClick: () => console.log('Add friend — not implemented'),
+        onClick: () => {
+          const name = prompt('Enter character name to add as buddy:');
+          if (!name || !SessionManager.isConnected()) return;
+          const pkt = new OutPacket(OutPacketOpcode.ADD_BUDDY);
+          (pkt as any).writeByte(1); // add
+          (pkt as any).writeString(name);
+          (pkt as any).writeString(''); // group
+          pkt.dispatch();
+        },
       });
       ClickManager.addButton(btn);
       this.buttons.push(btn);

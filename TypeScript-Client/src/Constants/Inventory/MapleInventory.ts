@@ -74,22 +74,17 @@ const getWzNameFromInventoryId = (id: string): WzInventoryType => {
 };
 
 const getInventoryTypeFromItemId = (id: number): MapleInventoryType => {
-  const idAsString = id.toString();
-
-  /// maybe ????????????????????????
-  if (idAsString[0] === "5") {
-    return MapleInventoryType.SETUP;
-  } else {
-    const secondDigit = idAsString[1];
-    const secondDigitToWzInventoryType: Record<string, MapleInventoryType> = {
-      5: MapleInventoryType.CASH,
-      2: MapleInventoryType.USE,
-      3: MapleInventoryType.EQUIPPED,
-      4: MapleInventoryType.ETC,
-    };
-
-    return secondDigitToWzInventoryType[secondDigit];
-  }
+  const s = id.toString();
+  const first = s[0];
+  const second = s[1];
+  if (first === '1') return MapleInventoryType.EQUIP;   // 1xxxxxxx = equip
+  if (first === '5') return MapleInventoryType.CASH;    // 5xxxxxxx = cash/pet
+  const map: Record<string, MapleInventoryType> = {
+    '2': MapleInventoryType.USE,
+    '3': MapleInventoryType.SETUP,
+    '4': MapleInventoryType.ETC,
+  };
+  return map[second] ?? map[first] ?? MapleInventoryType.ETC;
 };
 
 export const getByWZName = (name: string): MapleInventoryType => {
@@ -105,9 +100,20 @@ export const getByWZName = (name: string): MapleInventoryType => {
   return MapleInventoryType.UNDEFINED;
 };
 
+const getInventoryByType = (type: MapleInventoryType): string => {
+  switch (type) {
+    case MapleInventoryType.EQUIP:    return 'equip';
+    case MapleInventoryType.USE:      return 'use';
+    case MapleInventoryType.SETUP:    return 'setup';
+    case MapleInventoryType.ETC:      return 'etc';
+    case MapleInventoryType.CASH:     return 'cash';
+    case MapleInventoryType.EQUIPPED: return 'equip';
+    default:                          return 'etc';
+  }
+};
+
 const MapleInventory = {
-  // todo
-  // getInventoryByType,
+  getInventoryByType,
   getByWZName,
   getWzNameFromInventoryId,
   WzInventoryType,

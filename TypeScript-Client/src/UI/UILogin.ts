@@ -507,41 +507,43 @@ UILogin.createWorldButtons = function () {
           });
           this.channelButtons = [];
 
+          const lastChClickTime: Record<number, number> = {};
           for (let i = 0; i < 20; i++) {
             const row = Math.floor(i / 4);
             const col = i % 4;
-            if (i < world.channels.length) {
-              const channelButton = new MapleStanceButton(this.gameCanvas, {
-                x: -145 + col * 92,
-                y: -620 + row * 30,
-                img: this.uiLogin.nGet('WorldSelect')?.nGet('channel')[i].nChildren,
-                onClick: async () => {
-                  console.log(`Channel ${i} selected!`);
+            const isActive = i < world.channels.length;
 
-                  this.selectedChannelIndex = i;
-                  this.channelSelectAnimation = new FrameAnimation(
-                    this.uiLogin.nGet('WorldSelect')?.nGet('channel').nGet('chSelect'),
-                    -145 + col * 92 - 10,
-                    -620 + row * 30 - 10
-                  );
-                  this.channelSelectAnimation.active = true;
-                  // @todo: handle double click
-                },
-                isHidden: false
-              });
-              ClickManager.addButton(channelButton);
-              this.channelButtons.push(channelButton);
-            } else {
-              // @todo: always disable
-              const channelButton = new MapleStanceButton(this.gameCanvas, {
-                x: -145 + col * 92,
-                y: -620 + row * 30,
-                img: this.uiLogin.nGet('WorldSelect')?.nGet('channel')[i].nChildren,
-                onClick: async () => {},
-                isHidden: false
-              });
-              this.channelButtons.push(channelButton);
-            }
+            const channelButton = new MapleStanceButton(this.gameCanvas, {
+              x: -145 + col * 92,
+              y: -620 + row * 30,
+              img: (this.uiLogin.nGet('WorldSelect') as any)?.nGet('channel')[i].nChildren,
+              isHidden: false,
+              onClick: async () => {
+                if (!isActive) return;
+                const now = Date.now();
+                const doubleClick = now - (lastChClickTime[i] ?? 0) < 400;
+                lastChClickTime[i] = now;
+
+                this.selectedChannelIndex = i;
+                this.channelSelectAnimation = new FrameAnimation(
+                  (this.uiLogin.nGet('WorldSelect') as any)?.nGet('channel').nGet('chSelect'),
+                  -145 + col * 92 - 10,
+                  -620 + row * 30 - 10
+                );
+                this.channelSelectAnimation.active = true;
+
+                if (doubleClick && this.selectedWorldId !== null) {
+                  if (!config.websocketUrl) {
+                    await LoginState.switchToSubState(LoginSubState.CHARACTER_SELECT);
+                  } else {
+                    this.showLoading();
+                    new CharacterListRequestPacket(this.selectedWorldId, i + 1).dispatch();
+                  }
+                }
+              },
+            });
+            if (isActive) ClickManager.addButton(channelButton);
+            this.channelButtons.push(channelButton);
           }
 
           const enterChannelButton = new MapleStanceButton(this.gameCanvas, {

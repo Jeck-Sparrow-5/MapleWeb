@@ -74,6 +74,7 @@ class MapleCharacter {
   bodyStartPoistion: any = { x: 0, y: 0 };
   isInAttack: boolean = false;
   currentAttackStance: string = 'swingO1';
+  _npcLocked: boolean = false;
   isInAlert: boolean = false;
   isInPortal: boolean = false;
   isInClimbingRope: boolean = false;
@@ -658,21 +659,11 @@ async executeAttackDamage() {
 /**
  * Create a visual hit effect at the specified position
  */
-async createHitEffect(x, y) {
-  try {
-    // This is a placeholder for creating hit effects
-    // You would typically load a sprite sheet and animate it
-    // For now, we'll just log that we want to create an effect
-    console.log(`Creating hit effect at (${x}, ${y})`);
-    
-    // In the future, you could implement something like:
-    // const hitEffect = await HitEffect.fromOpts({
-    //   x: x, y: y, type: "normal"
-    // });
-    // this.map.addEffect(hitEffect);
-  } catch (error) {
-    console.error("Error creating hit effect:", error);
-  }
+async createHitEffect(x: number, y: number) {
+  // Add a canvas-animated hit flash to the map's effect list
+  if (!this.map) return;
+  if (!(this.map as any).hitEffects) (this.map as any).hitEffects = [];
+  (this.map as any).hitEffects.push({ x, y, startTime: Date.now(), duration: 300 });
 }
 
 /**
@@ -862,13 +853,13 @@ isCloseToMob = (inAllDirections = true) => {
   }
 
   rightClick() {
-    if (!this.isInAttack) {
+    if (!this.isInAttack && !this._npcLocked) {
       this.pos.right = true;
     }
   }
 
   leftClick() {
-    if (!this.isInAttack) {
+    if (!this.isInAttack && !this._npcLocked) {
       this.pos.left = true;
     }
   }

@@ -7,7 +7,9 @@
       "PowerShell(git clone --depth 1 https://github.com/ryantpayton/MapleStory-Client C:\\\\temp\\\\maplestoryclient 2>&1)",
       "Bash(gh api *)",
       "Bash(powershell -command \"Get-Content 'c:\\\\Users\\\\jorge\\\\OneDrive\\\\Desktop\\\\mapleweb\\\\MapleWeb\\\\TypeScript-Client\\\\public\\\\wz_client\\\\UI.wz\\\\Login.img.json' | ConvertFrom-Json | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name\")",
-      "Bash(python -c ' *)"
+      "Bash(python -c ' *)",
+      "Read(//c/Users/jorge/OneDrive/Desktop/mapleweb/MaplaWeb/TypeScript-Client/src/UI/Menu/**)",
+      "Read(//c/Users/jorge/OneDrive/Desktop/mapleweb/MaplaWeb/TypeScript-Client/src/**)"
     ]
   }
 }

@@ -1,4 +1,5 @@
 import WZManager from '../wz-utils/WZManager';
+import UIOptionMenu from './UIOptionMenu';
 import { MapleStanceButton } from './MapleStanceButton';
 import ClickManager from './ClickManager';
 import GameCanvas from '../GameCanvas';
@@ -51,7 +52,7 @@ const UIGameMenu = {
         img: btGameOpt.nChildren,
         isRelativeToCamera: true, isPartOfUI: true,
         isHidden: true,
-        onClick: () => { this.hide(); /* TODO: UIOptionMenu.show() */ },
+        onClick: () => { this.hide(); UIOptionMenu.show(); },
       });
       ClickManager.addButton(btn);
       this.buttons.push(btn);

@@ -26,6 +26,9 @@ export interface MapleMap {
   isTown: boolean;
   footholds: any;
   boundaries: any;
+  reactors: any[];
+  mists: any[];
+  doors: any[];
   backgrounds: any;
   tiles: any;
   objects: any;
@@ -93,6 +96,9 @@ MapleMap.load = async function (id: number | string) {
   this.monsters = [];
   this.characters = [];
   this.itemDrops = [];
+  this.reactors = [];
+  this.mists = [];
+  this.doors = [];
 
   if (!this.PlayerCharacter) {
     this.PlayerCharacter = null;
@@ -115,6 +121,23 @@ MapleMap.load = async function (id: number | string) {
     await this.loadNPCs(this.wzNode.life);
     await this.loadMonsters(this.wzNode.life);
   }
+
+  // Load reactors from WZ map data
+  try {
+    const reactorNode = this.wzNode.reactor;
+    if (reactorNode?.nChildren) {
+      reactorNode.nChildren.forEach((r: any) => {
+        this.reactors.push({
+          id: parseInt(r.id?.nValue ?? '0'),
+          name: r.name?.nValue ?? '',
+          x: parseInt(r.x?.nValue ?? '0'),
+          y: parseInt(r.y?.nValue ?? '0'),
+          oId: parseInt(r.nName ?? '0'),
+          activated: false,
+        });
+      });
+    }
+  } catch (_) {}
 
   Timer.doReset();
 
@@ -467,6 +490,101 @@ MapleMap.render = function (
     drop.draw(canvas, camera);
   });
 
+  // Reactors (clickable objects)
+  this.reactors?.forEach((r: any) => {
+    if (r.activated) return;
+    const rx = r.x - camera.x;
+    const ry = r.y - camera.y;
+    canvas.context.save();
+    canvas.context.fillStyle = 'rgba(255,200,50,0.6)';
+    canvas.context.strokeStyle = '#FFDD00';
+    canvas.context.lineWidth = 1;
+    canvas.context.fillRect(rx - 15, ry - 30, 30, 30);
+    canvas.context.strokeRect(rx - 15, ry - 30, 30, 30);
+    canvas.context.restore();
+  });
+
+  // Hit flash effects
+  const hitNow = Date.now();
+  if ((this as any).hitEffects) {
+    (this as any).hitEffects = (this as any).hitEffects.filter((e: any) => hitNow - e.startTime < e.duration);
+    (this as any).hitEffects.forEach((e: any) => {
+      const alpha = 1 - (hitNow - e.startTime) / e.duration;
+      const radius = 18 + (1 - alpha) * 10;
+      canvas.context.save();
+      canvas.context.globalAlpha = alpha * 0.8;
+      canvas.context.strokeStyle = '#FFEE44';
+      canvas.context.lineWidth = 2;
+      canvas.context.beginPath();
+      canvas.context.arc(e.x - camera.x, e.y - camera.y, radius, 0, Math.PI * 2);
+      canvas.context.stroke();
+      // Star lines
+      for (let a = 0; a < 8; a++) {
+        const angle = (a / 8) * Math.PI * 2;
+        const dx = Math.cos(angle) * radius;
+        const dy = Math.sin(angle) * radius;
+        canvas.context.beginPath();
+        canvas.context.moveTo(e.x - camera.x + dx * 0.5, e.y - camera.y + dy * 0.5);
+        canvas.context.lineTo(e.x - camera.x + dx * 1.3, e.y - camera.y + dy * 1.3);
+        canvas.context.stroke();
+      }
+      canvas.context.restore();
+    });
+  }
+
+  // Monster status indicators (frozen=blue, stunned=grey, poisoned=green)
+  this.monsters?.forEach((m: any) => {
+    if (!(m.statusMask ?? 0)) return;
+    const mx = (m.pos?.x ?? m.x) - camera.x;
+    const my = (m.pos?.y ?? m.y) - camera.y - (m.height ?? 60) - 8;
+    canvas.context.save();
+    if (m.statusMask & 0x2) {          // stun
+      canvas.context.fillStyle = '#AAAAFF';
+      canvas.context.fillText('★', mx - 4, my);
+    } else if (m.statusMask & 0x200) { // freeze
+      canvas.context.fillStyle = '#44AAFF';
+      canvas.context.fillText('❄', mx - 4, my);
+    } else if (m.statusMask & 0x400) { // poison
+      canvas.context.fillStyle = '#44FF44';
+      canvas.context.fillText('☠', mx - 4, my);
+    }
+    canvas.context.restore();
+    // Clear expired status
+    if (m.statusExpiry && Date.now() > m.statusExpiry) m.statusMask = 0;
+  });
+
+  // Mist clouds (poison, smoke)
+  const now = Date.now();
+  if ((this as any).mists) {
+    (this as any).mists = (this as any).mists.filter((m: any) => now < m.expiry);
+    (this as any).mists.forEach((mist: any) => {
+      canvas.context.save();
+      canvas.context.globalAlpha = 0.35;
+      canvas.context.fillStyle = mist.type === 2 ? '#88FF44' : '#AAAAFF';
+      canvas.context.fillRect(
+        mist.rect.l - camera.x, mist.rect.t - camera.y,
+        mist.rect.r - mist.rect.l, mist.rect.b - mist.rect.t
+      );
+      canvas.context.restore();
+    });
+  }
+
+  // Mystic doors
+  if ((this as any).doors) {
+    (this as any).doors.forEach((door: any) => {
+      const dx = door.x - camera.x;
+      const dy = door.y - camera.y;
+      canvas.context.save();
+      canvas.context.fillStyle = 'rgba(150,100,255,0.7)';
+      canvas.context.strokeStyle = '#AAAAFF';
+      canvas.context.beginPath();
+      canvas.context.ellipse(dx, dy, 20, 30, 0, 0, Math.PI * 2);
+      canvas.context.fill();
+      canvas.context.stroke();
+      canvas.context.restore();
+    });
+  }
+
   // Name tags above NPCs
   this.npcs.forEach((npc: any) => {
     const name = npc.strings?.name ?? '';
@@ -525,6 +643,16 @@ MapleMap.handleClick = function (
   const mouseX = event.clientX - rect.left;
   const mouseY = event.clientY - rect.top;
   console.log("Click detected at:", mouseX, mouseY);
+
+  // Reactor click
+  this.reactors?.forEach((r: any) => {
+    if (r.activated) return;
+    const rx = r.x - camera.x;
+    const ry = r.y - camera.y;
+    if (mouseX >= rx - 15 && mouseX <= rx + 15 && mouseY >= ry - 30 && mouseY <= ry) {
+      r.activated = true;
+    }
+  });
 
   this.npcs.forEach(async (npc: any) => {
     if (!npc.pos) return;

@@ -22,6 +22,7 @@ export enum OutPacketOpcode {
   PICKUP_ITEM = 110,
   DELETE_CHAR = 23,
   CHECK_CHAR_NAME = 21,
+  ADD_BUDDY = 38,
   SELECT_CHARACTER = 19,
   PLAYER_LOGIN = 20,
   PONG = 24,

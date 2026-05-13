@@ -65,9 +65,13 @@ const UIOptionMenu = {
     this.initialized = true;
   },
 
-  show() { this.isHidden = false; this.buttons.forEach((b) => (b.isHidden = false)); },
+  show(canvas?: GameCanvas) {
+    if (!this.initialized && canvas) this.initialize(canvas);
+    this.isHidden = false;
+    this.buttons.forEach((b) => (b.isHidden = false));
+  },
   hide() { this.isHidden = true;  this.buttons.forEach((b) => (b.isHidden = true)); },
-  toggle() { if (this.isHidden) this.show(); else this.hide(); },
+  toggle(canvas?: GameCanvas) { if (this.isHidden) this.show(canvas); else this.hide(); },
 
   draw(canvas: GameCanvas) {
     if (this.isHidden) return;

@@ -1,5 +1,7 @@
 import WZManager from "../../wz-utils/WZManager";
 import WZFiles from "../../Constants/enums/WZFiles";
+import SessionManager from "../../SessionManager";
+import { getItemIconSync } from "../../wz-utils/ItemIconLoader";
 import ClickManager from "../ClickManager";
 import { MapleStanceButton } from "../MapleStanceButton";
 import DragableMenu from "./DragableMenu";
@@ -201,20 +203,13 @@ class InventoryMenuSprite extends DragableMenu {
         // Draw the item in this slot if present.
         if (slotIndex < items.length && items[slotIndex]) {
           const item = items[slotIndex];
-          let icon = null;
-          if (item.node && item.node.iconRaw) {
-            try {
-              icon = item.node.iconRaw.nGetImage();
-            } catch (e) {
-              console.warn(`Failed to get iconRaw image for item ${item.itemId}`);
-            }
+          // Try Item.wz icon first, then fall back to node-attached icon
+          let icon = getItemIconSync(item.itemId);
+          if (!icon && item.node?.iconRaw) {
+            try { icon = item.node.iconRaw.nGetImage(); } catch (_) {}
           }
-          if (!icon && item.node && item.node.info && item.node.info.iconRaw) {
-            try {
-              icon = item.node.info.iconRaw.nGetImage();
-            } catch (e) {
-              console.warn(`Failed to get info.iconRaw image for item ${item.itemId}`);
-            }
+          if (!icon && item.node?.info?.iconRaw) {
+            try { icon = item.node.info.iconRaw.nGetImage(); } catch (_) {}
           }
 
           if (icon) {
@@ -416,8 +411,6 @@ class InventoryMenuSprite extends DragableMenu {
   }
 
   private currentTabNumber(): number {
-    // MapleInventoryType enum values
-    const { MapleInventoryType } = require('../../Constants/Inventory/MapleInventory');
     switch (this.currentTab) {
       case MapleInventoryType.EQUIP: return 1;
       case MapleInventoryType.USE:   return 2;
@@ -453,8 +446,15 @@ class InventoryMenuSprite extends DragableMenu {
           img: this.inventoryNode.BtCoin.nChildren,
           isRelativeToCamera: true,
           isPartOfUI: true,
-          onClick: () => {
-            console.log("drop meso not implemented");
+          onClick: async () => {
+            const amount = parseInt(prompt('Amount of mesos to drop:') ?? '0');
+            if (!amount || amount <= 0) return;
+            if (SessionManager.isConnected()) {
+              const { DropItemPacket } = await import('../../Net/Packets/ItemPackets');
+              new DropItemPacket(0, 0, 0, amount).dispatch();
+            } else {
+              this.charecter.inventory.mesos = Math.max(0, this.charecter.inventory.mesos - amount);
+            }
           },
         });
         ClickManager.addButton(dropMesoButton);

@@ -30,10 +30,12 @@ export class NpcTalkHandler extends PacketHandler {
 
     const npc = MapleMap.npcs?.find((n: any) => n.oId === npcObjectId);
 
+    const hasPrev = prev === 1;
+    const hasNext = next === 1;
+    const type = this.mapTalkType(talkType);
+    const npcName = npc?.strings?.name ?? 'NPC';
+    await MapleMap.npcDialog.changeText(npcObjectId, type, npcName, message, hasPrev, hasNext);
     MapleMap.npcDialog.setIsHidden(false);
-    MapleMap.npcDialog.name = npc?.strings?.name ?? 'NPC';
-    MapleMap.npcDialog.text = message;
-    MapleMap.npcDialog.type = this.mapTalkType(talkType);
   }
 
   private mapTalkType(t: number): NpcTalkType {

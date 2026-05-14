@@ -2,8 +2,12 @@ import WZManager from '../wz-utils/WZManager';
 import { MapleStanceButton } from './MapleStanceButton';
 import ClickManager from './ClickManager';
 import GameCanvas from '../GameCanvas';
+import FamePacket from '../Net/Packets/FamePacket';
+import SessionManager from '../SessionManager';
+import UIStatusMessenger from './UIStatusMessenger';
 
 export interface CharInfoData {
+  charId?: number;
   name: string;
   level: number;
   job: string;
@@ -52,6 +56,33 @@ const UICharInfo = {
       ClickManager.addButton(btn);
       this.buttons.push(btn);
     }
+
+    const fameBtn = new MapleStanceButton(canvas, {
+      x: this.x + 8, y: this.y + this.H - 28,
+      img: uiWin?.nGet('BtOK')?.nChildren,
+      isRelativeToCamera: true, isPartOfUI: true, isHidden: true,
+      onClick: () => {
+        if (!SessionManager.isConnected() || !this.data?.charId) return;
+        new FamePacket(this.data.charId, 1).dispatch();
+        UIStatusMessenger.show(`Famed ${this.data.name}!`, '#FFD700');
+      },
+    });
+    ClickManager.addButton(fameBtn);
+    this.buttons.push(fameBtn);
+
+    const defameBtn = new MapleStanceButton(canvas, {
+      x: this.x + 80, y: this.y + this.H - 28,
+      img: uiWin?.nGet('BtNo')?.nChildren,
+      isRelativeToCamera: true, isPartOfUI: true, isHidden: true,
+      onClick: () => {
+        if (!SessionManager.isConnected() || !this.data?.charId) return;
+        new FamePacket(this.data.charId, 0).dispatch();
+        UIStatusMessenger.show(`Defamed ${this.data.name}.`, '#888888');
+      },
+    });
+    ClickManager.addButton(defameBtn);
+    this.buttons.push(defameBtn);
+
     this.initialized = true;
   },
 
@@ -99,6 +130,10 @@ const UICharInfo = {
     });
 
     canvas.drawText({ text: 'Character Info', color: '#FFDD88', x: this.x + 8, y: this.y + 12, fontSize: 11 });
+    if (this.data.charId) {
+      canvas.drawText({ text: 'Fame', color: '#FFD700', x: this.x + 22, y: this.y + this.H - 14, fontSize: 9 });
+      canvas.drawText({ text: 'Defame', color: '#888888', x: this.x + 90, y: this.y + this.H - 14, fontSize: 9 });
+    }
     this.buttons.forEach((b) => b.draw(canvas, { x: 0, y: 0 } as any, 0, 0, 0));
   },
 };

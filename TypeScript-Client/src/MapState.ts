@@ -105,6 +105,8 @@ MapStateInstance.initialize = async function (gameCanvas?: GameCanvas) {
   // StateManager passes the GameCanvas as first arg; fall back to DOM lookup
   const canvas: GameCanvas = gameCanvas ?? (document.getElementById('game') as any);
 
+  this.UIMenus = [];
+
   this.isTouchControllsEnabled = isTouchDevice();
   if (this.isTouchControllsEnabled) {
     this.joyStick = TouchJoyStick.init();
@@ -154,13 +156,15 @@ MapStateInstance.initialize = async function (gameCanvas?: GameCanvas) {
   this.lastMoveSent = 0;
   this.lastMoveX = 0;
   this.lastMoveY = 0;
-  // UIMenus populated after all menus initialize (skillBook/equipInventory/questLog added below)
-  this.UIMenus = [this.statsMenu, this.inventoryMenu];
+  this.UIMenus.push(this.statsMenu, this.inventoryMenu);
 
-  // Initialize previous keyboard state with all keys set to false.
   this.previousKeyboardState = {
     up: false, down: false, left: false, right: false,
     i: false, s: false, k: false, e: false, q: false, m: false,
+    '1': false, '2': false, '3': false, '4': false, '5': false,
+    '6': false, '7': false, '8': false, '9': false, '0': false,
+    f1: false, f2: false, f3: false, f4: false, f5: false,
+    f6: false, f7: false, f8: false, f9: false, f10: false,
   };
 
   await initializeMapState(defaultMap, true);
@@ -392,6 +396,13 @@ MapStateInstance.doUpdate = function (
     this.previousKeyboardState.down = canvas.isKeyDown("down");
     this.previousKeyboardState.left = canvas.isKeyDown("left");
     this.previousKeyboardState.right = canvas.isKeyDown("right");
+    (['1','2','3','4','5','6','7','8','9','0'] as const).forEach((k) => {
+      (this.previousKeyboardState as any)[k] = canvas.isKeyDown(k);
+    });
+    for (let fi = 1; fi <= 10; fi++) {
+      const fk = `f${fi}`;
+      (this.previousKeyboardState as any)[fk] = canvas.isKeyDown(fk as any);
+    }
 
     Camera.lookAt(MyCharacter.pos.x, MyCharacter.pos.y - 78);
 

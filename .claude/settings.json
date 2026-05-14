@@ -10,7 +10,9 @@
       "Bash(python -c ' *)",
       "Read(//c/Users/jorge/OneDrive/Desktop/mapleweb/MaplaWeb/TypeScript-Client/src/UI/Menu/**)",
       "Read(//c/Users/jorge/OneDrive/Desktop/mapleweb/MaplaWeb/TypeScript-Client/src/**)",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "WebSearch",
+      "WebFetch(domain:api.github.com)"
     ]
   }
 }

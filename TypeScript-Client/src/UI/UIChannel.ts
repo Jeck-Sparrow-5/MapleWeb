@@ -42,8 +42,8 @@ const UIChannel = {
         isRelativeToCamera: true, isPartOfUI: true, isHidden: true,
         onClick: () => {
           if (!SessionManager.isConnected()) return;
-          // Send CHANGE_CHANNEL packet
-          const pkt = new OutPacket(OutPacketOpcode.CHANGE_MAP);
+          const pkt = new OutPacket(OutPacketOpcode.CHANGE_CHANNEL);
+          (pkt as any).writeByte(this.selectedChannel);
           pkt.dispatch();
           this.hide();
         },

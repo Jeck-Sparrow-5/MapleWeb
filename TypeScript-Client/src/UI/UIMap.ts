@@ -3,6 +3,7 @@ import WZManager from "../wz-utils/WZManager";
 import UIKeyConfig from "./UIKeyConfig";
 import UIGameMenu from "./UIGameMenu";
 import ChatPacket from "../Net/Packets/ChatPacket";
+import WhisperPacket from "../Net/Packets/WhisperPacket";
 import SessionManager from "../SessionManager";
 import ChatBubbleRenderer from "./ChatBubbleRenderer";
 import UICommon from "./UICommon";
@@ -229,7 +230,29 @@ UIMap.doUpdate = function (msPerTick, camera, canvas) {
     this.chat.addSubmitListener(() => {
       const msg = this.chat!.input.value;
       this.chat!.input.value = "";
-      if (msg && msg[0] !== '!') {
+      if (msg && msg[0] === '/') {
+        // Slash commands (server-side)
+        if (SessionManager.isConnected()) {
+          const parts = msg.slice(1).split(' ');
+          const cmd = parts[0].toLowerCase();
+          if ((cmd === 'w' || cmd === 'whisper') && parts.length >= 3) {
+            const target = parts[1];
+            const text = parts.slice(2).join(' ');
+            new WhisperPacket(target, text).dispatch();
+            this.addChatMessage(`[Whisper → ${target}] ${text}`, '#FFAAFF');
+          } else if (cmd === 'find' && parts.length >= 2) {
+            new WhisperPacket(parts[1], '', true).dispatch();
+            this.addChatMessage(`Searching for ${parts[1]}...`, '#AAAAFF');
+          } else if ((cmd === 'e' || cmd === 'emo') && parts.length >= 2) {
+            // Emote — handled client-side only for now
+            this.addChatMessage(`Emote: ${parts[1]}`, '#AADDFF');
+          } else {
+            this.addChatMessage(`Unknown command: /${cmd}`, '#FF8888');
+          }
+        } else {
+          this.addChatMessage(`(not connected)`, '#888888');
+        }
+      } else if (msg && msg[0] !== '!') {
         ChatBubbleRenderer.show(MyCharacter.id ?? 0, msg);
         if (SessionManager.isConnected()) {
           new ChatPacket(msg).dispatch();

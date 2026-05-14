@@ -105,8 +105,10 @@ MapleMap.load = async function (id: number | string) {
     this.PlayerCharacter = null;
   }
 
-  // disabled for debugging other sound
-  await AudioManager.playBackgroundMusic(this.wzNode.info.bgm.nValue);
+  const bgmPath = this.wzNode?.info?.bgm?.nValue;
+  if (bgmPath) {
+    AudioManager.playBackgroundMusic(bgmPath);
+  }
 
   this.footholds = this.loadFootholds(this.wzNode.foothold);
   this.boundaries = this.loadBoundaries(this.wzNode, this.footholds);

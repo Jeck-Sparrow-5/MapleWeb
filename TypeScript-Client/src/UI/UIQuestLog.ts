@@ -5,6 +5,8 @@ import DragableMenu from './Menu/DragableMenu';
 import GameCanvas from '../GameCanvas';
 import { CameraInterface } from '../Camera';
 import { Position } from '../Effects/DamageIndicator';
+import QuestActionPacket, { QuestAction } from '../Net/Packets/QuestActionPacket';
+import SessionManager from '../SessionManager';
 
 export interface QuestEntry {
   id: number;
@@ -71,7 +73,7 @@ class UIQuestLog extends DragableMenu {
       this.buttons.push(closeBtn);
     }
 
-    // Giveup button
+    // Giveup / Forfeit button
     const btGiveup = uiWin?.nGet('BtGiveup');
     if (btGiveup) {
       const btn = new MapleStanceButton(canvas, {
@@ -80,14 +82,38 @@ class UIQuestLog extends DragableMenu {
         isRelativeToCamera: true, isPartOfUI: true,
         onClick: () => {
           if (this.selectedIndex < 0) return;
-          const list = this.tab === 'active'
-            ? activeQuests.filter((q) => q.state === 'started')
-            : activeQuests.filter((q) => q.state === 'completed');
+          const list = activeQuests.filter((q) => q.state === 'started');
           const q = list[this.scroll + this.selectedIndex];
-          if (q) {
-            const idx = activeQuests.indexOf(q);
-            if (idx >= 0) activeQuests.splice(idx, 1);
-            this.selectedIndex = -1;
+          if (!q) return;
+          if (SessionManager.isConnected()) {
+            new QuestActionPacket(QuestAction.FORFEIT, q.id).dispatch();
+          }
+          const idx = activeQuests.indexOf(q);
+          if (idx >= 0) activeQuests.splice(idx, 1);
+          this.selectedIndex = -1;
+        },
+      });
+      ClickManager.addButton(btn);
+      this.buttons.push(btn);
+    }
+
+    // Complete quest button (for completed-state quests ready to turn in)
+    const btOK = uiWin?.nGet('BtOK');
+    if (btOK) {
+      const btn = new MapleStanceButton(canvas, {
+        x: this.x + 10, y: this.y + this.H - 25,
+        img: btOK.nChildren,
+        isRelativeToCamera: true, isPartOfUI: true,
+        onClick: () => {
+          if (this.selectedIndex < 0) return;
+          const list = this.tab === 'completed'
+            ? activeQuests.filter((q) => q.state === 'completed')
+            : activeQuests.filter((q) => q.state === 'started');
+          const q = list[this.scroll + this.selectedIndex];
+          if (!q) return;
+          if (SessionManager.isConnected()) {
+            const action = q.state === 'completed' ? QuestAction.COMPLETE : QuestAction.START;
+            new QuestActionPacket(action, q.id).dispatch();
           }
         },
       });

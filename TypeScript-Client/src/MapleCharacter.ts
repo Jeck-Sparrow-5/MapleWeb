@@ -885,10 +885,14 @@ isCloseToMob = (inAllDirections = true) => {
       const randomLocationInMap = this.map!.getLocationAboveRandomFoothold();
       if (randomLocationInMap) {
         this.pos = new Physics();
-        // todo
-        // 1. fix - sometimes the y location is way off,
         this.pos.x = randomLocationInMap.x;
-        this.pos.y = randomLocationInMap.y - 100;
+        // Place player just above the foothold surface (foothold y = ground level)
+        // Clamp to map boundaries to prevent spawning underground or out of bounds
+        const bounds = this.map!.boundaries;
+        const spawnY = randomLocationInMap.y - 10; // 10 units above foothold
+        this.pos.y = bounds
+          ? Math.max(bounds.top + 50, Math.min(bounds.bottom - 50, spawnY))
+          : spawnY;
       }
     }, 5 * 1000);
   }

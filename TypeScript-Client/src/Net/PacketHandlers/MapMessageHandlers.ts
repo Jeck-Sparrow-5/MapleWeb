@@ -123,6 +123,15 @@ export class PartyOperationHandler extends PacketHandler {
   handle(data: DataView): void {
     let offset = Cryptography.HEADER_LENGTH + 2;
     const op = data.getUint8(offset); offset += 1;
+
+    if (op === 4) {
+      // Invite received — show in UIParty
+      const { str: leaderName } = readString(data, offset);
+      const UIParty = (window as any).UIParty;
+      if (UIParty) { UIParty.showInvite(leaderName); UIParty.show(); }
+      return;
+    }
+
     if (op !== 0x23) return; // only handle full party list (op 35 = update)
 
     partyMembers.length = 0;

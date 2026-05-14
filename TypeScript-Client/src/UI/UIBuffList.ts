@@ -1,6 +1,8 @@
 import WZManager from '../wz-utils/WZManager';
 import GameCanvas from '../GameCanvas';
 import config from '../Config';
+import SessionManager from '../SessionManager';
+import { CancelBuffPacket } from '../Net/Packets/UpgradeScrollPacket';
 
 export interface ActiveBuff {
   skillId: number;
@@ -33,6 +35,26 @@ const UIBuffList = {
 
   removeBuff(skillId: number) {
     this.buffs = this.buffs.filter((b) => b.skillId !== skillId);
+  },
+
+  // Call from MapState or GameCanvas right-click handler
+  onRightClick(mx: number, my: number): boolean {
+    const startX = config.originalWidth - 8;
+    const baseY = 6;
+    const iconSize = 32;
+    const gap = 2;
+    for (let i = 0; i < this.buffs.length; i++) {
+      const bx = startX - (i + 1) * (iconSize + gap);
+      if (mx >= bx && mx < bx + iconSize && my >= baseY && my < baseY + iconSize) {
+        const buff = this.buffs[i];
+        if (SessionManager.isConnected()) {
+          new CancelBuffPacket(buff.skillId).dispatch();
+        }
+        this.buffs.splice(i, 1);
+        return true;
+      }
+    }
+    return false;
   },
 
   update() {

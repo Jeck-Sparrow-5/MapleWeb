@@ -5,6 +5,7 @@ import UIGameMenu from "./UIGameMenu";
 import ChatPacket from "../Net/Packets/ChatPacket";
 import WhisperPacket from "../Net/Packets/WhisperPacket";
 import MultiChatPacket from "../Net/Packets/MultiChatPacket";
+import EmotionPacket from "../Net/Packets/EmotionPacket";
 import SessionManager from "../SessionManager";
 import ChatBubbleRenderer from "./ChatBubbleRenderer";
 import UICommon from "./UICommon";
@@ -254,7 +255,9 @@ UIMap.doUpdate = function (msPerTick, camera, canvas) {
             new MultiChatPacket(3, parts.slice(1).join(' ')).dispatch();
             this.addChatMessage(`[Alliance] ${parts.slice(1).join(' ')}`, '#AAAAFF');
           } else if ((cmd === 'e' || cmd === 'emo') && parts.length >= 2) {
-            this.addChatMessage(`Emote: ${parts[1]}`, '#AADDFF');
+            const emoteId = parseInt(parts[1]) || 0;
+            new EmotionPacket(emoteId).dispatch();
+            this.addChatMessage(`Emote: ${emoteId}`, '#AADDFF');
           } else {
             this.addChatMessage(`Unknown command: /${cmd}  (try /w name msg, /find name, /p msg, /g msg)`, '#FF8888');
           }

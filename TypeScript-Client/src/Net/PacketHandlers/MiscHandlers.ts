@@ -59,11 +59,47 @@ export class StorageHandler extends PacketHandler {
 export class PlayerInteractionHandler extends PacketHandler {
   handle(data: DataView): void {
     let offset = Cryptography.HEADER_LENGTH + 2;
-    const command = data.getUint8(offset);
-    // command 2 = room created, 3 = invite, 4 = declined, etc.
-    if (command === 3) {
-      const { str: inviter } = readString(data, offset + 1);
-      UIStatusMessenger.show(`${inviter} invited you to trade`, '#FFDD88');
+    const command = data.getUint8(offset); offset += 1;
+    const UITrade = (window as any).UITrade;
+    switch (command) {
+      case 2: { // room created / entered
+        const { str: partnerName } = readString(data, offset);
+        if (UITrade) UITrade.open(partnerName);
+        break;
+      }
+      case 3: { // trade invite received
+        const { str: inviter } = readString(data, offset);
+        UIStatusMessenger.show(`${inviter} wants to trade. Accept? (open Trade window)`, '#FFDD88');
+        if (UITrade) UITrade.open(inviter);
+        break;
+      }
+      case 0x0B: { // item added by partner
+        const slotIdx = data.getUint8(offset); offset += 1;
+        const itemId  = data.getInt32(offset, true); offset += 4;
+        const qty     = data.getInt16(offset, true);
+        if (UITrade) UITrade.partnerSlots[slotIdx] = { itemId, quantity: qty };
+        break;
+      }
+      case 0x0D: { // mesos set by partner
+        const mesos = data.getInt32(offset, true);
+        if (UITrade) UITrade.partnerMesos = mesos;
+        break;
+      }
+      case 0x0F: { // partner confirmed
+        if (UITrade) UITrade.partnerConfirmed = true;
+        UIStatusMessenger.show('Trade partner confirmed!', '#AAFFAA');
+        break;
+      }
+      case 0x10: { // trade complete
+        if (UITrade) UITrade.close();
+        UIStatusMessenger.show('Trade completed!', '#AAFFAA');
+        break;
+      }
+      case 0x11: { // trade cancelled
+        if (UITrade) UITrade.close();
+        UIStatusMessenger.show('Trade cancelled.', '#FF8888');
+        break;
+      }
     }
   }
 }

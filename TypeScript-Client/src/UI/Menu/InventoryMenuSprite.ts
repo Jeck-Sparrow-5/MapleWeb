@@ -401,14 +401,64 @@ class InventoryMenuSprite extends DragableMenu {
     if (!SessionManager.isConnected()) return;
     const itemId = item.itemId;
     const invType = this.currentTabNumber();
-    if (invType === 2) {
-      // USE tab — use item (potion etc.)
-      const { UseItemPacket } = await import('../../Net/Packets/ItemPackets');
-      new UseItemPacket(slotIndex + 1, itemId).dispatch();
-    } else if (invType === 1) {
-      // EQUIP tab — equip item
+    const slot = slotIndex + 1;
+
+    if (invType === 1) {
+      // EQUIP tab — equip item to body
       const { EquipItemPacket } = await import('../../Net/Packets/ItemPackets');
-      new EquipItemPacket(slotIndex + 1, -1).dispatch(); // -1 = auto-equip
+      new EquipItemPacket(slot, -1).dispatch();
+      return;
+    }
+
+    if (invType === 2) {
+      const prefix4 = Math.floor(itemId / 10000);
+      const prefix3 = Math.floor(itemId / 100000);
+
+      if (prefix3 === 203) {
+        // Return scroll (2030xxx) — USE_RETURN_SCROLL
+        const { OutPacket, OutPacketOpcode } = await import('../../Net/OutPacket');
+        const pkt = new OutPacket(OutPacketOpcode.USE_RETURN_SCROLL);
+        (pkt as any).writeInt(0); // timestamp
+        (pkt as any).writeShort(slot);
+        (pkt as any).writeInt(itemId);
+        pkt.dispatch();
+      } else if (prefix4 >= 2040 && prefix4 <= 2059) {
+        // Upgrade scroll (2040xxx - 2059xxx) — need target equip slot
+        const targetSlot = prompt('Enter equip slot to scroll (-1 = hat, -5 = top, -10 = weapon, etc.):');
+        if (!targetSlot) return;
+        const { UpgradeScrollPacket } = await import('../../Net/Packets/UpgradeScrollPacket');
+        new UpgradeScrollPacket(slot, parseInt(targetSlot)).dispatch();
+      } else if (prefix3 === 228) {
+        // Skill book / mastery book (2280xxx) — USE_SKILL_BOOK
+        const { UseSkillBookPacket } = await import('../../Net/Packets/UpgradeScrollPacket');
+        new UseSkillBookPacket(slot, itemId).dispatch();
+      } else if (prefix4 >= 2220 && prefix4 <= 2229) {
+        // Scripted item (2220xxx) — SCRIPTED_ITEM
+        const { OutPacket, OutPacketOpcode } = await import('../../Net/OutPacket');
+        const pkt = new OutPacket(OutPacketOpcode.SCRIPTED_ITEM);
+        (pkt as any).writeInt(0); // timestamp
+        (pkt as any).writeShort(slot);
+        (pkt as any).writeInt(itemId);
+        pkt.dispatch();
+      } else {
+        // General consumable (potion, food, etc.)
+        const { UseItemPacket } = await import('../../Net/Packets/ItemPackets');
+        new UseItemPacket(slot, itemId).dispatch();
+      }
+      return;
+    }
+
+    if (invType === 5) {
+      // Cash tab — pets are 5000xxx
+      const prefix3cash = Math.floor(itemId / 100000);
+      if (prefix3cash === 50) {
+        // Pet item — spawn/despawn
+        const { OutPacket, OutPacketOpcode } = await import('../../Net/OutPacket');
+        const pkt = new OutPacket(OutPacketOpcode.SPAWN_PET);
+        (pkt as any).writeByte(0); // pet slot 0
+        (pkt as any).writeInt(itemId);
+        pkt.dispatch();
+      }
     }
   }
 

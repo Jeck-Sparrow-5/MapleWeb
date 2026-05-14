@@ -93,6 +93,12 @@ export enum OutPacketOpcode {
 
   // Quests
   QUEST_ACTION       = 107,  // 0x6B
+
+  // Emote / facial expression
+  FACIAL_EXPRESSION  = 197,  // 0xC5 — client sends emote; server broadcasts to other players
+
+  // Player-to-player interaction (trade, etc.)
+  PLAYER_OPERATION   = 222,  // 0xDE — trade/interact actions
 }
 
 export class OutPacket {

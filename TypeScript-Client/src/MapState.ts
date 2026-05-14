@@ -17,6 +17,8 @@ import UIKeyConfig from "./UI/UIKeyConfig";
 import UIUserList from "./UI/UIUserList";
 import UIWorldMap from "./UI/UIWorldMap";
 import UIChannel from "./UI/UIChannel";
+import UIParty from "./UI/UIParty";
+import UITrade from "./UI/UITrade";
 import UIStorage from "./UI/UIStorage";
 import { UseItemPacket } from "./Net/Packets/ItemPackets";
 import UISkillHotbar, { useHotbarSlot, selectHotbarSlot, assignSkillToSelectedSlot } from "./UI/UISkillHotbar";
@@ -130,6 +132,7 @@ MapStateInstance.initialize = async function (gameCanvas?: GameCanvas) {
   await TooltipRenderer.initialize();
   await UIPartyHP.initialize();
   await UIOptionMenu.initialize(canvas);
+  await UIParty.initialize(canvas);
   await UIKeyConfig.initialize(canvas);
   await UIChannel.initialize(canvas);
   this.userList = await UIUserList.fromOpts({ x: 400, y: 80, isHidden: true, canvas });
@@ -364,6 +367,11 @@ MapStateInstance.doUpdate = function (
       }
     }
 
+    // Right-click: buff cancel
+    if ((canvas as any).rightClicked) {
+      UIBuffList.onRightClick(canvas.mouseX, canvas.mouseY);
+    }
+
     // Hotbar slot selection on click
     if (canvas.clicked) {
       const slotSize = 32; const gap = 2; const count = 10;
@@ -447,6 +455,8 @@ MapStateInstance.doRender = function (
     this.userList?.draw(canvas, camera, lag, msPerTick, tdelta);
     this.worldMap?.draw(canvas, camera, lag, msPerTick, tdelta);
     UIOptionMenu.draw(canvas);
+    UIParty.draw(canvas);
+    UITrade.draw(canvas);
     UIKeyConfig.draw(canvas);
     UIChannel.draw(canvas);
     this.skillBook?.draw(canvas, camera, lag, msPerTick, tdelta);
@@ -489,6 +499,8 @@ declare global {
   }
 }
 window.UINotice = UINotice;
+(window as any).UIParty = UIParty;
+(window as any).UITrade = UITrade;
 window.UICharInfo = UICharInfo;
 
 export default MapStateInstance;

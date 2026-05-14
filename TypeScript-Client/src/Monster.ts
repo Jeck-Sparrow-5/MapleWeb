@@ -1,6 +1,8 @@
 import WZManager from "./wz-utils/WZManager";
 import PLAY_AUDIO from "./Audio/PlayAudio";
 import { Physics } from "./Physics";
+import MoveLifePacket from "./Net/Packets/MoveLifePacket";
+import SessionManager from "./SessionManager";
 import { MobStance } from "./Constants/enums/Stance";
 import WZFiles from "./Constants/enums/WZFiles";
 import DamageIndicator, {
@@ -54,6 +56,7 @@ class Monster {
   onStanceFinish: any = null;
   flipped: boolean = false;
   layer: number = 0;
+  _moveTimer: number = 0;
 
   static async fromOpts(opts: any) {
     const mob = new Monster(opts);
@@ -493,6 +496,17 @@ async addDrops() {
 
     if (this.isMovementEnabled) {
       this.pos.update(msPerTick);
+      // Send movement to server ~5×/s when client controls this mob
+      this._moveTimer = (this._moveTimer ?? 0) + msPerTick;
+      if (this._moveTimer > 200 && SessionManager.isConnected()) {
+        this._moveTimer = 0;
+        new MoveLifePacket(this.oId, 0, 0, [{
+          x: Math.round(this.pos.x), y: Math.round(this.pos.y),
+          vx: Math.round((this.pos as any).vx ?? 0),
+          vy: Math.round((this.pos as any).vy ?? 0),
+          newstate: 0, duration: 200, foothold: 0,
+        }]).dispatch();
+      }
     }
 
     this.centerPosition = {

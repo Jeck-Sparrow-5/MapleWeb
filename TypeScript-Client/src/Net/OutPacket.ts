@@ -53,12 +53,46 @@ export enum OutPacketOpcode {
   GIVE_FAME         = 95,   // 0x5F
 
   // Stats / skills
-  DISTRIBUTE_AP     = 87,   // 0x57
-  DISTRIBUTE_SP     = 89,   // 0x59
+  DISTRIBUTE_AP      = 87,   // 0x57
+  AUTO_DISTRIBUTE_AP = 88,   // 0x58
+  DISTRIBUTE_SP      = 90,   // 0x5A — was 89 (wrong)
+  CANCEL_BUFF_CLIENT = 92,   // 0x5C — player cancels own buff
 
-  // World interaction
-  TOUCH_REACTOR     = 168,  // 0xA8 — activate reactor
-  CHAR_INFO_REQUEST = 97,   // 0x61 — request another player's info
+  // Items / inventory
+  USE_RETURN_SCROLL  = 85,   // 0x55
+  USE_UPGRADE_SCROLL = 86,   // 0x56 — apply scroll to equipment
+  USE_SKILL_BOOK     = 82,   // 0x52 — learn skill from item
+  SCRIPTED_ITEM      = 78,   // 0x4E — use scripted quest/event item
+  ITEM_SORT          = 69,   // 0x45
+  ITEM_SORT2         = 70,   // 0x46
+
+  // Map / world interaction
+  CHANGE_MAP_SPECIAL = 100,  // 0x64 — scripted portal warp
+  USE_DOOR           = 133,  // 0x85
+  TOUCHING_REACTOR   = 206,  // 0xCE — touch reactor (fixes former TOUCH_REACTOR=168)
+  DAMAGE_REACTOR     = 205,  // 0xCD — skill hit on reactor
+  CHAR_INFO_REQUEST  = 97,   // 0x61 — request another player's info
+
+  // Party / social
+  PARTY_OPERATION    = 124,  // 0x7C
+  DENY_PARTY_REQUEST = 125,  // 0x7D
+  GUILD_OPERATION    = 126,  // 0x7E
+  DENY_GUILD_REQUEST = 127,  // 0x7F
+  CHANGE_KEYMAP      = 135,  // 0x87
+
+  // Chat
+  MULTI_CHAT         = 119,  // 0x77 — party/alliance/group chat
+
+  // Pet
+  SPAWN_PET          = 98,   // 0x62 — equip/unequip pet
+  MOVE_PET           = 167,  // 0xA7
+  PET_COMMAND        = 169,  // 0xA9
+
+  // Mobs (client-controlled)
+  MOVE_LIFE          = 188,  // 0xBC — send controlled monster movement
+
+  // Quests
+  QUEST_ACTION       = 107,  // 0x6B
 }
 
 export class OutPacket {

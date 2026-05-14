@@ -48,3 +48,36 @@ export function getItemIconSync(itemId: number): any {
   loadItemIcon(itemId); // fire-and-forget
   return null;
 }
+
+// ─── Skill icons ──────────────────────────────────────────────────────────────
+const skillIconCache = new Map<number, any>();
+const skillIconPending = new Map<number, Promise<any>>();
+
+async function loadSkillIcon(skillId: number): Promise<any> {
+  if (skillIconCache.has(skillId)) return skillIconCache.get(skillId);
+  if (skillIconPending.has(skillId)) return skillIconPending.get(skillId);
+
+  const p = (async () => {
+    try {
+      const fileCode = Math.floor(skillId / 10000).toString().padStart(3, '0');
+      const node = await WZManager.get(`Skill.wz/${fileCode}.img/skill/${skillId}/icon`);
+      const img = node?.nGetImage?.() ?? null;
+      skillIconCache.set(skillId, img);
+      return img;
+    } catch (_) {
+      skillIconCache.set(skillId, null);
+      return null;
+    } finally {
+      skillIconPending.delete(skillId);
+    }
+  })();
+
+  skillIconPending.set(skillId, p);
+  return p;
+}
+
+export function getSkillIconSync(skillId: number): any {
+  if (skillIconCache.has(skillId)) return skillIconCache.get(skillId);
+  loadSkillIcon(skillId); // fire-and-forget
+  return null;
+}

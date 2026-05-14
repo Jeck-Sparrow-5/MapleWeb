@@ -26,13 +26,19 @@ export class UnequipItemPacket extends OutPacket {
 }
 
 export class DropItemPacket extends OutPacket {
-  constructor(inventoryType: number, slot: number, itemId: number, quantity: number) {
-    super(OutPacketOpcode.DROP_ITEM);
+  // Drop = ITEM_MOVE with destination slot 0 (floor). Quantity for stackables only.
+  constructor(inventoryType: number, slot: number, _itemId: number, quantity: number) {
+    super(OutPacketOpcode.ITEM_MOVE);
     this.writeByte(inventoryType);
     this.writeShort(slot);
+    this.writeShort(0);        // destination 0 = drop to map
     this.writeShort(quantity);
-    this.writeInt(itemId);
-    this.writeInt(0); // x
-    this.writeInt(0); // y
+  }
+}
+
+export class ItemSortPacket extends OutPacket {
+  constructor(inventoryType: number) {
+    super(OutPacketOpcode.ITEM_SORT);
+    this.writeByte(inventoryType);
   }
 }

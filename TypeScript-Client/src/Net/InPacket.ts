@@ -72,7 +72,12 @@ export enum InPacketOpcode {
   STORAGE = 309,
   PLAYER_INTERACTION = 314,
   KEYMAP = 335,
-  RECALCULATE_STATS = 35,
+  FORCED_STAT_SET   = 34,  // server overrides a stat value
+  FORCED_STAT_RESET = 35,  // server restores overridden stat (was RECALCULATE_STATS)
+  RECALCULATE_STATS = 35,  // alias — same opcode
+  MAP_TRANSFER_RESULT    = 42, // server confirms map warp completed
+  QUEST_CLEAR            = 49, // quest completion signal (distinct from SET_QUEST_CLEAR=150)
+  SKILL_LEARN_ITEM_RESULT = 51, // result of using skill book item
   GATHER_RESULT = 52,
   SORT_RESULT = 53,
   WEEK_EVENT_MESSAGE = 77,

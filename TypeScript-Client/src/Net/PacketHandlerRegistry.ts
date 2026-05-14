@@ -73,6 +73,10 @@ import {
   UpdateCharBoxHandler, PlayerHintHandler, FameResponseHandler,
   SkillUseResultHandler, SpawnPortalHandler,
 } from './PacketHandlers/MiscHandlers';
+import {
+  MapTransferResultHandler, QuestClearHandler, SkillLearnItemResultHandler,
+  ForcedStatSetHandler, ForcedStatResetHandler,
+} from './PacketHandlers/NewGameplayHandlers';
 
 export class PacketHandlerRegistry {
   private static instance: PacketHandlerRegistry | null = null;
@@ -195,6 +199,13 @@ export class PacketHandlerRegistry {
     this.handlers.set(InPacketOpcode.HIT_REACTOR,        new HitReactorHandler());
     this.handlers.set(InPacketOpcode.SPAWN_REACTOR,      new SpawnReactorHandler());
     this.handlers.set(InPacketOpcode.REMOVE_REACTOR,     new RemoveReactorHandler());
+
+    // ── New Cosmic opcodes ────────────────────────────────────────
+    this.handlers.set(InPacketOpcode.MAP_TRANSFER_RESULT,       new MapTransferResultHandler());
+    this.handlers.set(InPacketOpcode.QUEST_CLEAR,               new QuestClearHandler());
+    this.handlers.set(InPacketOpcode.SKILL_LEARN_ITEM_RESULT,   new SkillLearnItemResultHandler());
+    this.handlers.set(InPacketOpcode.FORCED_STAT_SET,           new ForcedStatSetHandler());
+    this.handlers.set(InPacketOpcode.FORCED_STAT_RESET,         new ForcedStatResetHandler());
   }
 
   getHandler(opcode: InPacketOpcode): IPacketHandler | undefined {

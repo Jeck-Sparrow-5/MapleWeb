@@ -4,6 +4,7 @@ import UIKeyConfig from "./UIKeyConfig";
 import UIGameMenu from "./UIGameMenu";
 import ChatPacket from "../Net/Packets/ChatPacket";
 import WhisperPacket from "../Net/Packets/WhisperPacket";
+import MultiChatPacket from "../Net/Packets/MultiChatPacket";
 import SessionManager from "../SessionManager";
 import ChatBubbleRenderer from "./ChatBubbleRenderer";
 import UICommon from "./UICommon";
@@ -243,11 +244,19 @@ UIMap.doUpdate = function (msPerTick, camera, canvas) {
           } else if (cmd === 'find' && parts.length >= 2) {
             new WhisperPacket(parts[1], '', true).dispatch();
             this.addChatMessage(`Searching for ${parts[1]}...`, '#AAAAFF');
+          } else if (cmd === 'p' || cmd === 'party') {
+            new MultiChatPacket(1, parts.slice(1).join(' ')).dispatch();
+            this.addChatMessage(`[Party] ${parts.slice(1).join(' ')}`, '#FFFFAA');
+          } else if (cmd === 'g' || cmd === 'guild') {
+            new MultiChatPacket(2, parts.slice(1).join(' ')).dispatch();
+            this.addChatMessage(`[Guild] ${parts.slice(1).join(' ')}`, '#AAFFAA');
+          } else if (cmd === 'a' || cmd === 'alliance') {
+            new MultiChatPacket(3, parts.slice(1).join(' ')).dispatch();
+            this.addChatMessage(`[Alliance] ${parts.slice(1).join(' ')}`, '#AAAAFF');
           } else if ((cmd === 'e' || cmd === 'emo') && parts.length >= 2) {
-            // Emote — handled client-side only for now
             this.addChatMessage(`Emote: ${parts[1]}`, '#AADDFF');
           } else {
-            this.addChatMessage(`Unknown command: /${cmd}`, '#FF8888');
+            this.addChatMessage(`Unknown command: /${cmd}  (try /w name msg, /find name, /p msg, /g msg)`, '#FF8888');
           }
         } else {
           this.addChatMessage(`(not connected)`, '#888888');

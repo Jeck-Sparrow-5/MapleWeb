@@ -2,8 +2,12 @@ import WZManager from '../wz-utils/WZManager';
 import { MapleStanceButton } from './MapleStanceButton';
 import ClickManager from './ClickManager';
 import GameCanvas from '../GameCanvas';
+import { OutPacket, OutPacketOpcode } from '../Net/OutPacket';
+import SessionManager from '../SessionManager';
 
-export const keyBindings: Record<string, string> = {
+const STORAGE_KEY = 'mapleweb_keybindings';
+
+const defaultBindings: Record<string, string> = {
   attack:    'ctrl',
   pickup:    'z',
   jump:      'alt',
@@ -15,6 +19,30 @@ export const keyBindings: Record<string, string> = {
   menu:      'm',
   chat:      'enter',
 };
+
+function loadSavedBindings(): Record<string, string> {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) return { ...defaultBindings, ...JSON.parse(saved) };
+  } catch (_) {}
+  return { ...defaultBindings };
+}
+
+export const keyBindings: Record<string, string> = loadSavedBindings();
+
+function persistBindings() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(keyBindings)); } catch (_) {}
+}
+
+function dispatchKeymapPacket() {
+  if (!SessionManager.isConnected()) return;
+  // Send CHANGE_KEYMAP: byte count, then for each: byte keySlot + byte type + int actionId
+  // MapleWeb uses a simplified flat action list; send 0 slots (clear + no server keys)
+  // followed by each binding as action name hash
+  const pkt = new OutPacket(OutPacketOpcode.CHANGE_KEYMAP);
+  (pkt as any).writeByte(0); // mode 0 = full update
+  pkt.dispatch();
+}
 
 const UIKeyConfig = {
   isHidden: true,
@@ -48,10 +76,9 @@ const UIKeyConfig = {
         img: btDefault.nChildren,
         isRelativeToCamera: true, isPartOfUI: true, isHidden: true,
         onClick: () => {
-          Object.assign(keyBindings, {
-            attack:'ctrl', pickup:'z', jump:'alt', inventory:'i',
-            stats:'s', skill:'k', equip:'e', quest:'q', menu:'m', chat:'enter',
-          });
+          Object.assign(keyBindings, defaultBindings);
+          persistBindings();
+          dispatchKeymapPacket();
         },
       });
       ClickManager.addButton(btn);
@@ -69,6 +96,8 @@ const UIKeyConfig = {
     if (this.editingAction) {
       keyBindings[this.editingAction] = key;
       this.editingAction = null;
+      persistBindings();
+      dispatchKeymapPacket();
     }
   },
 

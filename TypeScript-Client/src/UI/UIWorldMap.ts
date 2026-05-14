@@ -28,6 +28,8 @@ class UIWorldMap extends DragableMenu {
     'WorldMap040','WorldMap050','WorldMap051',
   ];
   currentWorldMapIdx = 0;
+  _currentAreaNode: any = null;
+  _playerMapEntry: any = null;
 
   async load(canvas: GameCanvas) {
     const uiWin = await WZManager.get('UI.wz/UIWindow.img');
@@ -88,12 +90,54 @@ class UIWorldMap extends DragableMenu {
     try {
       const node = await WZManager.get(`Map.wz/WorldMap/${fileName}.img`);
       this.currentWorldMapImg = node?.nGet('BaseImg')?.nGetImage?.() ?? this.currentWorldMapImg;
+      this._currentAreaNode = node;
     } catch (_) {}
+  }
+
+  // Find which world map area contains the given mapId, load it automatically
+  async autoSelectArea(mapId: number) {
+    for (const fileName of this.worldMapFiles) {
+      try {
+        const node = await WZManager.get(`Map.wz/WorldMap/${fileName}.img`);
+        const mapList = node?.nGet('MapList');
+        if (!mapList) continue;
+        for (const entry of (mapList.nChildren ?? [])) {
+          if (parseInt(entry.nGet?.('mapNo')?.nValue ?? '-1') === mapId) {
+            this.currentWorldMapImg = node?.nGet('BaseImg')?.nGetImage?.() ?? this.currentWorldMapImg;
+            this._currentAreaNode = node;
+            this._playerMapEntry = entry;
+            return;
+          }
+        }
+      } catch (_) {}
+    }
+  }
+
+  getPlayerDotOnMap(mapArea: { x: number; y: number; w: number; h: number }): { x: number; y: number } | null {
+    // Use WZ MapList entry if available (has cx, cy for dot position on map image)
+    const entry = (this as any)._playerMapEntry;
+    if (entry) {
+      const cx = parseInt(entry.nGet?.('cx')?.nValue ?? '-1');
+      const cy = parseInt(entry.nGet?.('cy')?.nValue ?? '-1');
+      if (cx >= 0 && cy >= 0) {
+        const img = this.currentWorldMapImg;
+        if (img) {
+          return {
+            x: mapArea.x + (cx / img.width) * mapArea.w,
+            y: mapArea.y + (cy / img.height) * mapArea.h,
+          };
+        }
+      }
+    }
+    return null;
   }
 
   setIsHidden(v: boolean) {
     this.isHidden = v;
     this.buttons.forEach((b) => (b.isHidden = v));
+    if (!v && MapleMap.id != null) {
+      this.autoSelectArea(Number(MapleMap.id)); // auto-navigate to player's current area
+    }
   }
 
   moveTo(pos: Position) {
@@ -141,13 +185,21 @@ class UIWorldMap extends DragableMenu {
         canvas.context.drawImage(this.currentWorldMapImg, mapArea.x, mapArea.y, mapArea.w, mapArea.h);
       } catch (_) {}
     }
-    // Player dot
+
+    // Player location dot — try WZ MapList cx/cy, fallback to center
+    const dot = this.getPlayerDotOnMap(mapArea) ?? { x: mapArea.x + mapArea.w / 2, y: mapArea.y + mapArea.h / 2 };
     canvas.context.fillStyle = '#FF4444';
     canvas.context.strokeStyle = '#FFFFFF';
+    canvas.context.lineWidth = 1.5;
+    canvas.context.beginPath();
+    canvas.context.arc(dot.x, dot.y, 5, 0, Math.PI * 2);
+    canvas.context.fill();
+    canvas.context.stroke();
+    // Pulsing ring
+    canvas.context.strokeStyle = 'rgba(255,68,68,0.5)';
     canvas.context.lineWidth = 1;
     canvas.context.beginPath();
-    canvas.context.arc(mapArea.x + mapArea.w / 2, mapArea.y + mapArea.h / 2, 5, 0, Math.PI * 2);
-    canvas.context.fill();
+    canvas.context.arc(dot.x, dot.y, 8 + Math.sin(Date.now() / 400) * 2, 0, Math.PI * 2);
     canvas.context.stroke();
     canvas.context.restore();
 

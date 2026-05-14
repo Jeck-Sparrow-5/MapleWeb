@@ -12,7 +12,18 @@
       "Read(//c/Users/jorge/OneDrive/Desktop/mapleweb/MaplaWeb/TypeScript-Client/src/**)",
       "Bash(npx tsc *)",
       "WebSearch",
-      "WebFetch(domain:api.github.com)"
+      "WebFetch(domain:api.github.com)",
+      "Bash(find /tmp/HeavenClient/Net/Handlers -name \"*.h\" | sort)",
+      "Read(//tmp/HeavenClient/Net/**)",
+      "Bash(find /tmp/HeavenClient/Net/Packets -name \"*.h\" | sort)",
+      "Bash(find /tmp/HeavenClient -type f -name \"*.h\" | grep -i \"ui\\\\|window\" | head -30)",
+      "Read(//tmp/**)",
+      "Bash(xargs -I {} basename {})",
+      "Bash(cat > *)",
+      "Bash(curl -s \"https://raw.githubusercontent.com/P0nk/Cosmic/master/src/main/java/net/opcodes/SendOpcode.java\")"
+    ],
+    "additionalDirectories": [
+      "\\tmp"
     ]
   }
 }

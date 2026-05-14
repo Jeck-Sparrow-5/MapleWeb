@@ -10,6 +10,8 @@ import { MapleInventoryType } from "../../Constants/Inventory/MapleInventory";
 import { CameraInterface } from "../../Camera";
 import { Position } from "../../Effects/DamageIndicator";
 import GameCanvas from "../../GameCanvas";
+import { getItemNameSync } from "../../wz-utils/ItemNameLoader";
+import { ItemSortPacket } from "../../Net/Packets/ItemPackets";
 
 class InventoryMenuSprite extends DragableMenu {
   opts: any;
@@ -460,9 +462,58 @@ class InventoryMenuSprite extends DragableMenu {
         ClickManager.addButton(dropMesoButton);
         this.buttons = [dropMesoButton];
       }
+      // Sort button
+      if (this.inventoryNode?.BtSortNormal) {
+        const sortBtn = new MapleStanceButton(canvas, {
+          x: this.x + 130, y: this.y + 267,
+          img: this.inventoryNode.BtSortNormal.nChildren,
+          isRelativeToCamera: true, isPartOfUI: true,
+          onClick: () => {
+            if (SessionManager.isConnected()) {
+              new ItemSortPacket(this.currentTabNumber()).dispatch();
+            } else {
+              this.charecter.inventory[this.currentTabKey()]?.sort((a: any, b: any) => a.itemId - b.itemId);
+            }
+          },
+        });
+        ClickManager.addButton(sortBtn);
+        this.buttons.push(sortBtn);
+      }
+
+      // Gather button (merge stacks)
+      if (this.inventoryNode?.BtGather) {
+        const gatherBtn = new MapleStanceButton(canvas, {
+          x: this.x + 100, y: this.y + 267,
+          img: this.inventoryNode.BtGather.nChildren,
+          isRelativeToCamera: true, isPartOfUI: true,
+          onClick: () => {
+            if (SessionManager.isConnected()) {
+              // Opcode 52 = GATHER_RESULT inbound; outbound is ITEM_SORT2 (70)
+              import('../../Net/OutPacket').then(({ OutPacket, OutPacketOpcode }) => {
+                const pkt = new OutPacket(OutPacketOpcode.ITEM_SORT2);
+                (pkt as any).writeByte(this.currentTabNumber());
+                pkt.dispatch();
+              });
+            }
+          },
+        });
+        ClickManager.addButton(gatherBtn);
+        this.buttons.push(gatherBtn);
+      }
     } catch (e) {
       console.error("Error loading meso button:", e);
       this.buttons = [];
+    }
+  }
+
+  private currentTabKey(): string {
+    switch (this.currentTab) {
+      case MapleInventoryType.EQUIP: return 'equip';
+      case MapleInventoryType.USE:   return 'use';
+      case MapleInventoryType.SETUP: return 'setup';
+      case MapleInventoryType.ETC:   return 'etc';
+      case MapleInventoryType.CASH:  return 'cash';
+      default: return 'equip';
     }
   }
 
@@ -518,7 +569,7 @@ class InventoryMenuSprite extends DragableMenu {
             const idx = row * 4 + col;
             const item = items[idx];
             if (item) {
-              TooltipRenderer.drawItemTooltip(canvas, item.itemId, `Item ${item.itemId}`, mx, my);
+              TooltipRenderer.drawItemTooltip(canvas, item.itemId, getItemNameSync(item.itemId) || `Item ${item.itemId}`, mx, my);
             }
           }
         }

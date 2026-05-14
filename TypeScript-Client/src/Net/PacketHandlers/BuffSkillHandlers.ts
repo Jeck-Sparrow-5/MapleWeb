@@ -3,6 +3,7 @@ import { Cryptography } from '../Cryptography';
 import UIBuffList from '../../UI/UIBuffList';
 import { skillLevels } from '../../UI/UISkillBook';
 import { getSkillNameSync } from '../../wz-utils/ItemNameLoader';
+import { getSkillIconSync } from '../../wz-utils/ItemIconLoader';
 
 // mask key → skillId, so CancelBuff can remove the right buff
 const buffMaskToSkill = new Map<string, number>();
@@ -29,9 +30,10 @@ export class GiveBuffHandler extends PacketHandler {
 
     const name = getSkillNameSync(skillId) || `Skill ${skillId}`;
     const durationMs = duration > 0 ? duration : 30000;
+    const icon = getSkillIconSync(skillId);
 
     buffMaskToSkill.set(`${mask1}:${mask2}`, skillId);
-    UIBuffList.addBuff(skillId, name, durationMs);
+    UIBuffList.addBuff(skillId, name, durationMs, icon);
   }
 }
 

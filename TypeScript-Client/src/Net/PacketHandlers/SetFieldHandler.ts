@@ -96,6 +96,13 @@ export class SetFieldHandler extends PacketHandler {
       console.warn('[SetFieldHandler] inventory parse error:', e);
     }
 
+    // Attach equipped items (negative slot = body slot)
+    for (const item of MyCharacter.inventory.equip) {
+      if ((item as any).slot < 0) {
+        try { await MyCharacter.attachEquip((item as any).itemId, (item as any).slot); } catch (_) {}
+      }
+    }
+
     try {
       offset = this.parseSkills(data, offset);
     } catch (e) {

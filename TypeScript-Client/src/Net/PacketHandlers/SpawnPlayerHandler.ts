@@ -31,6 +31,25 @@ export class SpawnPlayerHandler extends PacketHandler {
     const face = data.getInt32(offset, true); offset += 4;
     const hair = data.getInt32(offset, true); offset += 4;
 
+    // Read equipped item slots (same format as CharacterListHandler.parseLook)
+    const eqSlots = new Map<number, number>();
+    let eqPos = data.getInt8(offset); offset += 1;
+    while (eqPos !== -1) {
+      const itemId = data.getInt32(offset, true); offset += 4;
+      eqSlots.set(eqPos, itemId);
+      eqPos = data.getInt8(offset); offset += 1;
+    }
+    const maskedEqSlots = new Map<number, number>();
+    let maskedPos = data.getInt8(offset); offset += 1;
+    while (maskedPos !== -1) {
+      const itemId = data.getInt32(offset, true); offset += 4;
+      maskedEqSlots.set(maskedPos, itemId);
+      maskedPos = data.getInt8(offset); offset += 1;
+    }
+    const weaponId = data.getInt32(offset, true); offset += 4;
+    if (weaponId > 0) eqSlots.set(-11, weaponId);
+    offset += 12; // 3 pet IDs (int × 3)
+
     const x = data.getInt16(offset, true); offset += 2;
     const y = data.getInt16(offset, true); offset += 2;
     const stance = data.getUint8(offset); offset += 1;
@@ -53,6 +72,12 @@ export class SpawnPlayerHandler extends PacketHandler {
       char.face = face;
       char.Hair = hair;
       try { await char.load(); } catch (_) {}
+      // Attach equipped items
+      for (const [slot, itemId] of eqSlots) {
+        if (itemId > 0) {
+          try { await char.attachEquip(itemId, slot); } catch (_) {}
+        }
+      }
       char.pos = char.pos ?? { x, y } as any;
       if (char.pos) { char.pos.x = x; char.pos.y = y; }
       MapleMap.characters.push(char);

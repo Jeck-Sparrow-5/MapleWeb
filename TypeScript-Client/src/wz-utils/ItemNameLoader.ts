@@ -50,3 +50,28 @@ export function getItemNameSync(itemId: number): string {
   loadCategory(wz, cat); // fire-and-forget
   return `Item ${itemId}`;
 }
+
+const skillNameCache = new Map<number, string>();
+let skillNamesLoaded = false;
+
+async function loadSkillNames(): Promise<void> {
+  if (skillNamesLoaded) return;
+  skillNamesLoaded = true;
+  try {
+    const node = await WZManager.get('String.wz/Skill.img');
+    if (!node?.nChildren) return;
+    node.nChildren.forEach((child: any) => {
+      const id = parseInt(child.nName);
+      if (!isNaN(id)) {
+        const name = child.name?.nValue ?? child.nGet?.('name')?.nValue ?? '';
+        if (name) skillNameCache.set(id, name);
+      }
+    });
+  } catch (_) {}
+}
+
+export function getSkillNameSync(skillId: number): string {
+  if (skillNameCache.has(skillId)) return skillNameCache.get(skillId)!;
+  loadSkillNames(); // fire-and-forget
+  return '';
+}

@@ -9,6 +9,8 @@ import { CameraInterface } from '../Camera';
 import MyCharacter from '../MyCharacter';
 import { JobsType } from '../Constants/Jobs';
 import { Position } from '../Effects/DamageIndicator';
+import DistributeSpPacket from '../Net/Packets/DistributeSpPacket';
+import SessionManager from '../SessionManager';
 
 // Skill levels: skillId → level
 export const skillLevels: Map<number, number> = new Map();
@@ -79,8 +81,11 @@ class UISkillBook extends DragableMenu {
   buttons: MapleStanceButton[] = [];
   loaded = false;
   scroll = 0;
+  _dirty = false;
   readonly W = 175;
   readonly H = 289;
+
+  markDirty() { this._dirty = true; }
 
   static async fromOpts(opts: any) {
     const o = new UISkillBook(opts);
@@ -165,6 +170,9 @@ class UISkillBook extends DragableMenu {
             if (sk.maxLevel > 0 && cur >= sk.maxLevel) return;
             skillLevels.set(sk.id, cur + 1);
             skillSPTotal.sp--;
+            if (SessionManager.isConnected()) {
+              new DistributeSpPacket(sk.id).dispatch();
+            }
           },
         });
         ClickManager.addButton(btn);
@@ -192,7 +200,28 @@ class UISkillBook extends DragableMenu {
     return { x: this.x, y: this.y, width: this.W, height: this.H };
   }
 
-  update(_ms: number) {}
+  update(_ms: number) {
+    if (this._dirty) {
+      this._dirty = false;
+      this.reloadSkillLevels();
+    }
+  }
+
+  reloadSkillLevels() {
+    // Refresh skill entries to pick up any new skills from skillLevels
+    // (handles class advancement — new skillIds appear in the map)
+    const knownIds = new Set(this.skills.map(s => s.id));
+    for (const [id] of skillLevels) {
+      if (!knownIds.has(id)) {
+        // New skill not in current list — do a full reload next time load() is called
+        this.loaded = false;
+        this.load((document.getElementById('game') as any)).then(() => {
+          this.loaded = true;
+        }).catch(() => { this.loaded = true; });
+        return;
+      }
+    }
+  }
 
   draw(canvas: GameCanvas, camera: CameraInterface, lag: number, ms: number, td: number) {
     if (this.isHidden || !this.loaded) return;

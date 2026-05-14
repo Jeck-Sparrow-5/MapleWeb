@@ -193,8 +193,8 @@ class MapleCharacter {
     const smap: any = await WZManager.get("Base.wz/smap.img");
     const nonNullSmapNodes = smap.nChildren.filter((n: any) => !!n.nValue);
     const smapDict = nonNullSmapNodes.reduce((acc: any, node: any) => {
-      return acc;
       acc[node.nName] = node.nValue;
+      return acc;
     }, {});
     const reverseSmapDict = nonNullSmapNodes.reduce((acc: any, node: any) => {
       if (!acc[node.nValue]) {

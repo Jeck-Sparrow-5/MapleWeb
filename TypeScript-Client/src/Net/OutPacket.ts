@@ -51,6 +51,10 @@ export enum OutPacketOpcode {
   // Social
   ADD_BUDDY         = 130,  // 0x82 — was 38 (collided with CHANGE_MAP)
   GIVE_FAME         = 95,   // 0x5F
+
+  // Stats / skills
+  DISTRIBUTE_AP     = 87,   // 0x57
+  DISTRIBUTE_SP     = 89,   // 0x59
 }
 
 export class OutPacket {

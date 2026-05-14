@@ -2,26 +2,50 @@ import { PacketHandler } from '../PacketHandler';
 import { Cryptography } from '../Cryptography';
 import UIBuffList from '../../UI/UIBuffList';
 import { skillLevels } from '../../UI/UISkillBook';
+import { getSkillNameSync } from '../../wz-utils/ItemNameLoader';
+
+// mask key → skillId, so CancelBuff can remove the right buff
+const buffMaskToSkill = new Map<string, number>();
+
+function countBits(n: number): number {
+  let c = 0; let v = n >>> 0;
+  while (v) { c += v & 1; v >>>= 1; }
+  return c;
+}
 
 export class GiveBuffHandler extends PacketHandler {
   handle(data: DataView): void {
     let offset = Cryptography.HEADER_LENGTH + 2;
 
-    // Buff stat masks (8 bytes) + value/duration per active buff
-    // Simplified: read first stat mask to get skill ID, duration
-    offset += 8; // stat mask bytes (skip details — just grab duration)
-    // We don't have a clean way to get skill ID from this without full stat map
-    // Use a basic approach: show a generic buff icon for 30s
-    const duration = 30000;
-    UIBuffList.addBuff(0, 'Buff', duration);
+    const mask1 = data.getUint32(offset, true); offset += 4;
+    const mask2 = data.getUint32(offset, true); offset += 4;
+    const setBits = countBits(mask1) + countBits(mask2);
+    if (setBits === 0) return;
+
+    // Each stat entry: short value + int skillId + int duration (ms)
+    offset += 2; // value short (first stat)
+    const skillId  = data.getInt32(offset, true); offset += 4;
+    const duration = data.getInt32(offset, true);
+
+    const name = getSkillNameSync(skillId) || `Skill ${skillId}`;
+    const durationMs = duration > 0 ? duration : 30000;
+
+    buffMaskToSkill.set(`${mask1}:${mask2}`, skillId);
+    UIBuffList.addBuff(skillId, name, durationMs);
   }
 }
 
 export class CancelBuffHandler extends PacketHandler {
   handle(data: DataView): void {
-    // Remove first buff (simplified)
-    if (UIBuffList.buffs.length > 0) {
-      UIBuffList.buffs[0].durationMs = 0;
+    let offset = Cryptography.HEADER_LENGTH + 2;
+    const mask1 = data.getUint32(offset, true); offset += 4;
+    const mask2 = data.getUint32(offset, true);
+    const key = `${mask1}:${mask2}`;
+    const skillId = buffMaskToSkill.get(key);
+    if (skillId !== undefined) {
+      const idx = UIBuffList.buffs.findIndex((b: any) => b.skillId === skillId);
+      if (idx >= 0) UIBuffList.buffs.splice(idx, 1);
+      buffMaskToSkill.delete(key);
     }
   }
 }
@@ -39,5 +63,10 @@ export class UpdateSkillsHandler extends PacketHandler {
       offset += 8; // expiry time
       skillLevels.set(skillId, level);
     }
+    // Signal UISkillBook to rebuild skills list (handles class advancement)
+    try {
+      const MapState = (window as any).MapStateInstance;
+      MapState?.skillBook?.markDirty?.();
+    } catch (_) {}
   }
 }

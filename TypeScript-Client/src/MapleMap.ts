@@ -109,7 +109,7 @@ MapleMap.load = async function (id: number | string) {
 
   const bgmPath = this.wzNode?.info?.bgm?.nValue;
   if (bgmPath) {
-    AudioManager.playBackgroundMusic(bgmPath);
+    AudioManager.playBackgroundMusic(bgmPath).catch(() => {});
   }
 
   this.footholds = this.loadFootholds(this.wzNode.foothold);

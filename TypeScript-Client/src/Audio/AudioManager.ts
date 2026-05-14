@@ -29,9 +29,9 @@ const currentAudioManager: AudioManager = {
       );
       this.bgm = wzNode.nGetAudio();
       this.bgm.loop = true;
-      console.log(`Playing ${name}`);
-      this.bgm.play();
       this.bgm.volume = Volume;
+      console.log(`Playing ${name}`);
+      this.bgm.play().catch(() => {});
     }
   },
 };

@@ -35,7 +35,7 @@ class Tile {
 
     this.x = wzNode.x.nValue;
     this.y = wzNode.y.nValue;
-    this.z = spriteNode.nGet("z").nGet("nValue", 0) || wzNode.zM.nValue;
+    this.z = spriteNode.nGet("z")?.nGet("nValue", 0) ?? wzNode.zM.nValue ?? 0;
   }
   draw(canvas: GameCanvas, camera: CameraInterface) {
     canvas.drawImage({

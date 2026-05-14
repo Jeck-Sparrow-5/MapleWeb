@@ -32,9 +32,9 @@ const WZManager: WZManager = {
    * @example WZManager.load('Character.wz/Cap/01002357.img');
    */
   async load(filename) {
-    const json = await fetch(`wz_client/${filename}.json`).then((res) =>
-      res.json()
-    );
+    const res = await fetch(`wz_client/${filename}.json`);
+    if (!res.ok) throw new Error(`WZ not found: ${filename}`);
+    const json = await res.json();
 
     let tree: any = this.cache;
     filename

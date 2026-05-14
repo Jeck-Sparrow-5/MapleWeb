@@ -310,9 +310,9 @@ MapleMap.loadNames = async function (id: number) {
     area = "victoria";
   }
 
-  const nameNode: any = strMap.nGet(area).nGet(id);
-  const streetName = nameNode.nGet("streetName").nGet("nValue", "");
-  const mapName = nameNode.nGet("mapName").nGet("nValue", "");
+  const nameNode: any = strMap.nGet(area)?.nGet(id);
+  const streetName = nameNode?.nGet("streetName")?.nGet("nValue", "") ?? "";
+  const mapName = nameNode?.nGet("mapName")?.nGet("nValue", "") ?? "";
 
   return {
     streetName,

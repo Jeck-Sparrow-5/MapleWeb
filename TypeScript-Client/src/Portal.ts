@@ -42,7 +42,7 @@ class Portal {
     this.toMap = wzNode.tm.nValue;
     this.toName = wzNode.tn.nValue;
 
-    this.image = wzNode.nGet("image").nGet("nValue", "default");
+    this.image = wzNode.nGet("image")?.nGet("nValue", "default") ?? "default";
 
     const basePath = "Map.wz/MapHelper.img/portal/game";
     switch (this.type) {
@@ -128,7 +128,7 @@ class Portal {
 
     this.frame = !this.frames[frame] ? 0 : frame;
     this.delay = carryOverDelay;
-    this.nextDelay = this.frames[this.frame].nGet("delay").nGet("nValue", 100);
+    this.nextDelay = this.frames[this.frame].nGet("delay")?.nGet("nValue", 100) ?? 100;
   }
   update(msPerTick: number) {
     if (!this.frames) {
@@ -155,8 +155,8 @@ class Portal {
     const currentFrame = this.frames[this.frame];
     const currentImage = currentFrame.nGetImage();
 
-    const originX = currentFrame.nGet("origin").nGet("nX", 0);
-    const originY = currentFrame.nGet("origin").nGet("nY", 0);
+    const originX = currentFrame.nGet("origin")?.nGet("nX", 0) ?? 0;
+    const originY = currentFrame.nGet("origin")?.nGet("nY", 0) ?? 0;
     this.rect = {
       x: this.x - originX,
       y: this.y - originY,

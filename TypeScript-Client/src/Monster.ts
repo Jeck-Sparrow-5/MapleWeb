@@ -117,7 +117,7 @@ class Monster {
     // name do exits in string.wz
     const thisMobSounds = mobSounds.nGet(strId);
 
-    this.sounds = thisMobSounds.nChildren.reduce((acc: any, node: any) => {
+    this.sounds = (thisMobSounds?.nChildren ?? []).reduce((acc: any, node: any) => {
       try {
         const Node = node.nTagName === "sound" ? node : node.nResolveUOL();
         acc[Node.nName] = Node.nGetAudio();
@@ -314,7 +314,7 @@ async addDrops() {
     this.stance = stance;
     this.frame = f;
     this.delay = carryOverDelay;
-    this.nextDelay = stanceFrame.nGet("delay").nGet("nValue", 100);
+    this.nextDelay = stanceFrame.nGet("delay")?.nGet("nValue", 100) ?? 100;
   }
 
   setStance(stance: any, frame = 0, onFinish = () => {}) {
@@ -666,8 +666,8 @@ async addDrops() {
     const currentFrame = this.stances[this.stance].frames[this.frame];
     const currentImage = currentFrame.nGetImage();
 
-    const originX = currentFrame.nGet("origin").nGet("nX", 0);
-    const originY = currentFrame.nGet("origin").nGet("nY", 0);
+    const originX = currentFrame.nGet("origin")?.nGet("nX", 0) ?? 0;
+    const originY = currentFrame.nGet("origin")?.nGet("nY", 0) ?? 0;
 
     const adjustX = !this.flipped ? originX : currentFrame.nWidth - originX;
 

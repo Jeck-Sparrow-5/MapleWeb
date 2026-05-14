@@ -82,9 +82,9 @@ class NPC {
       this.strings.speak = npcFile.nGet("speak").nGet("nValue", "Hello!");
     }
 
-    this.floating = npcFile.info.nGet("float").nGet("nValue", 0);
+    this.floating = npcFile.info.nGet("float")?.nGet("nValue", 0) ?? 0;
 
-    this.mapleTv = npcFile.info.nGet("MapleTV").nGet("nValue", 0);
+    this.mapleTv = npcFile.info.nGet("MapleTV")?.nGet("nValue", 0) ?? 0;
     if (!!this.mapleTv) {
       this.mapleTvAdX = npcFile.info.MapleTVadX.nValue;
       this.mapleTvAdY = npcFile.info.MapleTVadY.nValue;
@@ -151,9 +151,9 @@ class NPC {
     this.stance = s;
     this.frame = f;
     this.delay = carryOverDelay;
-    this.nextDelay = stanceFrame.nGet("delay").nGet("nValue", 100);
+    this.nextDelay = stanceFrame.nGet("delay")?.nGet("nValue", 100) ?? 100;
   }
-  
+
   setTvAdFrame(stance = 0, frame = 0, carryOverDelay = 0) {
     const s = !this.tvAdStances[stance] ? 0 : stance;
     const f = !this.tvAdStances[s].frames[frame] ? 0 : frame;
@@ -162,7 +162,7 @@ class NPC {
     this.tvAdStance = s;
     this.tvAdFrame = f;
     this.tvAdDelay = carryOverDelay;
-    this.tvAdNextDelay = stanceFrame.nGet("delay").nGet("nValue", 100);
+    this.tvAdNextDelay = stanceFrame.nGet("delay")?.nGet("nValue", 100) ?? 100;
   }
   
   draw(
@@ -175,8 +175,8 @@ class NPC {
     const currentFrame = this.stances[this.stance].frames[this.frame];
     const currentImage = currentFrame.nGetImage();
 
-    const originX = currentFrame.nGet("origin").nGet("nX", 0);
-    const originY = currentFrame.nGet("origin").nGet("nY", 0);
+    const originX = currentFrame.nGet("origin")?.nGet("nX", 0) ?? 0;
+    const originY = currentFrame.nGet("origin")?.nGet("nY", 0) ?? 0;
 
     const adjustX = !this.flipped ? originX : currentFrame.nWidth - originX;
 
@@ -198,7 +198,7 @@ class NPC {
     msPerTick: number,
     tdelta: number
   ) {
-    const hideName = this.npcFile.info.nGet("hideName").nGet("nValue", 0);
+    const hideName = this.npcFile.info.nGet("hideName")?.nGet("nValue", 0) ?? 0;
     const hasName = !!this.strings.name;
     const hasFunc = !!this.strings.func;
     const tagHeight = 16;

@@ -62,17 +62,17 @@ class Obj {
     this.zid = parseInt(wzNode.nName);
     this.flipped = wzNode.f.nValue;
 
-    this.flow = wzNode.nGet("flow").nGet("nValue", 0);
-    this.cx = wzNode.nGet("cx").nGet("nValue", 0);
-    this.rx = wzNode.nGet("rx").nGet("nValue", 0);
-    this.cy = wzNode.nGet("cy").nGet("nValue", 0);
-    this.ry = wzNode.nGet("ry").nGet("nValue", 0);
+    this.flow = wzNode.nGet("flow")?.nGet("nValue", 0) ?? 0;
+    this.cx = wzNode.nGet("cx")?.nGet("nValue", 0) ?? 0;
+    this.rx = wzNode.nGet("rx")?.nGet("nValue", 0) ?? 0;
+    this.cy = wzNode.nGet("cy")?.nGet("nValue", 0) ?? 0;
+    this.ry = wzNode.nGet("ry")?.nGet("nValue", 0) ?? 0;
   }
   setFrame(frame = 0, carryOverDelay = 0) {
     this.frame = !this.frames[frame] ? 0 : frame;
 
     this.delay = carryOverDelay;
-    this.nextDelay = this.frames[this.frame].nGet("delay").nGet("nValue", 100);
+    this.nextDelay = this.frames[this.frame].nGet("delay")?.nGet("nValue", 100) ?? 100;
   }
   advanceFrame() {
     let nextFrame = this.frame + 1;
@@ -107,8 +107,8 @@ class Obj {
     const height = currentFrame.nHeight;
     const cx = Math.abs(this.cx) || boundaries.right - boundaries.left - 45;
     const cy = Math.abs(this.cy) || boundaries.bottom - boundaries.top - 160;
-    const originX = currentFrame.nGet("origin").nGet("nX", 0);
-    const originY = currentFrame.nGet("origin").nGet("nY", 0);
+    const originX = currentFrame.nGet("origin")?.nGet("nX", 0) ?? 0;
+    const originY = currentFrame.nGet("origin")?.nGet("nY", 0) ?? 0;
 
     let dx = this.x;
     let dy = this.y;
@@ -116,10 +116,10 @@ class Obj {
     dx -= !this.flipped ? originX : width - originX;
     dy -= originY;
 
-    const moveType = firstFrame.nGet("moveType").nGet("nValue", 0);
-    const moveW = firstFrame.nGet("moveW").nGet("nValue", 0);
-    const moveH = firstFrame.nGet("moveH").nGet("nValue", 0);
-    const moveP = firstFrame.nGet("moveP").nGet("nValue", Math.PI * 2 * 1000);
+    const moveType = firstFrame.nGet("moveType")?.nGet("nValue", 0) ?? 0;
+    const moveW = firstFrame.nGet("moveW")?.nGet("nValue", 0) ?? 0;
+    const moveH = firstFrame.nGet("moveH")?.nGet("nValue", 0) ?? 0;
+    const moveP = firstFrame.nGet("moveP")?.nGet("nValue", Math.PI * 2 * 1000) ?? Math.PI * 2 * 1000;
     switch (moveType) {
       case 1: {
         dx += moveW * Math.sin((Math.PI * 2 * tdelta) / moveP);
@@ -136,14 +136,14 @@ class Obj {
       }
     }
 
-    const moveR = firstFrame.nGet("moveR").nGet("nValue", 0);
+    const moveR = firstFrame.nGet("moveR")?.nGet("nValue", 0) ?? 0;
     const angle = moveR === 0 ? 0 : ((tdelta * 360) / moveR) % 360;
 
     let a0 = 1;
     let a1 = 1;
     if ("a0" in currentFrame || "a1" in currentFrame) {
-      a0 = currentFrame.nGet("a0").nGet("nValue", 0) / 255;
-      a1 = currentFrame.nGet("a1").nGet("nValue", a0 * 255) / 255;
+      a0 = (currentFrame.nGet("a0")?.nGet("nValue", 0) ?? 0) / 255;
+      a1 = (currentFrame.nGet("a1")?.nGet("nValue", a0 * 255) ?? (a0 * 255)) / 255;
     }
     const percent = this.delay / this.nextDelay;
     const alpha = percent * a1 + (1 - percent) * a0;

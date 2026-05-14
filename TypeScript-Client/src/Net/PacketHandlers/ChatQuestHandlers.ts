@@ -81,17 +81,16 @@ export class CharInfoHandler extends PacketHandler {
     const charId = data.getInt32(offset, true); offset += 4;
     const level  = data.getUint8(offset); offset += 1;
     const job    = data.getInt16(offset, true); offset += 2;
-    offset += 4; // fame
+    const fame   = data.getInt32(offset, true); offset += 4;
     offset += 1; // married flag
     const { str: guildName, offset: o1 } = readString(data, offset); offset = o1;
     const { str: name, offset: o2 }      = readString(data, offset);
 
-    // Show in UICharInfo
     const charInfo = (window as any).UICharInfo;
     if (charInfo) {
       charInfo.show(document.getElementById('game'), {
-        name, level, job: `${job}`, guild: guildName,
-        fame: 0, str: 0, dex: 0, int: 0, luk: 0,
+        charId, name, level, job: `${job}`, guild: guildName,
+        fame, str: 0, dex: 0, int: 0, luk: 0,
         hp: 0, maxHp: 0, mp: 0, maxMp: 0,
       });
     }

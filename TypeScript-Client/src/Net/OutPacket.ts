@@ -55,6 +55,10 @@ export enum OutPacketOpcode {
   // Stats / skills
   DISTRIBUTE_AP     = 87,   // 0x57
   DISTRIBUTE_SP     = 89,   // 0x59
+
+  // World interaction
+  TOUCH_REACTOR     = 168,  // 0xA8 — activate reactor
+  CHAR_INFO_REQUEST = 97,   // 0x61 — request another player's info
 }
 
 export class OutPacket {

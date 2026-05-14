@@ -10,6 +10,8 @@ import MapleCharacter from "../../MapleCharacter";
 import { CameraInterface } from "../../Camera";
 import GameCanvas from "../../GameCanvas";
 import { Position } from "../../Effects/DamageIndicator";
+import DistributeApPacket from "../../Net/Packets/DistributeApPacket";
+import SessionManager from "../../SessionManager";
 
 class StatsMenuSprite extends DragableMenu {
   opts: any;
@@ -293,6 +295,7 @@ class StatsMenuSprite extends DragableMenu {
       isPartOfUI: true,
       onClick: () => {
         this.charecter!.stats.addStr();
+        if (SessionManager.isConnected()) new DistributeApPacket('str').dispatch();
       },
     });
     ClickManager.addButton(strButton);
@@ -305,6 +308,7 @@ class StatsMenuSprite extends DragableMenu {
       isPartOfUI: true,
       onClick: () => {
         this.charecter!.stats.addDex();
+        if (SessionManager.isConnected()) new DistributeApPacket('dex').dispatch();
       },
     });
     ClickManager.addButton(dexButton);
@@ -317,6 +321,7 @@ class StatsMenuSprite extends DragableMenu {
       isPartOfUI: true,
       onClick: () => {
         this.charecter!.stats.addInt();
+        if (SessionManager.isConnected()) new DistributeApPacket('int').dispatch();
       },
     });
     ClickManager.addButton(intButton);
@@ -329,6 +334,7 @@ class StatsMenuSprite extends DragableMenu {
       isPartOfUI: true,
       onClick: () => {
         this.charecter!.stats.addLuk();
+        if (SessionManager.isConnected()) new DistributeApPacket('luk').dispatch();
       },
     });
     ClickManager.addButton(lukButton);

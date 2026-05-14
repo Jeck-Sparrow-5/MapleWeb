@@ -1,6 +1,8 @@
 import WZManager from "./wz-utils/WZManager";
 import SessionManager from "./SessionManager";
 import { NpcTalkPacket } from "./Net/Packets/NpcInteractPacket";
+import TouchReactorPacket from "./Net/Packets/TouchReactorPacket";
+import CharInfoRequestPacket from "./Net/Packets/CharInfoRequestPacket";
 import NpcTalkType from "./Constants/NpcTalkType";
 import NameTagRenderer from "./UI/NameTagRenderer";
 import ChatBubbleRenderer from "./UI/ChatBubbleRenderer";
@@ -739,6 +741,21 @@ MapleMap.handleClick = function (
     const ry = r.y - camera.y;
     if (mouseX >= rx - 15 && mouseX <= rx + 15 && mouseY >= ry - 30 && mouseY <= ry) {
       r.activated = true;
+      if (SessionManager.isConnected()) {
+        new TouchReactorPacket(r.oId ?? r.id ?? 0).dispatch();
+      }
+    }
+  });
+
+  // Click on another player → request their info
+  this.characters?.forEach((chr: any) => {
+    if (!chr.pos) return;
+    const cx = chr.pos.x - camera.x;
+    const cy = chr.pos.y - camera.y;
+    if (mouseX >= cx - 20 && mouseX <= cx + 20 && mouseY >= cy - 60 && mouseY <= cy + 5) {
+      if (SessionManager.isConnected() && chr.id) {
+        new CharInfoRequestPacket(chr.id).dispatch();
+      }
     }
   });
 

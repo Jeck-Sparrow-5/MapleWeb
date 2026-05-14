@@ -47,7 +47,13 @@ class UIQuestLog extends DragableMenu {
         const id = parseInt(q.nName);
         if (isNaN(id)) return;
         const name = q.nGet?.('name')?.nValue ?? q.name?.nValue ?? `Quest ${id}`;
-        const desc = q.nGet?.('0')?.nValue ?? '';
+        // Quest.wz/QuestInfo.img stores description in '0' (talk text) or 'desc' or nested sub-node
+        const desc =
+          q.nGet?.('0')?.nValue ??
+          q.nGet?.('desc')?.nValue ??
+          q.nGet?.('1')?.nValue ??
+          q.nGet?.('summary')?.nValue ??
+          '';
         this.questInfoCache.set(id, { name, desc });
       });
     } catch (_) {}

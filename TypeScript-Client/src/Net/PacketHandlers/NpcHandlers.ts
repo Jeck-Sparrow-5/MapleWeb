@@ -40,10 +40,16 @@ export class NpcTalkHandler extends PacketHandler {
 
   private mapTalkType(t: number): NpcTalkType {
     switch (t) {
-      case 0: return NpcTalkType.YesNo;
-      case 1: return NpcTalkType.SendNext;
-      case 2: return NpcTalkType.SendNextPrev;
-      default: return NpcTalkType.YesNo;
+      case 0:  return NpcTalkType.TextOnly;
+      case 1:  return NpcTalkType.SendNextPrev;
+      case 2:  return NpcTalkType.YesNo;
+      case 3:  return NpcTalkType.GetNumber;
+      case 4:  return NpcTalkType.Selection;
+      case 5:  return NpcTalkType.GetText;
+      case 6:  return NpcTalkType.TextOkOnly;
+      case 9:  return NpcTalkType.AcceptDecline;
+      case 12: return NpcTalkType.AcceptDecline;
+      default: return NpcTalkType.TextOnly;
     }
   }
 }

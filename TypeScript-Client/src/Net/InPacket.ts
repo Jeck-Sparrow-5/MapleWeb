@@ -72,6 +72,8 @@ export enum InPacketOpcode {
   STORAGE = 309,
   PLAYER_INTERACTION = 314,
   KEYMAP = 335,
+  CHECK_CASH_RESULT    = 262, // 0x106 — server sends NX balance
+  CASHSHOP_OP_RESULT   = 263, // 0x107 — result of buy/gift operation
   FORCED_STAT_SET   = 34,  // server overrides a stat value
   FORCED_STAT_RESET = 35,  // server restores overridden stat (was RECALCULATE_STATS)
   RECALCULATE_STATS = 35,  // alias — same opcode

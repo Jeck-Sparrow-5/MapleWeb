@@ -45,13 +45,14 @@ export class StorageHandler extends PacketHandler {
       } else {
         const qty = data.getInt16(offset, true); offset += 2;
         offset += 2; // flags
-        items.push({ itemId, quantity: qty, slot });
+        items.push({ itemId, quantity: qty, slot, invType });
       }
     }
 
     const canvas = document.getElementById('game') as any;
     const { default: UIStorage } = await import('../../UI/UIStorage');
     await UIStorage.open(canvas, mesos, slots, items);
+    if (UIStorage.instance) UIStorage.instance.npcId = npcId;
   }
 }
 
@@ -266,5 +267,34 @@ export class SkillUseResultHandler extends PacketHandler {
 export class SpawnPortalHandler extends PacketHandler {
   handle(data: DataView): void {
     // Portals on map are already loaded from WZ; dynamic portals rare
+  }
+}
+
+// Cash shop NX balance response
+export class CheckCashResultHandler extends PacketHandler {
+  handle(data: DataView): void {
+    let offset = Cryptography.HEADER_LENGTH + 2;
+    const nx = data.getInt32(offset, true); offset += 4;
+    const mp = data.getInt32(offset, true);
+    const cashShop = (window as any).UICashShop;
+    if (cashShop) { cashShop.nx = nx; cashShop.mp = mp; }
+    UIStatusMessenger.show(`NX: ${nx.toLocaleString()}`, '#FFAA00');
+  }
+}
+
+// Cash shop buy/gift operation result
+export class CashShopOpResultHandler extends PacketHandler {
+  handle(data: DataView): void {
+    let offset = Cryptography.HEADER_LENGTH + 2;
+    const action = data.getUint8(offset); offset += 1;
+    const result = data.getUint8(offset);
+    if (result === 0) {
+      UIStatusMessenger.show('Purchase successful!', '#AAFFAA');
+    } else {
+      const errors: Record<number, string> = {
+        2: 'Not enough NX', 3: 'Item not available', 4: 'Inventory full',
+      };
+      UIStatusMessenger.show(errors[result] ?? `Purchase failed (${result})`, '#FF8888');
+    }
   }
 }

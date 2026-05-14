@@ -9,7 +9,7 @@ import { getItemIconSync } from '../wz-utils/ItemIconLoader';
 import SessionManager from '../SessionManager';
 import { OutPacket, OutPacketOpcode } from '../Net/OutPacket';
 
-export interface StorageItem { itemId: number; quantity: number; slot: number; }
+export interface StorageItem { itemId: number; quantity: number; slot: number; invType?: number; }
 
 class UIStorage extends DragableMenu {
   bgImg: any = null;
@@ -18,6 +18,7 @@ class UIStorage extends DragableMenu {
   mesos = 0;
   maxSlots = 4;
   items: StorageItem[] = [];
+  npcId = 0;
   selectedSlot = -1;
   readonly W = 240;
   readonly H = 310;
@@ -29,6 +30,7 @@ class UIStorage extends DragableMenu {
       UIStorage.instance = new UIStorage({ x: 200, y: 120, isHidden: false });
       await UIStorage.instance.load(canvas);
     }
+    UIStorage.instance.npcId = 0; // set by StorageHandler when available
     UIStorage.instance.mesos = mesos;
     UIStorage.instance.maxSlots = slots;
     UIStorage.instance.items = items;
@@ -63,8 +65,13 @@ class UIStorage extends DragableMenu {
           if (this.selectedSlot < 0 || !SessionManager.isConnected()) return;
           const item = this.items[this.selectedSlot];
           if (!item) return;
-          // Send STORAGE_TAKE packet (opcode approximate)
-          UIStatusMessenger.show(`Took item ${item.itemId} from storage`, '#88FF88');
+          // STORAGE take: writeByte(0x04) + writeInt(npcId) + writeByte(invType) + writeShort(storageSlot)
+          const pkt = new OutPacket(OutPacketOpcode.STORAGE);
+          (pkt as any).writeByte(0x04); // take
+          (pkt as any).writeInt(this.npcId);
+          (pkt as any).writeByte(item.invType ?? 2); // inv type (USE=2 default)
+          (pkt as any).writeShort(item.slot);
+          pkt.dispatch();
           this.items.splice(this.selectedSlot, 1);
           this.selectedSlot = -1;
         },
@@ -80,8 +87,20 @@ class UIStorage extends DragableMenu {
         x: this.x + 80, y: this.y + this.H - 28,
         img: btPut.nChildren,
         isRelativeToCamera: true, isPartOfUI: true,
-        onClick: () => {
-          UIStatusMessenger.show('Select item from inventory to store', '#AADDFF');
+        onClick: async () => {
+          if (!SessionManager.isConnected()) return;
+          const slotStr = prompt('Inventory slot to store (1-based):');
+          if (!slotStr) return;
+          const slot = parseInt(slotStr);
+          if (!slot) return;
+          // STORAGE put: writeByte(0x03) + writeInt(npcId) + writeByte(invType) + writeShort(invSlot) + writeShort(qty)
+          const pkt = new OutPacket(OutPacketOpcode.STORAGE);
+          (pkt as any).writeByte(0x03); // put
+          (pkt as any).writeInt(this.npcId);
+          (pkt as any).writeByte(2); // USE tab default
+          (pkt as any).writeShort(slot);
+          (pkt as any).writeShort(1); // quantity
+          pkt.dispatch();
         },
       });
       ClickManager.addButton(btn);

@@ -7,6 +7,7 @@ import ClickManager from './ClickManager';
 import NpcTalkType from '../Constants/NpcTalkType';
 import { Position } from '../Effects/DamageIndicator';
 import MapleButton from './MapleButton';
+import MapleInput from './MapleInput';
 import SessionManager from '../SessionManager';
 import { NpcTalkMorePacket } from '../Net/Packets/NpcInteractPacket';
 import MyCharacter from '../MyCharacter';
@@ -41,6 +42,10 @@ export default class UINpcTalk {
   buttons: MapleButton[] = [];
 
   utilDlgExNode: any = null;
+  textInput: MapleInput | null = null;
+  numberValue: number = 0;
+  numberMin: number = 0;
+  numberMax: number = 999999999;
 
   static async fromOpts(opts: any) {
     const o = new UINpcTalk(opts);
@@ -95,7 +100,6 @@ export default class UINpcTalk {
     }
 
     if (this.type === NpcTalkType.YesNo || this.type === NpcTalkType.AcceptDecline) {
-      // Yes/Ok
       if (this.utilDlgExNode?.BtYes) {
         const yes = new MapleStanceButton(null, {
           x: this.x + 60, y: bY,
@@ -105,7 +109,6 @@ export default class UINpcTalk {
         });
         this.buttons.push(yes);
       }
-      // No/Decline
       if (this.utilDlgExNode?.BtNo) {
         const no = new MapleStanceButton(null, {
           x: this.x + 110, y: bY,
@@ -115,14 +118,13 @@ export default class UINpcTalk {
         });
         this.buttons.push(no);
       }
-    } else if (this.type === NpcTalkType.TextOnly) {
-      // Next / Prev
+    } else if (this.type === NpcTalkType.TextOnly || this.type === NpcTalkType.SendNextPrev) {
       if (this.hasNext && this.utilDlgExNode?.BtNext) {
         const next = new MapleStanceButton(null, {
           x: this.x + this.width - 60, y: bY,
           img: this.utilDlgExNode.BtNext.nChildren,
           isRelativeToCamera: true, isPartOfUI: true,
-          onClick: () => { this.respond(0); }, // 0 = next in v83
+          onClick: () => { this.respond(0); },
         });
         this.buttons.push(next);
       }
@@ -131,10 +133,66 @@ export default class UINpcTalk {
           x: this.x + this.width - 110, y: bY,
           img: this.utilDlgExNode.BtPrev.nChildren,
           isRelativeToCamera: true, isPartOfUI: true,
-          onClick: () => { this.respond(1); }, // 1 = back
+          onClick: () => { this.respond(1); },
         });
         this.buttons.push(prev);
       }
+    } else if (this.type === NpcTalkType.TextOkOnly) {
+      if (this.utilDlgExNode?.BtOK) {
+        const ok = new MapleStanceButton(null, {
+          x: this.x + 60, y: bY,
+          img: this.utilDlgExNode.BtOK.nChildren,
+          isRelativeToCamera: true, isPartOfUI: true,
+          onClick: () => { this.respond(1); },
+        });
+        this.buttons.push(ok);
+      }
+    } else if (this.type === NpcTalkType.GetText) {
+      if (this.utilDlgExNode?.BtOK) {
+        const ok = new MapleStanceButton(null, {
+          x: this.x + 60, y: bY,
+          img: this.utilDlgExNode.BtOK.nChildren,
+          isRelativeToCamera: true, isPartOfUI: true,
+          onClick: () => {
+            const entered = this.textInput?.input.value ?? '';
+            this.respondWithText(entered);
+          },
+        });
+        this.buttons.push(ok);
+      }
+      if (this.utilDlgExNode?.BtNo) {
+        const cancel = new MapleStanceButton(null, {
+          x: this.x + 110, y: bY,
+          img: this.utilDlgExNode.BtNo.nChildren,
+          isRelativeToCamera: true, isPartOfUI: true,
+          onClick: () => { this.close(0); },
+        });
+        this.buttons.push(cancel);
+      }
+    } else if (this.type === NpcTalkType.GetNumber) {
+      if (this.utilDlgExNode?.BtOK) {
+        const ok = new MapleStanceButton(null, {
+          x: this.x + 60, y: bY,
+          img: this.utilDlgExNode.BtOK.nChildren,
+          isRelativeToCamera: true, isPartOfUI: true,
+          onClick: () => { this.respondWithNumber(this.numberValue); },
+        });
+        this.buttons.push(ok);
+      }
+      // +/- buttons for number adjustment
+      const incBtn = new MapleStanceButton(null, {
+        x: this.x + this.width - 60, y: bY,
+        img: this.utilDlgExNode?.BtNext?.nChildren,
+        isRelativeToCamera: true, isPartOfUI: true,
+        onClick: () => { this.numberValue = Math.min(this.numberMax, this.numberValue + 1); },
+      });
+      const decBtn = new MapleStanceButton(null, {
+        x: this.x + this.width - 90, y: bY,
+        img: this.utilDlgExNode?.BtPrev?.nChildren,
+        isRelativeToCamera: true, isPartOfUI: true,
+        onClick: () => { this.numberValue = Math.max(this.numberMin, this.numberValue - 1); },
+      });
+      this.buttons.push(incBtn, decBtn);
     }
 
     this.buttons.forEach((b) => ClickManager.addButton(b));
@@ -144,17 +202,44 @@ export default class UINpcTalk {
     if (SessionManager.isConnected()) {
       new NpcTalkMorePacket(this.type as number, selection).dispatch();
     }
-    if (selection === 0 && this.type !== NpcTalkType.TextOnly) {
+    if (selection === 0 && this.type !== NpcTalkType.TextOnly && this.type !== NpcTalkType.SendNextPrev) {
       this.close(0);
     }
+  }
+
+  respondWithText(text: string) {
+    if (SessionManager.isConnected()) {
+      import('../Net/OutPacket').then(({ OutPacket, OutPacketOpcode }) => {
+        const pkt = new OutPacket(OutPacketOpcode.NPC_TALK_MORE);
+        (pkt as any).writeByte(this.type as number);
+        (pkt as any).writeByte(1); // confirmed
+        (pkt as any).writeString(text);
+        pkt.dispatch();
+      });
+    }
+    this.close(0);
+  }
+
+  respondWithNumber(value: number) {
+    if (SessionManager.isConnected()) {
+      import('../Net/OutPacket').then(({ OutPacket, OutPacketOpcode }) => {
+        const pkt = new OutPacket(OutPacketOpcode.NPC_TALK_MORE);
+        (pkt as any).writeByte(this.type as number);
+        (pkt as any).writeByte(1); // confirmed
+        (pkt as any).writeInt(value);
+        pkt.dispatch();
+      });
+    }
+    this.close(0);
   }
 
   close(selection: number) {
     if (SessionManager.isConnected()) {
       new NpcTalkMorePacket(255, -1).dispatch(); // close signal
     }
+    this.textInput?.remove?.();
+    this.textInput = null;
     this.setIsHidden(true);
-    // Release movement lock
     if (MyCharacter) (MyCharacter as any)._npcLocked = false;
   }
 
@@ -214,6 +299,18 @@ export default class UINpcTalk {
       });
     }
 
+    // GetNumber — show current value
+    if (this.type === NpcTalkType.GetNumber) {
+      const numY = this.y + this.height - 30;
+      canvas.context.save();
+      canvas.context.fillStyle = 'rgba(255,255,255,0.9)';
+      canvas.context.fillRect(this.x + 130, numY, 80, 18);
+      canvas.context.strokeStyle = '#334466';
+      canvas.context.strokeRect(this.x + 130, numY, 80, 18);
+      canvas.context.restore();
+      canvas.drawText({ text: `${this.numberValue}`, color: '#000000', x: this.x + 165, y: numY + 13, fontSize: 11, align: 'center' } as any);
+    }
+
     this.buttons.forEach((b) => b.draw(canvas, camera, lag, msPerTick, tdelta));
   }
 
@@ -262,6 +359,23 @@ export default class UINpcTalk {
     const topH = (this.top?.nGetImage() as any)?.height ?? 0;
     const botH = (this.bottom?.nGetImage() as any)?.height ?? 0;
     this.height = topH + this.fillCount * fillH + botH;
+
+    // Initialize text input for GetText type
+    if (type === NpcTalkType.GetText) {
+      this.numberValue = 0;
+      const canvas = document.getElementById('game') as any;
+      if (canvas && !this.textInput) {
+        this.textInput = new MapleInput(canvas, {
+          x: this.x + 130, y: this.y + this.height - 35,
+          width: 140, height: 18, color: '#000000',
+        });
+      }
+    } else {
+      this.textInput?.remove?.();
+      this.textInput = null;
+      this.numberValue = 0;
+    }
+
     this.loadButtons();
   }
 }

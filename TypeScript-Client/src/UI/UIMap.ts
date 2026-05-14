@@ -544,6 +544,21 @@ UIMap.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
 
   this.drawNumbers(canvas, hp, maxHp, mp, maxMp, exp, maxExp);
 
+  // Character name + job label
+  const charName = MyCharacter.name || '';
+  const jobId    = MyCharacter.job ?? 0;
+  const jobName  = jobId === 0 ? 'Beginner' : `Job ${jobId}`;
+  if (charName) {
+    canvas.context.save();
+    canvas.context.font = 'bold 11px Arial';
+    canvas.context.fillStyle = '#FFFFFF';
+    canvas.context.fillText(charName, 8, 542 + startUIPosition.y);
+    canvas.context.font = '10px Arial';
+    canvas.context.fillStyle = '#AADDFF';
+    canvas.context.fillText(jobName, 8, 554 + startUIPosition.y);
+    canvas.context.restore();
+  }
+
   this.buttons.forEach((obj) => {
     obj.draw(canvas, camera, lag, msPerTick, tdelta);
   });

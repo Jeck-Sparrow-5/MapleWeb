@@ -19,6 +19,7 @@ import UIWorldMap from "./UI/UIWorldMap";
 import UIChannel from "./UI/UIChannel";
 import UIParty from "./UI/UIParty";
 import UITrade from "./UI/UITrade";
+import UICashShop from "./UI/UICashShop";
 import UIStorage from "./UI/UIStorage";
 import { UseItemPacket } from "./Net/Packets/ItemPackets";
 import UISkillHotbar, { useHotbarSlot, selectHotbarSlot, assignSkillToSelectedSlot } from "./UI/UISkillHotbar";
@@ -141,6 +142,7 @@ MapStateInstance.initialize = async function (gameCanvas?: GameCanvas) {
   await UIGameMenu.initialize(canvas, {
     onQuit: () => this.quitDialog?.show(),
     onChannel: () => UIChannel.show(),
+    onCashShop: (c) => UICashShop.open(c),
   });
 
   this.UIMenus.push(this.skillBook, this.equipInventory, this.questLog, this.userList, this.worldMap);
@@ -372,6 +374,22 @@ MapStateInstance.doUpdate = function (
       UIBuffList.onRightClick(canvas.mouseX, canvas.mouseY);
     }
 
+    // Cash shop mouse routing + scroll
+    if (canvas.clicked && !UIGameMenu.isHidden) {
+      UIGameMenu.onMouseDown(canvas.mouseX, canvas.mouseY, canvas);
+    }
+
+    if (!UICashShop.isHidden) {
+      if (canvas.clicked) UICashShop.onMouseDown(canvas.mouseX, canvas.mouseY);
+      if (canvas.scrolledDown) {
+        const maxPage = Math.ceil(UICashShop.filteredItems.length / 16) - 1;
+        UICashShop.scroll = Math.min(UICashShop.scroll + 1, maxPage);
+      }
+      if (canvas.scrolledUp) {
+        UICashShop.scroll = Math.max(0, UICashShop.scroll - 1);
+      }
+    }
+
     // Hotbar slot selection on click
     if (canvas.clicked) {
       const slotSize = 32; const gap = 2; const count = 10;
@@ -457,6 +475,7 @@ MapStateInstance.doRender = function (
     UIOptionMenu.draw(canvas);
     UIParty.draw(canvas);
     UITrade.draw(canvas);
+    UICashShop.draw(canvas);
     UIKeyConfig.draw(canvas);
     UIChannel.draw(canvas);
     this.skillBook?.draw(canvas, camera, lag, msPerTick, tdelta);
@@ -501,6 +520,7 @@ declare global {
 window.UINotice = UINotice;
 (window as any).UIParty = UIParty;
 (window as any).UITrade = UITrade;
+(window as any).UICashShop = UICashShop;
 window.UICharInfo = UICharInfo;
 
 export default MapStateInstance;

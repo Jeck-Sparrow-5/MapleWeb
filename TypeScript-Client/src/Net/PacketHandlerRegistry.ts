@@ -72,6 +72,7 @@ import {
   SpawnMistHandler, SpawnDoorHandler, RemoveDoorHandler,
   UpdateCharBoxHandler, PlayerHintHandler, FameResponseHandler,
   SkillUseResultHandler, SpawnPortalHandler,
+  CheckCashResultHandler, CashShopOpResultHandler,
 } from './PacketHandlers/MiscHandlers';
 import {
   MapTransferResultHandler, QuestClearHandler, SkillLearnItemResultHandler,
@@ -199,6 +200,10 @@ export class PacketHandlerRegistry {
     this.handlers.set(InPacketOpcode.HIT_REACTOR,        new HitReactorHandler());
     this.handlers.set(InPacketOpcode.SPAWN_REACTOR,      new SpawnReactorHandler());
     this.handlers.set(InPacketOpcode.REMOVE_REACTOR,     new RemoveReactorHandler());
+
+    // ── Cash shop ─────────────────────────────────────────────────
+    this.handlers.set(InPacketOpcode.CHECK_CASH_RESULT,         new CheckCashResultHandler());
+    this.handlers.set(InPacketOpcode.CASHSHOP_OP_RESULT,        new CashShopOpResultHandler());
 
     // ── New Cosmic opcodes ────────────────────────────────────────
     this.handlers.set(InPacketOpcode.MAP_TRANSFER_RESULT,       new MapTransferResultHandler());

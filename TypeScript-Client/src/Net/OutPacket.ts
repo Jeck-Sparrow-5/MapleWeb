@@ -94,6 +94,11 @@ export enum OutPacketOpcode {
   // Quests
   QUEST_ACTION       = 107,  // 0x6B
 
+  // Cash shop
+  ENTER_CASHSHOP     = 40,   // 0x28 — enter cash shop
+  CHECK_CASH         = 228,  // 0xE4 — request NX balance
+  CASHSHOP_OPERATION = 229,  // 0xE5 — buy/gift/etc in cash shop
+
   // Emote / facial expression
   FACIAL_EXPRESSION  = 197,  // 0xC5 — client sends emote; server broadcasts to other players
 

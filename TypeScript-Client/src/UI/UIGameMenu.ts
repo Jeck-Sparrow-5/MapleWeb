@@ -5,6 +5,8 @@ import ClickManager from './ClickManager';
 import GameCanvas from '../GameCanvas';
 import { CameraInterface } from '../Camera';
 import config from '../Config';
+import { OutPacket, OutPacketOpcode } from '../Net/OutPacket';
+import SessionManager from '../SessionManager';
 
 const UIGameMenu = {
   isHidden: true,
@@ -17,10 +19,12 @@ const UIGameMenu = {
   H: 140,
   onQuit: null as (() => void) | null,
   onChannel: null as (() => void) | null,
+  onCashShop: null as ((canvas: GameCanvas) => void) | null,
 
-  async initialize(canvas: GameCanvas, opts: { onQuit?: () => void; onChannel?: () => void } = {}) {
+  async initialize(canvas: GameCanvas, opts: { onQuit?: () => void; onChannel?: () => void; onCashShop?: (c: GameCanvas) => void } = {}) {
     this.onQuit = opts.onQuit ?? null;
     this.onChannel = opts.onChannel ?? null;
+    this.onCashShop = opts.onCashShop ?? null;
 
     // Position near bottom-right above status bar
     this.x = config.originalWidth - 100;
@@ -72,11 +76,25 @@ const UIGameMenu = {
       this.buttons.push(btn);
     }
 
+    // Cash Shop — use BtCashShop WZ button if available; else handled by onMouseDown fallback
+    const btCashShopNode = menuNode?.nGet('BtCashShop');
+    if (btCashShopNode?.nChildren) {
+      const cashShopBtn = new MapleStanceButton(canvas, {
+        x: this.x + 6, y: this.y + 78,
+        img: btCashShopNode.nChildren,
+        isRelativeToCamera: true, isPartOfUI: true,
+        isHidden: true,
+        onClick: () => this._openCashShop(canvas),
+      });
+      ClickManager.addButton(cashShopBtn);
+      this.buttons.push(cashShopBtn);
+    }
+
     // Quit
     const btQuit = menuNode?.nGet('BtQuit');
     if (btQuit) {
       const btn = new MapleStanceButton(canvas, {
-        x: this.x + 6, y: this.y + 105,
+        x: this.x + 6, y: this.y + 110,
         img: btQuit.nChildren,
         isRelativeToCamera: true, isPartOfUI: true,
         isHidden: true,
@@ -87,6 +105,25 @@ const UIGameMenu = {
     }
 
     this.initialized = true;
+  },
+
+  _openCashShop(canvas: GameCanvas) {
+    this.hide();
+    if (SessionManager.isConnected()) {
+      new OutPacket(OutPacketOpcode.ENTER_CASHSHOP).dispatch();
+    }
+    this.onCashShop?.(canvas);
+  },
+
+  // Fallback: handle clicks on text labels when WZ buttons missing
+  onMouseDown(mx: number, my: number, canvas: GameCanvas): boolean {
+    if (this.isHidden) return false;
+    // Cash Shop row (y + 78 to y + 108 approx)
+    if (mx >= this.x && mx < this.x + this.W && my >= this.y + 78 && my < this.y + 108) {
+      this._openCashShop(canvas);
+      return true;
+    }
+    return false;
   },
 
   toggle() {
@@ -117,8 +154,8 @@ const UIGameMenu = {
       canvas.context.strokeRect(this.x, this.y, 93, 140);
       canvas.context.restore();
 
-      const labels = ['Channel', 'Game Opt', 'Sys Opt', 'Quit'];
-      const colors = ['#AADDFF', '#AADDFF', '#AADDFF', '#FF8888'];
+      const labels = ['Channel', 'Game Opt', 'Sys Opt', 'Cash Shop', 'Quit'];
+      const colors = ['#AADDFF', '#AADDFF', '#AADDFF', '#FFDD44', '#FF8888'];
       labels.forEach((label, i) => {
         canvas.drawText({ text: label, color: colors[i], x: this.x + 12, y: this.y + 22 + i * 30, fontSize: 11 });
       });

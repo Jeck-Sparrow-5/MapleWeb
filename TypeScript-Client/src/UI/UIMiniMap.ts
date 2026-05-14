@@ -6,7 +6,7 @@ import { MapleStanceButton } from './MapleStanceButton';
 import ClickManager from './ClickManager';
 import config from '../Config';
 
-type MiniMapMode = 'min' | 'normal';
+type MiniMapMode = 'min' | 'normal' | 'large';
 
 interface UIMiniMapInterface {
   mode: MiniMapMode;
@@ -45,7 +45,7 @@ UIMiniMap.initialize = async function (canvas: GameCanvas) {
   const statusBar = await WZManager.get('UI.wz/StatusBar.img');
   this.statusBarNode = statusBar;
 
-  // Min button
+  // Min button — cycles: normal → min → normal
   const minBtn = new MapleStanceButton(canvas, {
     x: config.originalWidth - 152,
     y: 4,
@@ -59,6 +59,22 @@ UIMiniMap.initialize = async function (canvas: GameCanvas) {
   if (statusBar?.MiniMap?.BtMin) {
     ClickManager.addButton(minBtn);
     this.buttons.push(minBtn);
+  }
+
+  // Max button — expands to large mode
+  const maxBtn = new MapleStanceButton(canvas, {
+    x: config.originalWidth - 168,
+    y: 4,
+    img: statusBar?.MiniMap?.BtMax?.nChildren,
+    isRelativeToCamera: true,
+    isPartOfUI: true,
+    onClick: () => {
+      this.mode = this.mode === 'large' ? 'normal' : 'large';
+    },
+  });
+  if (statusBar?.MiniMap?.BtMax) {
+    ClickManager.addButton(maxBtn);
+    this.buttons.push(maxBtn);
   }
 
   this.loadMapData();
@@ -84,8 +100,8 @@ UIMiniMap.loadMapData = function () {
 UIMiniMap.draw = function (canvas: GameCanvas) {
   if (!this.initialized) return;
 
-  const mapW = 140;
-  const mapH = this.mode === 'min' ? 0 : 80;
+  const mapW = this.mode === 'large' ? 240 : 140;
+  const mapH = this.mode === 'min' ? 0 : this.mode === 'large' ? 160 : 80;
   const barH = 16;
   const px = this.x;
   const py = this.y;
@@ -191,10 +207,12 @@ UIMiniMap.draw = function (canvas: GameCanvas) {
 
   canvas.context.restore();
 
-  // NPC list on hover (show first 6 NPC names)
+  // NPC list on hover (show first 6, or always in large mode)
   const mx = (canvas as any).mouseX;
   const my2 = (canvas as any).mouseY;
-  if (mx >= px && mx < px + mapW && my2 >= py && my2 < py + barH + mapH && MapleMap.npcs?.length > 0) {
+  const showNpcList = this.mode === 'large' ||
+    (mx >= px && mx < px + mapW && my2 >= py && my2 < py + barH + mapH && MapleMap.npcs?.length > 0);
+  if (showNpcList && MapleMap.npcs?.length > 0) {
     const listY = py + barH + mapH + 2;
     canvas.context.save();
     canvas.context.fillStyle = 'rgba(0,0,0,0.8)';

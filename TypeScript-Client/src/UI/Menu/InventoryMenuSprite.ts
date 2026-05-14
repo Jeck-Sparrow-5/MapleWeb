@@ -25,6 +25,8 @@ class InventoryMenuSprite extends DragableMenu {
   id: number = 0;
   originalX: number = 0;
   originalY: number = 0;
+  _dragSourceSlot: number = -1;
+  _dragItem: any = null;
   // Holds the full composite background image.
   fullBackgroundImage: any = null;
 
@@ -370,11 +372,23 @@ class InventoryMenuSprite extends DragableMenu {
           if (slotIndex < items.length && items[slotIndex]) {
             const item = items[slotIndex];
             if ((this as any)._lastClickSlot === slotIndex && now - (this as any)._lastClickTime < 400) {
-              // Double-click — use or equip
               this.useOrEquipItem(item, slotIndex);
+              this._dragSourceSlot = -1;
+              this._dragItem = null;
+            } else {
+              // Start drag
+              this._dragSourceSlot = slotIndex;
+              this._dragItem = item;
             }
             (this as any)._lastClickSlot = slotIndex;
             (this as any)._lastClickTime = now;
+          } else {
+            // Dropping onto empty slot — dispatch ITEM_MOVE if drag active
+            if (this._dragSourceSlot >= 0 && this._dragItem) {
+              this._dispatchItemMove(this._dragSourceSlot, slotIndex);
+              this._dragSourceSlot = -1;
+              this._dragItem = null;
+            }
           }
           return true;
         }
@@ -556,6 +570,27 @@ class InventoryMenuSprite extends DragableMenu {
     }
   }
 
+  private async _dispatchItemMove(fromSlot: number, toSlot: number) {
+    if (fromSlot === toSlot) return;
+    const { default: SessionManager } = await import('../../SessionManager');
+    if (!SessionManager.isConnected()) {
+      // Local-only rearrange
+      const items = this.getItemsForCurrentTab();
+      const tmp = items[fromSlot];
+      items[fromSlot] = items[toSlot];
+      items[toSlot] = tmp;
+      return;
+    }
+    // ITEM_MOVE: writeByte(invType) + writeShort(fromSlot+1) + writeShort(toSlot+1)
+    const { OutPacket, OutPacketOpcode } = await import('../../Net/OutPacket');
+    const pkt = new OutPacket(OutPacketOpcode.ITEM_MOVE);
+    (pkt as any).writeByte(this.currentTabNumber()); // inventory type
+    (pkt as any).writeShort(fromSlot + 1);           // 1-based from
+    (pkt as any).writeShort(toSlot + 1);             // 1-based to
+    (pkt as any).writeShort(1);                      // quantity (1 for non-stackable)
+    pkt.dispatch();
+  }
+
   private currentTabKey(): string {
     switch (this.currentTab) {
       case MapleInventoryType.EQUIP: return 'equip';
@@ -622,6 +657,41 @@ class InventoryMenuSprite extends DragableMenu {
               TooltipRenderer.drawItemTooltip(canvas, item.itemId, getItemNameSync(item.itemId) || `Item ${item.itemId}`, mx, my);
             }
           }
+        }
+      }
+    }
+
+    // Drag ghost — draw item icon following cursor while dragging
+    if (this._dragItem && this._dragSourceSlot >= 0) {
+      if (!canvas.clicked) {
+        // Mouse released — check if over a slot and drop
+        const slotSize = 30; const slotPadding = 4; const cols = 4;
+        const startX = this.x + 14; const startY = this.y + 55;
+        let dropped = false;
+        outer: for (let row = 0; row < 6; row++) {
+          for (let col = 0; col < cols; col++) {
+            const sx = startX + col * (slotSize + slotPadding);
+            const sy = startY + row * (slotSize + slotPadding);
+            if (mx >= sx && mx < sx + slotSize && my >= sy && my < sy + slotSize) {
+              const targetSlot = row * cols + col;
+              if (targetSlot !== this._dragSourceSlot) {
+                this._dispatchItemMove(this._dragSourceSlot, targetSlot);
+              }
+              dropped = true;
+              break outer;
+            }
+          }
+        }
+        this._dragSourceSlot = -1;
+        this._dragItem = null;
+      } else {
+        // Still dragging — draw ghost at cursor
+        const icon = getItemIconSync(this._dragItem.itemId);
+        if (icon && mx !== undefined && my !== undefined) {
+          canvas.context.save();
+          canvas.context.globalAlpha = 0.7;
+          try { canvas.context.drawImage(icon, mx - 15, my - 15, 30, 30); } catch (_) {}
+          canvas.context.restore();
         }
       }
     }

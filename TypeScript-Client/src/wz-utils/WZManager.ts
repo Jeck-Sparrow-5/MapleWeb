@@ -1,92 +1,55 @@
-import WZNode from "./WZNode";
+import { NXNode } from './NXNode';
+import { NXReader } from './NXReader';
 
-/**
- * WZManager handles the loading and caching of WZ files.
- */
-interface WZManager {
-  cache: WZNode;
-  initialize: () => void;
-  load: (filename: string) => Promise<void>;
-  pathExists: (thePath: string) => boolean;
-  get: (thePath: string) => Promise<any>;
+// Cache: nx file name (e.g. "Map") → parsed root NXNode
+const fileCache = new Map<string, NXNode>();
+
+function nxName(path: string): string {
+  // "Map.wz/Back/forest.img" → "Map"
+  return path.split('/')[0].replace(/\.wz$/, '');
 }
 
-const WZManager: WZManager = {
-  /**
-   * The cache to store loaded WZNode objects.
-   */
-  cache: new WZNode({ $dir: "" }),
+async function fetchNX(name: string): Promise<NXNode> {
+  if (fileCache.has(name)) return fileCache.get(name)!;
+  const res = await fetch(`wz_client/${name}.nx`);
+  if (!res.ok) throw new Error(`NX not found: ${name}.nx`);
+  const root = new NXReader(await res.arrayBuffer()).parse();
+  fileCache.set(name, root);
+  return root;
+}
 
-  /**
-   * Initializes the WZManager by setting up the cache.
-   */
-  initialize() {
-    this.cache = new WZNode({ $dir: "" });
+function navigate(root: NXNode, parts: string[]): any {
+  let node: any = root;
+  for (const part of parts) {
+    if (node == null) return undefined;
+    // Try exact name first, then strip .img suffix (some converters drop it)
+    node = node[part] ?? node[part.replace(/\.img$/, '')];
+  }
+  return node;
+}
+
+const WZManager = {
+  initialize(): void {
+    fileCache.clear();
   },
 
-  /**
-   * Loads and caches a WZ file.
-   *
-   * @param filename - Relative path to WZ file.
-   * @example WZManager.load('Map.wz/Map/Map1/100000000.img');
-   * @example WZManager.load('Character.wz/Cap/01002357.img');
-   */
-  async load(filename) {
-    const res = await fetch(`wz_client/${filename}.json`);
-    if (!res.ok) throw new Error(`WZ not found: ${filename}`);
-    const json = await res.json();
-
-    let tree: any = this.cache;
-    filename
-      .split("/")
-      .slice(0, -1)
-      .forEach((p) => {
-        if (!(p in tree)) {
-          tree[p] = new WZNode({ $dir: p }, tree);
-          tree.nChildren.push(tree[p]);
-        }
-        tree = tree[p];
-      });
-
-    const subtree = new WZNode(json, tree);
-    tree[subtree.nName] = subtree;
-    tree.nChildren.push(subtree);
+  // Kept for API compatibility — NX loads the whole file, so this is a prefetch
+  async load(filename: string): Promise<void> {
+    await fetchNX(nxName(filename));
   },
 
-  /**
-   * Checks if a WZ path exists in the cache.
-   *
-   * @param thePath - WZ path.
-   * @returns True if path exists, false otherwise.
-   */
-  pathExists(thePath) {
-    let tree: any = this.cache;
-    for (const p of thePath.split("/")) {
-      if (tree === undefined || tree[p] === undefined) {
-        return false;
-      }
-      tree = tree[p];
-    }
-    return true;
+  pathExists(thePath: string): boolean {
+    const parts = thePath.split('/');
+    const name = parts[0].replace(/\.wz$/, '');
+    if (!fileCache.has(name)) return false;
+    return navigate(fileCache.get(name)!, parts.slice(1)) !== undefined;
   },
 
-  /**
-   * Gets a WZNode from the cache based on the provided path.
-   * If the path doesn't exist, it loads the corresponding WZ file.
-   *
-   * @param thePath - WZ path.
-   * @returns The WZNode if found, undefined otherwise.
-   */
-  async get(thePath) {
-    if (!this.pathExists(thePath)) {
-      const filename = `${thePath.split(".img")[0]}.img`;
-      await this.load(filename);
-    }
-    let tree: any = this.cache;
-    for (const p of thePath.split("/")) {
-      tree = tree[p];
-    }
-    return tree;
+  async get(thePath: string): Promise<any> {
+    const parts = thePath.split('/');
+    const name = parts[0].replace(/\.wz$/, '');
+    const root = await fetchNX(name);
+    return navigate(root, parts.slice(1));
   },
 };
 

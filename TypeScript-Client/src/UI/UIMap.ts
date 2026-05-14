@@ -165,11 +165,54 @@ UIMap.addButtons = function (canvas) {
     isRelativeToCamera: true,
     isPartOfUI: true,
     onClick: () => {
-      MapState.statsMenu.setIsHidden(!MapState.statsMenu.isHidden);
+      // EquipKey = open equip inventory (character tab)
+      MapState.equipInventory?.setIsHidden(!MapState.equipInventory?.isHidden);
     },
   });
   ClickManager.addButton(equipKey);
   this.buttons.add(equipKey);
+
+  // Additional stat bar shortcuts — stat window
+  const btStat = this.statusBarNode.BtStat ?? this.statusBarNode.Stat;
+  if (btStat?.nChildren) {
+    const statBtn = new MapleStanceButton(canvas, {
+      x: 608,
+      y: 536 + startUIPosition.y,
+      img: btStat.nChildren,
+      isRelativeToCamera: true, isPartOfUI: true,
+      onClick: () => MapState.statsMenu?.setIsHidden(!MapState.statsMenu?.isHidden),
+    });
+    ClickManager.addButton(statBtn);
+    this.buttons.add(statBtn);
+  }
+
+  // Quest button
+  const btQuest = this.statusBarNode.BtQuest ?? this.statusBarNode.Quest;
+  if (btQuest?.nChildren) {
+    const questBtn = new MapleStanceButton(canvas, {
+      x: 576,
+      y: 536 + startUIPosition.y,
+      img: btQuest.nChildren,
+      isRelativeToCamera: true, isPartOfUI: true,
+      onClick: () => MapState.questLog?.setIsHidden(!MapState.questLog?.isHidden),
+    });
+    ClickManager.addButton(questBtn);
+    this.buttons.add(questBtn);
+  }
+
+  // Community / buddy list
+  const btBuddy = this.statusBarNode.BtMessenger ?? this.statusBarNode.Community;
+  if (btBuddy?.nChildren) {
+    const buddyBtn = new MapleStanceButton(canvas, {
+      x: 544,
+      y: 536 + startUIPosition.y,
+      img: btBuddy.nChildren,
+      isRelativeToCamera: true, isPartOfUI: true,
+      onClick: () => MapState.userList?.setIsHidden(!MapState.userList?.isHidden),
+    });
+    ClickManager.addButton(buddyBtn);
+    this.buttons.add(buddyBtn);
+  }
 };
 
 UIMap.doUpdate = function (msPerTick, camera, canvas) {

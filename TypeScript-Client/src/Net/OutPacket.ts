@@ -24,6 +24,8 @@ export enum OutPacketOpcode {
   CHECK_CHAR_NAME = 21,
   ADD_BUDDY = 38,
   NPC_SHOP_CLOSE = 63,
+  SELECT_CHAR_PIC = 24,
+  REGISTER_PIC = 29,
   SELECT_CHARACTER = 19,
   PLAYER_LOGIN = 20,
   PONG = 24,

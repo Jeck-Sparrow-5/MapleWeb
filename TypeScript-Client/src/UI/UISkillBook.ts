@@ -65,7 +65,11 @@ function jobTypeToSkillFiles(job: JobsType): string[] {
 interface SkillEntry {
   id: number;
   icon: any;
+  iconDisabled: any;
   name: string;
+  desc: string;
+  maxLevel: number;
+  isPassive: boolean;
 }
 
 class UISkillBook extends DragableMenu {
@@ -93,15 +97,16 @@ class UISkillBook extends DragableMenu {
     const jobType = MyCharacter.stats.jobType as JobsType;
     const files = jobTypeToSkillFiles(jobType);
 
-    // Load String.wz/Skill.img for names
+    // Load String.wz/Skill.img for names and descriptions
     let skillNames: Record<string, string> = {};
+    let skillDescs: Record<string, string> = {};
     try {
       const strNode = await WZManager.get('String.wz/Skill.img');
       if (strNode) {
         strNode.nChildren?.forEach((job: any) => {
           job.nChildren?.forEach((sk: any) => {
-            const nameNode = sk.nGet?.('name') ?? sk.name;
-            if (nameNode) skillNames[sk.nName] = nameNode.nValue ?? '';
+            skillNames[sk.nName] = sk.name?.nValue ?? sk.nGet?.('name')?.nValue ?? '';
+            skillDescs[sk.nName] = sk.desc?.nValue ?? sk.nGet?.('desc')?.nValue ?? '';
           });
         });
       }
@@ -116,9 +121,14 @@ class UISkillBook extends DragableMenu {
         skillNode.nChildren?.forEach((sk: any) => {
           const id = parseInt(sk.nName);
           if (isNaN(id)) return;
-          const icon = sk.nGet?.('icon')?.nGetImage?.() ?? null;
-          const name = skillNames[sk.nName] ?? `Skill ${id}`;
-          this.skills.push({ id, icon, name });
+          const icon         = sk.nGet?.('icon')?.nGetImage?.() ?? null;
+          const iconDisabled = sk.nGet?.('iconDisabled')?.nGetImage?.() ?? null;
+          const name         = skillNames[sk.nName] ?? `Skill ${id}`;
+          const desc         = skillDescs[sk.nName] ?? '';
+          const masterLevel  = parseInt(sk.nGet?.('masterLevel')?.nValue ?? sk.nGet?.('info')?.nGet?.('masterLevel')?.nValue ?? '0');
+          // Skills with maxLevel = 0 or tagged passive in info are passive
+          const isPassive    = masterLevel === 0 || !!(sk.nGet?.('info')?.nGet?.('passive'));
+          this.skills.push({ id, icon, iconDisabled, name, desc, maxLevel: masterLevel, isPassive });
         });
       } catch (_) {}
     }
@@ -150,8 +160,9 @@ class UISkillBook extends DragableMenu {
           isPartOfUI: true,
           onClick: () => {
             const sk = this.skills[this.scroll + rowIndex];
-            if (!sk || skillSPTotal.sp <= 0) return;
+            if (!sk || sk.isPassive || skillSPTotal.sp <= 0) return;
             const cur = skillLevels.get(sk.id) ?? 0;
+            if (sk.maxLevel > 0 && cur >= sk.maxLevel) return;
             skillLevels.set(sk.id, cur + 1);
             skillSPTotal.sp--;
           },
@@ -204,17 +215,29 @@ class UISkillBook extends DragableMenu {
     visibleSkills.forEach((sk, i) => {
       const sy = this.y + 30 + i * 30;
       const sx = this.x + 8;
-      if (sk.icon) {
-        canvas.drawImage({ img: sk.icon, dx: sx, dy: sy - 14 });
+      const lvl = skillLevels.get(sk.id) ?? 0;
+      const iconToDraw = (sk.isPassive && lvl === 0) ? (sk.iconDisabled ?? sk.icon) : sk.icon;
+
+      if (iconToDraw) {
+        canvas.context.save();
+        if (sk.isPassive) canvas.context.globalAlpha = 0.7;
+        canvas.context.drawImage(iconToDraw, sx, sy - 14, 26, 26);
+        canvas.context.restore();
       } else {
         canvas.context.save();
-        canvas.context.fillStyle = '#334455';
+        canvas.context.fillStyle = sk.isPassive ? '#223344' : '#334455';
         canvas.context.fillRect(sx, sy - 14, 26, 26);
         canvas.context.restore();
       }
-      const lvl = skillLevels.get(sk.id) ?? 0;
-      canvas.drawText({ text: sk.name.substring(0, 18), color: '#FFFFFF', x: sx + 30, y: sy - 2, fontSize: 10 });
-      canvas.drawText({ text: `Lv.${lvl}`, color: '#AAAAFF', x: sx + 30, y: sy + 10, fontSize: 9 });
+
+      const maxStr = sk.maxLevel > 0 ? ` (${lvl}/${sk.maxLevel})` : '';
+      const nameColor = sk.isPassive ? '#AAAACC' : '#FFFFFF';
+      canvas.drawText({ text: (sk.name + maxStr).substring(0, 22), color: nameColor, x: sx + 30, y: sy - 2, fontSize: 10 });
+      if (sk.isPassive) {
+        canvas.drawText({ text: 'Passive', color: '#777788', x: sx + 30, y: sy + 10, fontSize: 8 });
+      } else {
+        canvas.drawText({ text: `Lv.${lvl}`, color: '#AAAAFF', x: sx + 30, y: sy + 10, fontSize: 9 });
+      }
     });
 
     // Scroll arrows
@@ -249,7 +272,12 @@ class UISkillBook extends DragableMenu {
         const sy = this.y + 30 + i * 30;
         if (mx >= this.x + 8 && mx < this.x + this.W - 30 && my >= sy - 14 && my < sy + 16) {
           const lvl = skillLevels.get(sk.id) ?? 0;
-          TooltipRenderer.drawSkillTooltip(canvas, sk.id, sk.name, lvl, mx, my);
+          const descLine = sk.desc ? sk.desc.substring(0, 60) : '';
+          TooltipRenderer.show([
+            { text: sk.name, color: '#FFDD88' },
+            { text: sk.isPassive ? 'Passive Skill' : `Lv.${lvl} / Max ${sk.maxLevel}`, color: sk.isPassive ? '#AAAACC' : '#AADDFF' },
+            ...(descLine ? [{ text: descLine, color: '#CCCCCC' }] : []),
+          ], mx, my);
         }
       });
     }

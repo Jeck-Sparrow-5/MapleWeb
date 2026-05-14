@@ -642,6 +642,33 @@ MapleMap.render = function (
     });
   }
 
+  // Pet rendering (above their owner)
+  const renderPets = (owner: any) => {
+    const pets = (owner as any).pets;
+    if (!pets?.length) return;
+    pets.forEach((pet: any) => {
+      if (!pet?.visible) return;
+      const px = (pet.x ?? owner.pos?.x ?? 0) - camera.x;
+      const py = (pet.y ?? owner.pos?.y ?? 0) - 30 - camera.y;
+      canvas.context.save();
+      canvas.context.fillStyle = 'rgba(255,180,80,0.8)';
+      canvas.context.strokeStyle = '#FFAA44';
+      canvas.context.lineWidth = 1;
+      canvas.context.beginPath();
+      canvas.context.ellipse(px, py, 14, 10, 0, 0, Math.PI * 2);
+      canvas.context.fill();
+      canvas.context.stroke();
+      canvas.context.fillStyle = '#FFFFFF';
+      canvas.context.font = '8px Arial';
+      canvas.context.textAlign = 'center';
+      canvas.context.fillText('Pet', px, py + 3);
+      canvas.context.textAlign = 'left';
+      canvas.context.restore();
+    });
+  };
+  if (this.PlayerCharacter) renderPets(this.PlayerCharacter);
+  this.characters?.forEach((c: any) => renderPets(c));
+
   // Name tags above NPCs
   this.npcs.forEach((npc: any) => {
     const nx = npc.x ?? (npc as any).pos?.x ?? 0;

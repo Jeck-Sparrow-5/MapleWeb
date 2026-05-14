@@ -20,6 +20,7 @@ import World from '../Net/Models/World';
 import CharacterListRequestPacket from '../Net/Packets/CharacterListRequestPacket';
 import SelectCharPacket from '../Net/Packets/SelectCharPacket';
 import UIRaceSelect from './UIRaceSelect';
+import { SelectCharPicPacket, RegisterPicPacket } from '../Net/Packets/PicPackets';
 import { DeleteCharPacket } from '../Net/Packets/DeleteCharPacket';
 import { drawPreview, clearCache } from './CharSelectPreview';
 import Channel from '../Net/Models/Channel';
@@ -111,6 +112,7 @@ interface UILoginInterface {
   viewAllCharacterButton: MapleButton;
   characters: Character[];
   selectedCharacterId: number | null;
+  requirePic: number;
   characterSlotButtons: MapleButton[];
   createCharacterSlotButtons: () => void;
   clearCharacterSlotButtons: () => void;
@@ -137,6 +139,7 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   this.characters = [];
   this.characterSlotButtons = [];
   this.selectedCharacterId = null;
+  this.requirePic = 0;
   this.currentCharPage = 0;
   this.saveIdEnabled = !!localStorage.getItem('maple_saved_id');
 
@@ -168,8 +171,25 @@ UILogin.initialize = async function (canvas: GameCanvas) {
         await LoginState.enterGame();
         return;
       }
-      if (this.selectedCharacterId !== null) {
-        new SelectCharPacket(this.selectedCharacterId).dispatch();
+      if (this.selectedCharacterId === null) return;
+      const charId = this.selectedCharacterId;
+      const pic = this.requirePic ?? 0;
+
+      if (pic === 0) {
+        // No PIC required
+        new SelectCharPacket(charId).dispatch();
+      } else if (pic === 1) {
+        // Soft-key PIC — prompt then send SelectCharPicPacket
+        const entered = prompt('Enter your PIC (Personal ID Code):');
+        if (!entered) return;
+        new SelectCharPicPacket(entered, charId).dispatch();
+      } else {
+        // First time — register PIC
+        const newPic = prompt('Set your PIC (6 digits):');
+        if (!newPic || newPic.length !== 6) return;
+        const confirm = prompt('Confirm PIC:');
+        if (confirm !== newPic) { alert('PICs do not match'); return; }
+        new RegisterPicPacket(charId, newPic).dispatch();
       }
     },
   });

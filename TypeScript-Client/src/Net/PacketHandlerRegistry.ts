@@ -61,6 +61,12 @@ import {
 
 // Misc
 import {
+  RecalculateStatsHandler, GatherResultHandler, SortResultHandler,
+  WeekEventMessageHandler, SkillMacrosHandler, FieldEffectHandler,
+  ScrollResultHandler, SpawnPetHandler, MovePetHandler,
+  ShowForeignEffectHandler, HitReactorHandler, SpawnReactorHandler, RemoveReactorHandler,
+} from './PacketHandlers/GameplayHandlers';
+import {
   StorageHandler, PlayerInteractionHandler, FacialExpressionHandler,
   NpcActionHandler, ClockHandler, MinimapOnOffHandler, OpenUIHandler,
   SpawnMistHandler, SpawnDoorHandler, RemoveDoorHandler,
@@ -174,6 +180,21 @@ export class PacketHandlerRegistry {
     this.handlers.set(InPacketOpcode.COOLDOWN,                   new CooldownHandler());
     this.handlers.set(InPacketOpcode.CLOSE_RANGE_ATTACK,         new RemoteAttackHandler());
     this.handlers.set(InPacketOpcode.RANGED_ATTACK,              new RemoteAttackHandler());
+
+    // Gameplay
+    this.handlers.set(InPacketOpcode.RECALCULATE_STATS,  new RecalculateStatsHandler());
+    this.handlers.set(InPacketOpcode.GATHER_RESULT,      new GatherResultHandler());
+    this.handlers.set(InPacketOpcode.SORT_RESULT,        new SortResultHandler());
+    this.handlers.set(InPacketOpcode.WEEK_EVENT_MESSAGE, new WeekEventMessageHandler());
+    this.handlers.set(InPacketOpcode.SKILL_MACROS,       new SkillMacrosHandler());
+    this.handlers.set(InPacketOpcode.FIELD_EFFECT,       new FieldEffectHandler());
+    this.handlers.set(InPacketOpcode.SCROLL_RESULT,      new ScrollResultHandler());
+    this.handlers.set(InPacketOpcode.SPAWN_PET,          new SpawnPetHandler());
+    this.handlers.set(InPacketOpcode.MOVE_PET,           new MovePetHandler());
+    this.handlers.set(InPacketOpcode.SHOW_FOREIGN_EFFECT,new ShowForeignEffectHandler());
+    this.handlers.set(InPacketOpcode.HIT_REACTOR,        new HitReactorHandler());
+    this.handlers.set(InPacketOpcode.SPAWN_REACTOR,      new SpawnReactorHandler());
+    this.handlers.set(InPacketOpcode.REMOVE_REACTOR,     new RemoveReactorHandler());
   }
 
   getHandler(opcode: InPacketOpcode): IPacketHandler | undefined {

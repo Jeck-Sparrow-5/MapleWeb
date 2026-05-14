@@ -53,6 +53,7 @@ export class CharacterListHandler extends PacketHandler {
     console.log('pic:', pic);
     console.log('slots:', slots);
     UILogin.hideLoading();
+    UILogin.requirePic = pic;
     clearCache();
     UILogin.characters = characters;
     UILogin.selectedCharacterId = characters.length > 0 ? characters[0].stat.characterId : null;

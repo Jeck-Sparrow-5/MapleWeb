@@ -1,5 +1,6 @@
 import WZManager from '../wz-utils/WZManager';
 import { getItemIconSync } from '../wz-utils/ItemIconLoader';
+import { getItemNameSync } from '../wz-utils/ItemNameLoader';
 import { ShopBuyPacket, ShopSellPacket } from '../Net/Packets/ShopPacket';
 import SessionManager from '../SessionManager';
 import { OutPacket, OutPacketOpcode } from '../Net/OutPacket';
@@ -62,9 +63,9 @@ class UIShop extends DragableMenu {
       if (!it) return;
       this.sellItems.push({
         itemId: it.itemId,
-        name: `${it.itemId}`,
+        name: getItemNameSync(it.itemId) || `${it.itemId}`,
         price: Math.floor((it.price ?? 0) / 2),
-        icon: it.node?.iconRaw?.nGetImage?.() ?? null,
+        icon: getItemIconSync(it.itemId),
       });
     });
   }

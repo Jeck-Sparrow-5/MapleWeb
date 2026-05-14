@@ -10,6 +10,7 @@ import { PacketHandler } from '../PacketHandler';
 import { Cryptography } from '../Cryptography';
 import UIStatusMessenger from '../../UI/UIStatusMessenger';
 import UIMap from '../../UI/UIMap';
+import UIClock from '../../UI/UIClock';
 import MapleMap from '../../MapleMap';
 import MyCharacter from '../../MyCharacter';
 import { getItemIconSync } from '../../wz-utils/ItemIconLoader';
@@ -99,15 +100,13 @@ export class ClockHandler extends PacketHandler {
     let offset = Cryptography.HEADER_LENGTH + 2;
     const type = data.getUint8(offset); offset += 1;
     if (type === 1) {
-      // Countdown timer in seconds
       const seconds = data.getInt32(offset, true);
-      UIStatusMessenger.show(`Timer: ${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`, '#FFDD88');
+      UIClock.setCountdown(seconds);
     } else {
-      // Real time clock: h, m, s
       const h = data.getUint8(offset); offset += 1;
       const m = data.getUint8(offset); offset += 1;
       const s = data.getUint8(offset);
-      UIMap.addChatMessage(`[System] Time: ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`, '#888888');
+      UIClock.setRealTime(h, m, s);
     }
   }
 }

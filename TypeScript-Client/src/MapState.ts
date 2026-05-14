@@ -27,7 +27,9 @@ import TooltipRenderer from "./UI/TooltipRenderer";
 import UIPartyHP from "./UI/UIPartyHP";
 import MovePlayerPacket from "./Net/Packets/MovePlayerPacket";
 import SessionManager from "./SessionManager";
-import UISkillBook from "./UI/UISkillBook";
+import UISkillBook, { skillLevels } from "./UI/UISkillBook";
+import UIClock from "./UI/UIClock";
+import UseSkillPacket from "./Net/Packets/UseSkillPacket";
 import UIEquipInventory from "./UI/UIEquipInventory";
 import UIBuffList from "./UI/UIBuffList";
 import UIGameMenu from "./UI/UIGameMenu";
@@ -277,6 +279,10 @@ MapStateInstance.doUpdate = function (
           const skillId = useHotbarSlot(idx);
           if (skillId && MyCharacter.pos) {
             showSkillEffect(MyCharacter.pos.x, MyCharacter.pos.y - 40, skillId);
+            if (SessionManager.isConnected()) {
+              const level = skillLevels.get(skillId) ?? 1;
+              new UseSkillPacket(skillId, level).dispatch();
+            }
           }
         }
       });
@@ -284,7 +290,12 @@ MapStateInstance.doUpdate = function (
       for (let fi = 1; fi <= 10; fi++) {
         const fkey = `f${fi}` as any;
         if (canvas.isKeyDown(fkey) && !(this.previousKeyboardState as any)[fkey]) {
-          useHotbarSlot(9 + fi);
+          const skillId = useHotbarSlot(9 + fi);
+          if (skillId && MyCharacter.pos && SessionManager.isConnected()) {
+            showSkillEffect(MyCharacter.pos.x, MyCharacter.pos.y - 40, skillId);
+            const level = skillLevels.get(skillId) ?? 1;
+            new UseSkillPacket(skillId, level).dispatch();
+          }
         }
       }
 
@@ -451,6 +462,7 @@ MapStateInstance.doRender = function (
     drawSkillEffects(canvas, camera);
     ChatBubbleRenderer.update();
     UISkillHotbar.draw(canvas);
+    UIClock.draw(canvas);
     TooltipRenderer.draw(canvas); // always last so it renders on top
     if (UIStorage.instance && !UIStorage.instance.isHidden) {
       UIStorage.instance.draw(canvas, camera, lag, msPerTick, tdelta);

@@ -177,46 +177,77 @@ class UIEquipInventory extends DragableMenu {
 
     const equipped = this.getEquippedItems();
     const tabIdx = TABS.indexOf(this.currentTab);
-    const visSlots = SLOTS.filter((s) => s.tab === tabIdx === (s.tab === 0));
+    const mx = (canvas as any).mouseX;
+    const my = (canvas as any).mouseY;
 
-    (tabIdx === 0 ? SLOTS : []).forEach((slot) => {
-      const sx = this.x + slot.cx;
-      const sy = this.y + slot.cy;
-      const isSelected = slot.slotId === this.selectedSlot;
-      const item = equipped.get(slot.slotId);
+    if (tabIdx === 0) {
+      SLOTS.forEach((slot) => {
+        const sx = this.x + slot.cx;
+        const sy = this.y + slot.cy;
+        const isSelected = slot.slotId === this.selectedSlot;
+        const item = equipped.get(slot.slotId);
 
-      canvas.context.save();
-      canvas.context.fillStyle = isSelected ? 'rgba(100,130,200,0.8)' : 'rgba(40,50,80,0.6)';
-      canvas.context.strokeStyle = isSelected ? '#AADDFF' : '#334455';
-      canvas.context.fillRect(sx, sy, 28, 28);
-      canvas.context.strokeRect(sx, sy, 28, 28);
+        canvas.context.save();
+        canvas.context.fillStyle = isSelected ? 'rgba(100,130,200,0.8)' : 'rgba(40,50,80,0.6)';
+        canvas.context.strokeStyle = isSelected ? '#AADDFF' : '#334455';
+        canvas.context.fillRect(sx, sy, 28, 28);
+        canvas.context.strokeRect(sx, sy, 28, 28);
 
-      if (item) {
+        if (item) {
+          const icon = getItemIconSync(item.itemId);
+          if (icon) {
+            try { canvas.context.drawImage(icon, sx + 1, sy + 1, 26, 26); } catch (_) {}
+          } else {
+            canvas.context.fillStyle = '#446688';
+            canvas.context.fillRect(sx + 2, sy + 2, 24, 24);
+          }
+          if (mx >= sx && mx < sx + 28 && my >= sy && my < sy + 28) {
+            TooltipRenderer.drawItemTooltip(canvas, item.itemId, getItemNameSync(item.itemId), mx, my);
+          }
+        } else {
+          canvas.context.fillStyle = '#444466';
+          canvas.context.font = '7px Arial';
+          canvas.context.textAlign = 'center';
+          canvas.context.fillText(slot.label, sx + 14, sy + 16);
+          canvas.context.textAlign = 'left';
+        }
+        canvas.context.restore();
+      });
+    } else {
+      // Cash (1) / Setup (2) / Etc (3) — show inventory grid
+      const inv = MyCharacter.inventory;
+      const tabItems: any[] = tabIdx === 1
+        ? (inv.cash ?? [])
+        : tabIdx === 2
+          ? (inv.setup ?? [])
+          : (inv.etc ?? []);
+      const cols = 4;
+      const cellSize = 32;
+      const startX = this.x + 8;
+      const startY = this.y + 45;
+      tabItems.forEach((item: any, i: number) => {
+        if (!item) return;
+        const col = i % cols;
+        const row = Math.floor(i / cols);
+        const sx = startX + col * (cellSize + 2);
+        const sy = startY + row * (cellSize + 2);
+        canvas.context.save();
+        canvas.context.fillStyle = 'rgba(40,50,80,0.6)';
+        canvas.context.strokeStyle = '#334455';
+        canvas.context.fillRect(sx, sy, cellSize, cellSize);
+        canvas.context.strokeRect(sx, sy, cellSize, cellSize);
         const icon = getItemIconSync(item.itemId);
         if (icon) {
-          try { canvas.context.drawImage(icon, sx + 1, sy + 1, 26, 26); } catch (_) {}
-        } else {
-          canvas.context.fillStyle = '#446688';
-          canvas.context.fillRect(sx + 2, sy + 2, 24, 24);
+          try { canvas.context.drawImage(icon, sx + 2, sy + 2, cellSize - 4, cellSize - 4); } catch (_) {}
         }
-        // Tooltip
-        const mx = (canvas as any).mouseX;
-        const my = (canvas as any).mouseY;
-        if (mx >= sx && mx < sx + 28 && my >= sy && my < sy + 28) {
+        if (mx >= sx && mx < sx + cellSize && my >= sy && my < sy + cellSize) {
           TooltipRenderer.drawItemTooltip(canvas, item.itemId, getItemNameSync(item.itemId), mx, my);
         }
-      } else {
-        canvas.context.fillStyle = '#444466';
-        canvas.context.font = '7px Arial';
-        canvas.context.textAlign = 'center';
-        canvas.context.fillText(slot.label, sx + 14, sy + 16);
-        canvas.context.textAlign = 'left';
+        canvas.context.restore();
+      });
+      if (tabItems.length === 0) {
+        canvas.drawText({ text: 'No items', color: '#666688', x: this.x + 60, y: this.y + 150 });
       }
-      canvas.context.restore();
-    });
-
-    if (tabIdx !== 0) {
-      canvas.drawText({ text: 'No items', color: '#666688', x: this.x + 60, y: this.y + 150 });
     }
 
     this.buttons.forEach((b) => b.draw(canvas, camera, lag, ms, td));

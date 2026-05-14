@@ -6,6 +6,12 @@ import LoginState from '../../LoginState';
 import StateManager from '../../StateManager';
 import { skillLevels, skillSPTotal } from '../../UI/UISkillBook';
 
+// Fourth-job skills have a master level field appended after expiration
+function isFourthJobSkill(skillId: number): boolean {
+  const jobId = Math.floor(skillId / 10000);
+  return jobId >= 22 && jobId <= 522 && (jobId % 10) === 2;
+}
+
 function readString(data: DataView, offset: number, length: number): string {
   let s = '';
   for (let i = 0; i < length; i++) s += String.fromCharCode(data.getUint8(offset + i));
@@ -76,6 +82,7 @@ export class SetFieldHandler extends PacketHandler {
     MyCharacter.exp = exp;
     MyCharacter.fame = fame;
     MyCharacter.stats.level = level;
+    MyCharacter.job = job;
     MyCharacter.stats.str = str;
     MyCharacter.stats.dex = dex;
     MyCharacter.stats.int = int_;
@@ -83,15 +90,18 @@ export class SetFieldHandler extends PacketHandler {
     MyCharacter.stats.abilityPoints = ap;
     skillSPTotal.sp = sp;
 
-    // Parse inventory (simplified — read slot counts then iterate equip items)
     try {
       offset = this.parseInventory(data, offset);
     } catch (e) {
-      console.warn('[SetFieldHandler] inventory parse error, skipping:', e);
+      console.warn('[SetFieldHandler] inventory parse error:', e);
     }
 
-    // Skip skills, quests, etc. — parse only what we need for map entry
-    // Remaining data leads to map portal info; try to trust mapId from stats block
+    try {
+      offset = this.parseSkills(data, offset);
+    } catch (e) {
+      console.warn('[SetFieldHandler] skill parse error:', e);
+    }
+
     await this.enterMap(mapId, spawnPoint);
   }
 
@@ -111,9 +121,35 @@ export class SetFieldHandler extends PacketHandler {
         if (isCash) offset += 8; // unique id
         offset += 8; // expiration time
         if (tab === 0) {
-          // Equip item — read equip stats
-          offset += 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 1 + 2 + 1 + 2; // ~35 bytes of stats
-          MyCharacter.inventory.equip.push({ itemId, slot: slotId, quantity: 1 } as any);
+          // Equip stats: 15 shorts (str/dex/int/luk/hp/mp/wAtk/mAtk/wDef/mDef/acc/avoid/hands/speed/jump)
+          // + 1 short (unk) + 1 byte (upgradeSlots) + 1 byte (level) + 2 shorts (itemExp, vicious)
+          // + 1 byte (itemState) + 1 byte (covered) + 8 bytes (crafterAccountId) = 48 bytes
+          const str    = data.getInt16(offset, true); offset += 2;
+          const dex    = data.getInt16(offset, true); offset += 2;
+          const int_   = data.getInt16(offset, true); offset += 2;
+          const luk    = data.getInt16(offset, true); offset += 2;
+          const hp     = data.getInt16(offset, true); offset += 2;
+          const mp     = data.getInt16(offset, true); offset += 2;
+          const wAtk   = data.getInt16(offset, true); offset += 2;
+          const mAtk   = data.getInt16(offset, true); offset += 2;
+          const wDef   = data.getInt16(offset, true); offset += 2;
+          const mDef   = data.getInt16(offset, true); offset += 2;
+          const acc    = data.getInt16(offset, true); offset += 2;
+          const avoid  = data.getInt16(offset, true); offset += 2;
+          const hands  = data.getInt16(offset, true); offset += 2;
+          const speed  = data.getInt16(offset, true); offset += 2;
+          const jump   = data.getInt16(offset, true); offset += 2;
+          offset += 2; // unk short
+          const upgradeSlots = data.getUint8(offset); offset += 1;
+          const itemLevel    = data.getUint8(offset); offset += 1;
+          offset += 2; // itemExp
+          offset += 2; // viciousHammer
+          offset += 1; // itemState
+          offset += 1; // covered
+          offset += 8; // crafterAccountId (long)
+          MyCharacter.inventory.equip.push({ itemId, slot: slotId, quantity: 1,
+            str, dex, int: int_, luk, hp, mp, wAtk, mAtk, wDef, mDef,
+            acc, avoid, hands, speed, jump, upgradeSlots, itemLevel } as any);
         } else {
           const quantity = data.getInt16(offset, true); offset += 2;
           offset += 2; // flags
@@ -125,6 +161,24 @@ export class SetFieldHandler extends PacketHandler {
         slotId = data.getInt8(offset); offset += 1;
       }
     }
+    return offset;
+  }
+
+  private parseSkills(data: DataView, offset: number): number {
+    const count = data.getInt16(offset, true); offset += 2;
+    skillLevels.clear();
+    for (let i = 0; i < count; i++) {
+      const skillId = data.getInt32(offset, true); offset += 4;
+      const level   = data.getInt32(offset, true); offset += 4;
+      offset += 8; // expiration (long)
+      if (isFourthJobSkill(skillId)) {
+        offset += 4; // masterLevel
+      }
+      if (level > 0) skillLevels.set(skillId, level);
+    }
+    // Cooldowns
+    const cooldownCount = data.getInt16(offset, true); offset += 2;
+    offset += cooldownCount * 6; // skillId (int) + remaining (short) each
     return offset;
   }
 

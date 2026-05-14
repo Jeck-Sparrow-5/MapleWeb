@@ -33,10 +33,36 @@ export class InventoryOperationHandler extends PacketHandler {
         case 0: { // ADD
           const itemId = data.getInt32(offset, true); offset += 4;
           if (invType === 1) {
-            // equip item — skip full equip stats blob
-            offset += 1 + 8; // isCash + expiration
-            offset += 35;    // equip stats (approximate)
-            tab?.push({ itemId, slot, quantity: 1 } as any);
+            const isCash = data.getUint8(offset); offset += 1;
+            if (isCash) offset += 8; // unique id
+            offset += 8; // expiration
+            // Equip stats: 15 shorts + 1 short(unk) + 2 bytes + 2 shorts + 2 bytes + 8 bytes = 48
+            const str   = data.getInt16(offset, true); offset += 2;
+            const dex   = data.getInt16(offset, true); offset += 2;
+            const int_  = data.getInt16(offset, true); offset += 2;
+            const luk   = data.getInt16(offset, true); offset += 2;
+            const hp    = data.getInt16(offset, true); offset += 2;
+            const mp    = data.getInt16(offset, true); offset += 2;
+            const wAtk  = data.getInt16(offset, true); offset += 2;
+            const mAtk  = data.getInt16(offset, true); offset += 2;
+            const wDef  = data.getInt16(offset, true); offset += 2;
+            const mDef  = data.getInt16(offset, true); offset += 2;
+            const acc   = data.getInt16(offset, true); offset += 2;
+            const avoid = data.getInt16(offset, true); offset += 2;
+            const hands = data.getInt16(offset, true); offset += 2;
+            const speed = data.getInt16(offset, true); offset += 2;
+            const jump  = data.getInt16(offset, true); offset += 2;
+            offset += 2; // unk short
+            const upgradeSlots = data.getUint8(offset); offset += 1;
+            const itemLevel    = data.getUint8(offset); offset += 1;
+            offset += 2; // itemExp
+            offset += 2; // viciousHammer
+            offset += 1; // itemState
+            offset += 1; // covered
+            offset += 8; // crafterAccountId
+            tab?.push({ itemId, slot, quantity: 1,
+              str, dex, int: int_, luk, hp, mp, wAtk, mAtk, wDef, mDef,
+              acc, avoid, hands, speed, jump, upgradeSlots, itemLevel } as any);
           } else {
             const qty = data.getInt16(offset, true); offset += 2;
             offset += 2; // flags

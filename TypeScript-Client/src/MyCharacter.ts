@@ -8,26 +8,26 @@ import Item from "./Inventory/Item";
 
 const MyCharacter = new MapleCharacter({
   name: "Player",
-  hp: 10000,          // starting health points
-  maxHp: 50,       // maximum health at level 1
-  mp: 5,           // starting magic points
-  maxMp: 5,        // maximum magic points at level 1
-  Hair: 30030,     // initial hair id (example value)
-  exp: 0,          // starting experience
-  fame: 0,         // starting fame
+  hp: 50,
+  maxHp: 50,
+  mp: 5,
+  maxMp: 5,
+  Hair: 30030,
+  exp: 0,
+  fame: 0,
   inventory: new Inventory({
-    mesos: 100,    // starting mesos
+    mesos: 0,
   }),
   stats: new Stats({
-    str: 500,
-    dex: 500,
+    str: 4,
+    dex: 4,
     int: 4,
     luk: 4,
     abilityPoints: 0,
     maxHp: 50,
     maxMp: 5,
-    jobType: JobsMainType.Beginner, // beginner job type
-    job: "Beginner",                // beginner job order (using a literal here)
+    jobType: JobsMainType.Beginner,
+    job: "Beginner",
     level: 1,
   }),
 });

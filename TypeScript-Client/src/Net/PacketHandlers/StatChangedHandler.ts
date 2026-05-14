@@ -37,7 +37,7 @@ export class StatChangedHandler extends PacketHandler {
     if (mask & STAT.FACE)   { MyCharacter.face      = data.getInt32(offset, true); offset += 4; }
     if (mask & STAT.HAIR)   { MyCharacter.Hair      = data.getInt32(offset, true); offset += 4; }
     if (mask & STAT.LEVEL)  { MyCharacter.stats.level = data.getInt8(offset); offset += 1; }
-    if (mask & STAT.JOB)    { /* job = */ data.getInt16(offset, true); offset += 2; }
+    if (mask & STAT.JOB)    { MyCharacter.job = data.getInt16(offset, true); offset += 2; }
     if (mask & STAT.STR)    { MyCharacter.stats.str = data.getInt16(offset, true); offset += 2; }
     if (mask & STAT.DEX)    { MyCharacter.stats.dex = data.getInt16(offset, true); offset += 2; }
     if (mask & STAT.INT)    { MyCharacter.stats.int = data.getInt16(offset, true); offset += 2; }

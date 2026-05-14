@@ -611,6 +611,11 @@ UILogin.createWorldButtons = function () {
 UILogin.doUpdate = function (msPerTick, camera, canvas) {
   UICommon.doUpdate(msPerTick);
 
+  // Route clicks to UIRaceSelect race cards (not handled by ClickManager)
+  if (canvas.clicked && !UIRaceSelect.isHidden) {
+    UIRaceSelect.onMouseDown(canvas.mouseX, canvas.mouseY);
+  }
+
   const wasScrollActive = this.scrollOpenAnimation.active;
   this.scrollOpenAnimation.update(msPerTick);
   this.uiLoginLoading?.update(msPerTick);

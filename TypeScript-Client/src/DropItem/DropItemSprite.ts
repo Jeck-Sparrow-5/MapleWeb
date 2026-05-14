@@ -112,7 +112,13 @@ class DropItemSprite {
       );
       
       try {
-        if (wzInventoryType === MapleInventory.WzInventoryType.Pet) {
+        if (wzInventoryType === MapleInventory.WzInventoryType.Eqp) {
+          const strId = `${this.id}`.padStart(8, "0");
+          const equipFile = await WZManager.get(`Character.wz/${strId}.img`);
+          this.frame = equipFile?.info?.iconRaw ?? equipFile?.info?.icon ?? null;
+          this.icon = this.frame?.nGetImage?.() ?? null;
+          if (!this.icon) { this.destroyed = true; return; }
+        } else if (wzInventoryType === MapleInventory.WzInventoryType.Pet) {
           this.itemFile = await WZManager.get(
             `${WZFiles.Item}/${wzInventoryType}/${this.id}.img`
           );
@@ -209,7 +215,7 @@ class DropItemSprite {
       this.stance = stance;
       this.frameNumber = f;
       this.delay = carryOverDelay;
-      this.nextDelay = stanceFrame.nGet("delay").nGet("nValue", 100);
+      this.nextDelay = stanceFrame.nGet("delay")?.nGet("nValue", 100) ?? 100;
     } catch (e) {
       console.error("Error in setFrame:", e);
     }

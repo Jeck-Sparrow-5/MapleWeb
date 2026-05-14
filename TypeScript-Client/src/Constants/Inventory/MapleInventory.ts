@@ -11,6 +11,7 @@ export enum MapleInventoryType {
 
 export enum WzInventoryType {
   Pet = "Pet",
+  Eqp = "Eqp",
   Install = "Install",
   Consume = "Consume",
   Etc = "Etc",
@@ -59,17 +60,14 @@ const getWzNameFromInventoryId = (id: string): WzInventoryType => {
     console.log("secondDigit", secondDigit);
 
     const secondDigitToWzInventoryType: Record<string, WzInventoryType> = {
+      1: WzInventoryType.Eqp,
       5: WzInventoryType.Cash,
       2: WzInventoryType.Consume,
       3: WzInventoryType.Install,
       4: WzInventoryType.Etc,
       9: WzInventoryType.Special,
     };
-    console.log(
-      "secondDigitToWzInventoryType[secondDigit]",
-      secondDigitToWzInventoryType[secondDigit]
-    );
-    return secondDigitToWzInventoryType[secondDigit];
+    return secondDigitToWzInventoryType[secondDigit] ?? WzInventoryType.Etc;
   }
 };
 

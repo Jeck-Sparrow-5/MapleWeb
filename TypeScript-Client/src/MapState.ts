@@ -37,10 +37,6 @@ import UIEquipInventory from "./UI/UIEquipInventory";
 import UIBuffList from "./UI/UIBuffList";
 import UIGameMenu from "./UI/UIGameMenu";
 import UIQuestLog from "./UI/UIQuestLog";
-import TouchJoyStick, {
-  JoyStick,
-  JoyStickDirections,
-} from "./UI/TouchJoyStick";
 
 // henesys 100000000
 // 100020100 - maps with pigs - useful to test fast things with mobs
@@ -51,8 +47,6 @@ const defaultMap = 100000000; // henesys
 
 export interface MapState extends UIState {
   changeMap: (map: number) => Promise<void>;
-  isTouchControllsEnabled: boolean;
-  joyStick: JoyStick;
   statsMenu: StatsMenuSprite;
   inventoryMenu: InventoryMenuSprite;
   quitDialog: typeof UIQuit;
@@ -102,20 +96,11 @@ MapStateInstance.changeMap = async function (map = defaultMap) {
   }
 };
 
-function isTouchDevice() {
-  return "ontouchstart" in window || navigator.maxTouchPoints > 0;
-}
-
 MapStateInstance.initialize = async function (gameCanvas?: GameCanvas) {
   // StateManager passes the GameCanvas as first arg; fall back to DOM lookup
   const canvas: GameCanvas = gameCanvas ?? (document.getElementById('game') as any);
 
   this.UIMenus = [];
-
-  this.isTouchControllsEnabled = isTouchDevice();
-  if (this.isTouchControllsEnabled) {
-    this.joyStick = TouchJoyStick.init();
-  }
 
   await UIQuit.initialize(canvas);
   this.quitDialog = UIQuit;
@@ -195,48 +180,7 @@ MapStateInstance.doUpdate = function (
   if (!!MapleMap.doneLoading) {
     MapleMap.update(msPerTick);
 
-    if (this.isTouchControllsEnabled) {
-      switch (this.joyStick.cardinalDirection) {
-        case JoyStickDirections.N:
-          MyCharacter.upClick();
-          break;
-        case JoyStickDirections.S:
-          MyCharacter.downClick();
-          break;
-        case JoyStickDirections.E:
-          MyCharacter.rightClick();
-          break;
-        case JoyStickDirections.W:
-          MyCharacter.leftClick();
-          break;
-        case JoyStickDirections.NE:
-          MyCharacter.upClick();
-          MyCharacter.rightClick();
-          break;
-        case JoyStickDirections.NW:
-          MyCharacter.upClick();
-          MyCharacter.leftClick();
-          break;
-        case JoyStickDirections.SE:
-          MyCharacter.downClick();
-          MyCharacter.rightClick();
-          break;
-        case JoyStickDirections.SW:
-          MyCharacter.downClick();
-          MyCharacter.leftClick();
-          break;
-        case JoyStickDirections.C:
-          MyCharacter.downClickRelease();
-          MyCharacter.upClickRelease();
-          MyCharacter.leftClickRelease();
-          MyCharacter.rightClickRelease();
-          break;
-        default:
-          break;
-      }
-      MyCharacter.update(msPerTick);
-    } else {
-      if (canvas.isKeyDown("up")) {
+    if (canvas.isKeyDown("up")) {
         MyCharacter.upClick();
       }
       if (canvas.isKeyDown("down")) {
@@ -333,7 +277,6 @@ MapStateInstance.doUpdate = function (
       if (!canvas.isKeyDown("right")) {
         MyCharacter.rightClickRelease();
       }
-    }
 
     // Auto-pot: use first HP potion if HP < 50%, MP potion if MP < 30%
     if (SessionManager.isConnected()) {

@@ -43,7 +43,7 @@ export default class FrameAnimation {
     this.frame = !this.frames[frame] ? 0 : frame;
 
     this.delay = carryOverDelay;
-    this.nextDelay = this.frames[this.frame].nGet("delay").nGet("nValue", 100);
+    this.nextDelay = this.frames[this.frame].nGet("delay")?.nGet("nValue", 100) ?? 100;
   }
   advanceFrame() {
     let nextFrame = this.frame + 1;

@@ -20,7 +20,17 @@
       "Read(//tmp/**)",
       "Bash(xargs -I {} basename {})",
       "Bash(cat > *)",
-      "Bash(curl -s \"https://raw.githubusercontent.com/P0nk/Cosmic/master/src/main/java/net/opcodes/SendOpcode.java\")"
+      "Bash(curl -s \"https://raw.githubusercontent.com/P0nk/Cosmic/master/src/main/java/net/opcodes/SendOpcode.java\")",
+      "Bash(xargs grep -l \"name.*check\\\\|CHECK_CHAR\" -i)",
+      "Bash(dir /s /b \"public\\\\wz_client\\\\*Login*\")",
+      "Bash(dir \"c:\\\\Users\\\\jorge\\\\OneDrive\\\\Desktop\\\\mapleweb\\\\MapleWeb\\\\TypeScript-Client\\\\public\\\\wz_client\" /b)",
+      "Bash(node -e \"const fs=require\\('fs'\\);const j=JSON.parse\\(fs.readFileSync\\('public/wz_client/UI.wz/Login.img.json','utf8'\\)\\);console.log\\(Object.keys\\(j\\).slice\\(0,30\\).join\\(', '\\)\\);\")",
+      "Bash(node -e \"const fs=require\\('fs'\\);const j=JSON.parse\\(fs.readFileSync\\('public/wz_client/UI.wz/Login.img.json','utf8'\\)\\);console.log\\(Object.keys\\(j['$$']\\).join\\(', '\\)\\);\")",
+      "Bash(node -e \"const fs=require\\('fs'\\);const raw=fs.readFileSync\\('public/wz_client/UI.wz/Login.img.json','utf8'\\);console.log\\(raw.substring\\(0,500\\)\\);\")",
+      "Bash(node -e 'const fs=require\\('\\\\''fs'\\\\''\\);const j=JSON.parse\\(fs.readFileSync\\('\\\\''public/wz_client/UI.wz/Login.img.json'\\\\'','\\\\''utf8'\\\\''\\)\\);const top=j['\\\\''__TRACKED_VAR__'\\\\''];console.log\\('\\\\''Top nodes:'\\\\'',top.map\\(n=>n['\\\\''$imgdir'\\\\'']\\).join\\('\\\\'', '\\\\''\\)\\);')",
+      "Bash(node -e ' *)",
+      "Bash(curl -s \"https://raw.githubusercontent.com/ryantpayton/HeavenClient/master/IO/UITypes/UICommonCreation.h\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/ryantpayton/HeavenClient/master/IO/UITypes/UICommonCreation.cpp\")"
     ],
     "additionalDirectories": [
       "\\tmp"

@@ -1,5 +1,4 @@
 import WZManager from "../wz-utils/WZManager";
-import WZNode from "../wz-utils/WZNode";
 
 export interface AudioManager {
   bgm: HTMLAudioElement;
@@ -7,31 +6,36 @@ export interface AudioManager {
   playBackgroundMusic: (name: string) => Promise<void>;
 }
 const Volume = 0.4;
-console.log("Background Volume", Volume);
 
 const currentAudioManager: AudioManager = {
   bgm: new Audio(),
   bgmName: "",
   playBackgroundMusic: async function (name: string) {
-    console.log(name);
     if (name !== this.bgmName) {
-      if (!!this.bgm) {
+      if (this.bgm) {
         this.bgm.pause();
         this.bgm.currentTime = 0;
       }
       this.bgmName = name;
-      if (!name) {
-        return;
-      }
+      if (!name) return;
+
       const [filename, child] = name.split("/");
       const wzNode: any = await WZManager.get(
         `Sound.wz/${filename}.img/${child}`
       );
+      if (!wzNode) return;
+
       this.bgm = wzNode.nGetAudio();
       this.bgm.loop = true;
       this.bgm.volume = Volume;
-      console.log(`Playing ${name}`);
-      this.bgm.play().catch(() => {});
+
+      const tryPlay = () => this.bgm.play().catch(() => {});
+      // Audio src is set asynchronously — play when ready
+      if (this.bgm.readyState >= 2) {
+        tryPlay();
+      } else {
+        this.bgm.addEventListener('canplay', tryPlay, { once: true });
+      }
     }
   },
 };

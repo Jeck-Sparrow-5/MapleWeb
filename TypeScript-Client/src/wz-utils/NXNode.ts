@@ -17,7 +17,13 @@ export class NXNode {
   _audioLength: number = 0;
 
   private _image: HTMLImageElement | null = null;
+  private _imageLoading = false;
   private _audio: HTMLAudioElement | null = null;
+  private _audioLoading = false;
+
+  // Shared placeholder returned before real assets load
+  static readonly _placeholder: HTMLImageElement = new Image();
+  static readonly _silentAudio: HTMLAudioElement = new Audio();
 
   nGet(key: string | number, defaultValue?: any): any {
     const k = String(key);
@@ -50,19 +56,31 @@ export class NXNode {
     return null;
   }
 
+  // Returns a placeholder image immediately, fetches real image in background.
+  // Subsequent calls return the cached image once loaded.
   nGetImage(): HTMLImageElement {
     if (this._image) return this._image;
-    if (this._reader && this._bitmapIndex >= 0) {
-      this._image = this._reader.decodeBitmap(this._bitmapIndex, this.nWidth, this.nHeight);
+    if (!this._imageLoading && this._reader && this._bitmapIndex >= 0 && this.nWidth > 0 && this.nHeight > 0) {
+      this._imageLoading = true;
+      this._reader.decodeBitmapAsync(this._bitmapIndex, this.nWidth, this.nHeight)
+        .then((img: HTMLImageElement) => { this._image = img; })
+        .catch(() => { this._imageLoading = false; });
     }
-    return this._image!;
+    return NXNode._placeholder;
   }
 
+  // Returns an audio element immediately; src is populated asynchronously.
+  // AudioManager should listen to canplay before calling play().
   nGetAudio(): HTMLAudioElement {
-    if (this._audio) return this._audio;
-    if (this._reader && this._audioIndex >= 0) {
-      this._audio = this._reader.decodeAudio(this._audioIndex, this._audioLength);
+    if (this._audio && this._audio.src) return this._audio;
+    if (!this._audioLoading && this._reader && this._audioIndex >= 0) {
+      this._audioLoading = true;
+      this._audio = this._audio ?? new Audio();
+      const target = this._audio;
+      this._reader.decodeAudioAsync(this._audioIndex, this._audioLength)
+        .then((audio: HTMLAudioElement) => { if (audio.src) target.src = audio.src; })
+        .catch(() => { this._audioLoading = false; });
     }
-    return this._audio!;
+    return this._audio ?? NXNode._silentAudio;
   }
 }

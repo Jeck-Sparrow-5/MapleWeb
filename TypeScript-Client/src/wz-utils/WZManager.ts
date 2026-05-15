@@ -19,6 +19,7 @@ function navigate(root: NXNode, parts: string[]): any {
   let node: any = root;
   for (const part of parts) {
     if (node == null) return undefined;
+    // NXNode is a Proxy — unknown property access auto-triggers child building
     node = node[part] ?? node[part.replace(/\.img$/, '')];
   }
   return node;

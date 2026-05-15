@@ -27,6 +27,9 @@ export class NXNode {
 
   nGet(key: string | number, defaultValue?: any): any {
     const k = String(key);
+    if (k in this) return this[k];
+    // Children are built lazily — trigger nChildren to populate named properties, then retry.
+    void this.nChildren;
     return k in this ? this[k] : defaultValue;
   }
 

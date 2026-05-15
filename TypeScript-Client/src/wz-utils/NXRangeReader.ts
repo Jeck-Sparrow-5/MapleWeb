@@ -185,16 +185,24 @@ export class NXRangeReader {
       enumerable: true,
     });
 
-    // For nodes with small child counts that are almost always fully iterated
-    // (animation frames, layer objects), eagerly build children now to avoid
-    // getter overhead on hot draw paths.
-    if (childCount > 0 && childCount <= 32) {
-      // Triggers the getter defined above, which builds and caches childArr
-      void node.nChildren;
-    }
+    // Proxy intercepts unknown property access and triggers lazy child building.
+    // This makes node["back"], node.info, etc. work without explicit nChildren call.
+    // Hot properties (nName, nValue, nWidth, etc.) are on the object directly so
+    // they bypass the Proxy get handler immediately.
+    const proxy = new Proxy(node, {
+      get(target: NXNode, prop: string | symbol): any {
+        if (prop in target) return (target as any)[prop];
+        if (typeof prop === 'string') {
+          // Unknown string key — may be a child name. Build children then retry.
+          void target.nChildren;
+          return (target as any)[prop];
+        }
+        return undefined;
+      },
+    }) as NXNode;
 
-    this.cache.set(i, node);
-    return node;
+    this.cache.set(i, proxy);
+    return proxy;
   }
 
   // ── Asset decoding ──────────────────────────────────────────────────────────

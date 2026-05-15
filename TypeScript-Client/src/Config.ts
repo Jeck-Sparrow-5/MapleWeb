@@ -28,26 +28,27 @@ export function enterBrowserFullscreen(): void {
 }
 
 const goFullScreen = (): void => {
-  // this requires user interaction
-  // enterBrowserFullscreen();
-  config.height = window.innerHeight;
-  config.width = window.innerWidth;
-  config.bottomSafeGap = config.height - config.originalHeight;
+  const h = window.innerHeight;
+  const w = window.innerWidth;
 
-  const gameCanvasElement = document.getElementById(
-    "game"
-  ) as HTMLCanvasElement | null;
+  // Ignore calls before the window has real dimensions
+  if (h < 100 || w < 100) return;
 
+  config.height = h;
+  config.width = w;
+  config.bottomSafeGap = h - config.originalHeight;
+
+  const gameCanvasElement = document.getElementById("game") as HTMLCanvasElement | null;
   if (gameCanvasElement) {
-    gameCanvasElement.height = config.height;
-    gameCanvasElement.width = config.width;
+    gameCanvasElement.height = h;
+    gameCanvasElement.width = w;
   }
 };
 
-// this not working dynamically yet
 window.addEventListener("resize", goFullScreen);
 
-goFullScreen();
+// Defer until layout is complete — window.innerHeight may be 0/tiny on first script eval
+requestAnimationFrame(() => goFullScreen());
 
 console.log("Config: ", config);
 

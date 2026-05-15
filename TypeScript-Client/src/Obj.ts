@@ -34,14 +34,17 @@ class Obj {
   }
   async load() {
     const wzNode = this.wzNode;
-    const oS = wzNode.oS.nValue;
-    const [l0, l1, l2] = [wzNode.l0.nValue, wzNode.l1.nValue, wzNode.l2.nValue];
+    const oS = wzNode.oS?.nValue;
+    const [l0, l1, l2] = [wzNode.l0?.nValue, wzNode.l1?.nValue, wzNode.l2?.nValue];
+    if (!oS || l0 == null || l1 == null || l2 == null) return;
     const objFile: any = await WZManager.get(`Map.wz/Obj/${oS}.img`);
-    const spriteNode: any = objFile[l0][l1][l2];
+    if (!objFile) return;
+    const spriteNode: any = objFile[l0]?.[l1]?.[l2];
+    if (!spriteNode) return;
 
     this.spriteNode = spriteNode;
     this.frames = [];
-    spriteNode.nChildren.forEach((frame: any) => {
+    (spriteNode?.nChildren ?? []).forEach((frame: any) => {
       if (frame.nTagName === "canvas" || frame.nTagName === "uol") {
         const Frame = frame.nTagName === "uol" ? frame.nResolveUOL() : frame;
         this.frames.push(Frame);

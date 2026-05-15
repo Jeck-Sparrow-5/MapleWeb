@@ -39,36 +39,41 @@ class Background {
 
     this.ani = wzNode.nGet("ani")?.nGet("nValue", 0) ?? 0;
 
-    const bS = wzNode.bS.nValue;
-    const no = wzNode.no.nValue;
+    const bS = wzNode.bS?.nValue;
+    const no = wzNode.no?.nValue ?? 0;
+    if (!bS) return;
     const backFile: any = await WZManager.get(`Map.wz/Back/${bS}.img`);
-    const spriteNode = backFile[!this.ani ? "back" : "ani"][no];
+    if (!backFile) return;
+    const spriteDir = backFile[!this.ani ? "back" : "ani"];
+    if (!spriteDir) return;
+    const spriteNode = spriteDir[no];
+    if (!spriteNode) return;
 
-    if (!this.ani) {
+    if (!this.ani && spriteNode.nTagName === "canvas") {
+      // Single static frame
       this.frames = [spriteNode];
     } else {
+      // Animated OR directory container — collect canvas/uol children as frames
       this.frames = [];
-      spriteNode.nChildren.forEach((frame: any) => {
+      spriteNode.nChildren?.forEach((frame: any) => {
         if (frame.nTagName === "canvas" || frame.nTagName === "uol") {
           const Frame = frame.nTagName === "uol" ? frame.nResolveUOL() : frame;
           this.frames.push(Frame);
-        } else {
-          console.log(`Unhandled frame=${frame.nTagName} for cls=Background`);
         }
       });
     }
 
     this.setFrame(0);
 
-    this.x = wzNode.x.nValue;
-    this.y = wzNode.y.nValue;
-    this.z = parseInt(wzNode.nName);
-    this.rx = wzNode.rx.nValue;
-    this.ry = wzNode.ry.nValue;
-    this.cx = wzNode.cx.nValue;
-    this.cy = wzNode.cy.nValue;
-    this.type = wzNode.type.nValue;
-    this.a = wzNode.a.nValue;
+    this.x = wzNode.x?.nValue ?? 0;
+    this.y = wzNode.y?.nValue ?? 0;
+    this.z = parseInt(wzNode.nName) || 0;
+    this.rx = wzNode.rx?.nValue ?? 0;
+    this.ry = wzNode.ry?.nValue ?? 0;
+    this.cx = wzNode.cx?.nValue ?? 0;
+    this.cy = wzNode.cy?.nValue ?? 0;
+    this.type = wzNode.type?.nValue ?? 0;
+    this.a = wzNode.a?.nValue ?? 255;
     this.front = wzNode.nGet("front")?.nGet("nValue", 0) ?? 0;
     this.flipped = wzNode.nGet("f")?.nGet("nValue", 0) ?? 0;
 
@@ -116,10 +121,10 @@ class Background {
     }
   }
   setFrame(frame = 0, carryOverDelay = 0) {
+    if (!this.frames.length) return;
     this.frame = !this.frames[frame] ? 0 : frame;
-
     this.delay = carryOverDelay;
-    this.nextDelay = this.frames[this.frame].nGet("delay")?.nGet("nValue", 100) ?? 100;
+    this.nextDelay = this.frames[this.frame]?.nGet("delay")?.nGet("nValue", 100) ?? 100;
   }
   update(msPerTick: number) {
     this.delay += msPerTick;
@@ -134,8 +139,11 @@ class Background {
     msPerTick: number,
     tdelta: number
   ) {
+    if (!this.frames.length) return;
+
     const firstFrame = this.frames[0];
     const currentFrame = this.frames[this.frame];
+    if (!currentFrame) return;
     const currentImage = currentFrame.nGetImage();
     let dx = this.x;
     let dy = this.y;
@@ -143,7 +151,7 @@ class Background {
     if (this.velocityX !== 0) {
       dx += (tdelta * this.rx) / 200 - camera.x;
     } else {
-      const wOffset = config.width / 2;
+      const wOffset = config.originalWidth / 2;
       const shiftX = (this.rx * (camera.x + wOffset)) / 100 + wOffset;
       dx += shiftX;
     }
@@ -151,7 +159,7 @@ class Background {
     if (this.velocityY !== 0) {
       dy += (tdelta * this.ry) / 200 - camera.y;
     } else {
-      const hOffset = config.height / 2;
+      const hOffset = config.originalHeight / 2;
       const shiftY = (this.ry * (camera.y + hOffset)) / 100 + hOffset;
       dy += shiftY;
     }

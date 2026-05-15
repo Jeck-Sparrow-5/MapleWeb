@@ -37,7 +37,7 @@ export default class UILoginLoading {
     this.y = opts.y;
 
     this.uiLoginLoading = await WZManager.get('UI.wz/Login.img/Notice/Loading');
-    this.barAnimation = new FrameAnimation(this.uiLoginLoading.bar, this.x + 130, this.y + 98, true, true);
+    this.barAnimation = new FrameAnimation(this.uiLoginLoading?.bar, this.x + 130, this.y + 98, true, true);
     this.loadButtons();
   }
 
@@ -51,7 +51,7 @@ export default class UILoginLoading {
       y: this.y + 40,
       isRelativeToCamera: true,
       isPartOfUI: true,
-      img: this.uiLoginLoading.BtCancel.nChildren,
+      img: this.uiLoginLoading?.BtCancel?.nChildren ?? [],
       onClick: () => {
         typeof this.cancelHandler === 'function' && this.cancelHandler();
       },
@@ -77,7 +77,7 @@ export default class UILoginLoading {
       return;
     }
     canvas.drawImage({
-      img: this.uiLoginLoading.backgrnd.nGetImage(),
+      img: this.uiLoginLoading?.backgrnd?.nGetImage(),
       dx: this.x,
       dy: this.y,
     });

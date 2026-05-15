@@ -59,7 +59,7 @@ class Portal {
         const spritePath = `${basePath}/pv`;
         const spriteNode: any = await WZManager.get(spritePath);
 
-        this.frames = spriteNode.nChildren;
+        this.frames = spriteNode?.nChildren ?? [];
 
         this.isNormalPortal = true;
         break;
@@ -73,7 +73,7 @@ class Portal {
         const spritePath = `${basePath}/pv`;
         const spriteNode: any = await WZManager.get(spritePath);
 
-        this.frames = spriteNode.nChildren;
+        this.frames = spriteNode?.nChildren ?? [];
         break;
       }
       case 5: {
@@ -89,7 +89,7 @@ class Portal {
         const spritePath = `${basePath}/pv`;
         const spriteNode: any = await WZManager.get(spritePath);
 
-        this.frames = spriteNode.nChildren;
+        this.frames = spriteNode?.nChildren ?? [];
         break;
       }
       case 8: {
@@ -105,7 +105,7 @@ class Portal {
         const spritePath = `${basePath}/ph/default/portalContinue`;
         const spriteNode: any = await WZManager.get(spritePath);
 
-        this.frames = spriteNode.nChildren;
+        this.frames = spriteNode?.nChildren ?? [];
         break;
       }
       case 11: {
@@ -113,7 +113,7 @@ class Portal {
         const spritePath = `${basePath}/psh/${this.image}/portalContinue`;
         const spriteNode: any = await WZManager.get(spritePath);
 
-        this.frames = spriteNode.nChildren;
+        this.frames = spriteNode?.nChildren ?? [];
         break;
       }
     }

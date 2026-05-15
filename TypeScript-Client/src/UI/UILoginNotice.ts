@@ -109,7 +109,7 @@ export default class UILoginNotice {
       y: this.y + 150,
       isRelativeToCamera: true,
       isPartOfUI: true,
-      img: this.uiLoginNotice.BtYes.nChildren,
+      img: this.uiLoginNotice?.BtYes?.nChildren ?? [],
       onClick: () => {
         this.setIsHidden(true);
       },
@@ -131,13 +131,13 @@ export default class UILoginNotice {
       return;
     }
     canvas.drawImage({
-      img: this.uiLoginNotice.backgrnd.nGet(this.noticeType).nGetImage(),
+      img: this.uiLoginNotice?.backgrnd?.nGet(this.noticeType)?.nGetImage(),
       dx: this.x,
       dy: this.y,
     });
-    if (this.noticeMessage && this.uiLoginNotice.text.nGet(this.noticeMessage)) {
+    if (this.noticeMessage && this.uiLoginNotice?.text?.nGet(this.noticeMessage)) {
       canvas.drawImage({
-        img: this.uiLoginNotice.text.nGet(this.noticeMessage).nGetImage(),
+        img: this.uiLoginNotice?.text?.nGet(this.noticeMessage)?.nGetImage(),
         dx: this.x + 125,
         dy: this.y + 25,
       });

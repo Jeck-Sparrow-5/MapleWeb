@@ -73,7 +73,7 @@ class InventoryMenuSprite extends DragableMenu {
       return;
     }
     try {
-      this.fullBackgroundImage = this.inventoryNode.FullBackgrnd.nGetImage();
+      this.fullBackgroundImage = this.inventoryNode?.FullBackgrnd?.nGetImage();
     } catch (e) {
       console.error("Error loading inventory background:", e);
     }
@@ -177,7 +177,7 @@ class InventoryMenuSprite extends DragableMenu {
         // Draw slot background (using .wz file image if available)
         if (this.inventoryNode && this.inventoryNode.SlotBackgrnd) {
           try {
-            const slotImg = this.inventoryNode.SlotBackgrnd.nGetImage();
+            const slotImg = this.inventoryNode?.SlotBackgrnd?.nGetImage();
             canvas.drawImage({
               img: slotImg,
               dx: slotX,
@@ -279,8 +279,8 @@ class InventoryMenuSprite extends DragableMenu {
       if (this.inventoryNode && this.inventoryNode.Tab) {
         try {
           const tabImg = isActive
-            ? this.inventoryNode.Tab.tabSelected.nGetImage()
-            : this.inventoryNode.Tab.tabNormal.nGetImage();
+            ? this.inventoryNode?.Tab?.tabSelected?.nGetImage()
+            : this.inventoryNode?.Tab?.tabNormal?.nGetImage();
           canvas.drawImage({
             img: tabImg,
             dx: tabX,
@@ -501,15 +501,13 @@ class InventoryMenuSprite extends DragableMenu {
   loadButtons(canvas: GameCanvas) {
     try {
       if (
-        this.inventoryNode &&
-        this.inventoryNode.BtCoin &&
-        this.inventoryNode.BtCoin.nChildren &&
-        this.inventoryNode.BtCoin.nChildren.length > 0
+        this.inventoryNode?.BtCoin?.nChildren &&
+        this.inventoryNode?.BtCoin?.nChildren.length > 0
       ) {
         const dropMesoButton = new MapleStanceButton(canvas, {
           x: this.x + 8,
           y: this.y + 267,
-          img: this.inventoryNode.BtCoin.nChildren,
+          img: this.inventoryNode?.BtCoin?.nChildren,
           isRelativeToCamera: true,
           isPartOfUI: true,
           onClick: async () => {
@@ -530,7 +528,7 @@ class InventoryMenuSprite extends DragableMenu {
       if (this.inventoryNode?.BtSortNormal) {
         const sortBtn = new MapleStanceButton(canvas, {
           x: this.x + 130, y: this.y + 267,
-          img: this.inventoryNode.BtSortNormal.nChildren,
+          img: this.inventoryNode?.BtSortNormal?.nChildren ?? [],
           isRelativeToCamera: true, isPartOfUI: true,
           onClick: () => {
             if (SessionManager.isConnected()) {
@@ -548,7 +546,7 @@ class InventoryMenuSprite extends DragableMenu {
       if (this.inventoryNode?.BtGather) {
         const gatherBtn = new MapleStanceButton(canvas, {
           x: this.x + 100, y: this.y + 267,
-          img: this.inventoryNode.BtGather.nChildren,
+          img: this.inventoryNode?.BtGather?.nChildren ?? [],
           isRelativeToCamera: true, isPartOfUI: true,
           onClick: () => {
             if (SessionManager.isConnected()) {

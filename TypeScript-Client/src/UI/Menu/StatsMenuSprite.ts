@@ -62,8 +62,8 @@ class StatsMenuSprite extends DragableMenu {
     return {
       x: this.x,
       y: this.y,
-      width: this.StatsNode.backgrnd.nGetImage().width,
-      height: this.StatsNode.backgrnd.nGetImage().height,
+      width: this.StatsNode?.backgrnd?.nGetImage()?.width ?? 0,
+      height: this.StatsNode?.backgrnd?.nGetImage()?.height ?? 0,
     };
   }
 
@@ -94,12 +94,12 @@ class StatsMenuSprite extends DragableMenu {
 
     this.generalMenuSprites.push(
       await GeneralMenuSprite.fromOpts({
-        wzImage: this.StatsNode.backgrnd2,
-        x: this.x + this.StatsNode.backgrnd.nGetImage().width - 10,
+        wzImage: this.StatsNode?.backgrnd2,
+        x: this.x + (this.StatsNode?.backgrnd?.nGetImage()?.width ?? 0) - 10,
         y:
           this.y +
-          this.StatsNode.backgrnd.nGetImage().height -
-          this.StatsNode.backgrnd2.nGetImage().height,
+          (this.StatsNode?.backgrnd?.nGetImage()?.height ?? 0) -
+          (this.StatsNode?.backgrnd2?.nGetImage()?.height ?? 0),
         z: 0,
       })
     );
@@ -290,7 +290,7 @@ class StatsMenuSprite extends DragableMenu {
     const strButton = new MapleStanceButton(canvas, {
       x: this.x + 152,
       y: this.y + 247,
-      img: this.StatsNode.BtApUp.nChildren,
+      img: this.StatsNode?.BtApUp?.nChildren ?? [],
       isRelativeToCamera: true,
       isPartOfUI: true,
       onClick: () => {
@@ -303,7 +303,7 @@ class StatsMenuSprite extends DragableMenu {
     const dexButton = new MapleStanceButton(canvas, {
       x: this.x + 152,
       y: this.y + 265,
-      img: this.StatsNode.BtApUp.nChildren,
+      img: this.StatsNode?.BtApUp?.nChildren ?? [],
       isRelativeToCamera: true,
       isPartOfUI: true,
       onClick: () => {
@@ -316,7 +316,7 @@ class StatsMenuSprite extends DragableMenu {
     const intButton = new MapleStanceButton(canvas, {
       x: this.x + 152,
       y: this.y + 283,
-      img: this.StatsNode.BtApUp.nChildren,
+      img: this.StatsNode?.BtApUp?.nChildren ?? [],
       isRelativeToCamera: true,
       isPartOfUI: true,
       onClick: () => {
@@ -329,7 +329,7 @@ class StatsMenuSprite extends DragableMenu {
     const lukButton = new MapleStanceButton(canvas, {
       x: this.x + 152,
       y: this.y + 301,
-      img: this.StatsNode.BtApUp.nChildren,
+      img: this.StatsNode?.BtApUp?.nChildren ?? [],
       isRelativeToCamera: true,
       isPartOfUI: true,
       onClick: () => {

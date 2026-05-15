@@ -93,21 +93,21 @@ class Monster {
 
     let strId = `${this.id}`.padStart(7, "0");
     let mobFile: any = await WZManager.get(`${WZFiles.Mob}/${strId}.img`);
-    if (!!mobFile.info.link) {
+    if (mobFile?.info?.link) {
       const linkId = mobFile.info.link.nValue;
       strId = `${linkId}`.padStart(7, "0");
       mobFile = await WZManager.get(`${WZFiles.Mob}/${strId}.img`);
     }
     this.mobFile = mobFile;
     // console.log("mobFile", mobFile);
-    this.pos = new Physics(opts.x, opts.y, mobFile.info.speed.nValue);
+    this.pos = new Physics(opts.x, opts.y, mobFile.info?.speed?.nValue ?? 100);
     this.jumpProbability = 0.05;
     this.lastDirectionChangeTime = 0;
     this.delayBetweenDirectionChange = 300;
     this.randomInitialDirection();
 
     this.isBoss = false;
-    if (mobFile.info.boss && mobFile.info.boss.nValue === 1) {
+    if (mobFile.info?.boss?.nValue === 1) {
       this.isBoss = true;
     }
 
@@ -141,8 +141,8 @@ class Monster {
     this.isShotHpBar = false;
     this.afterHitShowHpBarTimer = null;
 
-    this.maxHp = this.mobFile.info.maxHP.nValue;
-    this.maxMp = this.mobFile.info.maxMP.nValue;
+    this.maxHp = this.mobFile.info?.maxHP?.nValue ?? 1;
+    this.maxMp = this.mobFile.info?.maxMP?.nValue ?? 0;
     this.hp = this.maxHp;
     this.mp = this.maxMp;
     // await WZManager.get("String.wz/Map.img");
@@ -251,7 +251,7 @@ async addDrops() {
 
     const frames: any = [];
 
-    wzNode[stance].nChildren.forEach((frame: any) => {
+    (wzNode[stance]?.nChildren ?? []).forEach((frame: any) => {
       if (frame.nTagName === "canvas" || frame.nTagName === "uol") {
         const Frame = frame.nTagName === "uol" ? frame.nResolveUOL() : frame;
         frames.push(Frame);
@@ -291,7 +291,7 @@ async addDrops() {
 
     // Award experience to the player who killed the monster
     if (responsibleMapleCharacter) {
-      responsibleMapleCharacter.addExp(this.mobFile.info.exp.nValue);
+      responsibleMapleCharacter.addExp(this.mobFile.info?.exp?.nValue ?? 0);
     }
   }
 
@@ -321,7 +321,7 @@ async addDrops() {
     if (this.stance !== stance) {
       this.stance = stance;
       this.stances = {};
-      this.mobFile.nChildren
+      (this.mobFile?.nChildren ?? [])
         .filter((c: any) => c.nName !== "info")
         .forEach((stance: any) => {
           this.stances[stance.nName] = this.loadStance(
@@ -548,7 +548,7 @@ async addDrops() {
     });
     canvas.drawText(nameOpts);
 
-    const monsterLevel = this.mobFile.info.level.nValue;
+    const monsterLevel = this.mobFile.info?.level?.nValue ?? 0;
     const levelTagText = `lv,${monsterLevel}`;
     const levelGapFromName = 2;
     const levelOpts = {

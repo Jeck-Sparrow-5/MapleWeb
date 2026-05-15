@@ -263,31 +263,26 @@ class GameCanvas {
     const ry = opts.ry !== undefined ? opts.ry : effectiveHeight / 2;
 
     this.context.save();
+    try {
+      this.context.globalAlpha = alpha;
 
-    this.context.globalAlpha = alpha;
+      this.context.translate(dx + rx, dy + ry);
+      this.context.rotate(((angle % 360) * Math.PI) / 180);
+      this.context.translate(-rx, -ry);
 
-    this.context.translate(dx + rx, dy + ry);
-    this.context.rotate(((angle % 360) * Math.PI) / 180);
-    this.context.translate(-rx, -ry);
+      if (flipped) {
+        this.context.translate((img.width * scaleX * sw) / img.width, 0);
+        this.context.scale(-1, 1);
+      }
 
-    if (flipped) {
-      this.context.translate((img.width * scaleX * sw) / img.width, 0);
-      this.context.scale(-1, 1);
+      if (sw > 0 && sh > 0) {
+        this.context.drawImage(img, sx, sy, sw, sh, 0, 0, effectiveWidth, effectiveHeight);
+      }
+    } catch (e) {
+      console.warn('[canvas] drawImage failed:', e, 'img:', img, 'sw:', sw, 'sh:', sh);
+    } finally {
+      this.context.restore();
     }
-
-    this.context.drawImage(
-      img,
-      sx,
-      sy,
-      sw,
-      sh,
-      0,
-      0,
-      effectiveWidth,
-      effectiveHeight
-    );
-
-    this.context.restore();
   }
 
   /**

@@ -34,7 +34,15 @@
       "Read(//c/Users/jorge/OneDrive/Desktop/wz2nx-convertor-master/wz2nx-convertor-master/**)",
       "Read(//c/Users/jorge/OneDrive/Desktop/NoLifeWzToNx-master/NoLifeWzToNx-master/**)",
       "PowerShell(Get-ChildItem \"c:\\\\Users\\\\jorge\\\\OneDrive\\\\Desktop\\\\NoLifeWzToNx-master\\\\NoLifeWzToNx-master\" -Recurse | Select-Object FullName, @{N='MB';E={[math]::Round\\($_.Length/1MB,1\\)}} | Where-Object {$_.MB -gt 0})",
-      "PowerShell(Get-ChildItem \"c:\\\\Users\\\\jorge\\\\OneDrive\\\\Desktop\\\\NoLifeWzToNx-master\\\\NoLifeWzToNx-master\\\\files\" | Select-Object Name, @{N='MB';E={[math]::Round\\($_.Length/1MB,1\\)}} | Format-Table -AutoSize)"
+      "PowerShell(Get-ChildItem \"c:\\\\Users\\\\jorge\\\\OneDrive\\\\Desktop\\\\NoLifeWzToNx-master\\\\NoLifeWzToNx-master\\\\files\" | Select-Object Name, @{N='MB';E={[math]::Round\\($_.Length/1MB,1\\)}} | Format-Table -AutoSize)",
+      "Bash(grep -v \"//.*nGet\\\\|nGet.*nGet\\\\?\\\\.\")",
+      "Bash(grep -v \"wz-utils/\\\\|//\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/ryantpayton/MapleStory-Client/master/IO/UITypes/UIRaceSelect.cpp\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/ryantpayton/MapleStory-Client/master/IO/UITypes/UIRaceSelect.h\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/ryantpayton/MapleStory-Client/master/IO/UITypes/UIExplorerCreation.cpp\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/ryantpayton/MapleStory-Client/master/IO/UITypes/UIExplorerCreation.h\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/ryantpayton/MapleStory-Client/master/IO/UITypes/UICommonCreation.cpp\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/ryantpayton/MapleStory-Client/master/IO/UITypes/UICommonCreation.h\")"
     ],
     "additionalDirectories": [
       "\\tmp",

@@ -91,7 +91,7 @@ MapleMap.load = async function (id: number | string) {
     filename = `Map.wz/Map/Map${prefix}/${strId}.img`;
   }
   this.wzNode = await WZManager.get(filename);
-  this.isTown = !!this.wzNode.info.town.nValue;
+  this.isTown = !!this.wzNode.info?.town?.nValue;
   console.log(`is town: ${this.isTown}`);
   console.log("Map WZ Node:", this.wzNode);
   // Clear previous map entities
@@ -190,9 +190,9 @@ MapleMap.addItemDrop = function (itemDrop) {
 MapleMap.loadFootholds = function (wzNode) {
   const footholds: any = {};
 
-  wzNode.nChildren.forEach((layer: any) => {
-    layer.nChildren.forEach((group: any) => {
-      group.nChildren.forEach((fhNode: any) => {
+  (wzNode?.nChildren ?? []).forEach((layer: any) => {
+    (layer?.nChildren ?? []).forEach((group: any) => {
+      (group?.nChildren ?? []).forEach((fhNode: any) => {
         const fh = Foothold.fromWzNode(fhNode);
         footholds[fh.id] = fh;
       });
@@ -238,12 +238,14 @@ MapleMap.getLocationAboveRandomFoothold = function () {
 MapleMap.loadBackgrounds = async function (wzNode) {
   const backgrounds = [];
 
-  for (const backNode of wzNode.nChildren) {
-    if (!backNode.bS.nValue) {
+  for (const backNode of (wzNode?.nChildren ?? [])) {
+    if (!backNode.bS?.nValue) {
       continue;
     }
-    const bg = await Background.fromWzNode(backNode);
-    backgrounds.push(bg);
+    try {
+      const bg = await Background.fromWzNode(backNode);
+      backgrounds.push(bg);
+    } catch (_) {}
   }
 
   backgrounds.sort((a, b) => a.z - b.z);
@@ -273,7 +275,7 @@ MapleMap.loadPortals = async function (wzNode) {
     walkMapNames(strMap);
   } catch (_) {}
 
-  for (const portalNode of wzNode.nChildren) {
+  for (const portalNode of (wzNode?.nChildren ?? [])) {
     const portal = await Portal.fromWzNode(portalNode);
     if (portal.toMap > 0 && mapNames[portal.toMap]) {
       (portal as any).toMapName = mapNames[portal.toMap];
@@ -323,7 +325,7 @@ MapleMap.loadNames = async function (id: number) {
 MapleMap.loadTiles = async function (wzNode) {
   const tiles = [];
   for (let layer = 0; layer <= 7; layer += 1) {
-    for (const tileNode of wzNode[layer].tile.nChildren) {
+    for (const tileNode of (wzNode[layer]?.tile?.nChildren ?? [])) {
       const tile = await Tile.fromWzNode(tileNode);
       tile.layer = layer;
       tiles.push(tile);
@@ -339,7 +341,7 @@ MapleMap.loadObjects = async function (wzNode) {
   const objects = [];
 
   for (let layer = 0; layer <= 7; layer += 1) {
-    for (const objNode of wzNode[layer].obj.nChildren) {
+    for (const objNode of (wzNode[layer]?.obj?.nChildren ?? [])) {
       const obj = await Obj.fromWzNode(objNode);
       obj.layer = layer;
       objects.push(obj);
@@ -370,8 +372,8 @@ let currentMonsters: Monster[] = [];
 MapleMap.loadMonsters = async function (wzNode) {
   footholds = this.footholds;
 
-  for (const mobNode of wzNode.nChildren.filter(
-    (n: any) => n.type.nValue === "m"
+  for (const mobNode of (wzNode?.nChildren ?? []).filter(
+    (n: any) => n.type?.nValue === "m"
   )) {
     console.log("mobNode", mobNode);
     await this.spawnMonster({
@@ -403,15 +405,15 @@ MapleMap.spawnNPC = async function (opts = {}) {
 };
 
 MapleMap.loadNPCs = async function (wzNode) {
-  for (const npcNode of wzNode.nChildren.filter(
-    (n: any) => n.type.nValue === "n"
+  for (const npcNode of (wzNode?.nChildren ?? []).filter(
+    (n: any) => n.type?.nValue === "n"
   )) {
     await this.spawnNPC({
       oId: null,
       id: npcNode.id.nValue,
       x: npcNode.x.nValue,
       cy: npcNode.cy.nValue,
-      f: npcNode.nGet("f").nGet("nValue", 0),
+      f: npcNode.nGet("f")?.nGet("nValue", 0) ?? 0,
       fh: npcNode.fh.nValue
     });
   }
@@ -420,10 +422,10 @@ MapleMap.loadNPCs = async function (wzNode) {
 MapleMap.loadBoundaries = function (wzNode, footholds) {
   if ("VRLeft" in wzNode.info) {
     return {
-      left: wzNode.info.VRLeft.nValue,
-      right: wzNode.info.VRRight.nValue,
-      top: wzNode.info.VRTop.nValue,
-      bottom: wzNode.info.VRBottom.nValue,
+      left: wzNode.info?.VRLeft?.nValue ?? 0,
+      right: wzNode.info?.VRRight?.nValue ?? 0,
+      top: wzNode.info?.VRTop?.nValue ?? 0,
+      bottom: wzNode.info?.VRBottom?.nValue ?? 0,
     };
   }
 
@@ -450,7 +452,7 @@ MapleMap.getNearbyTownMapId = function () {
     return this.id;
   }
   console.log(this.wzNode);
-  return this.wzNode.info.returnMap.nValue;
+  return this.wzNode.info?.returnMap?.nValue;
 };
 
 MapleMap.update = function (msPerTick) {

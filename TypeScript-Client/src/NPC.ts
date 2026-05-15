@@ -60,7 +60,7 @@ class NPC {
 
     let strId = `${this.id}`.padStart(7, "0");
     let npcFile: any = await WZManager.get(`Npc.wz/${strId}.img`);
-    if (!!npcFile.info.link) {
+    if (npcFile?.info?.link) {
       const linkId = npcFile.info.link.nValue;
       strId = `${linkId}`.padStart(7, "0");
       npcFile = await WZManager.get(`Npc.wz/${strId}.img`);
@@ -68,7 +68,7 @@ class NPC {
     this.npcFile = npcFile;
 
     this.stances = {};
-    npcFile.nChildren
+    (npcFile?.nChildren ?? [])
       .filter((c: any) => c.nName !== "info")
       .forEach((stance: any) => {
         this.stances[stance.nName] = this.loadStance(npcFile, stance.nName);
@@ -79,28 +79,28 @@ class NPC {
     // Optionally, if your NPC WZ data has a "speak" node,
     // you might want to store it in this.strings.speak. For example:
     if (npcFile.nGet("speak")) {
-      this.strings.speak = npcFile.nGet("speak").nGet("nValue", "Hello!");
+      this.strings.speak = npcFile.nGet("speak")?.nGet("nValue", "Hello!") ?? "Hello!";
     }
 
     this.floating = npcFile.info.nGet("float")?.nGet("nValue", 0) ?? 0;
 
     this.mapleTv = npcFile.info.nGet("MapleTV")?.nGet("nValue", 0) ?? 0;
     if (!!this.mapleTv) {
-      this.mapleTvAdX = npcFile.info.MapleTVadX.nValue;
-      this.mapleTvAdY = npcFile.info.MapleTVadY.nValue;
-      this.mapleTvMsgX = npcFile.info.MapleTVmsgX.nValue;
-      this.mapleTvMsgY = npcFile.info.MapleTVmsgY.nValue;
+      this.mapleTvAdX = npcFile.info?.MapleTVadX?.nValue ?? 0;
+      this.mapleTvAdY = npcFile.info?.MapleTVadY?.nValue ?? 0;
+      this.mapleTvMsgX = npcFile.info?.MapleTVmsgX?.nValue ?? 0;
+      this.mapleTvMsgY = npcFile.info?.MapleTVmsgY?.nValue ?? 0;
 
       const tvFile: any = await WZManager.get("UI.wz/MapleTV.img");
       const tvMsg = tvFile.TVmedia;
 
-      this.tvAdStances = tvMsg.nChildren.map((stance: any, i: number) => {
+      this.tvAdStances = (tvMsg?.nChildren ?? []).map((stance: any, i: number) => {
         return this.loadStance(tvMsg, i.toString());
       });
 
       this.setTvAdFrame(Random.randInt(0, this.tvAdStances.length - 1), 0);
 
-      this.mapleTvMsgImg = tvFile.TVbasic[0].nGetImage();
+      this.mapleTvMsgImg = tvFile?.TVbasic?.[0]?.nGetImage();
     }
 
     this.setFrame("stand", 0);
@@ -108,8 +108,8 @@ class NPC {
   
   async loadStrings(id: number) {
     const stringFile: any = await WZManager.get("String.wz/Npc.img");
-    const npcStrings = stringFile.nGet(id);
-    return npcStrings.nChildren.reduce((acc: any, c: any) => {
+    const npcStrings = stringFile?.nGet(id);
+    return (npcStrings?.nChildren ?? []).reduce((acc: any, c: any) => {
       acc[c.nName] = c.nValue;
       return acc;
     }, {});
@@ -129,7 +129,7 @@ class NPC {
 
     const frames: any = [];
 
-    wzNode[stance].nChildren.forEach((frame: any) => {
+    (wzNode[stance]?.nChildren ?? []).forEach((frame: any) => {
       if (frame.nTagName === "canvas" || frame.nTagName === "uol") {
         const Frame = frame.nTagName === "uol" ? frame.nResolveUOL() : frame;
         frames.push(Frame);

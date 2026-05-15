@@ -20,7 +20,7 @@ export default class FrameAnimation {
     this.isRelativeToCamera = isRelativeToCamera;
     this.repeat = repeat;
     const frameIds = [];
-    for (const child of wzNode.nChildren) {
+    for (const child of wzNode?.nChildren ?? []) {
       const id = Number.parseInt(child.nName);
       if (Number.isNaN(id)) {
         continue;
@@ -33,7 +33,7 @@ export default class FrameAnimation {
       this.frames.push(wzNode.nGet(id));
     });
 
-    this.zigzag = wzNode.nGet('zigzag')?.nValue === '1';
+    this.zigzag = wzNode?.nGet('zigzag')?.nValue === '1';
     this.x = x;
     this.y = y;
     this.setFrame(0);
@@ -71,8 +71,8 @@ export default class FrameAnimation {
     msPerTick: number,
     tdelta: number
   ) {
-    // const firstFrame = this.frames[0];
     const currentFrame = this.frames[this.frame];
+    if (!currentFrame) return;
     const currentImage = currentFrame.nGetImage();
     let dx = this.x;
     let dy = this.y;

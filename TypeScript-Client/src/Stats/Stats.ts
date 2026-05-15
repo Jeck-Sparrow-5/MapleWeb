@@ -91,10 +91,10 @@ class Stats {
     let weaponAttack = 0;
     equips.forEach((equipe) => {
       if (equipe.info.incPAD != null) {
-        weaponAttack += equipe.info.incPAD.nValue;
+        weaponAttack += equipe.info?.incPAD?.nValue ?? 0;
       }
       if (equipe.info.attack != null) {
-        weaponAttack += equipe.info.attack.nValue;
+        weaponAttack += equipe.info?.attack?.nValue ?? 0;
       }
     });
 
@@ -234,7 +234,7 @@ class Stats {
     let weaponDef = 0;
     equips.forEach((equipe) => {
       if (equipe.info.incPDD != null) {
-        weaponDef += equipe.info.incPDD.nValue;
+        weaponDef += equipe.info?.incPDD?.nValue ?? 0;
       }
     });
 
@@ -249,7 +249,7 @@ class Stats {
     let magicDef = minMagicDefense;
     equips.forEach((equipe) => {
       if (equipe.info.incMDD != null) {
-        magicDef += equipe.info.incMDD.nValue;
+        magicDef += equipe.info?.incMDD?.nValue ?? 0;
       }
     });
 
@@ -383,7 +383,7 @@ class Stats {
     let speed = 100;
     equips.forEach((equipe) => {
       if (equipe.info.incSpeed != null) {
-        speed += equipe.info.incSpeed.nValue;
+        speed += equipe.info?.incSpeed?.nValue ?? 0;
       }
     });
 
@@ -396,7 +396,7 @@ class Stats {
     let jump = 100;
     equips.forEach((equipe) => {
       if (equipe.info.incJump != null) {
-        jump += equipe.info.incJump.nValue;
+        jump += equipe.info?.incJump?.nValue ?? 0;
       }
     });
 

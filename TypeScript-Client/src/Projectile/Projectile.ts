@@ -125,13 +125,13 @@ class Projectile {
       const attackRange =
         this.charecter!.stats.getAttackDamageRangeAfterMonsterDefense(
           this.weaponAttackRange,
-          this.target!.mobFile.info.PDDamage.nValue,
-          this.target!.mobFile.info.level.nValue
+          this.target!.mobFile.info?.PDDamage?.nValue ?? 0,
+          this.target!.mobFile.info?.level?.nValue ?? 1
         );
 
       const isMiss = this.charecter!.stats.getRandomIsMiss(
-        this.target!.mobFile.info.level.nValue,
-        this.target!.mobFile.info.eva.nValue
+        this.target!.mobFile.info?.level?.nValue ?? 1,
+        this.target!.mobFile.info?.eva?.nValue ?? 0
       );
       this.finalDamangeAfterTargetDefense = isMiss
         ? 0
@@ -162,12 +162,12 @@ class Projectile {
     // }ss
   }
   setFrame(stance: any, frame = 0, carryOverDelay = 0) {
-    const f = !this.stance.nChildren[frame] ? 0 : frame;
-    const stanceFrame = this.stance.nChildren[f];
+    const f = !this.stance?.nChildren?.[frame] ? 0 : frame;
+    const stanceFrame = this.stance?.nChildren?.[f];
     this.stance = stance;
     this.frame = f;
     this.delay = carryOverDelay;
-    this.nextDelay = stanceFrame.nGet("delay").nGet("nValue", 100);
+    this.nextDelay = stanceFrame.nGet("delay")?.nGet("nValue", 100) ?? 100;
   }
 
   getTravelDistance() {
@@ -216,7 +216,7 @@ class Projectile {
     this.delay += msPerTick;
 
     if (this.delay > this.nextDelay) {
-      const hasNextFrame = !!this.stance.nChildren[this.frame + 1];
+      const hasNextFrame = !!this.stance?.nChildren?.[this.frame + 1];
       if (!!this.dying && !hasNextFrame) {
         this.destroy();
         return;
@@ -251,11 +251,11 @@ class Projectile {
     } else if (this.pos!.vx < 0) {
       this.flipped = false;
     }
-    const currentFrame = this.stance.nChildren[this.frame];
+    const currentFrame = this.stance?.nChildren?.[this.frame];
     const currentImage = currentFrame.nGetImage();
 
-    const originX = currentFrame.nGet("origin").nGet("nX", 0);
-    const originY = currentFrame.nGet("origin").nGet("nY", 0);
+    const originX = currentFrame.nGet("origin")?.nGet("nX", 0) ?? 0;
+    const originY = currentFrame.nGet("origin")?.nGet("nY", 0) ?? 0;
 
     const adjustX = !this.flipped ? originX : currentFrame.nWidth - originX;
 

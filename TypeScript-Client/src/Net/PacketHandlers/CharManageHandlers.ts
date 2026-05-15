@@ -3,7 +3,7 @@ import { Cryptography } from '../Cryptography';
 import UILogin from '../../UI/UILogin';
 import UIStatusMessenger from '../../UI/UIStatusMessenger';
 import { clearCache } from '../../UI/CharSelectPreview';
-import { onNameCheckResult } from '../../UI/UIRaceSelect';
+import { onExplorerNameResult } from '../../UI/UIExplorerCreation';
 
 function readString(data: DataView, offset: number, len: number): string {
   let s = '';
@@ -25,7 +25,7 @@ export class CharNameResponseHandler extends PacketHandler {
       UIStatusMessenger.show(`"${name}" is available`, '#88FF88');
     }
     // Forward to UIRaceSelect if it's waiting for name validation
-    onNameCheckResult(!taken);
+    onExplorerNameResult(!taken);
   }
 }
 

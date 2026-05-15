@@ -135,7 +135,7 @@ export class NXRangeReader {
       case 1:
         node.nTagName = 'int';
         // Int64 stored as two int32 — combine carefully
-        node.nValue = v.getInt32(base + 12, true) + v.getInt32(base + 16, true) * 0x100000000;
+        node.nValue = v.getUint32(base + 12, true) + v.getInt32(base + 16, true) * 0x100000000;
         break;
       case 2:
         node.nTagName = 'double';
@@ -208,7 +208,10 @@ export class NXRangeReader {
   // ── Asset decoding ──────────────────────────────────────────────────────────
 
   async decodeBitmapAsync(index: number, w: number, h: number): Promise<HTMLImageElement> {
-    if (index >= this.bmpOffsets.length || w === 0 || h === 0) return new Image();
+    if (index >= this.bmpOffsets.length || w === 0 || h === 0) {
+      console.warn(`[NX bitmap] skip — index=${index} bmpOffsets.len=${this.bmpOffsets.length} w=${w} h=${h} url=${this.url}`);
+      return new Image();
+    }
 
     const off = this.bmpOffsets[index];
     // LZ4 compressed size ≤ uncompressed + uncompressed/255 + 16
@@ -216,7 +219,7 @@ export class NXRangeReader {
     const buf     = await this.fetchRange(off, 4 + maxComp);
     const view    = new DataView(buf);
     const compLen = view.getUint32(0, true);
-    const raw     = lz4Decompress(new Uint8Array(buf, 4, compLen), w * h * 4);
+    const raw = lz4Decompress(new Uint8Array(buf, 4, compLen), w * h * 4);
 
     // BGRA → RGBA
     const rgba = new Uint8ClampedArray(w * h * 4);
@@ -227,12 +230,13 @@ export class NXRangeReader {
       rgba[i + 3] = raw[i + 3];
     }
 
+    // Return canvas element directly — avoids createImageBitmap Firefox issues
+    // and the async PNG roundtrip of toDataURL. ctx.drawImage accepts HTMLCanvasElement.
     const cv = document.createElement('canvas');
-    cv.width = w; cv.height = h;
+    cv.width = w;
+    cv.height = h;
     cv.getContext('2d')!.putImageData(new ImageData(rgba, w, h), 0, 0);
-    const img = new Image();
-    img.src = cv.toDataURL();
-    return img;
+    return cv as unknown as HTMLImageElement;
   }
 
   async decodeAudioAsync(index: number, length: number): Promise<HTMLAudioElement> {

@@ -92,7 +92,7 @@ export default class UINpcTalk {
     if (this.utilDlgExNode?.BtClose) {
       const closeBtn = new MapleStanceButton(null, {
         x: this.x + 9, y: bY,
-        img: this.utilDlgExNode.BtClose.nChildren,
+        img: this.utilDlgExNode?.BtClose?.nChildren ?? [],
         isRelativeToCamera: true, isPartOfUI: true,
         onClick: () => { this.close(0); },
       });
@@ -103,7 +103,7 @@ export default class UINpcTalk {
       if (this.utilDlgExNode?.BtYes) {
         const yes = new MapleStanceButton(null, {
           x: this.x + 60, y: bY,
-          img: this.utilDlgExNode.BtYes.nChildren,
+          img: this.utilDlgExNode?.BtYes?.nChildren ?? [],
           isRelativeToCamera: true, isPartOfUI: true,
           onClick: () => { this.respond(1); },
         });
@@ -112,7 +112,7 @@ export default class UINpcTalk {
       if (this.utilDlgExNode?.BtNo) {
         const no = new MapleStanceButton(null, {
           x: this.x + 110, y: bY,
-          img: this.utilDlgExNode.BtNo.nChildren,
+          img: this.utilDlgExNode?.BtNo?.nChildren ?? [],
           isRelativeToCamera: true, isPartOfUI: true,
           onClick: () => { this.respond(0); },
         });
@@ -122,7 +122,7 @@ export default class UINpcTalk {
       if (this.hasNext && this.utilDlgExNode?.BtNext) {
         const next = new MapleStanceButton(null, {
           x: this.x + this.width - 60, y: bY,
-          img: this.utilDlgExNode.BtNext.nChildren,
+          img: this.utilDlgExNode?.BtNext?.nChildren ?? [],
           isRelativeToCamera: true, isPartOfUI: true,
           onClick: () => { this.respond(0); },
         });
@@ -131,7 +131,7 @@ export default class UINpcTalk {
       if (this.hasPrev && this.utilDlgExNode?.BtPrev) {
         const prev = new MapleStanceButton(null, {
           x: this.x + this.width - 110, y: bY,
-          img: this.utilDlgExNode.BtPrev.nChildren,
+          img: this.utilDlgExNode?.BtPrev?.nChildren ?? [],
           isRelativeToCamera: true, isPartOfUI: true,
           onClick: () => { this.respond(1); },
         });
@@ -141,7 +141,7 @@ export default class UINpcTalk {
       if (this.utilDlgExNode?.BtOK) {
         const ok = new MapleStanceButton(null, {
           x: this.x + 60, y: bY,
-          img: this.utilDlgExNode.BtOK.nChildren,
+          img: this.utilDlgExNode?.BtOK?.nChildren ?? [],
           isRelativeToCamera: true, isPartOfUI: true,
           onClick: () => { this.respond(1); },
         });
@@ -151,7 +151,7 @@ export default class UINpcTalk {
       if (this.utilDlgExNode?.BtOK) {
         const ok = new MapleStanceButton(null, {
           x: this.x + 60, y: bY,
-          img: this.utilDlgExNode.BtOK.nChildren,
+          img: this.utilDlgExNode?.BtOK?.nChildren ?? [],
           isRelativeToCamera: true, isPartOfUI: true,
           onClick: () => {
             const entered = this.textInput?.input.value ?? '';
@@ -163,7 +163,7 @@ export default class UINpcTalk {
       if (this.utilDlgExNode?.BtNo) {
         const cancel = new MapleStanceButton(null, {
           x: this.x + 110, y: bY,
-          img: this.utilDlgExNode.BtNo.nChildren,
+          img: this.utilDlgExNode?.BtNo?.nChildren ?? [],
           isRelativeToCamera: true, isPartOfUI: true,
           onClick: () => { this.close(0); },
         });
@@ -173,7 +173,7 @@ export default class UINpcTalk {
       if (this.utilDlgExNode?.BtOK) {
         const ok = new MapleStanceButton(null, {
           x: this.x + 60, y: bY,
-          img: this.utilDlgExNode.BtOK.nChildren,
+          img: this.utilDlgExNode?.BtOK?.nChildren ?? [],
           isRelativeToCamera: true, isPartOfUI: true,
           onClick: () => { this.respondWithNumber(this.numberValue); },
         });

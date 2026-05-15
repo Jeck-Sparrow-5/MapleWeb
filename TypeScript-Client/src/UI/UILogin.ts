@@ -20,6 +20,7 @@ import World from '../Net/Models/World';
 import CharacterListRequestPacket from '../Net/Packets/CharacterListRequestPacket';
 import SelectCharPacket from '../Net/Packets/SelectCharPacket';
 import UIRaceSelect from './UIRaceSelect';
+import UIExplorerCreation from './UIExplorerCreation';
 import { SelectCharPicPacket, RegisterPicPacket } from '../Net/Packets/PicPackets';
 import { DeleteCharPacket } from '../Net/Packets/DeleteCharPacket';
 import { drawPreview, clearCache } from './CharSelectPreview';
@@ -133,8 +134,8 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   this.selectedChannelIndex = null;
   this.uiLogin = await WZManager.get('UI.wz/Login.img');
 
-  this.frameImg = this.uiLogin.nGet('Common').nGet('frame').nGetImage();
-  this.selectedWorldImage = this.uiLogin.nGet('Common').selectWorld.nGetImage();
+  this.frameImg = this.uiLogin.nGet('Common')?.nGet('frame')?.nGetImage();
+  this.selectedWorldImage = this.uiLogin.nGet('Common')?.selectWorld?.nGetImage();
   this.worlds = [];
   this.characters = [];
   this.characterSlotButtons = [];
@@ -165,7 +166,7 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   const startButton = new MapleStanceButton(canvas, {
     x: 205,
     y: -1360,
-    img: this.uiLogin.nGet('CharSelect').nGet('BtSelect').nChildren,
+    img: this.uiLogin.nGet('CharSelect')?.nGet('BtSelect')?.nChildren ?? [],
     onClick: async () => {
       if (!config.websocketUrl) {
         await LoginState.enterGame();
@@ -198,7 +199,7 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   const createCharacterButton = new MapleStanceButton(canvas, {
     x: 205,
     y: -1325,
-    img: this.uiLogin.nGet('CharSelect').nGet('BtNew').nChildren,
+    img: this.uiLogin.nGet('CharSelect')?.nGet('BtNew')?.nChildren ?? [],
     onClick: async () => {
       UIRaceSelect.show(canvas);
     },
@@ -208,7 +209,7 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   const deleteCharacterButton = new MapleStanceButton(canvas, {
     x: 205,
     y: -1275,
-    img: this.uiLogin.nGet('CharSelect').nGet('BtDelete').nChildren,
+    img: this.uiLogin.nGet('CharSelect')?.nGet('BtDelete')?.nChildren ?? [],
     onClick: async () => {
       if (this.selectedCharacterId === null) return;
       const birthday = prompt('Enter birthday (YYYYMMDD) to confirm deletion:');
@@ -266,7 +267,7 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   this.viewAllCharacterButton = new MapleStanceButton(canvas, {
     x: 0,
     y: 370,
-    img: this.uiLogin.nGet('ViewAllChar').nGet('BtVAC').nChildren,
+    img: this.uiLogin.nGet('ViewAllChar')?.nGet('BtVAC')?.nChildren ?? [],
     isPartOfUI: true,
     isRelativeToCamera: true,
     isHidden: true,
@@ -286,7 +287,7 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   this.channelBackButton = new MapleStanceButton(canvas, {
     x: 0,
     y: 420,
-    img: this.uiLogin.nGet('Common').nGet('BtStart').nChildren,
+    img: this.uiLogin.nGet('Common')?.nGet('BtStart')?.nChildren ?? [],
     isPartOfUI: true,
     isRelativeToCamera: true,
     isHidden: true,
@@ -304,7 +305,7 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   const loginButton = new MapleStanceButton(canvas, {
     x: 223,
     y: -85,
-    img: this.uiLogin.nGet('Title').nGet('BtLogin').nChildren,
+    img: this.uiLogin.nGet('Title')?.nGet('BtLogin')?.nChildren ?? [],
     onClick: async () => {
       if (!config.websocketUrl) { // @todo: remove this check when the login screen is fully implemented
         this.worlds.push(new World(0, 'Test', 1, 'Message', [
@@ -327,7 +328,7 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   const saveIdButton = new MapleStanceButton(canvas, {
     x: 50,
     y: -38,
-    img: this.uiLogin.nGet('Title').nGet('BtLoginIDSave').nChildren,
+    img: this.uiLogin.nGet('Title')?.nGet('BtLoginIDSave')?.nChildren ?? [],
     onClick: () => {
       this.saveIdEnabled = !this.saveIdEnabled;
       if (this.saveIdEnabled) {
@@ -345,7 +346,7 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   const forgotIdButton = new MapleStanceButton(canvas, {
     x: 50,
     y: -14,
-    img: this.uiLogin.nGet('Title').nGet('BtLoginIDLost').nChildren,
+    img: this.uiLogin.nGet('Title')?.nGet('BtLoginIDLost')?.nChildren ?? [],
     onClick: () => {
       this.showNotice(NoticeType.NORMAL, null);
     },
@@ -356,8 +357,8 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   // Forgot Password (BtPasswdLost 66x23) — canvas ~(505,294)
   const forgotPwButton = new MapleStanceButton(canvas, {
     x: 133,
-    y: -14,
-    img: this.uiLogin.nGet('Title').nGet('BtPasswdLost').nChildren,
+    y: -15,
+    img: this.uiLogin.nGet('Title')?.nGet('BtPasswdLost')?.nChildren ?? [],
     onClick: () => {
       this.showNotice(NoticeType.NORMAL, null);
     },
@@ -368,8 +369,8 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   // Register (BtNew 92x38) — canvas ~(595,270)
   const newAccountButton = new MapleStanceButton(canvas, {
     x: 223,
-    y: -38,
-    img: this.uiLogin.nGet('Title').nGet('BtNew').nChildren,
+    y: -10,
+    img: this.uiLogin.nGet('Title')?.nGet('BtNew')?.nChildren ?? [],
     onClick: () => {
       this.showNotice(NoticeType.NORMAL, null);
     },
@@ -380,8 +381,8 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   // Quit (BtQuit 84x38) — canvas ~(595,310)
   const quitButton = new MapleStanceButton(canvas, {
     x: 223,
-    y: 2,
-    img: this.uiLogin.nGet('Title').nGet('BtQuit').nChildren,
+    y: 35,
+    img: this.uiLogin.nGet('Title')?.nGet('BtQuit')?.nChildren ?? [],
     onClick: () => {
       window.close();
     },
@@ -413,7 +414,7 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   const dice = new MapleFrameButton({
     x: 245,
     y: -1835,
-    img: uiLogin.NewChar.dice.nChildren,
+    img: uiLogin.NewChar?.dice?.nChildren ?? [],
     onEndFrame: () => {
       this.newCharStats = Random.generateDiceRollStats();
       console.log("Random stats: ", this.newCharStats);
@@ -427,7 +428,7 @@ UILogin.initialize = async function (canvas: GameCanvas) {
 
   const dx = Math.floor(-215);
   const dy = Math.floor(-830 - Camera.y);
-  this.scrollOpenAnimation = new FrameAnimation(this.uiLogin.nGet('WorldSelect')?.nGet('scroll').nGet(0), dx, dy);
+  this.scrollOpenAnimation = new FrameAnimation(this.uiLogin.nGet('WorldSelect')?.nGet('scroll')?.nGet(0), dx, dy);
   this.scrollContentFadeIn = {
     active: false,
     startTime: 0,
@@ -490,7 +491,7 @@ UILogin.createCharacterSlotButtons = function () {
     const btn = new MapleStanceButton(this.gameCanvas, {
       x: wx,
       y: CHAR_SLOT_Y,
-      img: this.uiLogin.nGet('CharSelect').nGet('BtSelect').nChildren,
+      img: this.uiLogin.nGet('CharSelect')?.nGet('BtSelect')?.nChildren ?? [],
       isHidden: true, // invisible hit-area; character drawn separately in doRender
       onClick: () => {
         this.selectedCharacterId = char.stat.characterId;
@@ -511,13 +512,13 @@ UILogin.resetWorld = function () {
 
 UILogin.createWorldButtons = function () {
   this.worlds.forEach((world: World) => {
-    const buttonImage = this.uiLogin.nGet('WorldSelect')?.BtWorld.nGet(world.id, null);
+    const buttonImage = this.uiLogin.nGet('WorldSelect')?.BtWorld?.nGet(world.id, null);
     if (buttonImage) {
       this.worldButtonImages.set(world.id, buttonImage);
       const worldButton = new MapleStanceButton(this.gameCanvas, {
         x: -250 + this.worldButtonImages.size * 27,
         y: -800,
-        img: buttonImage.nChildren,
+        img: buttonImage?.nChildren ?? [],
         onClick: () => {
           this.scrollOpenAnimation.reset();
           this.scrollOpenAnimation.active = true;
@@ -542,7 +543,7 @@ UILogin.createWorldButtons = function () {
             const channelButton = new MapleStanceButton(this.gameCanvas, {
               x: -145 + col * 92,
               y: -620 + row * 30,
-              img: (this.uiLogin.nGet('WorldSelect') as any)?.nGet('channel')[i].nChildren,
+              img: this.uiLogin.nGet('WorldSelect')?.nGet('channel')?.[i]?.nChildren ?? [],
               isHidden: false,
               onClick: async () => {
                 if (!isActive) return;
@@ -552,7 +553,7 @@ UILogin.createWorldButtons = function () {
 
                 this.selectedChannelIndex = i;
                 this.channelSelectAnimation = new FrameAnimation(
-                  (this.uiLogin.nGet('WorldSelect') as any)?.nGet('channel').nGet('chSelect'),
+                  this.uiLogin.nGet('WorldSelect')?.nGet('channel')?.nGet('chSelect'),
                   -145 + col * 92 - 10,
                   -620 + row * 30 - 10
                 );
@@ -575,7 +576,7 @@ UILogin.createWorldButtons = function () {
           const enterChannelButton = new MapleStanceButton(this.gameCanvas, {
             x: 135,
             y: -470,
-            img: this.uiLogin.nGet('WorldSelect')?.BtGoworld.nChildren,
+            img: this.uiLogin.nGet('WorldSelect')?.BtGoworld?.nChildren ?? [],
             onClick: async () => {
               if (!config.websocketUrl) {
                 await LoginState.switchToSubState(LoginSubState.CHARACTER_SELECT);
@@ -599,7 +600,7 @@ UILogin.createWorldButtons = function () {
       console.warn(`World button image for world ${world.id} not found.`);
     }
 
-    const image = this.uiLogin.nGet('WorldSelect')?.world.nGet(world.id, null);
+    const image = this.uiLogin.nGet('WorldSelect')?.world?.nGet(world.id, null);
     if (image) {
       this.worldImages.set(world.id, image);
     } else {
@@ -615,6 +616,8 @@ UILogin.doUpdate = function (msPerTick, camera, canvas) {
   if (canvas.clicked && !UIRaceSelect.isHidden) {
     UIRaceSelect.onMouseDown(canvas.mouseX, canvas.mouseY);
   }
+  // Route clicks to UIExplorerCreation look buttons (handled internally via ClickManager)
+  // Draw call keeps it active — no extra routing needed here
 
   const wasScrollActive = this.scrollOpenAnimation.active;
   this.scrollOpenAnimation.update(msPerTick);
@@ -764,7 +767,7 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
     });
   }
 
-  if (this.selectedWorldImageAnimation.active) {
+  if (this.selectedWorldImageAnimation.active && this.selectedWorldImage) {
     canvas.drawImage({
       img: this.selectedWorldImage,
       dx: this.selectedWorldImageAnimation.currentX,
@@ -798,6 +801,7 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
   });
 
   UIRaceSelect.draw(canvas);
+  UIExplorerCreation.draw(canvas);
 
   canvas.drawText({
     text: "Ver. 0.83",
@@ -816,6 +820,7 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
 };
 
 UILogin.drawMask = function (canvas) {
+  if (!this.frameImg) return;
   const frameWidth = this.frameImg.width;
   const frameHeight = this.frameImg.height;
   const frameX = 0;
@@ -838,14 +843,14 @@ UILogin.placeInputs = function () {
     y: 236,
     width: 142,
     height: 20,
-    color: "#ffffff",
+    color: "",
   });
   this.inputPwd = new MapleInput(this.gameCanvas, {
     x: 442,
     y: 265,
     width: 142,
     height: 20,
-    color: "#ffffff",
+    color: "#fffff",
     type: "password",
   });
   const savedId = localStorage.getItem('maple_saved_id');
@@ -945,7 +950,7 @@ UILogin.startSelectedWorldSlideIn = function () {
 };
 
 UILogin.stepImage = function (stepId: number) {
-  const step = this.uiLogin.nGet('Common').nGet('step').nGet(stepId);
+  const step = this.uiLogin.nGet('Common')?.nGet('step')?.nGet(stepId);
   if (step) {
     return step.nGetImage();
   }

@@ -181,7 +181,7 @@ class MapleCharacter {
   async load() {
     console.log("loading MapleCharacter");
     const zmap: any = await WZManager.get("Base.wz/zmap.img");
-    const zmapDict = [...zmap.nChildren].reverse().reduce((acc, node, i) => {
+    const zmapDict = [...(zmap?.nChildren ?? [])].reverse().reduce((acc, node, i) => {
       acc[node.nName] = i;
       return acc;
     }, {});
@@ -191,7 +191,7 @@ class MapleCharacter {
     };
 
     const smap: any = await WZManager.get("Base.wz/smap.img");
-    const nonNullSmapNodes = smap.nChildren.filter((n: any) => !!n.nValue);
+    const nonNullSmapNodes = (smap?.nChildren ?? []).filter((n: any) => !!n.nValue);
     const smapDict = nonNullSmapNodes.reduce((acc: any, node: any) => {
       acc[node.nName] = node.nValue;
       return acc;
@@ -277,7 +277,7 @@ class MapleCharacter {
     // this.frame = !this.baseBody[this.stance][frame] ? 0 : frame;
     this.delay = carryOverDelay;
     this.nextDelay = Math.abs(
-      this.baseBody[this.stance][this.frame].nGet("delay").nGet("nValue", 100)
+      this.baseBody[this.stance][this.frame].nGet("delay")?.nGet("nValue", 100) ?? 100
     );
   }
   advanceFrame() {
@@ -414,7 +414,7 @@ class MapleCharacter {
     const levelUpAudio = levelUpNode.nGetAudio();
 
     const lu: any = await WZManager.get("Effect.wz/BasicEff.img/LevelUp");
-    this.levelUpFrames = lu.nChildren;
+    this.levelUpFrames = lu?.nChildren ?? [];
 
     PLAY_AUDIO(levelUpAudio);
     this.levelingUp = true;
@@ -701,10 +701,10 @@ isCloseToMob = (inAllDirections = true) => {
   }
 
   checkForLadder(direction: ClimbDirections) {
-    const ladderRope = this.map!.wzNode.ladderRope.nChildren.find(
+    const ladderRope = this.map!.wzNode.ladderRope?.nChildren?.find(
       (ladderRope: any) => {
         // its ladder or rope
-        const isLadder = ladderRope.nGet("l").nValue === 1;
+        const isLadder = ladderRope.nGet("l")?.nValue === 1;
 
         const xRange = isLadder ? 15 : 8;
 
@@ -938,8 +938,8 @@ isCloseToMob = (inAllDirections = true) => {
           this.lastHitTime = currentTime;
 
           const isMiss = this.stats.getRandomMonsterTouchMiss(
-            monster.mobFile.info.level.nValue,
-            monster.mobFile.info.acc.nValue
+            monster.mobFile.info?.level?.nValue ?? 1,
+            monster.mobFile.info?.acc?.nValue ?? 0
           );
 
           const minXYPosition = findMinXY(this.bodyRects);
@@ -962,7 +962,7 @@ isCloseToMob = (inAllDirections = true) => {
             // todo
             // 2. if not miss -> calculate take demage (monster damage - player defense)
             const finalTakenDamage =
-              monster.mobFile.info.PADamage.nValue -
+              (monster.mobFile.info?.PADamage?.nValue ?? 0) -
               this.stats.getWeaponDefense(this.equips);
             this.takeDamage(finalTakenDamage);
 
@@ -1075,14 +1075,14 @@ isCloseToMob = (inAllDirections = true) => {
     const isDrawable = (n: any) =>
       n.nTagName === "canvas" || n.nTagName === "uol";
     const getParts = (img: any) =>
-      img.nGet(realStance).nGet(realFrame).nChildren;
+      img.nGet(realStance)?.nGet(realFrame)?.nChildren ?? [];
     const getFParts = (img: any) =>
-      img.nGet(faceExpr).nGet(faceFrame).nChildren;
+      img.nGet(faceExpr)?.nGet(faceFrame)?.nChildren ?? [];
 
     const twoChars = /.{1,2}/g;
     const [hat, faceAcc, ...equips] = this.equips;
 
-    const hatVslot = !hat ? "" : hat.info.vslot.nValue;
+    const hatVslot = !hat ? "" : hat.info?.vslot?.nValue ?? '';
     const hatParts = !hat ? [] : getParts(hat).filter(isDrawable);
     const hatSmapValues = hatParts.reduce((acc: any, p: any) => {
       try {
@@ -1114,7 +1114,7 @@ isCloseToMob = (inAllDirections = true) => {
       const pointInMap = (vector: any) => !!map[vector.nName];
       const pointNotInMap = (vector: any) => !map[vector.nName];
 
-      const mappedPoints = part.map.nChildren.filter(pointInMap);
+      const mappedPoints = (part.map?.nChildren ?? []).filter(pointInMap);
       const xSum = mappedPoints.reduce((acc: any, mappedPoint: any) => {
         const adjustedPointX = !flipped ? mappedPoint.nX : -mappedPoint.nX;
         return acc + map[mappedPoint.nName].x - adjustedPointX;
@@ -1126,7 +1126,7 @@ isCloseToMob = (inAllDirections = true) => {
       let x = Math.floor(xSum / numMappedPoints);
       let y = Math.floor(ySum / numMappedPoints);
 
-      part.map.nChildren.filter(pointNotInMap).forEach((mappedPoint: any) => {
+      (part.map?.nChildren ?? []).filter(pointNotInMap).forEach((mappedPoint: any) => {
         map[mappedPoint.nName] = {
           x: x + (!flipped ? mappedPoint.nX : -mappedPoint.nX),
           y: y + mappedPoint.nY,
@@ -1189,7 +1189,7 @@ isCloseToMob = (inAllDirections = true) => {
         return;
       }
 
-      const imgVslot = img.info.vslot.nValue;
+      const imgVslot = img.info?.vslot?.nValue ?? '';
       const isHead = img === this.head;
       const isFace = img === this.Face || img === faceAcc;
       const isHair = img === this.Hair;
@@ -1200,7 +1200,7 @@ isCloseToMob = (inAllDirections = true) => {
 
       let imgParts;
       if (isHead) {
-        imgParts = useBackHead ? img.back.nChildren : img.front.nChildren;
+        imgParts = useBackHead ? img.back?.nChildren ?? [] : img.front?.nChildren ?? [];
       } else if (isFace) {
         imgParts = getFParts(img);
       } else if (isHair) {
@@ -1277,7 +1277,7 @@ isCloseToMob = (inAllDirections = true) => {
 
     const characterIsFlipped = !!this.flipped;
     const imgdir = this.baseBody[this.stance][this.frame];
-    const imgdirFlip = !!imgdir.nGet("flip").nGet("nValue", 0);
+    const imgdirFlip = !!imgdir.nGet("flip")?.nGet("nValue", 0);
     const frameIsFlipped = characterIsFlipped !== imgdirFlip;
 
     const drawableFrames = this.getDrawableFrames(
@@ -1294,10 +1294,10 @@ isCloseToMob = (inAllDirections = true) => {
       false
     );
 
-    const mx = imgdir.nGet("move").nGet("nX", 0);
+    const mx = imgdir.nGet("move")?.nGet("nX", 0) ?? 0;
     const moveX = !characterIsFlipped ? mx : -mx;
-    const moveY = imgdir.nGet("move").nGet("nY", 0);
-    const rotate = imgdir.nGet("rotate").nGet("nValue", 0);
+    const moveY = imgdir.nGet("move")?.nGet("nY", 0) ?? 0;
+    const rotate = imgdir.nGet("rotate")?.nGet("nValue", 0) ?? 0;
     const angle = !characterIsFlipped ? rotate : 360 - rotate;
 
     let spriteWidth = 0;

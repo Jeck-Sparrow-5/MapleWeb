@@ -56,7 +56,7 @@ export default class UILoginTOS {
       y: this.y + 374,
       isRelativeToCamera: true,
       isPartOfUI: true,
-      img: this.uiLoginBtOk.nChildren,
+      img: this.uiLoginBtOk?.nChildren ?? [],
       onClick: () => {
         this.setIsHidden(true);
         typeof this.okHandler === 'function' && this.okHandler();
@@ -68,7 +68,7 @@ export default class UILoginTOS {
       y: this.y + 374,
       isRelativeToCamera: true,
       isPartOfUI: true,
-      img: this.uiLoginBtCancel.nChildren,
+      img: this.uiLoginBtCancel?.nChildren ?? [],
       onClick: () => {
         this.setIsHidden(true);
       },
@@ -90,7 +90,7 @@ export default class UILoginTOS {
       return;
     }
     canvas.drawImage({
-      img: this.uiLoginTOS.nGet('0').nGetImage(),
+      img: this.uiLoginTOS.nGet('0')?.nGetImage(),
       dx: this.x,
       dy: this.y,
     });

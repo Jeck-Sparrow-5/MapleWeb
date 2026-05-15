@@ -70,32 +70,32 @@ UIMap.initialize = async function () {
   await UICommon.initialize();
 
   const basic: any = await WZManager.get("UI.wz/Basic.img");
-  this.statusBarLevelDigits = basic.LevelNo.nChildren.map((d: any) =>
+  this.statusBarLevelDigits = basic.LevelNo?.nChildren?.map((d: any) =>
     d.nGetImage()
-  );
+  ) ?? [];
 
   this.firstUpdate = true;
   this.chat = null;
   this.chatHistory = [];
 
   const statusBar: any = await WZManager.get("UI.wz/StatusBar.img");
-  this.statusBg = statusBar.base.backgrnd.nGetImage();
-  this.statusBg2 = statusBar.base.backgrnd2.nGetImage();
-  this.bars = statusBar.gauge.bar.nGetImage();
-  this.graduation = statusBar.gauge.graduation.nGetImage();
-  this.barGray = statusBar.gauge.gray.nGetImage();
+  this.statusBg = statusBar.base?.backgrnd?.nGetImage();
+  this.statusBg2 = statusBar.base?.backgrnd2?.nGetImage();
+  this.bars = statusBar.gauge?.bar?.nGetImage();
+  this.graduation = statusBar.gauge?.graduation?.nGetImage();
+  this.barGray = statusBar.gauge?.gray?.nGetImage();
 
   this.statusBarNode = statusBar;
 
   this.buttons = new Set<any>();
 
-  this.numbers = statusBar.number.nChildren.reduce(
+  this.numbers = statusBar.number?.nChildren?.reduce(
     (numbers: any, node: any) => {
       numbers[node.nName] = node.nGetImage();
       return numbers;
     },
     {}
-  );
+  ) ?? {};
 };
 
 const startUIPosition = {
@@ -105,12 +105,12 @@ const startUIPosition = {
 
 UIMap.addButtons = function (canvas) {
   console.log("addButtons");
-  console.log(this.statusBarNode.EquipKey.nChildren);
+  console.log(this.statusBarNode?.EquipKey?.nChildren);
 
   const quickSlot = new MapleStanceButton(canvas, {
     x: 768,
     y: 536 + startUIPosition.y,
-    img: this.statusBarNode.QuickSlot.nChildren,
+    img: this.statusBarNode?.QuickSlot?.nChildren ?? [],
     isRelativeToCamera: true,
     isPartOfUI: true,
     onClick: () => {
@@ -123,7 +123,7 @@ UIMap.addButtons = function (canvas) {
   const keyboardlKey = new MapleStanceButton(canvas, {
     x: 736,
     y: 536 + startUIPosition.y,
-    img: this.statusBarNode.KeySet.nChildren,
+    img: this.statusBarNode?.KeySet?.nChildren ?? [],
     isRelativeToCamera: true,
     isPartOfUI: true,
     onClick: () => {
@@ -136,7 +136,7 @@ UIMap.addButtons = function (canvas) {
   const skillKey = new MapleStanceButton(canvas, {
     x: 704,
     y: 536 + startUIPosition.y,
-    img: this.statusBarNode.SkillKey.nChildren,
+    img: this.statusBarNode?.SkillKey?.nChildren ?? [],
     isRelativeToCamera: true,
     isPartOfUI: true,
     onClick: () => {
@@ -149,7 +149,7 @@ UIMap.addButtons = function (canvas) {
   const invetoryKey = new MapleStanceButton(canvas, {
     x: 672,
     y: 536 + startUIPosition.y,
-    img: this.statusBarNode.InvenKey.nChildren,
+    img: this.statusBarNode?.InvenKey?.nChildren ?? [],
     isRelativeToCamera: true,
     isPartOfUI: true,
     onClick: () => {
@@ -164,7 +164,7 @@ UIMap.addButtons = function (canvas) {
   const equipKey = new MapleStanceButton(canvas, {
     x: 640,
     y: 536 + startUIPosition.y,
-    img: this.statusBarNode.EquipKey.nChildren,
+    img: this.statusBarNode?.EquipKey?.nChildren ?? [],
     isRelativeToCamera: true,
     isPartOfUI: true,
     onClick: () => {
@@ -320,6 +320,7 @@ UIMap.addChatMessage = function (text, color = '#FFFFFF') {
 };
 
 UIMap.drawLevel = function (canvas, level) {
+  if (!this.statusBarLevelDigits?.length) return;
   const dy = 576 + startUIPosition.y;
   if (level >= 100) {
     const first = Math.floor(level / 100);
@@ -363,6 +364,7 @@ UIMap.drawLevel = function (canvas, level) {
 };
 
 UIMap.drawNumbers = function (canvas, hp, maxHp, mp, maxMp, exp, maxExp) {
+  if (!this.numbers || !Object.keys(this.numbers).length) return;
   canvas.drawImage({
     img: this.numbers.Lbracket,
     dx: 234,
@@ -370,12 +372,9 @@ UIMap.drawNumbers = function (canvas, hp, maxHp, mp, maxMp, exp, maxExp) {
   });
 
   const hpX = [...`${hp}`, "slash", ...`${maxHp}`].reduce((x, digit) => {
-    canvas.drawImage({
-      img: this.numbers[digit],
-      dx: x,
-      dy: 571 + startUIPosition.y,
-    });
-    x += this.numbers[digit].width + 1;
+    const img = this.numbers?.[digit];
+    if (img) canvas.drawImage({ img, dx: x, dy: 571 + startUIPosition.y });
+    x += (img?.width ?? 0) + 1;
     return x;
   }, 238);
 
@@ -392,12 +391,9 @@ UIMap.drawNumbers = function (canvas, hp, maxHp, mp, maxMp, exp, maxExp) {
   });
 
   const mpX = [...`${mp}`, "slash", ...`${maxMp}`].reduce((x, digit) => {
-    canvas.drawImage({
-      img: this.numbers[digit],
-      dx: x,
-      dy: 571 + startUIPosition.y,
-    });
-    x += this.numbers[digit].width + 1;
+    const img = this.numbers?.[digit];
+    if (img) canvas.drawImage({ img, dx: x, dy: 571 + startUIPosition.y });
+    x += (img?.width ?? 0) + 1;
     return x;
   }, 350);
 
@@ -414,28 +410,19 @@ UIMap.drawNumbers = function (canvas, hp, maxHp, mp, maxMp, exp, maxExp) {
       if (digit === ".") {
         canvas.drawRect({
           x: x,
-          y: 571 + this.numbers[0].height - 1 + startUIPosition.y,
+          y: 571 + (this.numbers?.['0']?.height ?? 0) - 1 + startUIPosition.y,
           width: 2,
           height: 1,
           color: "#ffffff",
         });
-
         x += 4;
       } else {
-        if (digit === "%") {
-          digit = "percent";
-        } else if (digit === "[") {
-          digit = "Lbracket";
-        } else if (digit === "]") {
-          digit = "Rbracket";
-        }
-
-        canvas.drawImage({
-          img: this.numbers[digit],
-          dx: x,
-          dy: 571 + startUIPosition.y,
-        });
-        x += this.numbers[digit].width + 1;
+        if (digit === "%") digit = "percent";
+        else if (digit === "[") digit = "Lbracket";
+        else if (digit === "]") digit = "Rbracket";
+        const img = this.numbers?.[digit];
+        if (img) canvas.drawImage({ img, dx: x, dy: 571 + startUIPosition.y });
+        x += (img?.width ?? 0) + 1;
       }
 
       return x;

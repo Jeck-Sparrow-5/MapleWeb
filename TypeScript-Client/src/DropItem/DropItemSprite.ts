@@ -122,8 +122,8 @@ class DropItemSprite {
           this.itemFile = await WZManager.get(
             `${WZFiles.Item}/${wzInventoryType}/${this.id}.img`
           );
-          this.frame = this.itemFile.info.iconRaw;
-          this.icon = this.itemFile.info.iconRaw.nGetImage();
+          this.frame = this.itemFile?.info?.iconRaw;
+          this.icon = this.itemFile?.info?.iconRaw?.nGetImage();
         } else if (wzInventoryType === MapleInventory.WzInventoryType.Special) {
           let strId = `${this.id}`.padStart(8, "0");
           const idFirst4digits = strId.slice(0, 4);
@@ -141,9 +141,9 @@ class DropItemSprite {
             `${WZFiles.Item}/${wzInventoryType}/${idFirst4digits}.img/${strId}`
           );
           this.itemFile = itemFile;
-          this.frame = this.itemFile.info.iconRaw;
+          this.frame = this.itemFile?.info?.iconRaw;
 
-          this.icon = this.itemFile.info.iconRaw.nGetImage();
+          this.icon = this.itemFile?.info?.iconRaw?.nGetImage();
         }
       } catch (e) {
         console.error("Error loading item:", e);

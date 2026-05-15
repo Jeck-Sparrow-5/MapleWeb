@@ -59,7 +59,7 @@ export class DamageIndicator {
     alpha: number = 1
   ) => {
     if (damageNumber <= 0) {
-      let image = otherNumberNode["Miss"].nGetImage();
+      let image = otherNumberNode?.["Miss"]?.nGetImage();
       canvas.drawImage({
         img: image,
         dx: position.x,
@@ -68,14 +68,14 @@ export class DamageIndicator {
       });
     } else {
       [...`${damageNumber}`].reduce((x, digit, index) => {
-        let image = otherNumberNode[digit].nGetImage();
+        let image = otherNumberNode?.[digit]?.nGetImage();
         let y = position.y;
         if (index % 2 === 1) {
           y += 4;
         }
 
         if (index === 0) {
-          image = firstNumberNode[digit].nGetImage();
+          image = firstNumberNode?.[digit]?.nGetImage();
           y -= 4;
         }
 

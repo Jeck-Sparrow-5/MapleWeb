@@ -99,21 +99,31 @@ const UIExplorerCreation = {
 
   async _loadWZ() {
     const login = await WZManager.get('UI.wz/Login.img');
-    this._bgGender = login?.nGet?.('Gender')?.nGet?.('backgrnd')?.nGetImage?.() ?? null;
+
+    const getImg = (node: any): any => {
+      if (!node) return null;
+      const first = node?.nChildren?.[0];
+      if (!first) return node?.nGetImage?.() ?? null;
+      return (first.nTagName === 'vector' ? first.nParent : first)?.nGetImage?.() ?? null;
+    };
+
+    this._bgGender = getImg(login?.nGet?.('Gender')?.nGet?.('backgrnd'));
 
     const nc = login?.nGet?.('NewChar');
+
     const s0 = nc?.nGet?.('scroll')?.nGet?.('0');
     if (s0?.nChildren?.length) {
-      this._scrollTop = s0.nChildren[0]?.nGetImage?.() ?? null;
-      this._scrollBod = s0.nChildren[1]?.nGetImage?.() ?? null;
+      this._scrollTop = getImg(s0.nChildren[0]);
+      this._scrollBod = getImg(s0.nChildren[1]);
     }
     const s1 = nc?.nGet?.('scroll')?.nGet?.('1');
     if (s1?.nChildren?.length)
-      this._scrollBot = s1.nChildren[s1.nChildren.length - 1]?.nGetImage?.() ?? null;
+      this._scrollBot = getImg(s1.nChildren[s1.nChildren.length - 1]);
 
+    // avatarSel/N: each child node has canvas in ITS first child
     const avSel = nc?.nGet?.('avatarSel');
     if (avSel?.nChildren)
-      this._avatarSel = avSel.nChildren.map((c: any) => c.nGetImage?.() ?? null);
+      this._avatarSel = avSel.nChildren.map((c: any) => getImg(c));
 
     // Appearance options from Etc.wz/MakeCharInfo.img
     try {

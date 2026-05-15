@@ -612,9 +612,12 @@ UILogin.createWorldButtons = function () {
 UILogin.doUpdate = function (msPerTick, camera, canvas) {
   UICommon.doUpdate(msPerTick);
 
-  // Route clicks to UIRaceSelect race cards (not handled by ClickManager)
-  if (canvas.clicked && !UIRaceSelect.isHidden) {
-    UIRaceSelect.onMouseDown(canvas.mouseX, canvas.mouseY);
+  // Hover + click routing for UIRaceSelect race cards
+  if (!UIRaceSelect.isHidden) {
+    UIRaceSelect.onMouseMove(canvas.mouseX, canvas.mouseY);
+    if (canvas.clicked) {
+      UIRaceSelect.onMouseDown(canvas.mouseX, canvas.mouseY);
+    }
   }
   // Route clicks to UIExplorerCreation look buttons (handled internally via ClickManager)
   // Draw call keeps it active — no extra routing needed here
@@ -701,9 +704,13 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
 
   this.scrollOpenAnimation.draw(canvas, camera, lag, msPerTick, tdelta);
 
+  const overlayActive = !UIRaceSelect.isHidden || !UIExplorerCreation.isHidden;
+  const savedClicked = canvas.clicked;
+  if (overlayActive) (canvas as any).clicked = false;
   this.behindFrameButtons.forEach((obj) => {
     obj.draw(canvas, camera, lag, msPerTick, tdelta);
   });
+  if (overlayActive) (canvas as any).clicked = savedClicked;
 
   if (typeof this.selectedWorldId !== 'undefined' && this.selectedWorldId !== null) {
     const worldImage = this.worldImages.get(this.selectedWorldId);

@@ -50,6 +50,7 @@ export interface MapleMap {
   getLocationAboveFoothold: (footholdId: any) => any;
   getHorizontalFootHolds: () => any;
   getLocationAboveRandomFoothold: () => any;
+  getLoginFloors: () => number[];
   loadBoundaries: (wzNode: any, footholds: any) => any;
   getNearbyTownMapId: () => any;
   loadBackgrounds: (wzNode: any) => Promise<any>;
@@ -205,6 +206,46 @@ MapleMap.loadFootholds = function (wzNode) {
   });
 
   return footholds;
+};
+
+// Returns the 4 main platform Y values for login sub-states sorted ascending.
+// Most negative Y = NewChar (mushroom platform, topmost in the map).
+// The 3 wide platforms (span ≥ 800px) = CharSelect, WorldSelect, Login.
+MapleMap.getLoginFloors = function (): number[] {
+  const yData = new Map<number, { minX: number; maxX: number }>();
+  Object.values(this.footholds).forEach((fh: any) => {
+    const y = Math.round(fh.y1);
+    const prev = yData.get(y) ?? { minX: Infinity, maxX: -Infinity };
+    yData.set(y, {
+      minX: Math.min(prev.minX, fh.x1, fh.x2),
+      maxX: Math.max(prev.maxX, fh.x1, fh.x2),
+    });
+  });
+
+  const horizontalEntries = [...yData.entries()]
+    .filter(([, d]) => d.maxX > d.minX);  // must be a horizontal platform
+
+  // NewChar mushroom = topmost platform on the map (minimum/most-negative Y)
+  const newCharY = Math.min(...horizontalEntries.map(([y]) => y));
+
+  // 3 wide state floors (span ≥ 800px): Login, WorldSelect, CharSelect
+  const wide = horizontalEntries
+    .filter(([y, d]) => y !== newCharY && d.maxX - d.minX >= 800)
+    .sort((a, b) => b[0] - a[0])  // descending (bottom first)
+    .slice(0, 3)
+    .map(([y]) => y);
+
+  // RaceSelect floor = topmost medium platform (400–799px span), excluding newChar
+  const raceSelY = horizontalEntries
+    .filter(([y, d]) => {
+      const span = d.maxX - d.minX;
+      return y !== newCharY && span >= 400 && span < 800;
+    })
+    .sort((a, b) => a[0] - b[0])  // ascending → most negative = topmost
+    .map(([y]) => y)[0] ?? null;
+
+  const all = raceSelY !== null ? [newCharY, raceSelY, ...wide] : [newCharY, ...wide];
+  return all.sort((a, b) => a - b);
 };
 
 MapleMap.getLocationAboveFoothold = function (footholdId: any) {

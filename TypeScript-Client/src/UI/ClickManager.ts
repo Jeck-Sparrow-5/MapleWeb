@@ -52,6 +52,7 @@ ClickManager.doUpdate = function (msPerTick: number, camera: CameraInterface) {
   }
 
   for (const button of buttons) {
+    if ((button as any).isDisabled) continue;
     const buttonRect = button.getRect(camera);
     const hoverButton = GUIUtil.pointInRectangle(mousePoint, buttonRect);
 

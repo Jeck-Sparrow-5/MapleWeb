@@ -1,14 +1,3 @@
-/**
- * UIExplorerCreation — character creation for Explorer/Adventurer class.
- * Uses Login.img/NewChar WZ node.
- * Flow: Gender → Look (appearance + name) → [name check] → Create
- *
- * HeavenClient "000" (Adventurer) pixel coordinates:
- *   Gender BtYes (514,394)  BtNo (590,394)
- *   Look arrows left base (552,198) right base (684,198) +18px/row
- *   Look BtYes (523,425)  BtNo (597,425)
- *   Name input (514,198) 163×24  BtYes (513,273)  BtNo (587,273)
- */
 import WZManager from '../wz-utils/WZManager';
 import { MapleStanceButton } from './MapleStanceButton';
 import ClickManager from './ClickManager';
@@ -22,7 +11,7 @@ import Inventory from '../Inventory/Inventory';
 import Stats from '../Stats/Stats';
 import { JobsMainType } from '../Constants/Jobs';
 
-// Fallback appearance options
+// ── Fallback appearance data ──────────────────────────────────────────────────
 const FB_FACES_M  = [20000, 20001, 20002, 20100, 20401];
 const FB_FACES_F  = [21000, 21001, 21002, 21100, 21201];
 const FB_HAIRS_M  = [30000, 30010, 30020, 30030, 33110];
@@ -34,106 +23,191 @@ const FB_BOTTOMS  = [1060002, 1060006, 1060010, 1061008];
 const FB_SHOES    = [1072001, 1072005, 1072037, 1072038];
 const FB_WEAPONS  = [1302000, 1312004, 1322005, 1332007];
 
-type Step = 'gender' | 'look' | 'waiting';
+// ── Layout constants (800×600) — adjust with debug overlay ───────────────────
+const SCROLL_X   = 115;   // left scroll panel draw x
+const SCROLL_Y   = 218;   // left scroll panel draw y
+const ROW_Y0     = 243;   // first row center y
+const ROW_DY     = 23;    // row pitch
+const BAR_X      = 182;   // avatarSel bar draw x
+const BAR_H      = 19;    // avatarSel bar draw height
+const ARR_L_X    = 172;   // left arrow x
+const ARR_R_X    = 318;   // right arrow x
+const VAL_X      = 265;   // value text x (within bar)
 
-interface St {
-  gender: number;
-  faceIdx: number; hairIdx: number; colorIdx: number; skinIdx: number;
-  topIdx: number; botIdx: number; shoeIdx: number; weaponIdx: number;
-  name: string;
-}
+const RIGHT_X     = 444;  // right panel left edge
+const CHARNAME_Y  = 91;  // charName image y
+const CHARSET_Y   = -202;  // charSet image y
+const NAME_IN_X   = RIGHT_X + 8;
+const NAME_IN_Y   = 227;
+const NAME_IN_W   = 115;
+const STAT_Y0     = 284;  // first stat row y
+const STAT_DY     = 20;
+const OK_X        = RIGHT_X + 6;
+const OK_Y        = 449;
+const CANCEL_X    = RIGHT_X + 75;
+const CANCEL_Y    = 449;
 
-// Called by CharNameResponseHandler after server validates the name
+const PREVIEW_X  = 390;
+const PREVIEW_Y  = 430;
+const BG_Y       = -80;  // shift background up to show foothold platform
+
+// Called by CharManageHandlers after server validates the name
 export function onExplorerNameResult(available: boolean) {
   if (!available) {
-    UIExplorerCreation._step      = 'look';
+    UIExplorerCreation._step      = 'name';
     UIExplorerCreation._nameError = 'Name already taken.';
+    UIExplorerCreation._applyStep();
     return;
   }
-  UIExplorerCreation._dispatchCreate();
+  // Name available — advance to look/appearance step
+  UIExplorerCreation._step = 'look';
+  UIExplorerCreation._applyStep();
+}
+
+function getImg(node: any): any {
+  if (!node) return null;
+  const first = node?.nChildren?.[0];
+  if (!first) return node?.nGetImage?.() ?? null;
+  return (first.nTagName === 'vector' ? first.nParent : first)?.nGetImage?.() ?? null;
 }
 
 const UIExplorerCreation = {
-  isHidden: true,
+  isHidden:    true,
   initialized: false,
 
-  _step:      'gender' as Step,
+  _step:      'name' as 'name' | 'look' | 'waiting',
   _nameError: '',
 
-  buttons:    [] as MapleStanceButton[],
-  nameInput:  null as MapleInput | null,
+  buttons:   [] as MapleStanceButton[],
+  nameInput: null as MapleInput | null,
 
-  // Button groups per step
-  _btnsGender: [] as MapleStanceButton[],
-  _btnsLook:   [] as MapleStanceButton[],
-  _btnsAlways: [] as MapleStanceButton[],
+  // WZ images
+  _bg:          [] as any[],   // NewChar/backgrnd + backgrnd2
+  _scrollImg:   null as any,   // NewChar/scroll  — left parchment panel
+  _charNameImg: null as any,   // NewChar/charName — name board (right top)
+  _charSetImg:  null as any,   // NewChar/charSet  — stats board (right bottom)
+  _avatarSel:   [] as any[],   // NewChar/avatarSel children (one per row)
 
-  // WZ images (Login.img/NewChar)
-  _bgGender:  null as any,   // Gender/backgrnd  362×219
-  _scrollTop: null as any,   // NewChar/scroll/0[0]  242×30
-  _scrollBod: null as any,   // NewChar/scroll/0[1]  242×214
-  _scrollBot: null as any,   // NewChar/scroll/1[last]
-  _avatarSel: [] as any[],   // NewChar/avatarSel/0-7  200×17
-
-  // Appearance data
-  _faces:   [FB_FACES_M.slice(), FB_FACES_F.slice()] as number[][],
+  // Appearance pools
+  _facesM:  FB_FACES_M.slice(), _facesF: FB_FACES_F.slice(),
   _hairs:   [FB_HAIRS_M.slice(), FB_HAIRS_F.slice()] as number[][],
-  _colors:  FB_COLORS.slice(), _skins:  FB_SKINS.slice(),
-  _tops:    FB_TOPS.slice(),   _bots:   FB_BOTTOMS.slice(),
-  _shoes:   FB_SHOES.slice(),  _weapons: FB_WEAPONS.slice(),
+  _colors:  FB_COLORS.slice(),  _skins:  FB_SKINS.slice(),
+  _tops:    FB_TOPS.slice(),    _bots:   FB_BOTTOMS.slice(),
+  _shoes:   FB_SHOES.slice(),   _weapons: FB_WEAPONS.slice(),
 
-  _preview: null as MapleCharacter | null,
+  _st: { gender:0, faceIdx:0, hairIdx:0, colorIdx:0, skinIdx:0,
+         topIdx:0, botIdx:0, shoeIdx:0, weaponIdx:0, name:'' },
+  _stats:         { str:4, dex:4, int:4, luk:4 },
+
+  _preview:      null as MapleCharacter | null,
   _previewDirty: false,
 
-  _st: {
-    gender:0, faceIdx:0, hairIdx:0, colorIdx:0, skinIdx:0,
-    topIdx:0, botIdx:0,  shoeIdx:0, weaponIdx:0, name:'',
-  } as St,
+  // ── Initialisation ───────────────────────────────────────────────────────────
 
   async initialize(canvas: GameCanvas) {
-    await this._loadWZ();
-    await this._buildButtons(canvas);
+    await this._loadWZ(canvas);
+    await this._loadAppearanceData();
     await this._buildPreview();
     this.initialized = true;
   },
 
-  async _loadWZ() {
+  // Button groups per step
+  _btnsName: [] as MapleStanceButton[],
+  _btnsLook: [] as MapleStanceButton[],
+
+  async _loadWZ(canvas: GameCanvas) {
     const login = await WZManager.get('UI.wz/Login.img');
+    const nc    = login?.nGet?.('NewChar');
+    const win   = await WZManager.get('UI.wz/UIWindow.img');
 
-    const getImg = (node: any): any => {
-      if (!node) return null;
-      const first = node?.nChildren?.[0];
-      if (!first) return node?.nGetImage?.() ?? null;
-      return (first.nTagName === 'vector' ? first.nParent : first)?.nGetImage?.() ?? null;
-    };
+    // Background — MapLogin node from Login.img
+    const mapLogin = login?.nGet?.('MapLogin');
+    this._bg = (mapLogin?.nChildren ?? [])
+      .map((c: any) => getImg(c))
+      .filter(Boolean);
 
-    this._bgGender = getImg(login?.nGet?.('Gender')?.nGet?.('backgrnd'));
+    // Left parchment scroll panel
+    this._scrollImg = getImg(nc?.nGet?.('scroll'))
+      ?? getImg(nc?.nGet?.('scroll')?.nGet?.('0'));
 
-    const nc = login?.nGet?.('NewChar');
+    // Right boards
+    this._charNameImg = getImg(nc?.nGet?.('charName'));
+    this._charSetImg  = getImg(nc?.nGet?.('charSet'));
 
-    const s0 = nc?.nGet?.('scroll')?.nGet?.('0');
-    if (s0?.nChildren?.length) {
-      this._scrollTop = getImg(s0.nChildren[0]);
-      this._scrollBod = getImg(s0.nChildren[1]);
-    }
-    const s1 = nc?.nGet?.('scroll')?.nGet?.('1');
-    if (s1?.nChildren?.length)
-      this._scrollBot = getImg(s1.nChildren[s1.nChildren.length - 1]);
-
-    // avatarSel/N: each child node has canvas in ITS first child
+    // avatarSel row bars — avatarSel has numbered children, one per row
     const avSel = nc?.nGet?.('avatarSel');
     if (avSel?.nChildren)
       this._avatarSel = avSel.nChildren.map((c: any) => getImg(c));
 
-    // Appearance options from Etc.wz/MakeCharInfo.img
+    // ── Buttons ──────────────────────────────────────────────────────────────
+    this.buttons.forEach(b => ClickManager.removeButton(b));
+    this.buttons = [];
+
+    const st   = this._st;
+    const wrap = (arr: any[], i: number, d: number) => (i + d + arr.length) % arr.length;
+
+    type Row = { getArr(): any[]; getI(): number; setI(v:number): void };
+    const rows: Row[] = [
+      { getArr: () => st.gender===0 ? this._facesM : this._facesF, getI: () => st.faceIdx,   setI: (v) => { st.faceIdx=v;   } },
+      { getArr: () => this._hairs[st.gender],                       getI: () => st.hairIdx,   setI: (v) => { st.hairIdx=v;   } },
+      { getArr: () => this._colors,                                  getI: () => st.colorIdx,  setI: (v) => { st.colorIdx=v;  } },
+      { getArr: () => this._skins,                                   getI: () => st.skinIdx,   setI: (v) => { st.skinIdx=v;   } },
+      { getArr: () => this._tops,                                    getI: () => st.topIdx,    setI: (v) => { st.topIdx=v;    } },
+      { getArr: () => this._bots,                                    getI: () => st.botIdx,    setI: (v) => { st.botIdx=v;    } },
+      { getArr: () => this._shoes,                                   getI: () => st.shoeIdx,   setI: (v) => { st.shoeIdx=v;   } },
+      { getArr: () => this._weapons,                                 getI: () => st.weaponIdx, setI: (v) => { st.weaponIdx=v; } },
+      { getArr: () => [0, 1], getI: () => st.gender, setI: (v) => { st.gender=v; st.faceIdx=0; st.hairIdx=0; this._previewDirty=true; } },
+    ];
+
+    const arL  = nc?.nGet?.('BtLeft')?.nChildren   ?? win?.nGet?.('BtLeft')?.nChildren;
+    const arR  = nc?.nGet?.('BtRight')?.nChildren  ?? win?.nGet?.('BtRight')?.nChildren;
+    const btOK = nc?.nGet?.('BtYes')?.nChildren    ?? win?.nGet?.('BtOK')?.nChildren;
+    const btNo = nc?.nGet?.('BtNo')?.nChildren      ?? win?.nGet?.('BtNo')?.nChildren;
+
+    this._btnsName = [];
+    this._btnsLook = [];
+
+    const addBtn = (img: any, x: number, y: number, cb: () => void, group: MapleStanceButton[]) => {
+      if (!img) return;
+      const b = new MapleStanceButton(canvas, {
+        x, y, img,
+        isRelativeToCamera: true, isPartOfUI: true, isHidden: true,
+        onClick: cb,
+      });
+      ClickManager.addButton(b);
+      this.buttons.push(b);
+      group.push(b);
+    };
+
+    // Name step: OK (check name) + Back
+    addBtn(btOK, OK_X,     OK_Y,     () => this._checkName(), this._btnsName);
+    addBtn(btNo, CANCEL_X, CANCEL_Y, () => this.hide(),       this._btnsName);
+
+    // Look step: appearance arrows + dice + OK + Cancel
+    rows.forEach((row, i) => {
+      const ry = ROW_Y0 + i * ROW_DY - 9;
+      addBtn(arL, ARR_L_X, ry, () => { row.setI(wrap(row.getArr(), row.getI(), -1)); this._previewDirty = true; }, this._btnsLook);
+      addBtn(arR, ARR_R_X, ry, () => { row.setI(wrap(row.getArr(), row.getI(),  1)); this._previewDirty = true; }, this._btnsLook);
+    });
+    addBtn(btOK, OK_X,     OK_Y,     () => this._dispatchCreate(), this._btnsLook);
+    addBtn(btNo, CANCEL_X, CANCEL_Y, () => this.hide(),        this._btnsLook);
+
+    // Name text input (always present when visible)
+    this.nameInput?.remove?.();
+    this.nameInput = new MapleInput(canvas, {
+      x: NAME_IN_X, y: NAME_IN_Y, width: NAME_IN_W, height: 18, color: '#ffffff',
+    });
+  },
+
+  async _loadAppearanceData() {
     try {
       const info = await WZManager.get('Etc.wz/MakeCharInfo.img');
       const list = (n: any): number[] =>
         n?.nChildren?.map((c: any) => parseInt(c.nValue ?? c.nName ?? '0')).filter(Boolean) ?? [];
       for (const g of [0, 1]) {
         const gn = info?.nGet?.('CharSet')?.nGet?.(`${g}`);
-        const f = list(gn?.nGet?.('face')); if (f.length) this._faces[g] = f;
-        const h = list(gn?.nGet?.('hair')); if (h.length) this._hairs[g] = h;
+        const f = list(gn?.nGet?.('face')); if (f.length) { if (g===0) this._facesM=f; else this._facesF=f; }
+        const h = list(gn?.nGet?.('hair')); if (h.length) this._hairs[g]=h;
       }
       const ex = info?.nGet?.('CharSet')?.nGet?.('0');
       const t = list(ex?.nGet?.('top'));    if (t.length) this._tops    = t;
@@ -145,6 +219,12 @@ const UIExplorerCreation = {
     } catch (_) {}
   },
 
+  _rollStats() {
+    const v = [4, 4, 4, 4];
+    for (let i = 0; i < 9; i++) v[Math.floor(Math.random() * 4)]++;
+    this._stats = { str: v[0], dex: v[1], int: v[2], luk: v[3] };
+  },
+
   async _buildPreview() {
     try {
       this._preview = new MapleCharacter({
@@ -152,10 +232,10 @@ const UIExplorerCreation = {
         Hair: this._hairs[0][0] ?? FB_HAIRS_M[0], exp:0, fame:0,
         inventory: new Inventory({}),
         stats: new Stats({ str:4, dex:4, int:4, luk:4, abilityPoints:0,
-          maxHp:50, maxMp:5, jobType: JobsMainType.Begginer, job:'Beginner', level:1 }),
+          maxHp:50, maxMp:5, jobType:JobsMainType.Begginer, job:'Beginner', level:1 }),
       });
       this._preview.skinColor = 0;
-      this._preview.face      = this._faces[0][0] ?? FB_FACES_M[0];
+      this._preview.face = this._facesM[0] ?? FB_FACES_M[0];
       await this._preview.load();
     } catch (_) {}
   },
@@ -164,8 +244,8 @@ const UIExplorerCreation = {
     if (!this._preview) return;
     const { gender:g, faceIdx, hairIdx, skinIdx, topIdx, botIdx, shoeIdx, weaponIdx } = this._st;
     try {
+      const face = (g===0 ? this._facesM : this._facesF)[faceIdx] ?? FB_FACES_M[0];
       const skin = this._skins[skinIdx] ?? 0;
-      const face = this._faces[g][faceIdx] ?? FB_FACES_M[0];
       if (this._preview.skinColor !== skin) await this._preview.setSkinColor(skin);
       if (this._preview.face      !== face) await this._preview.setFace(face);
       this._preview.equips = [];
@@ -178,114 +258,22 @@ const UIExplorerCreation = {
     } catch (_) {}
   },
 
-  async _buildButtons(canvas: GameCanvas) {
-    this.buttons.forEach(b => ClickManager.removeButton(b));
-    this.buttons     = [];
-    this._btnsGender = [];
-    this._btnsLook   = [];
-    this._btnsAlways = [];
+  // ── Name / create ────────────────────────────────────────────────────────────
 
-    const login = await WZManager.get('UI.wz/Login.img');
-    const nc    = login?.nGet?.('NewChar');
-    const gen   = login?.nGet?.('Gender');
-    const win   = await WZManager.get('UI.wz/UIWindow.img');
-
-    const ncImg  = (k: string) => nc?.nGet?.(k)?.nChildren  ?? null;
-    const genImg = (k: string) => gen?.nGet?.(k)?.nChildren  ?? null;
-    const winImg = (k: string) => win?.nGet?.(k)?.nChildren  ?? null;
-
-    const add = (
-      group: MapleStanceButton[], img: any, x: number, y: number, cb: () => void,
-    ) => {
-      if (!img) return;
-      const b = new MapleStanceButton(canvas, {
-        x, y, img, isRelativeToCamera:true, isPartOfUI:true, isHidden:true, onClick:cb,
-      });
-      ClickManager.addButton(b);
-      this.buttons.push(b);
-      group.push(b);
-    };
-
-    // ── GENDER step — BtYes Male (514,394)  BtNo Female (590,394) ──
-    add(this._btnsGender, genImg('BtYes') ?? winImg('BtOK'), 514, 394,
-        async () => { this._st.gender = 0; await this._toStep('look', canvas); });
-    add(this._btnsGender, genImg('BtNo')  ?? winImg('BtNo'), 590, 394,
-        async () => { this._st.gender = 1; await this._toStep('look', canvas); });
-
-    // ── LOOK step — appearance rows + name input ──────────────────
-    const arL = ncImg('BtLeft')  ?? winImg('BtLeft');
-    const arR = ncImg('BtRight') ?? winImg('BtRight');
-    const st  = this._st;
-    const wrap = (arr: number[], i: number, d: number) => (i + d + arr.length) % arr.length;
-
-    // 8 rows at y=198+i*18 (HeavenClient Adventurer spacing)
-    const rows: [() => number[], () => number, (v:number) => void][] = [
-      [() => this._skins,             () => st.skinIdx,   v => { st.skinIdx   = v; }],
-      [() => this._faces[st.gender],  () => st.faceIdx,   v => { st.faceIdx   = v; }],
-      [() => this._hairs[st.gender],  () => st.hairIdx,   v => { st.hairIdx   = v; }],
-      [() => this._colors,            () => st.colorIdx,  v => { st.colorIdx  = v; }],
-      [() => this._tops,              () => st.topIdx,    v => { st.topIdx    = v; }],
-      [() => this._bots,              () => st.botIdx,    v => { st.botIdx    = v; }],
-      [() => this._shoes,             () => st.shoeIdx,   v => { st.shoeIdx   = v; }],
-      [() => this._weapons,           () => st.weaponIdx, v => { st.weaponIdx = v; }],
-    ];
-
-    rows.forEach(([getArr, getIdx, setIdx], i) => {
-      const y = 198 + i * 18;
-      add(this._btnsLook, arL, 552, y,
-          async () => { setIdx(wrap(getArr(), getIdx(), -1)); this._previewDirty = true; });
-      add(this._btnsLook, arR, 684, y,
-          async () => { setIdx(wrap(getArr(), getIdx(),  1)); this._previewDirty = true; });
-    });
-
-    // BtCheck (50×24) — name check, beside name input
-    add(this._btnsLook, ncImg('BtCheck') ?? winImg('BtOK'), 668, 418,
-        async () => { this._submitName(); });
-
-    // BtYes (81×41) confirm at (523,425)  BtNo back at (597,425)
-    add(this._btnsLook, ncImg('BtYes') ?? winImg('BtOK'), 523, 425,
-        async () => { this._submitName(); });
-    add(this._btnsLook, ncImg('BtNo')  ?? winImg('BtNo'), 597, 425,
-        async () => {
-          // Back to gender if gender was choosable; else back to race select
-          await this._toStep('gender', canvas);
-        });
-
-    // Close
-    add(this._btnsAlways, winImg('BtUIClose'), 790, 4, () => this.hide());
-  },
-
-  async _toStep(step: Step, canvas?: GameCanvas) {
-    this._step      = step;
-    this._nameError = '';
-
-    if (step === 'look') {
-      this._previewDirty = true;
-      this.nameInput?.remove?.();
-      const c = canvas ?? document.getElementById('game') as any;
-      // Name input: (556,416) 108×20 inside the right scroll panel
-      this.nameInput = new MapleInput(c, { x:556, y:416, width:108, height:20, color:'#000000' });
-    } else {
-      this.nameInput?.remove?.();
-      this.nameInput = null;
-    }
-
-    this._btnsGender.forEach(b => { b.isHidden = step !== 'gender'; });
-    this._btnsLook.forEach(b   => { b.isHidden = step !== 'look' && step !== 'waiting'; });
-    this._btnsAlways.forEach(b => { b.isHidden = this.isHidden; });
-  },
-
-  _submitName() {
+  _checkName() {
     const name = this.nameInput?.input.value?.trim() ?? '';
-    if (name.length < 4)               { this._nameError = 'Min 4 characters.'; return; }
+    if (name.length < 4)               { this._nameError = 'Min 4 chars.';          return; }
     if (!/^[a-zA-Z0-9]+$/.test(name))  { this._nameError = 'Letters/numbers only.'; return; }
     this._st.name   = name;
     this._nameError = '';
-    this._step      = 'waiting';
     if (SessionManager.isConnected()) {
+      this._step = 'waiting';
+      this._applyStep();
       new CheckCharNamePacket(name).dispatch();
     } else {
-      this._dispatchCreate();
+      // Offline: skip name check, go straight to look step
+      this._step = 'look';
+      this._applyStep();
     }
   },
 
@@ -294,34 +282,50 @@ const UIExplorerCreation = {
             topIdx, botIdx, shoeIdx, weaponIdx, name } = this._st;
     new CreateCharPacket(
       name,
-      this._faces[g][faceIdx]  ?? FB_FACES_M[0],
-      this._hairs[g][hairIdx]  ?? FB_HAIRS_M[0],
-      this._colors[colorIdx]   ?? 0,
-      this._skins[skinIdx]     ?? 0,
-      this._tops[topIdx]       ?? FB_TOPS[0],
-      this._bots[botIdx]       ?? FB_BOTTOMS[0],
-      this._shoes[shoeIdx]     ?? FB_SHOES[0],
-      this._weapons[weaponIdx] ?? FB_WEAPONS[0],
+      (g===0 ? this._facesM : this._facesF)[faceIdx] ?? FB_FACES_M[0],
+      this._hairs[g][hairIdx]   ?? FB_HAIRS_M[0],
+      this._colors[colorIdx]    ?? 0,
+      this._skins[skinIdx]      ?? 0,
+      this._tops[topIdx]        ?? FB_TOPS[0],
+      this._bots[botIdx]        ?? FB_BOTTOMS[0],
+      this._shoes[shoeIdx]      ?? FB_SHOES[0],
+      this._weapons[weaponIdx]  ?? FB_WEAPONS[0],
       g,
     ).dispatch();
     this.hide();
   },
 
+  // ── Lifecycle ────────────────────────────────────────────────────────────────
+
   show(canvas: GameCanvas) {
     if (!this.initialized) {
       this.initialize(canvas).then(() => {
+        this._reset();
         this.isHidden = false;
-        this._toStep('gender', canvas);
+        this._applyStep();
       });
       return;
     }
+    this._reset();
     this.isHidden = false;
-    // Reset state
-    Object.assign(this._st, {
-      gender:0, faceIdx:0, hairIdx:0, colorIdx:0, skinIdx:0,
-      topIdx:0, botIdx:0, shoeIdx:0, weaponIdx:0, name:'',
-    });
-    this._toStep('gender', canvas);
+    this._applyStep();
+    if (this.nameInput) this.nameInput.input.value = '';
+  },
+
+  _reset() {
+    Object.assign(this._st, { gender:0, faceIdx:0, hairIdx:0, colorIdx:0, skinIdx:0,
+                               topIdx:0, botIdx:0, shoeIdx:0, weaponIdx:0, name:'' });
+    this._rollStats();
+    this._step       = 'name';
+    this._nameError  = '';
+    this._previewDirty = true;
+  },
+
+  _applyStep() {
+    const inName = this._step === 'name' || this._step === 'waiting';
+    const inLook = this._step === 'look';
+    this._btnsName.forEach(b => { b.isHidden = !inName; });
+    this._btnsLook.forEach(b => { b.isHidden = !inLook; });
   },
 
   hide() {
@@ -331,119 +335,125 @@ const UIExplorerCreation = {
     this.nameInput = null;
   },
 
-  _drawScrollPanel(canvas: GameCanvas, x: number, y: number) {
-    const W = 242;
-    let cy = y;
-    const draw = (img: any, h: number, fallback: string) => {
-      if (img) { try { canvas.context.drawImage(img, x, cy, W, h); } catch (_) {} }
-      else { canvas.context.save(); canvas.context.fillStyle=fallback; canvas.context.fillRect(x,cy,W,h); canvas.context.restore(); }
-      cy += h;
-    };
-    draw(this._scrollTop, 30,                           'rgba(10,16,40,0.92)');
-    const bh = this._scrollBod?.height ?? 214;
-    for (let i = 0; i < 2; i++) draw(this._scrollBod, bh, 'rgba(14,20,50,0.88)');
-    draw(this._scrollBot, 30,                           'rgba(10,16,40,0.92)');
-  },
-
-  async _drawPreview(canvas: GameCanvas) {
-    if (!this._preview) return;
-    if (this._previewDirty) { this._previewDirty = false; await this._refreshPreview(); }
-    try {
-      if (!this._preview.pos) (this._preview as any).pos = { x:200, y:400 };
-      this._preview.pos.x = 200; this._preview.pos.y = 400;
-      this._preview.draw(canvas, { x:0, y:0 } as any, 0, 100, 0);
-    } catch (_) {}
-  },
+  // ── Draw ─────────────────────────────────────────────────────────────────────
 
   draw(canvas: GameCanvas) {
     if (this.isHidden) return;
 
-    canvas.context.save();
-    canvas.context.fillStyle = 'rgba(0,0,0,0.88)';
-    canvas.context.fillRect(0, 0, 800, 600);
-    canvas.context.restore();
+    // Background at natural size, shifted up to show foothold platform
+    for (const bg of this._bg)
+      try { canvas.context.drawImage(bg, 0, BG_Y); } catch (_) {}
 
-    if (this._step === 'gender') {
-      this._drawGender(canvas);
+    if (this._step === 'name' || this._step === 'waiting') {
+      this._drawNamePanel(canvas);
     } else {
-      this._drawLook(canvas);
-      this._drawPreview(canvas);
+      this._drawRightPanel(canvas);
+    }
+    if (this._preview && this._previewDirty) {
+      this._previewDirty = false;
+      this._refreshPreview();
+    }
+    if (this._preview) {
+      try {
+        (this._preview as any).pos = { x: PREVIEW_X, y: PREVIEW_Y };
+        this._preview.draw(canvas, { x:0, y:0 } as any, 0, 100, 0);
+      } catch (_) {}
     }
 
     this.buttons.forEach(b => b.draw(canvas, { x:0, y:0 } as any, 0, 0, 0));
   },
 
-  _drawGender(canvas: GameCanvas) {
-    const bgX = Math.floor((800 - 362) / 2);
-    const bgY = Math.floor((600 - 219) / 2);
-
-    if (this._bgGender) {
-      try { canvas.context.drawImage(this._bgGender, bgX, bgY, 362, 219); } catch (_) {}
+  _drawScrollPanel(canvas: GameCanvas) {
+    // Draw parchment scroll background (natural size)
+    if (this._scrollImg) {
+      try { canvas.context.drawImage(this._scrollImg, SCROLL_X, SCROLL_Y); } catch (_) {}
     } else {
       canvas.context.save();
-      canvas.context.fillStyle  = 'rgba(20,28,60,0.97)';
-      canvas.context.strokeStyle= '#556688';
-      canvas.context.fillRect(bgX, bgY, 362, 219);
-      canvas.context.strokeRect(bgX, bgY, 362, 219);
+      canvas.context.fillStyle = 'rgba(240,225,190,0.92)';
+      canvas.context.fillRect(SCROLL_X, SCROLL_Y, 228, 9 * ROW_DY + 20);
       canvas.context.restore();
     }
 
-    canvas.drawText({ text:'Select Gender', color:'#FFDD88', x:bgX+115, y:bgY+28, fontSize:13 });
-    canvas.drawText({ text:'♂  Male',   color:'#88CCFF',  x:500, y:388, fontSize:11 });
-    canvas.drawText({ text:'♀  Female', color:'#FFAACC',  x:576, y:388, fontSize:11 });
-  },
-
-  _drawLook(canvas: GameCanvas) {
-    // Right panel: NewChar/scroll at x=530
-    this._drawScrollPanel(canvas, 530, 60);
-
-    const labels = ['Skin','Face','Hair','Color','Top','Bottom','Shoes','Weapon'];
-    const vals   = [
-      this._skins[this._st.skinIdx],
-      this._faces[this._st.gender][this._st.faceIdx],
-      this._hairs[this._st.gender][this._st.hairIdx],
-      this._colors[this._st.colorIdx],
-      this._tops[this._st.topIdx],
-      this._bots[this._st.botIdx],
-      this._shoes[this._st.shoeIdx],
-      this._weapons[this._st.weaponIdx],
+    // avatarSel bars have the category label baked in — only overlay the current value
+    const { gender:g } = this._st;
+    const faces = g===0 ? this._facesM : this._facesF;
+    const vals = [
+      faces[this._st.faceIdx]           ?? '-',
+      this._hairs[g][this._st.hairIdx]  ?? '-',
+      this._colors[this._st.colorIdx]   ?? '-',
+      this._skins[this._st.skinIdx]     ?? '-',
+      this._tops[this._st.topIdx]       ?? '-',
+      this._bots[this._st.botIdx]       ?? '-',
+      this._shoes[this._st.shoeIdx]     ?? '-',
+      this._weapons[this._st.weaponIdx] ?? '-',
+      g === 0 ? 'Male' : 'Female',
     ];
 
-    labels.forEach((label, i) => {
-      const y   = 198 + i * 18;
-      const bar = this._avatarSel[i] ?? null;
+    for (let i = 0; i < 9; i++) {
+      const ry = ROW_Y0 + i * ROW_DY;
+      const bar = this._avatarSel[i];
       if (bar) {
-        try { canvas.context.drawImage(bar, 552, y - 9, 200, 17); } catch (_) {}
-      } else {
-        canvas.context.save();
-        canvas.context.fillStyle = 'rgba(30,40,80,0.8)';
-        canvas.context.fillRect(552, y - 9, 200, 17);
-        canvas.context.restore();
+        try { canvas.context.drawImage(bar, BAR_X, ry - Math.floor(BAR_H / 2)); } catch (_) {}
       }
-      canvas.drawText({ text: label,           color:'#AAAACC', x:557, y:y+2, fontSize:8 });
-      canvas.drawText({ text:`${vals[i]??'-'}`, color:'#FFFFFF', x:620, y:y+2, fontSize:8 });
-    });
+      canvas.drawText({ text: `${vals[i]}`, color: '#2a1000', x: VAL_X, y: ry + 4, fontSize: 8 });
+    }
+  },
 
-    // Name input area label
-    canvas.context.save();
-    canvas.context.fillStyle  = 'rgba(20,28,60,0.9)';
-    canvas.context.strokeStyle= '#556688';
-    canvas.context.fillRect(552, 402, 108, 22);
-    canvas.context.strokeRect(552, 402, 108, 22);
-    canvas.context.restore();
-    canvas.drawText({ text:'Name:', color:'#AAAACC', x:557, y:398, fontSize:8 });
+  _drawRightPanel(canvas: GameCanvas) {
+    // charName board (name input area)
+    if (this._charNameImg) {
+      try { canvas.context.drawImage(this._charNameImg, RIGHT_X, CHARNAME_Y); } catch (_) {}
+    } else {
+      canvas.context.save();
+      canvas.context.fillStyle = 'rgba(80,48,16,0.92)';
+      canvas.context.fillRect(RIGHT_X, CHARNAME_Y, 168, 60);
+      canvas.context.restore();
+      canvas.drawText({ text: 'NAME OF CHARACTER', color: '#f0d080', x: RIGHT_X + 6, y: CHARNAME_Y + 12, fontSize: 8 });
+    }
 
     if (this._nameError) {
-      canvas.drawText({ text:this._nameError, color:'#FF6666', x:534, y:450, fontSize:9 });
-    }
-    if (this._step === 'waiting') {
-      canvas.drawText({ text:'Checking name...', color:'#AAAAFF', x:534, y:450, fontSize:9 });
+      canvas.drawText({ text: this._nameError, color: '#FF6666', x: RIGHT_X + 6, y: NAME_IN_Y + 24, fontSize: 8 });
+    } else if (this._step === 'waiting') {
+      canvas.drawText({ text: 'Checking...', color: '#88aaff', x: RIGHT_X + 6, y: NAME_IN_Y + 24, fontSize: 8 });
     }
 
-    canvas.drawText({
-      text:`${this._st.gender === 0 ? 'Male' : 'Female'} Explorer`,
-      color:'#AADDFF', x:534, y:466, fontSize:9,
+    // charSet board (stats area)
+    if (this._charSetImg) {
+      try { canvas.context.drawImage(this._charSetImg, RIGHT_X, CHARSET_Y); } catch (_) {}
+    } else {
+      canvas.context.save();
+      canvas.context.fillStyle = 'rgba(80,48,16,0.92)';
+      canvas.context.fillRect(RIGHT_X, CHARSET_Y, 168, 4 * STAT_DY + 20);
+      canvas.context.restore();
+    }
+
+    // Stats values overlaid on charSet board
+    const statLabels = ['STR', 'DEX', 'INT', 'LUK'];
+    const statVals   = [this._stats.str, this._stats.dex, this._stats.int, this._stats.luk];
+    statLabels.forEach((s, i) => {
+      const sy = STAT_Y0 + i * STAT_DY;
+      canvas.drawText({ text: s,               color: '#f0d080', x: RIGHT_X + 8,  y: sy, fontSize: 9 });
+      canvas.drawText({ text: `${statVals[i]}`, color: '#ffffff', x: RIGHT_X + 44, y: sy, fontSize: 9 });
     });
+  },
+
+  // Step 1: charName board only — no scroll, no charset
+  _drawNamePanel(canvas: GameCanvas) {
+    if (this._charNameImg) {
+      try { canvas.context.drawImage(this._charNameImg, RIGHT_X, CHARNAME_Y); } catch (_) {}
+    } else {
+      canvas.context.save();
+      canvas.context.fillStyle = 'rgba(80,48,16,0.92)';
+      canvas.context.fillRect(RIGHT_X, CHARNAME_Y, 168, 60);
+      canvas.context.restore();
+      canvas.drawText({ text: 'NAME OF CHARACTER', color: '#f0d080', x: RIGHT_X + 6, y: CHARNAME_Y + 12, fontSize: 8 });
+    }
+
+    if (this._nameError) {
+      canvas.drawText({ text: this._nameError, color: '#FF6666', x: RIGHT_X + 6, y: NAME_IN_Y + 24, fontSize: 8 });
+    } else if (this._step === 'waiting') {
+      canvas.drawText({ text: 'Checking...', color: '#88aaff', x: RIGHT_X + 6, y: NAME_IN_Y + 24, fontSize: 8 });
+    }
   },
 };
 

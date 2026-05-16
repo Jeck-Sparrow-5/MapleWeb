@@ -125,6 +125,7 @@ const UILogin = {} as UILoginInterface;
 
 UILogin.initialize = async function (canvas: GameCanvas) {
   this.gameCanvas = canvas;
+  (this as any)._lastOverlayState = 'none';
   await UICommon.initialize();
   this.behindFrameButtons = new Set<MapleButton>();
   this.inFrontOfFrameButtons = [];
@@ -324,10 +325,10 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   ClickManager.addButton(loginButton);
   this.behindFrameButtons.add(loginButton);
 
-  // Save ID (BtLoginIDSave 76x23) — canvas ~(422,270)
+  // Save ID (BtLoginIDSave)
   const saveIdButton = new MapleStanceButton(canvas, {
-    x: 50,
-    y: -38,
+    x: 55,
+    y: 12,
     img: this.uiLogin.nGet('Title')?.nGet('BtLoginIDSave')?.nChildren ?? [],
     onClick: () => {
       this.saveIdEnabled = !this.saveIdEnabled;
@@ -342,10 +343,10 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   ClickManager.addButton(saveIdButton);
   this.behindFrameButtons.add(saveIdButton);
 
-  // Forgot ID (BtLoginIDLost 82x23) — canvas ~(422,294)
+  // Forgot ID (BtLoginIDLost)
   const forgotIdButton = new MapleStanceButton(canvas, {
-    x: 50,
-    y: -14,
+    x: 156,
+    y: 12,
     img: this.uiLogin.nGet('Title')?.nGet('BtLoginIDLost')?.nChildren ?? [],
     onClick: () => {
       this.showNotice(NoticeType.NORMAL, null);
@@ -354,10 +355,10 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   ClickManager.addButton(forgotIdButton);
   this.behindFrameButtons.add(forgotIdButton);
 
-  // Forgot Password (BtPasswdLost 66x23) — canvas ~(505,294)
+  // Forgot Password (BtPasswdLost)
   const forgotPwButton = new MapleStanceButton(canvas, {
-    x: 133,
-    y: -15,
+    x: 251,
+    y: 12,
     img: this.uiLogin.nGet('Title')?.nGet('BtPasswdLost')?.nChildren ?? [],
     onClick: () => {
       this.showNotice(NoticeType.NORMAL, null);
@@ -366,10 +367,10 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   ClickManager.addButton(forgotPwButton);
   this.behindFrameButtons.add(forgotPwButton);
 
-  // Register (BtNew 92x38) — canvas ~(595,270)
+  // Register (BtNew 92x38)
   const newAccountButton = new MapleStanceButton(canvas, {
-    x: 223,
-    y: -10,
+    x: 74,
+    y: 62,
     img: this.uiLogin.nGet('Title')?.nGet('BtNew')?.nChildren ?? [],
     onClick: () => {
       this.showNotice(NoticeType.NORMAL, null);
@@ -378,10 +379,10 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   ClickManager.addButton(newAccountButton);
   this.behindFrameButtons.add(newAccountButton);
 
-  // Quit (BtQuit 84x38) — canvas ~(595,310)
+  // Quit (BtQuit 84x38)
   const quitButton = new MapleStanceButton(canvas, {
-    x: 223,
-    y: 35,
+    x: 229,
+    y: 24,
     img: this.uiLogin.nGet('Title')?.nGet('BtQuit')?.nChildren ?? [],
     onClick: () => {
       window.close();
@@ -612,11 +613,33 @@ UILogin.createWorldButtons = function () {
 UILogin.doUpdate = function (msPerTick, camera, canvas) {
   UICommon.doUpdate(msPerTick);
 
+  // Overlay state → camera transitions (all in one place, no circular deps)
+  const raceHidden     = UIRaceSelect.isHidden;
+  const creationHidden = UIExplorerCreation.isHidden;
+  const overlayState   = raceHidden && creationHidden ? 'none'
+                       : !raceHidden                  ? 'race'
+                       :                               'creation';
+
+  if (overlayState !== (this as any)._lastOverlayState) {
+    if (overlayState === 'race') {
+      LoginState.switchToSubState(LoginSubState.RACE_SELECT);
+    } else if (overlayState === 'creation') {
+      const race = (UIRaceSelect as any).confirmedRace ?? 'normal';
+      const subState = race === 'aran'   ? LoginSubState.ARAN_CREATION
+                     : race === 'knight' ? LoginSubState.CYGNUS_CREATION
+                     :                     LoginSubState.CHARACTER_CREATION;
+      LoginState.switchToSubState(subState);
+    } else {
+      LoginState.switchToSubState(LoginSubState.CHARACTER_SELECT);
+    }
+    (this as any)._lastOverlayState = overlayState;
+  }
+
   // Hover + click routing for UIRaceSelect race cards
   if (!UIRaceSelect.isHidden) {
     UIRaceSelect.onMouseMove(canvas.mouseX, canvas.mouseY);
     if (canvas.clicked) {
-      UIRaceSelect.onMouseDown(canvas.mouseX, canvas.mouseY);
+      UIRaceSelect.onMouseDown(canvas.mouseX, canvas.mouseY, canvas);
     }
   }
   // Route clicks to UIExplorerCreation look buttons (handled internally via ClickManager)
@@ -746,6 +769,15 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
     }
   }
 
+  // MapLogin shown during race select, NewChar backgrounds during creation
+  if (!UIRaceSelect.isHidden) {
+    for (const img of (UIRaceSelect as any)._mapLoginImgs ?? [])
+      try { canvas.context.drawImage(img, 0, 0); } catch (_) {}
+  } else if (!UIExplorerCreation.isHidden) {
+    for (const img of (UIExplorerCreation as any)._bg ?? [])
+      try { canvas.context.drawImage(img, 0, 0, 800, 600); } catch (_) {}
+  }
+
   canvas.drawImage({
     img: this.frameImg,
     dx: 0,
@@ -817,6 +849,19 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
     y: 13,
   });
 
+  // Debug coord overlay — remove when layout is finalized
+  const mx = canvas.mouseX ?? 0;
+  const my = canvas.mouseY ?? 0;
+  const wx = Math.round(mx + camera.x);
+  const wy = Math.round(my + camera.y);
+  canvas.context.save();
+  canvas.context.fillStyle = 'rgba(0,0,0,0.65)';
+  canvas.context.fillRect(2, 2, 230, 16);
+  canvas.context.font = '11px monospace';
+  canvas.context.fillStyle = '#00FF88';
+  canvas.context.fillText(`screen(${mx},${my})  world(${wx},${wy})`, 6, 14);
+  canvas.context.restore();
+
   this.drawMask(canvas);
 
   this.uiLoginNotice?.draw(canvas, camera, lag, msPerTick, tdelta);
@@ -850,14 +895,14 @@ UILogin.placeInputs = function () {
     y: 236,
     width: 142,
     height: 20,
-    color: "",
+    color: "#ffffff",
   });
   this.inputPwd = new MapleInput(this.gameCanvas, {
     x: 442,
     y: 265,
     width: 142,
     height: 20,
-    color: "#fffff",
+    color: "#ffffff",
     type: "password",
   });
   const savedId = localStorage.getItem('maple_saved_id');

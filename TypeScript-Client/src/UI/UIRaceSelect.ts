@@ -30,17 +30,34 @@ const UIRaceSelect = {
   initialized: false,
   buttons:  [] as MapleStanceButton[],
 
-  _selected: 0,
-  _hovered:  -1,
+  _selected:     0,
+  _hovered:      -1,
+  confirmedRace: 'normal' as 'normal' | 'knight' | 'aran',
 
-  _textGL:    null as any,
-  _raceImgs:  [] as RaceImgs[],
-  _raceText:  [] as any[],
+  _textGL:       null as any,
+  _raceImgs:     [] as RaceImgs[],
+  _raceText:     [] as any[],
+  _mapLoginImgs: [] as any[],
 
   async initialize(canvas: GameCanvas) {
     const login = await WZManager.get('UI.wz/Login.img');
     const rs    = login?.nGet?.('RaceSelect');
     const win   = await WZManager.get('UI.wz/UIWindow.img');
+
+    // MapLogin — handle both: direct canvas node OR container with canvas children
+    const mapLoginNode = login?.nGet?.('MapLogin');
+    this._mapLoginImgs = [];
+    if (mapLoginNode) {
+      if (mapLoginNode.nTagName === 'canvas') {
+        const img = getImg(mapLoginNode);
+        if (img) this._mapLoginImgs.push(img);
+      } else {
+        for (const c of mapLoginNode?.nChildren ?? []) {
+          const img = getImg(c);
+          if (img) this._mapLoginImgs.push(img);
+        }
+      }
+    }
 
     this._textGL   = getImg(rs?.nGet?.('textGL'));
     this._raceImgs = [];
@@ -57,11 +74,11 @@ const UIRaceSelect = {
       this._raceText.push(getImg(rn?.nGet?.('text')));
     }
 
-    // BtSelect — confirm race
+    // BtSelect — placed bottom-right inside the description panel
     const btSel = rs?.nGet?.('BtSelect')?.nChildren ?? win?.nGet?.('BtOK')?.nChildren;
     if (btSel) {
       const btn = new MapleStanceButton(canvas, {
-        x: 363, y: 545,
+        x: 606, y: 482,
         img: btSel,
         isRelativeToCamera: true, isPartOfUI: true, isHidden: true,
         onClick: () => this._confirm(canvas),
@@ -88,6 +105,7 @@ const UIRaceSelect = {
   _confirm(canvas: GameCanvas) {
     const race = RACES[this._selected];
     if (!race.available) return;
+    this.confirmedRace = race.key;
     this.hide();
     UIExplorerCreation.show(canvas);
   },
@@ -124,13 +142,16 @@ const UIRaceSelect = {
     }
   },
 
-  onMouseDown(mx: number, my: number): boolean {
+  onMouseDown(mx: number, my: number, canvas: GameCanvas): boolean {
     if (this.isHidden) return false;
     const pos = this._positions();
     for (let i = 0; i < RACES.length; i++) {
       const { x, y, w, h } = pos[i];
       if (mx >= x && mx < x + w && my >= y && my < y + h) {
-        if (RACES[i].available) this._selected = i;
+        if (RACES[i].available) {
+          this._selected = i;
+          this._confirm(canvas);
+        }
         return true;
       }
     }
@@ -150,10 +171,6 @@ const UIRaceSelect = {
   draw(canvas: GameCanvas) {
     if (this.isHidden) return;
 
-    canvas.context.save();
-    canvas.context.fillStyle = 'rgba(0,0,0,0.88)';
-    canvas.context.fillRect(0, 0, 800, 600);
-    canvas.context.restore();
 
     if (this._textGL) {
       try { canvas.context.drawImage(this._textGL, Math.floor((800 - 182) / 2), 60, 182, 39); } catch (_) {}
@@ -208,6 +225,15 @@ const UIRaceSelect = {
     }
 
     this.buttons.forEach(b => b.draw(canvas, { x: 0, y: 0 } as any, 0, 0, 0));
+
+    // Debug: show mouse coordinates — remove once layout is finalized
+    canvas.context.save();
+    canvas.context.fillStyle = 'rgba(0,0,0,0.6)';
+    canvas.context.fillRect(4, 4, 120, 18);
+    canvas.context.font = '11px monospace';
+    canvas.context.fillStyle = '#00FF88';
+    canvas.context.fillText(`x:${(canvas as any).mouseX ?? 0}  y:${(canvas as any).mouseY ?? 0}`, 8, 17);
+    canvas.context.restore();
   },
 };
 

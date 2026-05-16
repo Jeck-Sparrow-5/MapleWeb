@@ -45,6 +45,8 @@ class MapleInput {
     input.style.height = `${height}px`;
     input.style.background = background;
     input.style.border = border;
+    input.style.outline = "none";
+    input.style.boxShadow = "none";
     input.style.color = color;
     input.style.fontSize = `${fontSize}px`;
     input.style.cursor = cursor;

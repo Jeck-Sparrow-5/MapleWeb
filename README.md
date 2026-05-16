@@ -392,8 +392,11 @@ MapleWeb/
 │   │   │       ├── GeneralMenuSprite.ts
 │   │   │       └── StatsMenuSprite.ts
 │   │   └── wz-utils/
-│   │       ├── WZManager.ts
-│   │       ├── WZNode.ts
+│   │       ├── WZManager.ts              ← Asset resolver (NX preferred, WZ JSON fallback)
+│   │       ├── WZNode.ts                 ← WZ JSON node (nGet, nGetImage via base64)
+│   │       ├── NXNode.ts                 ← NX binary node (nGet, nGetImage async bitmap)
+│   │       ├── NXRangeReader.ts          ← PKG4 NX parser via HTTP Range (lazy load)
+│   │       ├── lz4.ts                    ← LZ4 decompressor for NX bitmaps
 │   │       ├── ItemIconLoader.ts         ← Async icon cache from Item.wz
 │   │       ├── ItemNameLoader.ts         ← Async name cache from String.wz
 │   │       └── base64headers.ts
@@ -403,6 +406,213 @@ MapleWeb/
 │                                            String, UI, etc.)
 └── proxy/                                ← Standalone WS→TCP proxy (optional)
     └── index.js
+```
+
+---
+
+## Working with WZ / NX Assets
+
+### Two asset formats
+
+| Format | Path | Reader | Used for |
+|--------|------|--------|----------|
+| **WZ JSON** | `public/wz_client/**/*.img.json` | `WZManager` + `WZNode` | Offline mode; legacy assets served as JSON |
+| **NX binary** | Served from URL via HTTP Range requests | `NXRangeReader` + `NXNode` | Runtime; lazy-loaded bitmaps/audio |
+
+`WZManager.get('UI.wz/Login.img')` returns whichever is available (NX preferred). Both expose the same `nGet` / `nGetImage` API, so consumers are format-agnostic.
+
+---
+
+### Node tree navigation
+
+Every asset file is a tree of nodes. Navigate with:
+
+```typescript
+const login = await WZManager.get('UI.wz/Login.img');
+
+// nGet(key) — access a named child
+const raceSelect = login?.nGet?.('RaceSelect');
+const btnNormal  = raceSelect?.nGet?.('normal')?.nGet?.('BtNormal');
+
+// nChildren — array of all children (lazy-loaded on first access)
+const stances = btnNormal?.nChildren;  // [normal, mouseOver, pressed, disabled]
+```
+
+`nGet` accepts string or number keys. Accessing an unknown property via dot notation also triggers lazy loading (Proxy intercepts it).
+
+---
+
+### NX node types
+
+| `nTagName` | Contains | Use |
+|-----------|----------|-----|
+| `'none'` | Container — has children, no data | Navigate only |
+| `'canvas'` | Bitmap — `_bitmapIndex`, `nWidth`, `nHeight` | Call `nGetImage()` |
+| `'vector'` | Origin offset — `nX`, `nY` | Position offset for draw |
+| `'int'` | Integer — `nValue` | Config values, IDs |
+| `'string'` | String — `nValue` | Names, paths |
+| `'double'` | Float — `nValue` | Rates, speeds |
+| `'audio'` | Sound — `_audioIndex` | Call `nGetAudio()` |
+
+---
+
+### Loading a bitmap image
+
+`nGetImage()` returns a **persistent `HTMLCanvasElement`**. It starts empty (1×1 transparent) and fills asynchronously when the NX bitmap decodes. The same canvas reference is returned on every call — callers that cache it automatically see the real image once loaded.
+
+**Critical pattern — `getImg` helper:**
+
+```typescript
+function getImg(node: any): any {
+  if (!node) return null;
+  const first = node?.nChildren?.[0];
+  if (!first) return node?.nGetImage?.() ?? null;
+  // If first child is a vector (origin offset), the node itself IS the bitmap.
+  // Otherwise, the first child IS the bitmap (container → canvas child pattern).
+  return (first.nTagName === 'vector' ? first.nParent : first)?.nGetImage?.() ?? null;
+}
+```
+
+Why this is needed: NX nodes have two structures:
+- **Canvas node** (type 5) — the node itself is the bitmap, first child is the origin vector.
+- **Container node** (type 0) — not a bitmap; first child is the actual canvas node.
+
+Using `node.nGetImage()` directly on a container returns a blank 1×1 canvas forever.
+
+**Usage:**
+
+```typescript
+const login = await WZManager.get('UI.wz/Login.img');
+const nc    = login?.nGet?.('NewChar');
+
+// Single image node
+const scrollImg = getImg(nc?.nGet?.('scroll'));
+
+// Button stance image  (container → canvas child pattern)
+const btnNode   = nc?.nGet?.('BtYes');
+const normalImg = getImg(btnNode?.nGet?.('normal'));
+const hoverImg  = getImg(btnNode?.nGet?.('mouseOver'));
+```
+
+---
+
+### MapleStanceButton — buttons from WZ
+
+Buttons have stances (`normal`, `mouseOver`, `pressed`, `disabled`, `selected`). Pass the button node's `nChildren` as `img`:
+
+```typescript
+const btYes = nc?.nGet?.('BtYes')?.nChildren;  // array of stance nodes
+
+const btn = new MapleStanceButton(canvas, {
+  x: 450, y: 420,
+  img: btYes,
+  isRelativeToCamera: true,   // screen-space (UI overlays)
+  // isRelativeToCamera: false // world-space (login buttons, map entities)
+  isPartOfUI: true,
+  isHidden: false,
+  onClick: () => { /* handler */ },
+});
+
+ClickManager.addButton(btn);
+```
+
+`MapleStanceButton` extracts each stance internally using the same `nChildren[0]` / origin-vector pattern. Setting `btn.isDisabled = true` switches to the `disabled` stance image and blocks clicks in `ClickManager`.
+
+---
+
+### Drawing images on canvas
+
+```typescript
+// In a draw() method:
+if (img) {
+  try {
+    canvas.context.drawImage(img, x, y);           // natural size
+    canvas.context.drawImage(img, x, y, w, h);    // scaled
+  } catch (_) {}   // guard: canvas may be 1×1 before bitmap loads
+}
+```
+
+Always wrap in `try/catch` — the canvas is valid but may have zero-size dimensions before async decode completes.
+
+---
+
+### Coordinate systems
+
+**World space** (`isRelativeToCamera: false`, default):
+```
+screen_x = world_x - camera.x
+screen_y = world_y - camera.y
+```
+Used for map entities and login buttons that should disappear when the camera moves away.
+
+**Screen space** (`isRelativeToCamera: true`):
+Coordinates are fixed to the screen regardless of camera. Used for UI overlays (inventory, minimap, race select panels).
+
+**Login camera positions** (derived from `MapLogin.img` background nodes):
+
+| State | Camera Y |
+|-------|---------|
+| LOGIN_SCREEN | -308 |
+| WORLD_SELECT | -914 |
+| CHARACTER_SELECT | -1544 |
+| RACE_SELECT | -2144 |
+| CHARACTER_CREATION (Explorer) | -2743 |
+| CYGNUS_CREATION | -3343 |
+| ARAN_CREATION | -3944 |
+
+The x offset is always `-372`. Camera switches via `LoginState.switchToSubState()`.
+
+---
+
+### Adding a new UI image — quick recipe
+
+```typescript
+// 1. Get the WZ node
+const login = await WZManager.get('UI.wz/Login.img');
+const node  = login?.nGet?.('SomeSection')?.nGet?.('myImage');
+
+// 2. Load the canvas (use getImg helper)
+const img = getImg(node);
+
+// 3. Draw every frame (canvas auto-fills when bitmap loads)
+draw(canvas: GameCanvas) {
+  if (img) try { canvas.context.drawImage(img, x, y); } catch (_) {}
+}
+```
+
+For animated nodes (frame sequences), use `FrameAnimation`:
+
+```typescript
+const anim = new FrameAnimation(login?.nGet?.('SomeAnim'), x, y);
+anim.active = true;
+// In update loop:
+anim.update(msPerTick);
+// In render loop:
+anim.draw(canvas, camera, lag, msPerTick, tdelta);
+```
+
+---
+
+### NX file structure for Login.img
+
+Key nodes used by the login/char-creation flow:
+
+```
+Login.img/
+├── Common/           — shared buttons (BtStart, BtExit, BtWselect…)
+├── Title/            — login screen (BtLogin, BtLoginIDSave, BtQuit, BtNew…)
+├── WorldSelect/      — world list, channel grid, scroll animation
+├── CharSelect/       — character slots (BtNew, BtDelete, BtSelect, BtPageL/R)
+├── RaceSelect/       — race selection (normal/, knight/, aran/, textGL, BtSelect)
+│   ├── normal/       → Explorer race (BtNormal/normal|mouseOver, text)
+│   ├── knight/       → Cygnus race
+│   └── aran/         → Aran race
+├── NewChar/          — Explorer creation (scroll, charName, charSet, avatarSel,
+│                        BtLeft, BtRight, BtYes, BtNo, BtCheck)
+├── NewCharKnight/    — Cygnus creation panels
+├── NewCharAran/      — Aran creation panels
+├── MapLogin          — background image(s) for the login map
+└── Gender/           — gender selection dialog (backgrnd, BtYes, BtNo)
 ```
 
 ---

@@ -3,9 +3,11 @@ import GameCanvas from "../GameCanvas";
 import MapleButton from "./MapleButton";
 
 const BUTTON_STANCE = {
-  NORMAL: "normal",
+  NORMAL:     "normal",
   MOUSE_OVER: "mouseOver",
-  PRESSED: "pressed",
+  PRESSED:    "pressed",
+  DISABLED:   "disabled",
+  SELECTED:   "selected",
 };
 
 class MapleStanceButton extends MapleButton {
@@ -15,6 +17,7 @@ class MapleStanceButton extends MapleButton {
   isRelativeToCamera: boolean;
   isPartOfUI: boolean;
   isHidden: boolean;
+  isDisabled: boolean;
 
   constructor(canvas: GameCanvas | null, opts: any) {
     super(opts);
@@ -29,6 +32,7 @@ class MapleStanceButton extends MapleButton {
     this.isRelativeToCamera = opts.isRelativeToCamera || false;
     this.isPartOfUI = opts.isPartOfUI || false;
     this.isHidden = opts.isHidden || false;
+    this.isDisabled = opts.isDisabled || false;
     // canvas.gameWrapper.appendChild(input);
   }
 
@@ -44,8 +48,11 @@ class MapleStanceButton extends MapleButton {
     tdelta: number
   ) {
     if (!this.isHidden) {
-      const currentFrame = this.stances[this.stance];
-      const currentImage = currentFrame?.nGetImage();
+      const activeStance = this.isDisabled && this.stances[BUTTON_STANCE.DISABLED]
+        ? BUTTON_STANCE.DISABLED
+        : this.stance;
+      const currentFrame = this.stances[activeStance] ?? this.stances[BUTTON_STANCE.NORMAL];
+      const currentImage = currentFrame?.nGetImage?.();
       if (this.isRelativeToCamera) {
         canvas.drawImage({
           img: currentImage,

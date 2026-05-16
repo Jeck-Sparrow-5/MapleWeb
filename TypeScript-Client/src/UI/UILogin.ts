@@ -293,8 +293,14 @@ UILogin.initialize = async function (canvas: GameCanvas) {
     isRelativeToCamera: true,
     isHidden: true,
     onClick: async () => {
+      const creationStates = [
+        LoginSubState.RACE_SELECT, LoginSubState.CHARACTER_CREATION,
+        LoginSubState.CYGNUS_CREATION, LoginSubState.ARAN_CREATION,
+      ];
       if (LoginState.currentSubState === LoginSubState.CHARACTER_SELECT) {
         await LoginState.switchToSubState(LoginSubState.WORLD_SELECT);
+      } else if (creationStates.includes(LoginState.currentSubState)) {
+        await LoginState.switchToSubState(LoginSubState.CHARACTER_SELECT);
       } else {
         await LoginState.switchToSubState(LoginSubState.LOGIN_SCREEN);
       }
@@ -784,9 +790,11 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
     dy: 0,
   });
 
+  if (overlayActive) (canvas as any).clicked = false;
   this.inFrontOfFrameButtons.forEach((obj) => {
     obj.draw(canvas, camera, lag, msPerTick, tdelta);
   });
+  if (overlayActive) (canvas as any).clicked = savedClicked;
 
   if (this.selectWorldChannelImgAnimation.active) {
     canvas.drawImage({

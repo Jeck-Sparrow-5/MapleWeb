@@ -43,7 +43,8 @@
       "Bash(curl -s \"https://raw.githubusercontent.com/ryantpayton/MapleStory-Client/master/IO/UITypes/UIExplorerCreation.h\")",
       "Bash(curl -s \"https://raw.githubusercontent.com/ryantpayton/MapleStory-Client/master/IO/UITypes/UICommonCreation.cpp\")",
       "Bash(curl -s \"https://raw.githubusercontent.com/ryantpayton/MapleStory-Client/master/IO/UITypes/UICommonCreation.h\")",
-      "Bash(grep -n 'nGetImage\\\\|nGetAudio\\\\|$canvas\\\\|basedata' src/wz-utils/NXNode.ts src/wz-utils/WZNode.ts)"
+      "Bash(grep -n 'nGetImage\\\\|nGetAudio\\\\|$canvas\\\\|basedata' src/wz-utils/NXNode.ts src/wz-utils/WZNode.ts)",
+      "Bash(git checkout *)"
     ],
     "additionalDirectories": [
       "\\tmp",

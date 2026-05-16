@@ -23,33 +23,33 @@ const FB_BOTTOMS  = [1060002, 1060006, 1060010, 1061008];
 const FB_SHOES    = [1072001, 1072005, 1072037, 1072038];
 const FB_WEAPONS  = [1302000, 1312004, 1322005, 1332007];
 
-// ── Layout constants (800×600) — adjust with debug overlay ───────────────────
-const SCROLL_X   = 115;   // left scroll panel draw x
-const SCROLL_Y   = 218;   // left scroll panel draw y
-const ROW_Y0     = 243;   // first row center y
-const ROW_DY     = 23;    // row pitch
-const BAR_X      = 182;   // avatarSel bar draw x
-const BAR_H      = 19;    // avatarSel bar draw height
-const ARR_L_X    = 172;   // left arrow x
-const ARR_R_X    = 318;   // right arrow x
-const VAL_X      = 265;   // value text x (within bar)
+// ── Layout constants from HeavenClient UICommonCreation (screen-space) ──────────
+const SCROLL_X   = 115;
+const SCROLL_Y   = 218;
+const ROW_Y0     = 198;   // HeavenClient BtLeft base y
+const ROW_DY     = 18;    // HeavenClient +18px per row
+const BAR_X      = 182;
+const BAR_H      = 19;
+const ARR_L_X    = 552;   // HeavenClient
+const ARR_R_X    = 684;   // HeavenClient
+const VAL_X      = 620;
 
-const RIGHT_X     = 444;  // right panel left edge
-const CHARNAME_Y  = 91;  // charName image y
-const CHARSET_Y   = -202;  // charSet image y
-const NAME_IN_X   = RIGHT_X + 8;
-const NAME_IN_Y   = 227;
-const NAME_IN_W   = 115;
-const STAT_Y0     = 284;  // first stat row y
-const STAT_DY     = 20;
-const OK_X        = RIGHT_X + 6;
-const OK_Y        = 449;
-const CANCEL_X    = RIGHT_X + 75;
-const CANCEL_Y    = 449;
+const RIGHT_X       = 486;   // charName board x
+const CHARNAME_Y    = 95;    // charName board y
+const CHARSET_Y     = 258;
+const NAME_IN_X     = 517;   // HeavenClient 514+3
+const NAME_IN_Y     = 198;   // HeavenClient
+const NAME_IN_W     = 148;   // HeavenClient
+const STAT_Y0       = 284;
+const STAT_DY       = 20;
+const NAME_OK_X     = 513;   const NAME_OK_Y     = 273;
+const NAME_CANCEL_X = 587;   const NAME_CANCEL_Y = 273;
+const LOOK_OK_X     = 523;   const LOOK_OK_Y     = 425;
+const LOOK_CANCEL_X = 597;   const LOOK_CANCEL_Y = 425;
 
 const PREVIEW_X  = 390;
-const PREVIEW_Y  = 430;
-const BG_Y       = -80;  // shift background up to show foothold platform
+const PREVIEW_Y  = 350;
+const BG_Y       = -80;
 
 // Called by CharManageHandlers after server validates the name
 export function onExplorerNameResult(available: boolean) {
@@ -180,23 +180,17 @@ const UIExplorerCreation = {
     };
 
     // Name step: OK (check name) + Back
-    addBtn(btOK, OK_X,     OK_Y,     () => this._checkName(), this._btnsName);
-    addBtn(btNo, CANCEL_X, CANCEL_Y, () => this.hide(),       this._btnsName);
+    addBtn(btOK, NAME_OK_X,     NAME_OK_Y,     () => this._checkName(), this._btnsName);
+    addBtn(btNo, NAME_CANCEL_X, NAME_CANCEL_Y, () => this.hide(),       this._btnsName);
 
-    // Look step: appearance arrows + dice + OK + Cancel
+    // Look step: appearance arrows + OK + Cancel
     rows.forEach((row, i) => {
-      const ry = ROW_Y0 + i * ROW_DY - 9;
+      const ry = ROW_Y0 + i * ROW_DY;
       addBtn(arL, ARR_L_X, ry, () => { row.setI(wrap(row.getArr(), row.getI(), -1)); this._previewDirty = true; }, this._btnsLook);
       addBtn(arR, ARR_R_X, ry, () => { row.setI(wrap(row.getArr(), row.getI(),  1)); this._previewDirty = true; }, this._btnsLook);
     });
-    addBtn(btOK, OK_X,     OK_Y,     () => this._dispatchCreate(), this._btnsLook);
-    addBtn(btNo, CANCEL_X, CANCEL_Y, () => this.hide(),        this._btnsLook);
-
-    // Name text input (always present when visible)
-    this.nameInput?.remove?.();
-    this.nameInput = new MapleInput(canvas, {
-      x: NAME_IN_X, y: NAME_IN_Y, width: NAME_IN_W, height: 18, color: '#ffffff',
-    });
+    addBtn(btOK, LOOK_OK_X,     LOOK_OK_Y,     () => this._dispatchCreate(), this._btnsLook);
+    addBtn(btNo, LOOK_CANCEL_X, LOOK_CANCEL_Y, () => this.hide(),            this._btnsLook);
   },
 
   async _loadAppearanceData() {
@@ -302,14 +296,24 @@ const UIExplorerCreation = {
       this.initialize(canvas).then(() => {
         this._reset();
         this.isHidden = false;
+        this._ensureNameInput(canvas);
         this._applyStep();
       });
       return;
     }
     this._reset();
     this.isHidden = false;
+    this._ensureNameInput(canvas);
     this._applyStep();
-    if (this.nameInput) this.nameInput.input.value = '';
+  },
+
+  _ensureNameInput(canvas: GameCanvas) {
+    if (!this.nameInput) {
+      this.nameInput = new MapleInput(canvas, {
+        x: NAME_IN_X, y: NAME_IN_Y, width: NAME_IN_W, height: 18, color: '#ffffff',
+      });
+    }
+    this.nameInput.input.value = '';
   },
 
   _reset() {
@@ -326,6 +330,7 @@ const UIExplorerCreation = {
     const inLook = this._step === 'look';
     this._btnsName.forEach(b => { b.isHidden = !inName; });
     this._btnsLook.forEach(b => { b.isHidden = !inLook; });
+    if (this.nameInput) this.nameInput.input.style.display = inName ? '' : 'none';
   },
 
   hide() {
@@ -349,13 +354,12 @@ const UIExplorerCreation = {
     } else {
       this._drawRightPanel(canvas);
     }
-    if (this._preview && this._previewDirty) {
-      this._previewDirty = false;
-      this._refreshPreview();
-    }
-    if (this._preview) {
+    if (this._step === 'look' && this._preview) {
+      if (this._previewDirty) { this._previewDirty = false; this._refreshPreview(); }
       try {
         (this._preview as any).pos = { x: PREVIEW_X, y: PREVIEW_Y };
+        this._preview.stance  = 'stand1';
+        this._preview.flipped = true;
         this._preview.draw(canvas, { x:0, y:0 } as any, 0, 100, 0);
       } catch (_) {}
     }
@@ -400,24 +404,7 @@ const UIExplorerCreation = {
   },
 
   _drawRightPanel(canvas: GameCanvas) {
-    // charName board (name input area)
-    if (this._charNameImg) {
-      try { canvas.context.drawImage(this._charNameImg, RIGHT_X, CHARNAME_Y); } catch (_) {}
-    } else {
-      canvas.context.save();
-      canvas.context.fillStyle = 'rgba(80,48,16,0.92)';
-      canvas.context.fillRect(RIGHT_X, CHARNAME_Y, 168, 60);
-      canvas.context.restore();
-      canvas.drawText({ text: 'NAME OF CHARACTER', color: '#f0d080', x: RIGHT_X + 6, y: CHARNAME_Y + 12, fontSize: 8 });
-    }
-
-    if (this._nameError) {
-      canvas.drawText({ text: this._nameError, color: '#FF6666', x: RIGHT_X + 6, y: NAME_IN_Y + 24, fontSize: 8 });
-    } else if (this._step === 'waiting') {
-      canvas.drawText({ text: 'Checking...', color: '#88aaff', x: RIGHT_X + 6, y: NAME_IN_Y + 24, fontSize: 8 });
-    }
-
-    // charSet board (stats area)
+    // charSet board only — charName drawn exclusively in _drawNamePanel
     if (this._charSetImg) {
       try { canvas.context.drawImage(this._charSetImg, RIGHT_X, CHARSET_Y); } catch (_) {}
     } else {

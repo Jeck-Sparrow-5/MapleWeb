@@ -1,6 +1,6 @@
-import { CameraInterface } from "./Camera";
+﻿import { CameraInterface } from "./Camera";
 import GameCanvas from "./GameCanvas";
-import WZManager from "./wz-utils/WZManager";
+import NXManager from "./wz-utils/NXManager";
 
 class Tile {
   wzNode: any;
@@ -26,7 +26,7 @@ class Tile {
     const u = wzNode.u?.nValue;
     const no = wzNode.no?.nValue ?? 0;
     if (!type || !u) return;
-    const tileFile: any = await WZManager.get(`Map.wz/Tile/${type}.img`);
+    const tileFile: any = await NXManager.get(`Map.wz/Tile/${type}.img`);
     if (!tileFile) return;
     const spriteNode = tileFile[u]?.[no];
     if (!spriteNode) return;

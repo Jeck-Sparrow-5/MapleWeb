@@ -1,4 +1,4 @@
-import WZManager from "../wz-utils/WZManager";
+﻿import NXManager from "../wz-utils/NXManager";
 
 export interface AudioManager {
   bgm: HTMLAudioElement;
@@ -20,7 +20,7 @@ const currentAudioManager: AudioManager = {
       if (!name) return;
 
       const [filename, child] = name.split("/");
-      const wzNode: any = await WZManager.get(
+      const wzNode: any = await NXManager.get(
         `Sound.wz/${filename}.img/${child}`
       );
       if (!wzNode) return;

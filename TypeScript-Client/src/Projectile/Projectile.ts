@@ -1,4 +1,4 @@
-import WZManager from "../wz-utils/WZManager";
+﻿import NXManager from "../wz-utils/NXManager";
 import WZFiles from "../Constants/enums/WZFiles";
 import ProjectilePhysics from "./ProjectilePhysics";
 import {
@@ -81,7 +81,7 @@ class Projectile {
 
     let strId = `${this.id}`.padStart(8, "0");
     const idFirst4digits = strId.slice(0, 4);
-    let projectileFile: any = await WZManager.get(
+    let projectileFile: any = await NXManager.get(
       `${WZFiles.Item}/Consume/${idFirst4digits}.img/${strId}`
     );
     // console.log("projectileFile", projectileFile);

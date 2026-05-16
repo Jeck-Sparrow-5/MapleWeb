@@ -1,5 +1,5 @@
-import MapleButton from './MapleButton';
-import WZManager from '../wz-utils/WZManager';
+﻿import MapleButton from './MapleButton';
+import NXManager from '../wz-utils/NXManager';
 import ClickManager from './ClickManager';
 import {MapleStanceButton} from './MapleStanceButton';
 import GameCanvas from '../GameCanvas';
@@ -95,7 +95,7 @@ export default class UILoginNotice {
     this.x = opts.x;
     this.y = opts.y;
 
-    this.uiLoginNotice = await WZManager.get('UI.wz/Login.img/Notice');
+    this.uiLoginNotice = await NXManager.get('UI.wz/Login.img/Notice');
     this.loadButtons();
   }
 

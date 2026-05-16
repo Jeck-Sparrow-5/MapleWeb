@@ -392,7 +392,7 @@ MapleWeb/
 │   │   │       ├── GeneralMenuSprite.ts
 │   │   │       └── StatsMenuSprite.ts
 │   │   └── wz-utils/
-│   │       ├── WZManager.ts              ← Asset resolver (NX preferred, WZ JSON fallback)
+│   │       ├── NXManager.ts              ← Asset resolver (NX preferred, WZ JSON fallback)
 │   │       ├── WZNode.ts                 ← WZ JSON node (nGet, nGetImage via base64)
 │   │       ├── NXNode.ts                 ← NX binary node (nGet, nGetImage async bitmap)
 │   │       ├── NXRangeReader.ts          ← PKG4 NX parser via HTTP Range (lazy load)
@@ -416,10 +416,10 @@ MapleWeb/
 
 | Format | Path | Reader | Used for |
 |--------|------|--------|----------|
-| **WZ JSON** | `public/wz_client/**/*.img.json` | `WZManager` + `WZNode` | Offline mode; legacy assets served as JSON |
+| **WZ JSON** | `public/wz_client/**/*.img.json` | `NXManager` + `WZNode` | Offline mode; legacy assets served as JSON |
 | **NX binary** | Served from URL via HTTP Range requests | `NXRangeReader` + `NXNode` | Runtime; lazy-loaded bitmaps/audio |
 
-`WZManager.get('UI.wz/Login.img')` returns whichever is available (NX preferred). Both expose the same `nGet` / `nGetImage` API, so consumers are format-agnostic.
+`NXManager.get('UI.wz/Login.img')` returns whichever is available (NX preferred). Both expose the same `nGet` / `nGetImage` API, so consumers are format-agnostic.
 
 ---
 
@@ -428,7 +428,7 @@ MapleWeb/
 Every asset file is a tree of nodes. Navigate with:
 
 ```typescript
-const login = await WZManager.get('UI.wz/Login.img');
+const login = await NXManager.get('UI.wz/Login.img');
 
 // nGet(key) — access a named child
 const raceSelect = login?.nGet?.('RaceSelect');
@@ -482,7 +482,7 @@ Using `node.nGetImage()` directly on a container returns a blank 1×1 canvas for
 **Usage:**
 
 ```typescript
-const login = await WZManager.get('UI.wz/Login.img');
+const login = await NXManager.get('UI.wz/Login.img');
 const nc    = login?.nGet?.('NewChar');
 
 // Single image node
@@ -568,7 +568,7 @@ The x offset is always `-372`. Camera switches via `LoginState.switchToSubState(
 
 ```typescript
 // 1. Get the WZ node
-const login = await WZManager.get('UI.wz/Login.img');
+const login = await NXManager.get('UI.wz/Login.img');
 const node  = login?.nGet?.('SomeSection')?.nGet?.('myImage');
 
 // 2. Load the canvas (use getImg helper)
@@ -621,7 +621,7 @@ Login.img/
 
 **Dual mode:** `SessionManager.isConnected()` gates whether WZ data or server data is authoritative. Offline mode renders from WZ; online mode populates entities from server packets and skips WZ mob/NPC placement.
 
-**WZ type system:** `WZNode.nGet()` returns `any`; `WZManager.get()` returns `Promise<any>`. This keeps all WZ consumers free of complex union types.
+**WZ type system:** `WZNode.nGet()` returns `any`; `NXManager.get()` returns `Promise<any>`. This keeps all WZ consumers free of complex union types.
 
 **Proxy dynamic port:** Login server runs on TCP 8484; channel servers run on different ports. On `SERVER_IP` receipt, `SessionManager.reconnect(channelPort)` reconnects the WebSocket with `?port=<channelPort>`, and the proxy opens a new TCP connection to that port.
 

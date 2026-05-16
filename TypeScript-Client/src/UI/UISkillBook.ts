@@ -1,4 +1,4 @@
-import WZManager from '../wz-utils/WZManager';
+﻿import NXManager from '../wz-utils/NXManager';
 import TooltipRenderer from './TooltipRenderer';
 import UISkillHotbar, { assignSkillToSelectedSlot } from './UISkillHotbar';
 import { MapleStanceButton } from './MapleStanceButton';
@@ -94,7 +94,7 @@ class UISkillBook extends DragableMenu {
   }
 
   async load(canvas: GameCanvas) {
-    const uiWin = await WZManager.get('UI.wz/UIWindow.img');
+    const uiWin = await NXManager.get('UI.wz/UIWindow.img');
     this.bgImg = uiWin?.nGet('Skill')?.nGet('backgrnd')?.nGetImage?.() ?? null;
 
     const btSpUpNode = uiWin?.nGet('BtSpUp');
@@ -106,7 +106,7 @@ class UISkillBook extends DragableMenu {
     let skillNames: Record<string, string> = {};
     let skillDescs: Record<string, string> = {};
     try {
-      const strNode = await WZManager.get('String.wz/Skill.img');
+      const strNode = await NXManager.get('String.wz/Skill.img');
       if (strNode) {
         strNode.nChildren?.forEach((job: any) => {
           job.nChildren?.forEach((sk: any) => {
@@ -120,7 +120,7 @@ class UISkillBook extends DragableMenu {
     // Load skills from Skill.wz
     for (const fileCode of files) {
       try {
-        const node = await WZManager.get(`Skill.wz/${fileCode}.img`);
+        const node = await NXManager.get(`Skill.wz/${fileCode}.img`);
         const skillNode = node?.nGet?.('skill');
         if (!skillNode) continue;
         skillNode.nChildren?.forEach((sk: any) => {

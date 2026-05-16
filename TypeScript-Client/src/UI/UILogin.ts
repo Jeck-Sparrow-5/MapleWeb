@@ -1,4 +1,4 @@
-import WZManager from "../wz-utils/WZManager";
+﻿import NXManager from "../wz-utils/NXManager";
 import UICommon from "./UICommon";
 import MapleInput from "./MapleInput";
 import Random from "../Random";
@@ -133,7 +133,7 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   this.channelButtons = [];
   this.channelSelectAnimation = null;
   this.selectedChannelIndex = null;
-  this.uiLogin = await WZManager.get('UI.wz/Login.img');
+  this.uiLogin = await NXManager.get('UI.wz/Login.img');
 
   this.frameImg = this.uiLogin.nGet('Common')?.nGet('frame')?.nGetImage();
   this.selectedWorldImage = this.uiLogin.nGet('Common')?.selectWorld?.nGetImage();

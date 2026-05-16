@@ -1,4 +1,4 @@
-import WZManager from "./wz-utils/WZManager";
+﻿import NXManager from "./wz-utils/NXManager";
 import AttackPacket from "./Net/Packets/AttackPacket";
 import SessionManager from "./SessionManager";
 import PLAY_AUDIO from "./Audio/PlayAudio";
@@ -180,7 +180,7 @@ class MapleCharacter {
 
   async load() {
     console.log("loading MapleCharacter");
-    const zmap: any = await WZManager.get("Base.wz/zmap.img");
+    const zmap: any = await NXManager.get("Base.wz/zmap.img");
     const zmapDict = [...(zmap?.nChildren ?? [])].reverse().reduce((acc, node, i) => {
       acc[node.nName] = i;
       return acc;
@@ -190,7 +190,7 @@ class MapleCharacter {
       indexOf: (name: string) => this.zmap.dict[name] || -1,
     };
 
-    const smap: any = await WZManager.get("Base.wz/smap.img");
+    const smap: any = await NXManager.get("Base.wz/smap.img");
     const nonNullSmapNodes = (smap?.nChildren ?? []).filter((n: any) => !!n.nValue);
     const smapDict = nonNullSmapNodes.reduce((acc: any, node: any) => {
       acc[node.nName] = node.nValue;
@@ -220,9 +220,9 @@ class MapleCharacter {
     this.DamageIndicator.initialize();
   }
   async setSkinColor(sc = 0) {
-    this.head = await WZManager.get(`Character.wz/0001200${sc}.img`);
-    this.body = await WZManager.get(`Character.wz/0000200${sc}.img`);
-    this.baseBody = await WZManager.get(`Character.wz/00002000.img`);
+    this.head = await NXManager.get(`Character.wz/0001200${sc}.img`);
+    this.body = await NXManager.get(`Character.wz/0000200${sc}.img`);
+    this.baseBody = await NXManager.get(`Character.wz/00002000.img`);
     this.skinColor = sc;
   }
   setStance(
@@ -296,7 +296,7 @@ class MapleCharacter {
   }
 
   async setFace(face = 20000) {
-    this.Face = await WZManager.get(`Character.wz/Face/000${face}.img`);
+    this.Face = await NXManager.get(`Character.wz/Face/000${face}.img`);
     this.face = face;
   }
   setFaceExpr(faceExpr = "blink", faceFrame = 0) {
@@ -312,7 +312,7 @@ class MapleCharacter {
     this.setFaceFrame(this.faceFrame + 1);
   }
   async setHair(hair = 30030) {
-    this.Hair = await WZManager.get(`Character.wz/Hair/000${hair}.img`);
+    this.Hair = await NXManager.get(`Character.wz/Hair/000${hair}.img`);
     this.hair = hair;
   }
 
@@ -362,7 +362,7 @@ class MapleCharacter {
     };
     if (realSlot === equipMap[firstThreeDigits].slot) {
       const dir = equipMap[firstThreeDigits].dir;
-      const equip = await WZManager.get(`Character.wz/${dir}/0${id}.img`);
+      const equip = await NXManager.get(`Character.wz/${dir}/0${id}.img`);
       this.equips[realSlot] = equip;
       console.log(
         "Adding equip",
@@ -410,10 +410,10 @@ class MapleCharacter {
   }
 
   async playLevelUp() {
-    const levelUpNode: any = await WZManager.get("Sound.wz/Game.img/LevelUp");
+    const levelUpNode: any = await NXManager.get("Sound.wz/Game.img/LevelUp");
     const levelUpAudio = levelUpNode.nGetAudio();
 
-    const lu: any = await WZManager.get("Effect.wz/BasicEff.img/LevelUp");
+    const lu: any = await NXManager.get("Effect.wz/BasicEff.img/LevelUp");
     this.levelUpFrames = lu?.nChildren ?? [];
 
     PLAY_AUDIO(levelUpAudio);
@@ -424,7 +424,7 @@ class MapleCharacter {
 
   async jump() {
     if (this.stance !== "jump") {
-      const jumpNode: any = await WZManager.get("Sound.wz/Game.img/Jump");
+      const jumpNode: any = await NXManager.get("Sound.wz/Game.img/Jump");
       const jumpAudio = jumpNode.nGetAudio();
       PLAY_AUDIO(jumpAudio);
     }
@@ -551,7 +551,7 @@ async executeAttackDamage() {
   // If no monsters are hit, just play a swing sound
   if (monsters.length === 0) {
     try {
-      const missNode = await WZManager.get("Sound.wz/Game.img/Swing");
+      const missNode = await NXManager.get("Sound.wz/Game.img/Swing");
       if (missNode && missNode.nGetAudio) {
         PLAY_AUDIO(missNode.nGetAudio());
       }
@@ -604,7 +604,7 @@ async executeAttackDamage() {
 
   // Play hit sound
   try {
-    const hitNode = await WZManager.get("Sound.wz/Game.img/Hit");
+    const hitNode = await NXManager.get("Sound.wz/Game.img/Hit");
     if (hitNode && hitNode.nGetAudio) {
       PLAY_AUDIO(hitNode.nGetAudio());
     }
@@ -753,7 +753,7 @@ isCloseToMob = (inAllDirections = true) => {
     console.log("chosenxportal", portal);
     if (portal && !this.isInPortal) {
       this.isInPortal = true;
-      const jumpNode: any = await WZManager.get("Sound.wz/Game.img/Portal");
+      const jumpNode: any = await NXManager.get("Sound.wz/Game.img/Portal");
       const jumpAudio: any = jumpNode.nGetAudio();
       PLAY_AUDIO(jumpAudio);
 

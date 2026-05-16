@@ -1,4 +1,4 @@
-import WZManager from '../wz-utils/WZManager';
+﻿import NXManager from '../wz-utils/NXManager';
 import { MapleStanceButton } from './MapleStanceButton';
 import ClickManager from './ClickManager';
 import MapleInput from './MapleInput';
@@ -116,9 +116,9 @@ const UIExplorerCreation = {
   _btnsLook: [] as MapleStanceButton[],
 
   async _loadWZ(canvas: GameCanvas) {
-    const login = await WZManager.get('UI.wz/Login.img');
+    const login = await NXManager.get('UI.wz/Login.img');
     const nc    = login?.nGet?.('NewChar');
-    const win   = await WZManager.get('UI.wz/UIWindow.img');
+    const win   = await NXManager.get('UI.wz/UIWindow.img');
 
     // Background — MapLogin node from Login.img
     const mapLogin = login?.nGet?.('MapLogin');
@@ -201,7 +201,7 @@ const UIExplorerCreation = {
 
   async _loadAppearanceData() {
     try {
-      const info = await WZManager.get('Etc.wz/MakeCharInfo.img');
+      const info = await NXManager.get('Etc.wz/MakeCharInfo.img');
       const list = (n: any): number[] =>
         n?.nChildren?.map((c: any) => parseInt(c.nValue ?? c.nName ?? '0')).filter(Boolean) ?? [];
       for (const g of [0, 1]) {

@@ -1,5 +1,5 @@
-import MapleButton from './MapleButton';
-import WZManager from '../wz-utils/WZManager';
+﻿import MapleButton from './MapleButton';
+import NXManager from '../wz-utils/NXManager';
 import ClickManager from './ClickManager';
 import {MapleStanceButton} from './MapleStanceButton';
 import GameCanvas from '../GameCanvas';
@@ -39,10 +39,10 @@ export default class UILoginTOS {
     this.x = opts.x;
     this.y = opts.y;
 
-    this.uiLoginTOS = await WZManager.get('UI.wz/Login.img/TOS');
-    this.uiLoginBtOk = await WZManager.get('UI.wz/Login.img/BtOk');
-    this.uiLoginBtCancel = await WZManager.get('UI.wz/Login.img/BtCancel');
-    this.stringEULA = await WZManager.get('String.wz/EULA.img/EULA');
+    this.uiLoginTOS = await NXManager.get('UI.wz/Login.img/TOS');
+    this.uiLoginBtOk = await NXManager.get('UI.wz/Login.img/BtOk');
+    this.uiLoginBtCancel = await NXManager.get('UI.wz/Login.img/BtCancel');
+    this.stringEULA = await NXManager.get('String.wz/EULA.img/EULA');
     this.loadButtons();
   }
 

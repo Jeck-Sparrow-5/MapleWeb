@@ -1,4 +1,4 @@
-import WZManager from "./wz-utils/WZManager";
+﻿import NXManager from "./wz-utils/NXManager";
 import PLAY_AUDIO from "./Audio/PlayAudio";
 import { Physics } from "./Physics";
 import MoveLifePacket from "./Net/Packets/MoveLifePacket";
@@ -92,11 +92,11 @@ class Monster {
     // this.pos.left = true;
 
     let strId = `${this.id}`.padStart(7, "0");
-    let mobFile: any = await WZManager.get(`${WZFiles.Mob}/${strId}.img`);
+    let mobFile: any = await NXManager.get(`${WZFiles.Mob}/${strId}.img`);
     if (mobFile?.info?.link) {
       const linkId = mobFile.info.link.nValue;
       strId = `${linkId}`.padStart(7, "0");
-      mobFile = await WZManager.get(`${WZFiles.Mob}/${strId}.img`);
+      mobFile = await NXManager.get(`${WZFiles.Mob}/${strId}.img`);
     }
     this.mobFile = mobFile;
     // console.log("mobFile", mobFile);
@@ -111,7 +111,7 @@ class Monster {
       this.isBoss = true;
     }
 
-    const mobSounds: any = await WZManager.get(`${WZFiles.Sound}/Mob.img`);
+    const mobSounds: any = await NXManager.get(`${WZFiles.Sound}/Mob.img`);
 
     // there bugs in wz files, for exmaple in map - 100020100 the pig sound not exists but
     // name do exits in string.wz
@@ -145,14 +145,14 @@ class Monster {
     this.maxMp = this.mobFile.info?.maxMP?.nValue ?? 0;
     this.hp = this.maxHp;
     this.mp = this.maxMp;
-    // await WZManager.get("String.wz/Map.img");
-    const mobStringNode: any = await WZManager.get(
+    // await NXManager.get("String.wz/Map.img");
+    const mobStringNode: any = await NXManager.get(
       `${WZFiles.String}/Mob.img/${strId}`
     );
     if (mobStringNode) {
       this.name = mobStringNode.name.nValue;
     } else {
-      const mobStringNode: any = await WZManager.get(
+      const mobStringNode: any = await NXManager.get(
         `${WZFiles.String}/Mob.img/${this.id}`
       );
       if (mobStringNode) {

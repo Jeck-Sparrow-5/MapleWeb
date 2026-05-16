@@ -1,4 +1,4 @@
-import WZManager from '../wz-utils/WZManager';
+﻿import NXManager from '../wz-utils/NXManager';
 import GameCanvas from '../GameCanvas';
 import { CameraInterface } from '../Camera';
 
@@ -15,7 +15,7 @@ const ChatBubbleRenderer = {
   initialized: false,
 
   async initialize() {
-    const node = await WZManager.get('UI.wz/ChatBalloon.img');
+    const node = await NXManager.get('UI.wz/ChatBalloon.img');
     const sec = node?.nGet('0');
     if (!sec) { this.initialized = true; return; }
     this.parts = {

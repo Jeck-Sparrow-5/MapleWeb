@@ -1,4 +1,4 @@
-import WZManager from '../wz-utils/WZManager';
+﻿import NXManager from '../wz-utils/NXManager';
 import { getItemNameSync } from '../wz-utils/ItemNameLoader';
 import GameCanvas from '../GameCanvas';
 
@@ -13,7 +13,7 @@ const TooltipRenderer = {
   pending: null as { lines: TooltipLine[]; x: number; y: number } | null,
 
   async initialize() {
-    const uiWin = await WZManager.get('UI.wz/UIWindow.img');
+    const uiWin = await NXManager.get('UI.wz/UIWindow.img');
     // ToolTip section has background pieces
     const tt = uiWin?.nGet('ToolTip');
     this.bgImg = tt?.nGetImage?.() ?? null;

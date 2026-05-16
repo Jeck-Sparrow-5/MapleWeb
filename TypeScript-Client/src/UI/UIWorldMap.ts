@@ -1,4 +1,4 @@
-import WZManager from '../wz-utils/WZManager';
+﻿import NXManager from '../wz-utils/NXManager';
 import { MapleStanceButton } from './MapleStanceButton';
 import ClickManager from './ClickManager';
 import DragableMenu from './Menu/DragableMenu';
@@ -32,12 +32,12 @@ class UIWorldMap extends DragableMenu {
   _playerMapEntry: any = null;
 
   async load(canvas: GameCanvas) {
-    const uiWin = await WZManager.get('UI.wz/UIWindow.img');
+    const uiWin = await NXManager.get('UI.wz/UIWindow.img');
     this.bgImg = uiWin?.nGet('WorldMap')?.nGetImage?.() ?? null;
 
     // Load base world map image
     try {
-      const wmBase = await WZManager.get('Map.wz/WorldMap/WorldMap.img');
+      const wmBase = await NXManager.get('Map.wz/WorldMap/WorldMap.img');
       this.currentWorldMapImg = wmBase?.nGet('BaseImg')?.nGetImage?.() ?? null;
     } catch (_) {}
 
@@ -88,7 +88,7 @@ class UIWorldMap extends DragableMenu {
 
   async loadWorldMapArea(fileName: string) {
     try {
-      const node = await WZManager.get(`Map.wz/WorldMap/${fileName}.img`);
+      const node = await NXManager.get(`Map.wz/WorldMap/${fileName}.img`);
       this.currentWorldMapImg = node?.nGet('BaseImg')?.nGetImage?.() ?? this.currentWorldMapImg;
       this._currentAreaNode = node;
     } catch (_) {}
@@ -98,7 +98,7 @@ class UIWorldMap extends DragableMenu {
   async autoSelectArea(mapId: number) {
     for (const fileName of this.worldMapFiles) {
       try {
-        const node = await WZManager.get(`Map.wz/WorldMap/${fileName}.img`);
+        const node = await NXManager.get(`Map.wz/WorldMap/${fileName}.img`);
         const mapList = node?.nGet('MapList');
         if (!mapList) continue;
         for (const entry of (mapList.nChildren ?? [])) {

@@ -1,4 +1,4 @@
-import WZManager from '../wz-utils/WZManager';
+﻿import NXManager from '../wz-utils/NXManager';
 import { MapleStanceButton } from './MapleStanceButton';
 import ClickManager from './ClickManager';
 import GameCanvas from '../GameCanvas';
@@ -26,7 +26,7 @@ const UITrade = {
   partnerConfirmed: false,
 
   async initialize(canvas: GameCanvas) {
-    const uiWin = await WZManager.get('UI.wz/UIWindow.img');
+    const uiWin = await NXManager.get('UI.wz/UIWindow.img');
     const btClose = uiWin?.nGet('BtUIClose');
     if (btClose) {
       const btn = new MapleStanceButton(canvas, {

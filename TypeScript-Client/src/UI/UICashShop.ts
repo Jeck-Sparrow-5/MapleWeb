@@ -1,4 +1,4 @@
-import WZManager from '../wz-utils/WZManager';
+﻿import NXManager from '../wz-utils/NXManager';
 import { MapleStanceButton } from './MapleStanceButton';
 import ClickManager from './ClickManager';
 import GameCanvas from '../GameCanvas';
@@ -49,7 +49,7 @@ const UICashShop = {
     this.x = Math.floor((800 - this.W) / 2);
     this.y = Math.floor((600 - this.H) / 2);
 
-    const uiWin = await WZManager.get('UI.wz/UIWindow.img');
+    const uiWin = await NXManager.get('UI.wz/UIWindow.img');
 
     // Close / Return button
     const btClose = uiWin?.nGet('BtUIClose');
@@ -99,7 +99,7 @@ const UICashShop = {
     this.allItems = [];
     try {
       // Load cash item names from String.wz/Cash.img
-      const cashStr = await WZManager.get('String.wz/Cash.img');
+      const cashStr = await NXManager.get('String.wz/Cash.img');
       if (cashStr?.nChildren) {
         for (const child of cashStr.nChildren) {
           const id = parseInt(child.nName);

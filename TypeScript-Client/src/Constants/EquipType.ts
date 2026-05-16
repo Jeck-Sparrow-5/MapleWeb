@@ -1,7 +1,7 @@
-import Stance from "./enums/Stance";
+﻿import Stance from "./enums/Stance";
 import WZFiles from "./enums/WZFiles";
 import PLAY_AUDIO from "../Audio/PlayAudio";
-import WZManager from "../wz-utils/WZManager";
+import NXManager from "../wz-utils/NXManager";
 
 export enum WeaponType {
   SWORD = 1302,
@@ -130,7 +130,7 @@ export const playAudioForAttackByWeaponType = async function (
 ) {
   // there is sometimes /Attack and /Attack2
   // probebly the second one is for close range attack
-  const jumpNode: any = await WZManager.get(
+  const jumpNode: any = await NXManager.get(
     `${WZFiles.Sound}/Weapon.img/${EquipTypeToSoundName[equipType]}/Attack`
   );
   const jumpAudio = jumpNode.nGetAudio();

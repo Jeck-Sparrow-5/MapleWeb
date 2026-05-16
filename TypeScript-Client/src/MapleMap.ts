@@ -1,4 +1,4 @@
-import WZManager from "./wz-utils/WZManager";
+﻿import NXManager from "./wz-utils/NXManager";
 import SessionManager from "./SessionManager";
 import { NpcTalkPacket } from "./Net/Packets/NpcInteractPacket";
 import TouchReactorPacket from "./Net/Packets/TouchReactorPacket";
@@ -91,7 +91,7 @@ MapleMap.load = async function (id: number | string) {
     const strId = `${id}`.padStart(9, "0");
     filename = `Map.wz/Map/Map${prefix}/${strId}.img`;
   }
-  this.wzNode = await WZManager.get(filename);
+  this.wzNode = await NXManager.get(filename);
   this.isTown = !!this.wzNode.info?.town?.nValue;
   console.log(`is town: ${this.isTown}`);
   console.log("Map WZ Node:", this.wzNode);
@@ -138,7 +138,7 @@ MapleMap.load = async function (id: number | string) {
         let origin = { x: 0, y: 0 };
         try {
           const strId = `${reactorId}`.padStart(7, '0');
-          const wzR = await WZManager.get(`Reactor.wz/${strId}.img`);
+          const wzR = await NXManager.get(`Reactor.wz/${strId}.img`);
           const state0 = wzR?.nGet('0');
           if (state0?.nChildren) {
             frames = state0.nChildren.map((f: any) => ({
@@ -300,7 +300,7 @@ MapleMap.loadPortals = async function (wzNode) {
   // Build map name lookup for portal destination labels
   let mapNames: Record<number, string> = {};
   try {
-    const strMap = await WZManager.get('String.wz/Map.img');
+    const strMap = await NXManager.get('String.wz/Map.img');
     const walkMapNames = (node: any) => {
       if (!node?.nChildren) return;
       node.nChildren.forEach((child: any) => {
@@ -328,7 +328,7 @@ MapleMap.loadPortals = async function (wzNode) {
 };
 
 MapleMap.loadNames = async function (id: number) {
-  const strMap: any = await WZManager.get("String.wz/Map.img");
+  const strMap: any = await NXManager.get("String.wz/Map.img");
 
   const firstDigit = Math.floor(id / 100000000);
   const firstTwoDigits = Math.floor(id / 10000000);

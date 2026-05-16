@@ -1,4 +1,4 @@
-import WZManager from '../wz-utils/WZManager';
+﻿import NXManager from '../wz-utils/NXManager';
 import { MapleStanceButton } from './MapleStanceButton';
 import ClickManager from './ClickManager';
 import DragableMenu from './Menu/DragableMenu';
@@ -37,14 +37,14 @@ class UIQuestLog extends DragableMenu {
   }
 
   async load(canvas: GameCanvas) {
-    const uiWin = await WZManager.get('UI.wz/UIWindow.img');
+    const uiWin = await NXManager.get('UI.wz/UIWindow.img');
     const questNode = uiWin?.nGet('Quest');
     this.bgImg = questNode?.nGet('backgrnd')?.nGetImage?.() ?? null;
     this.bgImg2 = questNode?.nGet('backgrnd2')?.nGetImage?.() ?? null;
 
     // Load quest names from Quest.wz/QuestInfo.img
     try {
-      const qi = await WZManager.get('Quest.wz/QuestInfo.img');
+      const qi = await NXManager.get('Quest.wz/QuestInfo.img');
       qi?.nChildren?.forEach((q: any) => {
         const id = parseInt(q.nName);
         if (isNaN(id)) return;

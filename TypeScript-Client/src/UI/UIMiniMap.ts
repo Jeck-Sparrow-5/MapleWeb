@@ -1,7 +1,7 @@
-import GameCanvas from '../GameCanvas';
+﻿import GameCanvas from '../GameCanvas';
 import MapleMap from '../MapleMap';
 import MyCharacter from '../MyCharacter';
-import WZManager from '../wz-utils/WZManager';
+import NXManager from '../wz-utils/NXManager';
 import { MapleStanceButton } from './MapleStanceButton';
 import ClickManager from './ClickManager';
 import config from '../Config';
@@ -42,7 +42,7 @@ UIMiniMap.initialize = async function (canvas: GameCanvas) {
   this.buttons = [];
   this.initialized = true;
 
-  const statusBar = await WZManager.get('UI.wz/StatusBar.img');
+  const statusBar = await NXManager.get('UI.wz/StatusBar.img');
   this.statusBarNode = statusBar;
 
   // Min button — cycles: normal → min → normal

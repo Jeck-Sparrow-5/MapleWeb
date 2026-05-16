@@ -1,4 +1,4 @@
-import WZManager from '../wz-utils/WZManager';
+﻿import NXManager from '../wz-utils/NXManager';
 import GameCanvas from '../GameCanvas';
 import { CameraInterface } from '../Camera';
 
@@ -11,7 +11,7 @@ const NameTagRenderer = {
   initialized: false,
 
   async initialize() {
-    const node = await WZManager.get('UI.wz/NameTag.img');
+    const node = await NXManager.get('UI.wz/NameTag.img');
     if (!node) return;
 
     for (const style of STYLES) {

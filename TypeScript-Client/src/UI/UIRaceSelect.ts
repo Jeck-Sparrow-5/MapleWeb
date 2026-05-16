@@ -1,4 +1,4 @@
-import WZManager from '../wz-utils/WZManager';
+﻿import NXManager from '../wz-utils/NXManager';
 import { MapleStanceButton } from './MapleStanceButton';
 import ClickManager from './ClickManager';
 import GameCanvas from '../GameCanvas';
@@ -40,9 +40,9 @@ const UIRaceSelect = {
   _mapLoginImgs: [] as any[],
 
   async initialize(canvas: GameCanvas) {
-    const login = await WZManager.get('UI.wz/Login.img');
+    const login = await NXManager.get('UI.wz/Login.img');
     const rs    = login?.nGet?.('RaceSelect');
-    const win   = await WZManager.get('UI.wz/UIWindow.img');
+    const win   = await NXManager.get('UI.wz/UIWindow.img');
 
     // MapLogin — handle both: direct canvas node OR container with canvas children
     const mapLoginNode = login?.nGet?.('MapLogin');

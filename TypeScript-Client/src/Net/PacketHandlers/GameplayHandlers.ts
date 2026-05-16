@@ -1,4 +1,4 @@
-/**
+﻿/**
  * New gameplay packet handlers:
  * RecalculateStats (35), GatherResult (52), SortResult (53),
  * WeekEventMessage (77), SkillMacros (124), FieldEffect (138),
@@ -201,7 +201,7 @@ export class SpawnReactorHandler extends PacketHandler {
     let frames: any[] = [];
     try {
       const strId = `${reactorId}`.padStart(7, '0');
-      const wzR = await (await import('../../wz-utils/WZManager')).default.get(`Reactor.wz/${strId}.img`);
+      const wzR = await (await import('../../wz-utils/NXManager')).default.get(`Reactor.wz/${strId}.img`);
       const state0 = wzR?.nGet('0');
       if (state0?.nChildren) {
         frames = state0.nChildren.map((f: any) => ({

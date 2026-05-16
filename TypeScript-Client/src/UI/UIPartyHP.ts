@@ -1,4 +1,4 @@
-import WZManager from '../wz-utils/WZManager';
+﻿import NXManager from '../wz-utils/NXManager';
 import GameCanvas from '../GameCanvas';
 import config from '../Config';
 
@@ -21,7 +21,7 @@ const UIPartyHP = {
   initialized: false,
 
   async initialize() {
-    const uiWin = await WZManager.get('UI.wz/UIWindow.img');
+    const uiWin = await NXManager.get('UI.wz/UIWindow.img');
     const ph = uiWin?.nGet('PartyHP');
     this.barBg   = ph?.nGet('0')?.nGetImage?.() ?? null; // 5×7 end cap
     this.barFill = ph?.nGet('1')?.nGetImage?.() ?? null; // 144×7 fill

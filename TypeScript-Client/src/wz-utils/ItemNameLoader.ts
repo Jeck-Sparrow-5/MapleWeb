@@ -1,4 +1,4 @@
-import WZManager from './WZManager';
+﻿import NXManager from './NXManager';
 
 const nameCache = new Map<number, string>();
 const loadedCategories = new Set<string>();
@@ -18,7 +18,7 @@ async function loadCategory(wzPath: string, cat: string): Promise<void> {
   if (loadedCategories.has(cat)) return;
   loadedCategories.add(cat);
   try {
-    const node = await WZManager.get(wzPath);
+    const node = await NXManager.get(wzPath);
     if (!node) return;
     // Eqp.img has sub-categories (Eqp/Cap/xxx), others are flat
     const walkNode = (n: any) => {
@@ -58,7 +58,7 @@ async function loadSkillNames(): Promise<void> {
   if (skillNamesLoaded) return;
   skillNamesLoaded = true;
   try {
-    const node = await WZManager.get('String.wz/Skill.img');
+    const node = await NXManager.get('String.wz/Skill.img');
     if (!node?.nChildren) return;
     node.nChildren.forEach((child: any) => {
       const id = parseInt(child.nName);

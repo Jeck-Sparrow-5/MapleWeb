@@ -1,4 +1,4 @@
-import WZManager from '../wz-utils/WZManager';
+﻿import NXManager from '../wz-utils/NXManager';
 import { getItemIconSync } from '../wz-utils/ItemIconLoader';
 import { getItemNameSync } from '../wz-utils/ItemNameLoader';
 import { ShopBuyPacket, ShopSellPacket } from '../Net/Packets/ShopPacket';
@@ -71,7 +71,7 @@ class UIShop extends DragableMenu {
   }
 
   async load(canvas: GameCanvas) {
-    const uiWin = await WZManager.get('UI.wz/UIWindow.img');
+    const uiWin = await NXManager.get('UI.wz/UIWindow.img');
     const shopNode = uiWin?.nGet('Shop');
     this.selectImg = shopNode?.nGet('select')?.nGetImage?.() ?? null;
 

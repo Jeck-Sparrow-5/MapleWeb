@@ -1,6 +1,6 @@
-import MapleInventory from "../Constants/Inventory/MapleInventory";
+﻿import MapleInventory from "../Constants/Inventory/MapleInventory";
 import WZFiles from "../Constants/enums/WZFiles";
-import WZManager from "../wz-utils/WZManager";
+import NXManager from "../wz-utils/NXManager";
 
 interface ItemOpts {
   itemId: number;
@@ -40,7 +40,7 @@ class Item {
       const itemId = MapleInventory.getMesosItemId(mesoAmount);
       let strId = `${itemId}`.padStart(8, "0");
       const idFirst4digits = strId.slice(0, 4);
-      let itemFile = await WZManager.get(
+      let itemFile = await NXManager.get(
         `${WZFiles.Item}/${MapleInventory.WzInventoryType.Special}/${idFirst4digits}.img/${itemId}`
       );
       this.node = itemFile;
@@ -49,20 +49,20 @@ class Item {
         this.itemId.toString().padStart(8, "0")
       );
       if (wzInventoryType === MapleInventory.WzInventoryType.Pet) {
-        this.node = await WZManager.get(
+        this.node = await NXManager.get(
           `${WZFiles.Item}/${wzInventoryType}/${this.itemId}.img`
         );
       } else if (wzInventoryType === MapleInventory.WzInventoryType.Special) {
         let strId = `${this.itemId}`.padStart(8, "0");
         const idFirst4digits = strId.slice(0, 4);
-        let itemFile = await WZManager.get(
+        let itemFile = await NXManager.get(
           `${WZFiles.Item}/${wzInventoryType}/${idFirst4digits}.img/${strId}`
         );
         this.node = itemFile;
       } else {
         let strId = `${this.itemId}`.padStart(8, "0");
         const idFirst4digits = strId.slice(0, 4);
-        let itemFile = await WZManager.get(
+        let itemFile = await NXManager.get(
           `${WZFiles.Item}/${wzInventoryType}/${idFirst4digits}.img/${strId}`
         );
         this.node = itemFile;

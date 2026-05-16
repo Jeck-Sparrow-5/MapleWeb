@@ -1,4 +1,4 @@
-import WZManager from "../wz-utils/WZManager";
+﻿import NXManager from "../wz-utils/NXManager";
 import PLAY_AUDIO from "../Audio/PlayAudio";
 import GameCanvas from "../GameCanvas";
 import { Rectangle } from "../Physics/Collision";
@@ -28,7 +28,7 @@ export interface UICommonInterface {
 const UICommon = {} as UICommonInterface;
 
 UICommon.initialize = async function () {
-  const cursor: any = await WZManager.get("UI.wz/Basic.img/Cursor");
+  const cursor: any = await NXManager.get("UI.wz/Basic.img/Cursor");
 
   this.cursorImg = cursor[0][0].nGetImage();
   this.cursorOrigin = cursor[0][0].origin;
@@ -36,7 +36,7 @@ UICommon.initialize = async function () {
   this.cursorDownImg = cursor[12][0].nGetImage();
   this.cursorDownOrigin = cursor[12][0].origin;
 
-  const sounds: any = await WZManager.get("Sound.wz/UI.img");
+  const sounds: any = await NXManager.get("Sound.wz/UI.img");
 
   this.clickAudio = sounds.BtMouseClick.nGetAudio();
   this.hoverAudio = sounds.BtMouseOver.nGetAudio();

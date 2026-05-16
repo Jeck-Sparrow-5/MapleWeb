@@ -1,9 +1,9 @@
-import { PacketHandler } from '../PacketHandler';
+﻿import { PacketHandler } from '../PacketHandler';
 import { Cryptography } from '../Cryptography';
 import MapleMap from '../../MapleMap';
 import UIShop, { ShopItem } from '../../UI/UIShop';
 import NpcTalkType from '../../Constants/NpcTalkType';
-import WZManager from '../../wz-utils/WZManager';
+import NXManager from '../../wz-utils/NXManager';
 
 function readString(data: DataView, offset: number): { str: string; offset: number } {
   const len = data.getUint16(offset, true); offset += 2;
@@ -65,13 +65,13 @@ export class OpenNpcShopHandler extends PacketHandler {
     let eqpNames: Record<number, string> = {};
     let etcNames: Record<number, string> = {};
     try {
-      const eqpNode = await WZManager.get('String.wz/Eqp.img');
+      const eqpNode = await NXManager.get('String.wz/Eqp.img');
       eqpNode?.nChildren?.forEach((cat: any) => {
         cat.nChildren?.forEach((item: any) => {
           eqpNames[parseInt(item.nName)] = item.name?.nValue ?? item.nName;
         });
       });
-      const etcNode = await WZManager.get('String.wz/Etc.img');
+      const etcNode = await NXManager.get('String.wz/Etc.img');
       etcNode?.nChildren?.forEach((cat: any) => {
         cat.nChildren?.forEach((item: any) => {
           etcNames[parseInt(item.nName)] = item.name?.nValue ?? item.nName;

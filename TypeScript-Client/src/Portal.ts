@@ -1,6 +1,6 @@
-import { CameraInterface } from "./Camera";
+﻿import { CameraInterface } from "./Camera";
 import GameCanvas from "./GameCanvas";
-import WZManager from "./wz-utils/WZManager";
+import NXManager from "./wz-utils/NXManager";
 import WZNode from "./wz-utils/WZNode";
 
 class Portal {
@@ -57,7 +57,7 @@ class Portal {
       case 2: {
         // regular
         const spritePath = `${basePath}/pv`;
-        const spriteNode: any = await WZManager.get(spritePath);
+        const spriteNode: any = await NXManager.get(spritePath);
 
         this.frames = spriteNode?.nChildren ?? [];
 
@@ -71,7 +71,7 @@ class Portal {
       case 4: {
         // GM event
         const spritePath = `${basePath}/pv`;
-        const spriteNode: any = await WZManager.get(spritePath);
+        const spriteNode: any = await NXManager.get(spritePath);
 
         this.frames = spriteNode?.nChildren ?? [];
         break;
@@ -87,7 +87,7 @@ class Portal {
       case 7: {
         // scripted
         const spritePath = `${basePath}/pv`;
-        const spriteNode: any = await WZManager.get(spritePath);
+        const spriteNode: any = await NXManager.get(spritePath);
 
         this.frames = spriteNode?.nChildren ?? [];
         break;
@@ -103,7 +103,7 @@ class Portal {
       case 10: {
         // hidden
         const spritePath = `${basePath}/ph/default/portalContinue`;
-        const spriteNode: any = await WZManager.get(spritePath);
+        const spriteNode: any = await NXManager.get(spritePath);
 
         this.frames = spriteNode?.nChildren ?? [];
         break;
@@ -111,7 +111,7 @@ class Portal {
       case 11: {
         // scripted+hidden
         const spritePath = `${basePath}/psh/${this.image}/portalContinue`;
-        const spriteNode: any = await WZManager.get(spritePath);
+        const spriteNode: any = await NXManager.get(spritePath);
 
         this.frames = spriteNode?.nChildren ?? [];
         break;

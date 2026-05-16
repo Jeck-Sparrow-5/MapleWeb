@@ -1,4 +1,4 @@
-import WZManager from '../wz-utils/WZManager';
+﻿import NXManager from '../wz-utils/NXManager';
 import { MapleStanceButton } from './MapleStanceButton';
 import ClickManager from './ClickManager';
 import GameCanvas from '../GameCanvas';
@@ -22,7 +22,7 @@ UIQuit.initialize = async function (canvas: GameCanvas) {
   this.isHidden = true;
   this.buttons = [];
 
-  const uiWindow = await WZManager.get('UI.wz/UIWindow.img');
+  const uiWindow = await NXManager.get('UI.wz/UIWindow.img');
 
   // Yes: confirm logout
   const yesBtn = new MapleStanceButton(canvas, {

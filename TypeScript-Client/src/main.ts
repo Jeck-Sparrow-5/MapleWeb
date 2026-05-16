@@ -1,8 +1,8 @@
-import "./style.css";
+﻿import "./style.css";
 
 import GameLoop from "./Gameloop";
 import Timer from "./Timer";
-import WZManager from "./wz-utils/WZManager";
+import NXManager from "./wz-utils/NXManager";
 import Camera from "./Camera";
 import SessionManager from "./SessionManager";
 import StateManager from "./StateManager";
@@ -29,7 +29,7 @@ const startGame = async () => {
   }
   StateManager.initialize();
   ClickManager.initialize(canvas);
-  WZManager.initialize();
+  NXManager.initialize();
   Camera.initialize();
   Timer.initialize();
   // await MySocket.initialize();

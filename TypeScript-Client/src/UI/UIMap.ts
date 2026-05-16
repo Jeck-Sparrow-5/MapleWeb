@@ -1,5 +1,5 @@
-import MyCharacter from "../MyCharacter";
-import WZManager from "../wz-utils/WZManager";
+﻿import MyCharacter from "../MyCharacter";
+import NXManager from "../wz-utils/NXManager";
 import UIKeyConfig from "./UIKeyConfig";
 import UIGameMenu from "./UIGameMenu";
 import ChatPacket from "../Net/Packets/ChatPacket";
@@ -69,7 +69,7 @@ UIMap.initialize = async function () {
   console.log("UIMap.initialize");
   await UICommon.initialize();
 
-  const basic: any = await WZManager.get("UI.wz/Basic.img");
+  const basic: any = await NXManager.get("UI.wz/Basic.img");
   this.statusBarLevelDigits = basic.LevelNo?.nChildren?.map((d: any) =>
     d.nGetImage()
   ) ?? [];
@@ -78,7 +78,7 @@ UIMap.initialize = async function () {
   this.chat = null;
   this.chatHistory = [];
 
-  const statusBar: any = await WZManager.get("UI.wz/StatusBar.img");
+  const statusBar: any = await NXManager.get("UI.wz/StatusBar.img");
   this.statusBg = statusBar.base?.backgrnd?.nGetImage();
   this.statusBg2 = statusBar.base?.backgrnd2?.nGetImage();
   this.bars = statusBar.gauge?.bar?.nGetImage();

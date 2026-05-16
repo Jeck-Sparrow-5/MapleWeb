@@ -1,4 +1,4 @@
-import WZManager from '../wz-utils/WZManager';
+﻿import NXManager from '../wz-utils/NXManager';
 import { MapleStanceButton } from './MapleStanceButton';
 import ClickManager from './ClickManager';
 import DragableMenu from './Menu/DragableMenu';
@@ -39,7 +39,7 @@ class UIStorage extends DragableMenu {
   }
 
   async load(canvas: GameCanvas) {
-    const uiWin = await WZManager.get('UI.wz/UIWindow.img');
+    const uiWin = await NXManager.get('UI.wz/UIWindow.img');
     this.bgImg = uiWin?.nGet('Trunk')?.nGetImage?.() ?? null;
 
     const btClose = uiWin?.nGet('BtUIClose');

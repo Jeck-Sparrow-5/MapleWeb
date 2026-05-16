@@ -1,4 +1,4 @@
-import WZManager from '../wz-utils/WZManager';
+﻿import NXManager from '../wz-utils/NXManager';
 import { MapleStanceButton } from './MapleStanceButton';
 import ClickManager from './ClickManager';
 import GameCanvas from '../GameCanvas';
@@ -27,8 +27,8 @@ UIGender.initialize = async function (canvas: GameCanvas) {
   this.isHidden = false;
   this.buttons = [];
 
-  const loginImg = await WZManager.get('UI.wz/Login.img');
-  const uiWindow = await WZManager.get('UI.wz/UIWindow.img');
+  const loginImg = await NXManager.get('UI.wz/Login.img');
+  const uiWindow = await NXManager.get('UI.wz/UIWindow.img');
 
   this.bgImg = loginImg.nGet('Gender')?.nGet('backgrnd')?.nGetImage();
 

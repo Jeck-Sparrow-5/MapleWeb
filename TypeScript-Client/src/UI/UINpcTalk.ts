@@ -1,4 +1,4 @@
-import WZManager from '../wz-utils/WZManager';
+﻿import NXManager from '../wz-utils/NXManager';
 import WZNode from '../wz-utils/WZNode';
 import GameCanvas from '../GameCanvas';
 import { CameraInterface } from '../Camera';
@@ -70,7 +70,7 @@ export default class UINpcTalk {
     this.originalX = this.opts.x;
     this.originalY = this.opts.y;
 
-    this.utilDlgExNode = await WZManager.get('UI.wz/UIWindow.img/UtilDlgEx');
+    this.utilDlgExNode = await NXManager.get('UI.wz/UIWindow.img/UtilDlgEx');
     this.top    = this.utilDlgExNode.t;
     this.fill   = this.utilDlgExNode.c;
     this.bottom = this.utilDlgExNode.s;
@@ -346,7 +346,7 @@ export default class UINpcTalk {
 
     try {
       const strId = `${npcId}`.padStart(7, '0');
-      this.speaker = await WZManager.get(`Npc.wz/${strId}.img`);
+      this.speaker = await NXManager.get(`Npc.wz/${strId}.img`);
     } catch (_) {}
 
     const spkH  = ((this.speaker as any)?.stand?.[0]?.nGetImage() as any)?.height ?? 0;

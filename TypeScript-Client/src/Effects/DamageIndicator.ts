@@ -1,4 +1,4 @@
-import WZManager from "../wz-utils/WZManager";
+﻿import NXManager from "../wz-utils/NXManager";
 import WZFiles from "../Constants/enums/WZFiles";
 import GameCanvas from "../GameCanvas";
 import { CameraInterface } from "../Camera";
@@ -30,7 +30,7 @@ export class DamageIndicator {
   constructor() {}
 
   async initialize() {
-    const basicEffectWzNode: any = await WZManager.get(
+    const basicEffectWzNode: any = await NXManager.get(
       `${WZFiles.Effect}/BasicEff.img`
     );
 

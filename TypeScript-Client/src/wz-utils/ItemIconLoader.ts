@@ -1,4 +1,4 @@
-import WZManager from './WZManager';
+﻿import NXManager from './NXManager';
 
 // itemId → HTMLImageElement (or null if not found)
 const iconCache = new Map<number, any>();
@@ -24,7 +24,7 @@ export async function loadItemIcon(itemId: number): Promise<any> {
       const category = categoryFor(itemId);
       const fileCode = Math.floor(itemId / 10000).toString().padStart(4, '0');
       const itemStr = itemId.toString().padStart(8, '0');
-      const node = await WZManager.get(`Item.wz/${category}/${fileCode}.img`);
+      const node = await NXManager.get(`Item.wz/${category}/${fileCode}.img`);
       const itemNode = node?.nGet(itemStr);
       const info = itemNode?.nGet('info');
       const icon = info?.nGet('iconRaw')?.nGetImage?.() ?? info?.nGet('icon')?.nGetImage?.() ?? null;
@@ -60,7 +60,7 @@ async function loadSkillIcon(skillId: number): Promise<any> {
   const p = (async () => {
     try {
       const fileCode = Math.floor(skillId / 10000).toString().padStart(3, '0');
-      const node = await WZManager.get(`Skill.wz/${fileCode}.img/skill/${skillId}/icon`);
+      const node = await NXManager.get(`Skill.wz/${fileCode}.img/skill/${skillId}/icon`);
       const img = node?.nGetImage?.() ?? null;
       skillIconCache.set(skillId, img);
       return img;

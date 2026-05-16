@@ -1,7 +1,7 @@
-import { CameraInterface } from "./Camera";
+﻿import { CameraInterface } from "./Camera";
 import GameCanvas from "./GameCanvas";
 import config from "./Config";
-import WZManager from "./wz-utils/WZManager";
+import NXManager from "./wz-utils/NXManager";
 
 class Background {
   wzNode: any;
@@ -42,7 +42,7 @@ class Background {
     const bS = wzNode.bS?.nValue;
     const no = wzNode.no?.nValue ?? 0;
     if (!bS) return;
-    const backFile: any = await WZManager.get(`Map.wz/Back/${bS}.img`);
+    const backFile: any = await NXManager.get(`Map.wz/Back/${bS}.img`);
     if (!backFile) return;
     const spriteDir = backFile[!this.ani ? "back" : "ani"];
     if (!spriteDir) return;

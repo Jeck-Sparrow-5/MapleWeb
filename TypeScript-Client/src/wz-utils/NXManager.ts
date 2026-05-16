@@ -1,4 +1,4 @@
-import { NXNode } from './NXNode';
+﻿import { NXNode } from './NXNode';
 import { NXRangeReader } from './NXRangeReader';
 
 const fileCache = new Map<string, NXNode>();
@@ -25,7 +25,7 @@ function navigate(root: NXNode, parts: string[]): any {
   return node;
 }
 
-const WZManager = {
+const NXManager = {
   initialize(): void { fileCache.clear(); },
 
   async load(filename: string): Promise<void> {
@@ -47,4 +47,4 @@ const WZManager = {
   },
 };
 
-export default WZManager;
+export default NXManager;

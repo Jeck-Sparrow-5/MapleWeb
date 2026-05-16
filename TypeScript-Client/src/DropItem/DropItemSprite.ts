@@ -1,4 +1,4 @@
-import WZManager from "../wz-utils/WZManager";
+﻿import NXManager from "../wz-utils/NXManager";
 import WZFiles from "../Constants/enums/WZFiles";
 import MapleInventory from "../Constants/Inventory/MapleInventory";
 import DropItemPhysics from "./DropItemPhysics";
@@ -87,7 +87,7 @@ class DropItemSprite {
       const idFirst4digits = strId.slice(0, 4);
       
       try {
-        let itemFile = await WZManager.get(
+        let itemFile = await NXManager.get(
           `${WZFiles.Item}/${MapleInventory.WzInventoryType.Special}/${idFirst4digits}.img/${itemId}`
         );
         this.itemFile = itemFile;
@@ -114,12 +114,12 @@ class DropItemSprite {
       try {
         if (wzInventoryType === MapleInventory.WzInventoryType.Eqp) {
           const strId = `${this.id}`.padStart(8, "0");
-          const equipFile = await WZManager.get(`Character.wz/${strId}.img`);
+          const equipFile = await NXManager.get(`Character.wz/${strId}.img`);
           this.frame = equipFile?.info?.iconRaw ?? equipFile?.info?.icon ?? null;
           this.icon = this.frame?.nGetImage?.() ?? null;
           if (!this.icon) { this.destroyed = true; return; }
         } else if (wzInventoryType === MapleInventory.WzInventoryType.Pet) {
-          this.itemFile = await WZManager.get(
+          this.itemFile = await NXManager.get(
             `${WZFiles.Item}/${wzInventoryType}/${this.id}.img`
           );
           this.frame = this.itemFile?.info?.iconRaw;
@@ -127,7 +127,7 @@ class DropItemSprite {
         } else if (wzInventoryType === MapleInventory.WzInventoryType.Special) {
           let strId = `${this.id}`.padStart(8, "0");
           const idFirst4digits = strId.slice(0, 4);
-          let itemFile = await WZManager.get(
+          let itemFile = await NXManager.get(
             `${WZFiles.Item}/${wzInventoryType}/${idFirst4digits}.img/${strId}`
           );
           this.itemFile = itemFile;
@@ -137,7 +137,7 @@ class DropItemSprite {
         } else {
           let strId = `${this.id}`.padStart(8, "0");
           const idFirst4digits = strId.slice(0, 4);
-          let itemFile = await WZManager.get(
+          let itemFile = await NXManager.get(
             `${WZFiles.Item}/${wzInventoryType}/${idFirst4digits}.img/${strId}`
           );
           this.itemFile = itemFile;
@@ -157,7 +157,7 @@ class DropItemSprite {
 
   async playDropItemAudio() {
     try {
-      const pickupNode: any = await WZManager.get(
+      const pickupNode: any = await NXManager.get(
         `${WZFiles.Sound}/Game.img/DropItem`
       );
       const pickupAudio = pickupNode.nGetAudio();
@@ -169,7 +169,7 @@ class DropItemSprite {
 
   async playPickupAudio() {
     try {
-      const pickupNode: any = await WZManager.get(
+      const pickupNode: any = await NXManager.get(
         `${WZFiles.Sound}/Game.img/PickUpItem`
       );
       const pickupAudio = pickupNode.nGetAudio();

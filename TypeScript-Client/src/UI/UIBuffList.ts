@@ -1,4 +1,4 @@
-import WZManager from '../wz-utils/WZManager';
+﻿import NXManager from '../wz-utils/NXManager';
 import GameCanvas from '../GameCanvas';
 import config from '../Config';
 import SessionManager from '../SessionManager';
@@ -20,7 +20,7 @@ const UIBuffList = {
 
   async initialize() {
     try {
-      this.buffIconNode = await WZManager.get('UI.wz/BuffIcon.img');
+      this.buffIconNode = await NXManager.get('UI.wz/BuffIcon.img');
     } catch (_) {}
     this.initialized = true;
   },

@@ -1,9 +1,9 @@
-import GameCanvas from '../GameCanvas';
+﻿import GameCanvas from '../GameCanvas';
 import { skillLevels } from './UISkillBook';
 import UseSkillPacket from '../Net/Packets/UseSkillPacket';
 import SessionManager from '../SessionManager';
 import config from '../Config';
-import WZManager from '../wz-utils/WZManager';
+import NXManager from '../wz-utils/NXManager';
 
 // Slots 0-9 mapped to keys 1-9,0. Slots 10-19 mapped to F1-F10.
 export const hotbarSlots: (number | null)[] = new Array(20).fill(null);
@@ -27,7 +27,7 @@ export function setCooldown(skillId: number, ms: number) {
 let coolTimeImg: any = null;
 async function loadCoolTimeImg() {
   if (coolTimeImg) return;
-  const uiWin = await WZManager.get('UI.wz/UIWindow.img');
+  const uiWin = await NXManager.get('UI.wz/UIWindow.img');
   coolTimeImg = uiWin?.nGet('CoolTime')?.nGetImage?.() ?? null;
 }
 

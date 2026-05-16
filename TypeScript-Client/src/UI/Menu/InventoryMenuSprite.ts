@@ -1,4 +1,4 @@
-import WZManager from "../../wz-utils/WZManager";
+﻿import NXManager from "../../wz-utils/NXManager";
 import WZFiles from "../../Constants/enums/WZFiles";
 import SessionManager from "../../SessionManager";
 import { getItemIconSync } from "../../wz-utils/ItemIconLoader";
@@ -53,7 +53,7 @@ class InventoryMenuSprite extends DragableMenu {
     this.charecter = opts.charecter;
 
     try {
-      this.inventoryNode = await WZManager.get(`${WZFiles.UI}/UIWindow.img/Item`);
+      this.inventoryNode = await NXManager.get(`${WZFiles.UI}/UIWindow.img/Item`);
       console.log("Loaded inventory UI node:", this.inventoryNode);
     } catch (e) {
       console.error("Error loading inventory UI node:", e);

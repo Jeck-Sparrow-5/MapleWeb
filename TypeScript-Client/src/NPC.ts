@@ -1,4 +1,4 @@
-import WZManager from "./wz-utils/WZManager";
+﻿import NXManager from "./wz-utils/NXManager";
 import Random from "./Random";
 import GameCanvas from "./GameCanvas";
 import { CameraInterface } from "./Camera";
@@ -59,11 +59,11 @@ class NPC {
     this.rx1 = opts.rx1;
 
     let strId = `${this.id}`.padStart(7, "0");
-    let npcFile: any = await WZManager.get(`Npc.wz/${strId}.img`);
+    let npcFile: any = await NXManager.get(`Npc.wz/${strId}.img`);
     if (npcFile?.info?.link) {
       const linkId = npcFile.info.link.nValue;
       strId = `${linkId}`.padStart(7, "0");
-      npcFile = await WZManager.get(`Npc.wz/${strId}.img`);
+      npcFile = await NXManager.get(`Npc.wz/${strId}.img`);
     }
     this.npcFile = npcFile;
 
@@ -91,7 +91,7 @@ class NPC {
       this.mapleTvMsgX = npcFile.info?.MapleTVmsgX?.nValue ?? 0;
       this.mapleTvMsgY = npcFile.info?.MapleTVmsgY?.nValue ?? 0;
 
-      const tvFile: any = await WZManager.get("UI.wz/MapleTV.img");
+      const tvFile: any = await NXManager.get("UI.wz/MapleTV.img");
       const tvMsg = tvFile.TVmedia;
 
       this.tvAdStances = (tvMsg?.nChildren ?? []).map((stance: any, i: number) => {
@@ -107,7 +107,7 @@ class NPC {
   }
   
   async loadStrings(id: number) {
-    const stringFile: any = await WZManager.get("String.wz/Npc.img");
+    const stringFile: any = await NXManager.get("String.wz/Npc.img");
     const npcStrings = stringFile?.nGet(id);
     return (npcStrings?.nChildren ?? []).reduce((acc: any, c: any) => {
       acc[c.nName] = c.nValue;

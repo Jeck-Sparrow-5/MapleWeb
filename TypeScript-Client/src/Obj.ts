@@ -1,7 +1,7 @@
-import { CameraInterface } from "./Camera";
+﻿import { CameraInterface } from "./Camera";
 import config from "./Config";
 import GameCanvas from "./GameCanvas";
-import WZManager from "./wz-utils/WZManager";
+import NXManager from "./wz-utils/NXManager";
 
 class Obj {
   wzNode: any;
@@ -37,7 +37,7 @@ class Obj {
     const oS = wzNode.oS?.nValue;
     const [l0, l1, l2] = [wzNode.l0?.nValue, wzNode.l1?.nValue, wzNode.l2?.nValue];
     if (!oS || l0 == null || l1 == null || l2 == null) return;
-    const objFile: any = await WZManager.get(`Map.wz/Obj/${oS}.img`);
+    const objFile: any = await NXManager.get(`Map.wz/Obj/${oS}.img`);
     if (!objFile) return;
     const spriteNode: any = objFile[l0]?.[l1]?.[l2];
     if (!spriteNode) return;

@@ -1,5 +1,5 @@
-import MapleButton from './MapleButton';
-import WZManager from '../wz-utils/WZManager';
+﻿import MapleButton from './MapleButton';
+import NXManager from '../wz-utils/NXManager';
 import ClickManager from './ClickManager';
 import {MapleStanceButton} from './MapleStanceButton';
 import GameCanvas from '../GameCanvas';
@@ -36,7 +36,7 @@ export default class UILoginLoading {
     this.x = opts.x;
     this.y = opts.y;
 
-    this.uiLoginLoading = await WZManager.get('UI.wz/Login.img/Notice/Loading');
+    this.uiLoginLoading = await NXManager.get('UI.wz/Login.img/Notice/Loading');
     this.barAnimation = new FrameAnimation(this.uiLoginLoading?.bar, this.x + 130, this.y + 98, true, true);
     this.loadButtons();
   }

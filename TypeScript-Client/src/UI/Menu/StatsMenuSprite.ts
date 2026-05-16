@@ -1,4 +1,4 @@
-import WZManager from "../../wz-utils/WZManager";
+﻿import NXManager from "../../wz-utils/NXManager";
 import WZFiles from "../../Constants/enums/WZFiles";
 import GeneralMenuSprite from "./GeneralMenuSprite";
 import getEquipTypeById from "../../Constants/EquipType";
@@ -47,7 +47,7 @@ class StatsMenuSprite extends DragableMenu {
 
     this.charecter = opts.charecter;
 
-    let StatsNode = await WZManager.get(`${WZFiles.UI}/UIWindow.img/Stat`);
+    let StatsNode = await NXManager.get(`${WZFiles.UI}/UIWindow.img/Stat`);
     this.StatsNode = StatsNode;
 
     this.generalMenuSprites = [];

@@ -1,4 +1,4 @@
-import WZManager from '../wz-utils/WZManager';
+﻿import NXManager from '../wz-utils/NXManager';
 import UIOptionMenu from './UIOptionMenu';
 import { MapleStanceButton } from './MapleStanceButton';
 import ClickManager from './ClickManager';
@@ -30,7 +30,7 @@ const UIGameMenu = {
     this.x = config.originalWidth - 100;
     this.y = config.originalHeight - 150 + (config.height - config.originalHeight);
 
-    const uiWin = await WZManager.get('UI.wz/UIWindow.img');
+    const uiWin = await NXManager.get('UI.wz/UIWindow.img');
     const menuNode = uiWin?.nGet('GameMenu');
     this.bgImg = menuNode?.nGet('backgrnd')?.nGetImage?.() ?? null;
 

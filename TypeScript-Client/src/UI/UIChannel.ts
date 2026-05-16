@@ -1,4 +1,4 @@
-import WZManager from '../wz-utils/WZManager';
+﻿import NXManager from '../wz-utils/NXManager';
 import { MapleStanceButton } from './MapleStanceButton';
 import ClickManager from './ClickManager';
 import GameCanvas from '../GameCanvas';
@@ -19,7 +19,7 @@ const UIChannel = {
 
   async initialize(canvas: GameCanvas, channelCount = 20) {
     this.channelCount = channelCount;
-    const uiWin = await WZManager.get('UI.wz/UIWindow.img');
+    const uiWin = await NXManager.get('UI.wz/UIWindow.img');
     this.bgImg = uiWin?.nGet('Channel')?.nGetImage?.() ?? null;
 
     const btClose = uiWin?.nGet('BtUIClose');

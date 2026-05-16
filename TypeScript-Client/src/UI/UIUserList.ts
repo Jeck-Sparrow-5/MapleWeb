@@ -1,4 +1,4 @@
-import WZManager from '../wz-utils/WZManager';
+﻿import NXManager from '../wz-utils/NXManager';
 import { OutPacket, OutPacketOpcode } from '../Net/OutPacket';
 import SessionManager from '../SessionManager';
 import { MapleStanceButton } from './MapleStanceButton';
@@ -33,7 +33,7 @@ class UIUserList extends DragableMenu {
   }
 
   async load(canvas: GameCanvas) {
-    const uiWin = await WZManager.get('UI.wz/UIWindow.img');
+    const uiWin = await NXManager.get('UI.wz/UIWindow.img');
     this.bgImg = uiWin?.nGet('UserList')?.nGetImage?.() ?? null;
 
     const btClose = uiWin?.nGet('BtUIClose');

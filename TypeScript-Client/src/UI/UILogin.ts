@@ -119,6 +119,7 @@ interface UILoginInterface {
   clearCharacterSlotButtons: () => void;
   saveIdEnabled: boolean;
   currentCharPage: number;
+  _chatsel: any;
 }
 
 const UILogin = {} as UILoginInterface;
@@ -136,6 +137,18 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   this.uiLogin = await NXManager.get('UI.wz/Login.img');
 
   this.frameImg = this.uiLogin.nGet('Common')?.nGet('frame')?.nGetImage();
+  this._chatsel  = this.uiLogin.nGet('Chatsel') ?? this.uiLogin.nGet('chatsel');
+  if (this._chatsel) {
+    const dbg = (name: string) => {
+      const n = this._chatsel.nGet(name);
+      if (!n) { console.log(`[chatsel] ${name}: NOT FOUND`); return; }
+      const children = n.nChildren?.map((c: any) =>
+        `${c.nName}(${c.nTagName}) x=${c.nX} y=${c.nY} val=${c.nValue}`).join(', ');
+      console.log(`[chatsel] ${name}: ${children ?? 'no children'} | nX=${n.nX} nY=${n.nY}`);
+    };
+    dbg('pageL'); dbg('pageR');
+    console.log('[chatsel] all children:', this._chatsel.nChildren?.map((c: any) => c.nName).join(', '));
+  }
   this.selectedWorldImage = this.uiLogin.nGet('Common')?.selectWorld?.nGetImage();
   this.worlds = [];
   this.characters = [];
@@ -228,7 +241,8 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   this.behindFrameButtons.add(deleteCharacterButton);
 
   // Page left (BtPageL) — world x=(CHAR_SLOT_X_START - 50), y around char slots
-  const pageLeftNode = this.uiLogin.nGet('CharSelect')?.nGet('BtPageL');
+  const pageLeftNode = this._chatsel?.nGet('pageL')
+                    ?? this.uiLogin.nGet('CharSelect')?.nGet('BtPageL');
   if (pageLeftNode) {
     const pageLeftBtn = new MapleStanceButton(canvas, {
       x: CHAR_SLOT_X_START - 50,
@@ -246,7 +260,8 @@ UILogin.initialize = async function (canvas: GameCanvas) {
     this.behindFrameButtons.add(pageLeftBtn);
   }
 
-  const pageRightNode = this.uiLogin.nGet('CharSelect')?.nGet('BtPageR');
+  const pageRightNode = this._chatsel?.nGet('pageR')
+                     ?? this.uiLogin.nGet('CharSelect')?.nGet('BtPageR');
   if (pageRightNode) {
     const pageRightBtn = new MapleStanceButton(canvas, {
       x: CHAR_SLOT_X_START + CHAR_SLOTS * CHAR_SLOT_X_STEP + 10,
@@ -474,6 +489,12 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   };
 };
 
+function getRaceKey(job: number): string {
+  if (job >= 2000 && job < 3000) return 'aran';
+  if (job >= 1000 && job < 2000) return 'knight';
+  return 'adventurer';
+}
+
 const CHAR_SLOTS = 3;
 const CHAR_SLOT_X_START = -280; // world x of slot 0 (canvas ~92 at charselect camera)
 const CHAR_SLOT_X_STEP = 140;   // world px between slots
@@ -550,7 +571,7 @@ UILogin.createWorldButtons = function () {
             const channelButton = new MapleStanceButton(this.gameCanvas, {
               x: -145 + col * 92,
               y: -620 + row * 30,
-              img: this.uiLogin.nGet('WorldSelect')?.nGet('channel')?.[i]?.nChildren ?? [],
+              img: this.uiLogin.nGet('WorldSelect')?.nGet('channel')?.nGet(i)?.nChildren ?? [],
               isHidden: false,
               onClick: async () => {
                 if (!isActive) return;
@@ -837,11 +858,28 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
       canvas.context.restore();
     }
 
-    // Draw actual character sprite (async, falls back to class badge on first frame)
-    drawPreview(canvas, camera, char, wx, CHAR_SLOT_Y, 16).catch(() => {
-      const classImg = this.uiLogin.nGet('CharSelect')?.nGet('adventure')?.nGet('0')?.nGetImage();
-      if (classImg) canvas.drawImage({ img: classImg, dx: cx, dy: cy });
-    });
+    // Aura (frame 1) — behind character
+    const auraImg = this._chatsel?.nGet('character')?.nGet('1')?.nGetImage();
+    if (auraImg?.width) {
+      canvas.drawImage({ img: auraImg, dx: cx - Math.floor(auraImg.width / 2) + 30, dy: cy - auraImg.height + 10 });
+    }
+
+    // Character sprite
+    drawPreview(canvas, camera, char, wx, CHAR_SLOT_Y, 16).catch(() => {});
+
+    // Platform (frame 0) — at feet
+    const platImg = this._chatsel?.nGet('character')?.nGet('0')?.nGetImage();
+    if (platImg?.width) {
+      canvas.drawImage({ img: platImg, dx: cx - Math.floor(platImg.width / 2) + 30, dy: cy - 10 });
+    }
+
+    // Race flag
+    const race = getRaceKey(char.stat.job);
+    const flagImg = this._chatsel?.nGet(race)?.nGetImage?.()
+                 ?? this._chatsel?.nGet(race)?.nGet('0')?.nGetImage?.();
+    if (flagImg?.width) {
+      canvas.drawImage({ img: flagImg, dx: cx + 65, dy: cy - 120 });
+    }
 
     canvas.drawText({ text: char.stat.characterName, color: '#FFFFFF', x: cx + 20, y: cy + 20 });
     canvas.drawText({ text: `Lv.${char.stat.level}`, color: '#FFFF88', x: cx + 20, y: cy + 34 });

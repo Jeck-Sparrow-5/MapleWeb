@@ -187,7 +187,7 @@ class MapleCharacter {
     }, {});
     this.zmap = {
       dict: zmapDict,
-      indexOf: (name: string) => this.zmap.dict[name] || -1,
+      indexOf: (name: string) => this.zmap.dict[name] ?? -1,
     };
 
     const smap: any = await NXManager.get("Base.wz/smap.img");
@@ -213,7 +213,8 @@ class MapleCharacter {
     await this.setSkinColor(this.skinColor);
     await this.setFace(this.face);
     await this.setHair(this.hair);
-    this.setStance(this.stance);
+    this.stance = '';  // force setStance to run even if already 'stand1'
+    this.setStance(this.stance || 'stand1');
 
     this.projectiles = [];
     this.DamageIndicator = new DamageIndicator();
@@ -1102,6 +1103,15 @@ isCloseToMob = (inAllDirections = true) => {
     const map: any = {};
     const drawableFrames: any = [];
 
+    // Manual z-boosts for layers that need explicit ordering above the zmap range.
+    // zmap reversed gives indices ~0-60; boosts of 1000+ guarantee ordering.
+    const Z_BOOSTS: Record<string, number> = {
+      weapon:          1000,
+      weaponOverHand:  1001,
+      arm:             1003,
+      armOverWeapon:   1004,
+    };
+
     const addFrame = (p: any, vslot: any) => {
       try {
         p.nResolveUOL();
@@ -1162,12 +1172,10 @@ isCloseToMob = (inAllDirections = true) => {
       }
 
       const realZ = part.z.nValue === 0 ? part.nName : part.z.nValue;
-      drawableFrames.push({
-        img: part.nGetImage(),
-        z: this.zmap.indexOf(realZ),
-        x,
-        y,
-      });
+      const baseZ = this.zmap.indexOf(realZ);
+      const boost = Z_BOOSTS[realZ] ?? 0;
+      const zIdx  = boost > 0 ? boost : baseZ;
+      drawableFrames.push({ img: part.nGetImage(), z: zIdx, x, y });
     };
 
     const imgs = [
@@ -1329,14 +1337,6 @@ isCloseToMob = (inAllDirections = true) => {
       const dx = Math.floor(this.pos.x + frame.x - camera.x + moveX);
       const dy = Math.floor(this.pos.y + frame.y - camera.y + moveY);
 
-      // Draw a border around the player's outline
-      const outlineColor = "blue"; // Change this to the desired border color
-      const borderWidth = 2; // Change this to the desired border width
-
-      canvas.context.strokeStyle = outlineColor;
-      canvas.context.lineWidth = borderWidth;
-      canvas.context.strokeRect(dx, dy, frame.img.width, frame.img.height);
-
       this.bodyRects.push({
         x: dx + camera.x,
         y: dy + camera.y,
@@ -1365,15 +1365,6 @@ isCloseToMob = (inAllDirections = true) => {
       projectile.draw(canvas, camera, lag, msPerTick, tdelta);
     });
 
-    const minXYPosition = findMinXY(this.bodyRects);
-    const maxXYPosition = findMaxXY(this.bodyRects);
-    canvas.context.fillStyle = "red";
-    canvas.context.fillRect(
-      Math.floor(minXYPosition.minX + maxXYPosition.maxX) / 2 - camera.x - 2,
-      (minXYPosition.minY + maxXYPosition.maxY) / 2 - camera.y - 2,
-      4,
-      4
-    );
   }
   drawName(
     canvas: GameCanvas,

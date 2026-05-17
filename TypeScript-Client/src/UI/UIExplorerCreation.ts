@@ -1,4 +1,5 @@
 ﻿import NXManager from '../wz-utils/NXManager';
+import { getItemName, getItemNameSync } from '../wz-utils/ItemNameLoader';
 import { MapleStanceButton } from './MapleStanceButton';
 import ClickManager from './ClickManager';
 import MapleInput from './MapleInput';
@@ -23,16 +24,16 @@ const FB_BOTTOMS  = [1060002, 1060006, 1060010, 1061008];
 const FB_SHOES    = [1072001, 1072005, 1072037, 1072038];
 const FB_WEAPONS  = [1302000, 1312004, 1322005, 1332007];
 
-// ── Layout constants from HeavenClient UICommonCreation (screen-space) ──────────
-const SCROLL_X   = 115;
-const SCROLL_Y   = 218;
-const ROW_Y0     = 198;   // HeavenClient BtLeft base y
-const ROW_DY     = 18;    // HeavenClient +18px per row
-const BAR_X      = 182;
+// ── Layout constants ─────────────────────────────────────────────────────────
+const ROW_DY     = 18;    // px per row
+const ROW_Y0     = 198;   // screen-space y for arrow buttons
 const BAR_H      = 19;
-const ARR_L_X    = 552;   // HeavenClient
-const ARR_R_X    = 684;   // HeavenClient
-const VAL_X      = 620;
+const ARR_L_X    = 552;   // screen-space (buttons isRelativeToCamera)
+const ARR_R_X    = 684;
+// avatarSel bars — world-space (converted via camera in _drawRightPanel)
+const BAR_WX     = 130;   // world x of first bar
+const BAR_WY0    = -3095; // world y of first bar
+const VAL_WX     = 246;   // world x of value text (center between L/R arrows)
 
 const RIGHT_X       = 486;   // charName board x
 const CHARNAME_Y    = 95;    // charName board y
@@ -40,8 +41,6 @@ const CHARSET_Y     = 95;
 const NAME_IN_X     = 517;   // HeavenClient 514+3
 const NAME_IN_Y     = 198;   // HeavenClient
 const NAME_IN_W     = 148;   // HeavenClient
-const STAT_Y0       = 284;
-const STAT_DY       = 20;
 const NAME_OK_X     = 513;   const NAME_OK_Y     = 273;
 const NAME_CANCEL_X = 587;   const NAME_CANCEL_Y = 273;
 const LOOK_OK_X     = 523;   const LOOK_OK_Y     = 425;
@@ -83,7 +82,6 @@ const UIExplorerCreation = {
 
   // WZ images
   _bg:          [] as any[],   // NewChar/backgrnd + backgrnd2
-  _scrollImg:   null as any,   // NewChar/scroll  — left parchment panel
   _charNameImg: null as any,   // NewChar/charName — name board (right top)
   _charSetImg:  null as any,   // NewChar/charSet  — stats board (right bottom)
   _avatarSel:   [] as any[],   // NewChar/avatarSel children (one per row)
@@ -107,6 +105,7 @@ const UIExplorerCreation = {
   async initialize(canvas: GameCanvas) {
     await this._loadWZ(canvas);
     await this._loadAppearanceData();
+    await this._loadItemNames();
     await this._buildPreview();
     this.initialized = true;
   },
@@ -126,18 +125,17 @@ const UIExplorerCreation = {
       .map((c: any) => getImg(c))
       .filter(Boolean);
 
-    // Left parchment scroll panel
-    this._scrollImg = getImg(nc?.nGet?.('scroll'))
-      ?? getImg(nc?.nGet?.('scroll')?.nGet?.('0'));
-
     // Right boards
     this._charNameImg = getImg(nc?.nGet?.('charName'));
     this._charSetImg  = getImg(nc?.nGet?.('charSet'));
 
-    // avatarSel row bars — avatarSel has numbered children, one per row
+    // avatarSel row bars — use 'normal' state child explicitly
     const avSel = nc?.nGet?.('avatarSel');
     if (avSel?.nChildren)
-      this._avatarSel = avSel.nChildren.map((c: any) => getImg(c));
+      this._avatarSel = avSel.nChildren.map((c: any) => {
+        const normal = c?.nGet?.('normal');
+        return getImg(normal ?? c);
+      });
 
     // ── Buttons ──────────────────────────────────────────────────────────────
     this.buttons.forEach(b => ClickManager.removeButton(b));
@@ -213,6 +211,12 @@ const UIExplorerCreation = {
     } catch (_) {}
   },
 
+  async _loadItemNames() {
+    // Pre-warm ItemNameLoader cache for all equip pools
+    const ids = [...this._tops, ...this._bots, ...this._shoes, ...this._weapons];
+    await Promise.all(ids.map(id => getItemName(id)));
+  },
+
   _rollStats() {
     const v = [4, 4, 4, 4];
     for (let i = 0; i < 9; i++) v[Math.floor(Math.random() * 4)]++;
@@ -239,16 +243,21 @@ const UIExplorerCreation = {
     const { gender:g, faceIdx, hairIdx, skinIdx, topIdx, botIdx, shoeIdx, weaponIdx } = this._st;
     try {
       const face = (g===0 ? this._facesM : this._facesF)[faceIdx] ?? FB_FACES_M[0];
+      const hair = this._hairs[g][hairIdx] ?? (g===0 ? FB_HAIRS_M[0] : FB_HAIRS_F[0]);
       const skin = this._skins[skinIdx] ?? 0;
       if (this._preview.skinColor !== skin) await this._preview.setSkinColor(skin);
-      if (this._preview.face      !== face) await this._preview.setFace(face);
+      if (this._preview.face !== face) await this._preview.setFace(face);
+      if ((this._preview as any).hair !== hair) await (this._preview as any).setHair(hair);
       this._preview.equips = [];
-      for (const id of [
-        this._tops[topIdx]    ?? FB_TOPS[0],
-        this._bots[botIdx]    ?? FB_BOTTOMS[0],
-        this._shoes[shoeIdx]  ?? FB_SHOES[0],
-        this._weapons[weaponIdx] ?? FB_WEAPONS[0],
-      ]) { try { await this._preview.attachEquip(id, 0); } catch (_) {} }
+      const equips: [number, number][] = [
+        [4,  this._tops[topIdx]       ?? FB_TOPS[0]],
+        [5,  this._bots[botIdx]       ?? FB_BOTTOMS[0]],
+        [6,  this._shoes[shoeIdx]     ?? FB_SHOES[0]],
+        [10, this._weapons[weaponIdx] ?? FB_WEAPONS[0]],
+      ];
+      for (const [slot, id] of equips) {
+        try { await this._preview.attachEquip(slot, id); } catch (_) {}
+      }
     } catch (_) {}
   },
 
@@ -325,6 +334,15 @@ const UIExplorerCreation = {
     this._previewDirty = true;
   },
 
+  doUpdate(msPerTick: number) {
+    if (this.isHidden || !this._preview) return;
+    const p = this._preview as any;
+    p.delay = (p.delay ?? 0) + msPerTick;
+    if (p.delay > (p.nextDelay ?? 100)) {
+      p.advanceFrame?.();
+    }
+  },
+
   _applyStep() {
     const inName = this._step === 'name' || this._step === 'waiting';
     const inLook = this._step === 'look';
@@ -352,74 +370,55 @@ const UIExplorerCreation = {
     if (this._step === 'name' || this._step === 'waiting') {
       this._drawNamePanel(canvas);
     } else {
-      this._drawRightPanel(canvas);
+      this._drawRightPanel(canvas, cam);
     }
+    this.buttons.forEach(b => b.draw(canvas, { x:0, y:0 } as any, 0, 0, 0));
+
     if (this._preview) {
       if (this._previewDirty) { this._previewDirty = false; this._refreshPreview(); }
-      (this._preview as any).pos = { x: PREVIEW_X, y: PREVIEW_Y };
-      this._preview.stance  = 'stand1';
+      (this._preview as any).pos.x   = PREVIEW_X;
+      (this._preview as any).pos.y   = PREVIEW_Y;
+      (this._preview as any).pos.fh  = true;   // prevents jump stance in draw()
+      (this._preview as any).pos.left  = false;
+      (this._preview as any).pos.right = false;
       this._preview.flipped = true;
       try { this._preview.draw(canvas, cam, 0, 100, 0); } catch (e) { console.error('[preview]', e); }
     }
-
-    this.buttons.forEach(b => b.draw(canvas, { x:0, y:0 } as any, 0, 0, 0));
   },
 
-  _drawScrollPanel(canvas: GameCanvas) {
-    // Draw parchment scroll background (natural size)
-    if (this._scrollImg) {
-      try { canvas.context.drawImage(this._scrollImg, SCROLL_X, SCROLL_Y); } catch (_) {}
-    } else {
-      canvas.context.save();
-      canvas.context.fillStyle = 'rgba(240,225,190,0.92)';
-      canvas.context.fillRect(SCROLL_X, SCROLL_Y, 228, 9 * ROW_DY + 20);
-      canvas.context.restore();
-    }
-
-    // avatarSel bars have the category label baked in — only overlay the current value
-    const { gender:g } = this._st;
-    const faces = g===0 ? this._facesM : this._facesF;
-    const vals = [
-      faces[this._st.faceIdx]           ?? '-',
-      this._hairs[g][this._st.hairIdx]  ?? '-',
-      this._colors[this._st.colorIdx]   ?? '-',
-      this._skins[this._st.skinIdx]     ?? '-',
-      this._tops[this._st.topIdx]       ?? '-',
-      this._bots[this._st.botIdx]       ?? '-',
-      this._shoes[this._st.shoeIdx]     ?? '-',
-      this._weapons[this._st.weaponIdx] ?? '-',
-      g === 0 ? 'Male' : 'Female',
-    ];
-
-    for (let i = 0; i < 9; i++) {
-      const ry = ROW_Y0 + i * ROW_DY;
-      const bar = this._avatarSel[i];
-      if (bar) {
-        try { canvas.context.drawImage(bar, BAR_X, ry - Math.floor(BAR_H / 2)); } catch (_) {}
-      }
-      canvas.drawText({ text: `${vals[i]}`, color: '#2a1000', x: VAL_X, y: ry + 4, fontSize: 8 });
-    }
-  },
-
-  _drawRightPanel(canvas: GameCanvas) {
-    // charSet board only — charName drawn exclusively in _drawNamePanel
+  _drawRightPanel(canvas: GameCanvas, _cam?: any) {
+    // charSet board (back)
     if (this._charSetImg) {
       try { canvas.context.drawImage(this._charSetImg, RIGHT_X, CHARSET_Y); } catch (_) {}
     } else {
       canvas.context.save();
       canvas.context.fillStyle = 'rgba(80,48,16,0.92)';
-      canvas.context.fillRect(RIGHT_X, CHARSET_Y, 168, 4 * STAT_DY + 20);
+      canvas.context.fillRect(RIGHT_X, CHARSET_Y, 168, 100);
       canvas.context.restore();
     }
 
-    // Stats values overlaid on charSet board
-    const statLabels = ['STR', 'DEX', 'INT', 'LUK'];
-    const statVals   = [this._stats.str, this._stats.dex, this._stats.int, this._stats.luk];
-    statLabels.forEach((s, i) => {
-      const sy = STAT_Y0 + i * STAT_DY;
-      canvas.drawText({ text: s,               color: '#f0d080', x: RIGHT_X + 8,  y: sy, fontSize: 9 });
-      canvas.drawText({ text: `${statVals[i]}`, color: '#ffffff', x: RIGHT_X + 44, y: sy, fontSize: 9 });
-    });
+    // avatarSel bars — on top of charSet, behind arrow buttons
+    const { gender:g } = this._st;
+    const faces = g===0 ? this._facesM : this._facesF;
+    const nm = (id: number | undefined) => id != null ? getItemNameSync(id) : '-';
+    const vals = [
+      nm(faces[this._st.faceIdx]),
+      nm(this._hairs[g][this._st.hairIdx]),
+      nm(this._colors[this._st.colorIdx]),
+      nm(this._skins[this._st.skinIdx]),
+      nm(this._tops[this._st.topIdx]),
+      nm(this._bots[this._st.botIdx]),
+      nm(this._shoes[this._st.shoeIdx]),
+      nm(this._weapons[this._st.weaponIdx]),
+      g === 0 ? 'Male' : 'Female',
+    ];
+    for (let i = 0; i < 9; i++) {
+      const sx = BAR_WX - (_cam?.x ?? 0);
+      const sy = (BAR_WY0 + i * ROW_DY) - (_cam?.y ?? 0);
+      const bar = this._avatarSel[i];
+      if (bar) try { canvas.context.drawImage(bar, sx, sy - Math.floor(BAR_H / 2)); } catch (_) {}
+      canvas.drawText({ text: `${vals[i]}`, color: '#2a1000', x: VAL_WX - (_cam?.x ?? 0), y: sy + 1, fontSize: 11, align: 'center' });
+    }
   },
 
   // Step 1: charName board only — no scroll, no charset

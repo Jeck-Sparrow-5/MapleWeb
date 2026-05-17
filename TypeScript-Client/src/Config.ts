@@ -16,7 +16,10 @@ const config: Config = {
   originalHeight,
   originalWidth,
   bottomSafeGap: 0, // 800x600
-  websocketUrl: import.meta.env.VITE_WEBSOCKET_URL,
+  websocketUrl: (() => {
+    const u = import.meta.env.VITE_WEBSOCKET_URL;
+    return u && (u.startsWith('ws://') || u.startsWith('wss://')) ? u : undefined;
+  })(),
 };
 
 const element: HTMLElement = document.documentElement; // Get the root element (whole document)

@@ -1102,14 +1102,17 @@ isCloseToMob = (inAllDirections = true) => {
 
     const map: any = {};
     const drawableFrames: any = [];
+    const baseImgs = new Set([this.body, this.head, this.Hair, this.Face]);
+    let _fromEquip = false;
 
-    // Manual z-boosts for layers that need explicit ordering above the zmap range.
-    // zmap reversed gives indices ~0-60; boosts of 1000+ guarantee ordering.
-    const Z_BOOSTS: Record<string, number> = {
-      weapon:          1000,
-      weaponOverHand:  1001,
-      arm:             1003,
-      armOverWeapon:   1004,
+    // Weapon layers always at fixed z. Arm boost applies only to equip arm parts.
+    const WEAPON_Z: Record<string, number> = {
+      weapon:         1000,
+      weaponOverHand: 1001,
+    };
+    const EQUIP_ARM_Z: Record<string, number> = {
+      arm:            1003,
+      armOverWeapon:  1004,
     };
 
     const addFrame = (p: any, vslot: any) => {
@@ -1173,8 +1176,16 @@ isCloseToMob = (inAllDirections = true) => {
 
       const realZ = part.z.nValue === 0 ? part.nName : part.z.nValue;
       const baseZ = this.zmap.indexOf(realZ);
-      const boost = Z_BOOSTS[realZ] ?? 0;
-      const zIdx  = boost > 0 ? boost : baseZ;
+      let zIdx: number;
+      if (WEAPON_Z[realZ] != null) {
+        zIdx = WEAPON_Z[realZ];
+      } else if (EQUIP_ARM_Z[realZ] != null) {
+        zIdx = EQUIP_ARM_Z[realZ];
+      } else if (_fromEquip) {
+        zIdx = Math.max(baseZ, 500); // equip floor: in front of body (~0-60)
+      } else {
+        zIdx = baseZ;
+      }
       drawableFrames.push({ img: part.nGetImage(), z: zIdx, x, y });
     };
 
@@ -1196,6 +1207,7 @@ isCloseToMob = (inAllDirections = true) => {
       if (!img) {
         return;
       }
+      _fromEquip = !baseImgs.has(img);
 
       const imgVslot = img.info?.vslot?.nValue ?? '';
       const isHead = img === this.head;

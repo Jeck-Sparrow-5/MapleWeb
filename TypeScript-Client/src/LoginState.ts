@@ -22,16 +22,16 @@ export enum LoginSubState {
 // back/1 y=-1200 → Char Select       (-1200 - 344 = -1544)
 // back/2 y=-1800 → Race Select       (-1800 - 344 = -2144)
 // back/3 y=-2399 → Cygnus Creation   (-2399 - 344 = -2743)
-// back/4 y=-2999 → Explorer Creation (-2999 - 344 = -3343)
-// back/4 y=-2999 → Aran Creation     (same section as Explorer, back/4)
+// back/4  y=-2999 → Explorer Creation (-2999 - 344 = -3343)
+// back/19 y=-3600 → Aran Creation     (-3600 - 344 = -3944)
 const LOGIN_CAMERA_POSITIONS: Record<string, { x: number; y: number }> = {
   [LoginSubState.LOGIN_SCREEN]:       { x: -372, y: -308  },
   [LoginSubState.WORLD_SELECT]:       { x: -372, y: -914  },
   [LoginSubState.CHARACTER_SELECT]:   { x: -372, y: -1544 },
-  [LoginSubState.RACE_SELECT]:        { x: -372, y: -2144 },
-  [LoginSubState.CHARACTER_CREATION]: { x: -372, y: -3343 },
-  [LoginSubState.CYGNUS_CREATION]:    { x: -372, y: -2743 },
-  [LoginSubState.ARAN_CREATION]:      { x: -372, y: -3343 },
+  [LoginSubState.RACE_SELECT]:        { x: -372, y: -2110 },
+  [LoginSubState.CHARACTER_CREATION]: { x: -372, y: -3300 },
+  [LoginSubState.CYGNUS_CREATION]:    { x: -372, y: -2700 },
+  [LoginSubState.ARAN_CREATION]:      { x: -372, y: -3930 },
 };
 
 interface LoginState extends UIState {

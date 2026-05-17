@@ -848,7 +848,7 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
   });
 
   UIRaceSelect.draw(canvas);
-  UIExplorerCreation.draw(canvas);
+  UIExplorerCreation.draw(canvas, camera);
 
   canvas.drawText({
     text: "Ver. 0.83",

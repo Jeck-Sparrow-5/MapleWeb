@@ -36,7 +36,7 @@ const VAL_X      = 620;
 
 const RIGHT_X       = 486;   // charName board x
 const CHARNAME_Y    = 95;    // charName board y
-const CHARSET_Y     = 258;
+const CHARSET_Y     = 95;
 const NAME_IN_X     = 517;   // HeavenClient 514+3
 const NAME_IN_Y     = 198;   // HeavenClient
 const NAME_IN_W     = 148;   // HeavenClient
@@ -47,8 +47,8 @@ const NAME_CANCEL_X = 587;   const NAME_CANCEL_Y = 273;
 const LOOK_OK_X     = 523;   const LOOK_OK_Y     = 425;
 const LOOK_CANCEL_X = 597;   const LOOK_CANCEL_Y = 425;
 
-const PREVIEW_X  = 390;
-const PREVIEW_Y  = 350;
+const PREVIEW_X  = 19;
+const PREVIEW_Y  = -3000;
 const BG_Y       = -80;
 
 // Called by CharManageHandlers after server validates the name
@@ -342,10 +342,10 @@ const UIExplorerCreation = {
 
   // ── Draw ─────────────────────────────────────────────────────────────────────
 
-  draw(canvas: GameCanvas) {
+  draw(canvas: GameCanvas, camera?: any) {
     if (this.isHidden) return;
+    const cam = camera ?? { x: 0, y: 0 };
 
-    // Background at natural size, shifted up to show foothold platform
     for (const bg of this._bg)
       try { canvas.context.drawImage(bg, 0, BG_Y); } catch (_) {}
 
@@ -354,14 +354,12 @@ const UIExplorerCreation = {
     } else {
       this._drawRightPanel(canvas);
     }
-    if (this._step === 'look' && this._preview) {
+    if (this._preview) {
       if (this._previewDirty) { this._previewDirty = false; this._refreshPreview(); }
-      try {
-        (this._preview as any).pos = { x: PREVIEW_X, y: PREVIEW_Y };
-        this._preview.stance  = 'stand1';
-        this._preview.flipped = true;
-        this._preview.draw(canvas, { x:0, y:0 } as any, 0, 100, 0);
-      } catch (_) {}
+      (this._preview as any).pos = { x: PREVIEW_X, y: PREVIEW_Y };
+      this._preview.stance  = 'stand1';
+      this._preview.flipped = true;
+      try { this._preview.draw(canvas, cam, 0, 100, 0); } catch (e) { console.error('[preview]', e); }
     }
 
     this.buttons.forEach(b => b.draw(canvas, { x:0, y:0 } as any, 0, 0, 0));

@@ -1105,14 +1105,26 @@ isCloseToMob = (inAllDirections = true) => {
     const baseImgs = new Set([this.body, this.head, this.Hair, this.Face]);
     let _fromEquip = false;
 
-    // Weapon layers always at fixed z. Arm boost applies only to equip arm parts.
-    const WEAPON_Z: Record<string, number> = {
-      weapon:         1000,
-      weaponOverHand: 1001,
-    };
-    const EQUIP_ARM_Z: Record<string, number> = {
-      arm:            1003,
-      armOverWeapon:  1004,
+    // Explicit z overrides based on HeavenMS layer order (back→front).
+    // Applies to all parts (body + equip). Unknown equip layers use floor=50.
+    const LAYER_Z: Record<string, number> = {
+      hairBelowBody:              1,
+      body:                      10,
+      backArm:                   12,
+      hair:                      40,  // DEFAULT — behind head (fixes rebel fringe)
+      head:                      55,
+      ear:                       56,
+      face:                      57,
+      hairOverHead:              65,
+      armOverHair:               70,
+      armOverHairBelowWeapon:    75,
+      handBelowWeapon:           80,
+      handOverHair:              85,
+      weapon:                   100,
+      weaponOverHand:           102,
+      handOverWeapon:           108,
+      arm:                      112,  // front arm over weapon
+      armOverWeapon:            114,
     };
 
     const addFrame = (p: any, vslot: any) => {
@@ -1177,14 +1189,13 @@ isCloseToMob = (inAllDirections = true) => {
       const realZ = part.z.nValue === 0 ? part.nName : part.z.nValue;
       const baseZ = this.zmap.indexOf(realZ);
       let zIdx: number;
-      if (WEAPON_Z[realZ] != null) {
-        zIdx = WEAPON_Z[realZ];
-      } else if (EQUIP_ARM_Z[realZ] != null) {
-        zIdx = EQUIP_ARM_Z[realZ];
+      const zOverride = LAYER_Z[realZ];
+      if (zOverride != null) {
+        zIdx = zOverride;           // known layer — explicit position
       } else if (_fromEquip) {
-        zIdx = Math.max(baseZ, 500); // equip floor: in front of body (~0-60)
+        zIdx = Math.max(baseZ < 0 ? 0 : baseZ, 50); // unknown equip layer: floor between hair and head
       } else {
-        zIdx = baseZ;
+        zIdx = baseZ;               // unknown body/hair/face layer: zmap
       }
       drawableFrames.push({ img: part.nGetImage(), z: zIdx, x, y });
     };

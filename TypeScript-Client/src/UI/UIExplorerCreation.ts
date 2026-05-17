@@ -240,11 +240,12 @@ const UIExplorerCreation = {
 
   async _refreshPreview() {
     if (!this._preview) return;
-    const { gender:g, faceIdx, hairIdx, skinIdx, topIdx, botIdx, shoeIdx, weaponIdx } = this._st;
+    const { gender:g, faceIdx, hairIdx, colorIdx, skinIdx, topIdx, botIdx, shoeIdx, weaponIdx } = this._st;
     try {
-      const face = (g===0 ? this._facesM : this._facesF)[faceIdx] ?? FB_FACES_M[0];
-      const hair = this._hairs[g][hairIdx] ?? (g===0 ? FB_HAIRS_M[0] : FB_HAIRS_F[0]);
-      const skin = this._skins[skinIdx] ?? 0;
+      const face     = (g===0 ? this._facesM : this._facesF)[faceIdx] ?? FB_FACES_M[0];
+      const hairBase = this._hairs[g][hairIdx] ?? (g===0 ? FB_HAIRS_M[0] : FB_HAIRS_F[0]);
+      const hair     = hairBase + (this._colors[colorIdx] ?? 0);
+      const skin     = this._skins[skinIdx] ?? 0;
       if (this._preview.skinColor !== skin) await this._preview.setSkinColor(skin);
       if (this._preview.face !== face) await this._preview.setFace(face);
       if ((this._preview as any).hair !== hair) await (this._preview as any).setHair(hair);

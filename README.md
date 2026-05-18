@@ -1,6 +1,6 @@
 ## MapleWeb
 
-Browser-based MapleStory v83 client. Connects to a v83 server emulator over WebSocket (proxied to TCP), with full login-to-game packet flow, live multiplayer, and a complete in-game UI built from WZ assets.
+Browser-based MapleStory v83 client. Connects to a v83 server emulator over WebSocket (proxied to TCP), with full login-to-game packet flow, live multiplayer, and a complete in-game UI built from WZ assets. Rendering is hardware-accelerated via **PixiJS v7 (WebGL)**.
 
 > **Notice:** All graphics and sound assets are rights reserved to Nexon. This project is for research and educational purposes only, with no commercial intent.
 
@@ -92,7 +92,7 @@ When `SERVER_IP` is received, the client reconnects the WebSocket to the channel
 | `S` | Character stats / info |
 | `I` | Item inventory (Equip / Use / Setup / Etc / Cash tabs) |
 | `E` | Equipment slots (20 slots: hat, face, eye, ear, top, bottom, shoes, gloves, cape, weapon, shield, ring×4, pendant×2, emblem, medal, shoulder, belt) |
-| `K` | Skill book (loads skills from Skill.wz for your job; SP up, hotbar assign, passive detection) |
+| `K` | Skill book (loads skills from Skill.nx for your job; SP up, hotbar assign, passive detection) |
 | `Q` | Quest log (in-progress and completed) |
 | `M` | Game menu (channel list, options, quit) |
 | `ESC` | Close topmost open dialog → quit confirmation |
@@ -116,7 +116,7 @@ When `SERVER_IP` is received, the client reconnects the WebSocket to the channel
 | Window | Description |
 |--------|-------------|
 | **NPC dialogue** | Text (word-wrapped), Yes/No, Next/Prev, selection list; sends NpcTalkMore packets |
-| **NPC shop** | Buy/sell tabs, item list with prices, icon from Item.wz |
+| **NPC shop** | Buy/sell tabs, item list with prices, icon from Item.nx |
 | **Storage** | Meso and item storage with slot grid |
 | **Quit dialog** | Disconnect and return to login |
 | **Key config** | Rebind keyboard shortcuts |
@@ -219,19 +219,21 @@ When `SERVER_IP` is received, the client reconnects the WebSocket to the channel
 
 ---
 
-## WZ Data Usage
+## Asset Files (NX format)
 
-| WZ file | Used for |
+Assets are stored as **PKG4 `.nx` binary files** in `public/wz_client/`. The path notation (e.g. `Character.wz/…`) is the logical namespace used in `NXManager.get()` — the physical files are `.nx`, not `.wz`.
+
+| NX file | Used for |
 |---------|----------|
-| `Character.wz` | Player/character sprite layers (body, head, face, hair, equipment) |
-| `Skill.wz` | Skill icons, animations, metadata (level, masterLevel, passive flag) |
-| `Item.wz` | Item icons and equipment stats in inventory/equip slots |
-| `String.wz` | Item names, NPC names, skill descriptions, map names, quest text |
-| `Map.wz` | Tiles, backgrounds, footholds, portals, NPC/mob positions, reactor data, minimap image |
-| `Mob.wz` | Monster sprites, frame animations, hit/death sequences |
-| `NPC.wz` | NPC sprite layers and animations |
-| `UI.wz` | Login screen, buttons, inventory panels, minimap chrome, status bar, chat, hotbar |
-| `Effect.wz` | Hit effects, skill visual effects, portal particles |
+| `Character.nx` | Player/character sprite layers (body, head, face, hair, equipment) |
+| `Skill.nx` | Skill icons, animations, metadata (level, masterLevel, passive flag) |
+| `Item.nx` | Item icons and equipment stats in inventory/equip slots |
+| `String.nx` | Item names, NPC names, skill descriptions, map names, quest text |
+| `Map.nx` | Tiles, backgrounds, footholds, portals, NPC/mob positions, reactor data, minimap image |
+| `Mob.nx` | Monster sprites, frame animations, hit/death sequences |
+| `NPC.nx` | NPC sprite layers and animations |
+| `UI.nx` | Login screen, buttons, inventory panels, minimap chrome, status bar, chat, hotbar |
+| `Effect.nx` | Hit effects, skill visual effects, portal particles |
 
 ---
 
@@ -397,29 +399,29 @@ MapleWeb/
 │   │       ├── NXNode.ts                 ← NX binary node (nGet, nGetImage async bitmap)
 │   │       ├── NXRangeReader.ts          ← PKG4 NX parser via HTTP Range (lazy load)
 │   │       ├── lz4.ts                    ← LZ4 decompressor for NX bitmaps
-│   │       ├── ItemIconLoader.ts         ← Async icon cache from Item.wz
-│   │       ├── ItemNameLoader.ts         ← Async name cache from String.wz
+│   │       ├── ItemIconLoader.ts         ← Async icon cache from Item.nx
+│   │       ├── ItemNameLoader.ts         ← Async name cache from String.nx
 │   │       └── base64headers.ts
 │   └── public/
-│       └── wz_client/                    ← WZ data (Base, Character, Effect,
-│                                            Item, Map, Mob, NPC, Skill,
-│                                            String, UI, etc.)
+│       └── wz_client/                    ← NX binary assets (Base.nx, Character.nx,
+│                                            Effect.nx, Item.nx, Map.nx, Mob.nx,
+│                                            NPC.nx, Skill.nx, String.nx, UI.nx, …)
 └── proxy/                                ← Standalone WS→TCP proxy (optional)
     └── index.js
 ```
 
 ---
 
-## Working with WZ / NX Assets
+## Working with NX Assets
 
 ### Two asset formats
 
 | Format | Path | Reader | Used for |
 |--------|------|--------|----------|
-| **WZ JSON** | `public/wz_client/**/*.img.json` | `NXManager` + `WZNode` | Offline mode; legacy assets served as JSON |
-| **NX binary** | Served from URL via HTTP Range requests | `NXRangeReader` + `NXNode` | Runtime; lazy-loaded bitmaps/audio |
+| **WZ JSON** | `public/wz_client/**/*.img.json` | `NXManager` + `WZNode` | Offline mode; legacy fallback served as JSON |
+| **NX binary** | `public/wz_client/*.nx` via HTTP Range requests | `NXRangeReader` + `NXNode` | Primary runtime format; lazy-loaded bitmaps/audio |
 
-`NXManager.get('UI.wz/Login.img')` returns whichever is available (NX preferred). Both expose the same `nGet` / `nGetImage` API, so consumers are format-agnostic.
+`NXManager.get('UI.wz/Login.img')` uses `.wz`-style path notation — the path is the **logical asset address** inside the NX file, not a physical filename. The physical files are `UI.nx`, `Character.nx`, etc. NX is preferred; WZ JSON is the offline fallback. Both expose the same `nGet` / `nGetImage` API so consumers are format-agnostic.
 
 ---
 
@@ -522,17 +524,25 @@ ClickManager.addButton(btn);
 
 ### Drawing images on canvas
 
+All drawing goes through `GameCanvas` methods — **never use `canvas.context` directly**.
+
 ```typescript
 // In a draw() method:
-if (img) {
-  try {
-    canvas.context.drawImage(img, x, y);           // natural size
-    canvas.context.drawImage(img, x, y, w, h);    // scaled
-  } catch (_) {}   // guard: canvas may be 1×1 before bitmap loads
-}
+canvas.drawImage({ img, dx: x, dy: y });                      // natural size
+canvas.drawImage({ img, dx: x, dy: y, dw: w, dh: h });       // scaled
+canvas.drawImage({ img, dx: x, dy: y, flipped: true });       // mirrored
+canvas.drawImage({ img, dx: x, dy: y, alpha: 0.5 });          // semi-transparent
+
+canvas.drawRect({ x, y, width: w, height: h, color: '#334477', alpha: 0.9 });
+canvas.drawRect({ x, y, width: w, height: h, strokeColor: '#ffffff', strokeWidth: 1 });
+canvas.drawText({ text: 'Hello', x, y, color: '#ffffff', fontSize: 11, align: 'center' });
+canvas.drawCircle({ x, y, radius: 4, color: '#FF2222' });
+canvas.drawRoundedRect({ x, y, width: w, height: h, radius: 4, color: '#fff', alpha: 0.9 });
+canvas.drawLine({ x1, y1, x2, y2, color: '#FFEE44', width: 2 });
+canvas.drawArc({ x, y, radius, startAngle: -Math.PI/2, endAngle: Math.PI/2 });
 ```
 
-Always wrap in `try/catch` — the canvas is valid but may have zero-size dimensions before async decode completes.
+The canvas NX bitmap starts transparent and fills asynchronously — GameCanvas automatically re-uploads the canvas texture to GPU for 3 seconds after first use (180 frames), ensuring sprites appear once loaded. Always wrap `drawImage` calls in `try/catch` in case the image is null.
 
 ---
 
@@ -576,7 +586,7 @@ const img = getImg(node);
 
 // 3. Draw every frame (canvas auto-fills when bitmap loads)
 draw(canvas: GameCanvas) {
-  if (img) try { canvas.context.drawImage(img, x, y); } catch (_) {}
+  if (img) try { canvas.drawImage({ img, dx: x, dy: y }); } catch (_) {}
 }
 ```
 
@@ -619,6 +629,8 @@ Login.img/
 
 ## Architecture Notes
 
+**Renderer:** `GameCanvas` wraps a **PixiJS v7 WebGL** application. Three fixed stage layers (bg → sprites → fg) hold pooled `PIXI.Sprite`, `PIXI.Graphics`, and `PIXI.Text` objects reused each frame. A transparent HTML Canvas 2D overlay sits on top for any CSS filter operations. All draw calls go through `GameCanvas` methods — never touch `canvas.context` directly for rendering.
+
 **Dual mode:** `SessionManager.isConnected()` gates whether WZ data or server data is authoritative. Offline mode renders from WZ; online mode populates entities from server packets and skips WZ mob/NPC placement.
 
 **WZ type system:** `WZNode.nGet()` returns `any`; `NXManager.get()` returns `Promise<any>`. This keeps all WZ consumers free of complex union types.
@@ -629,4 +641,4 @@ Login.img/
 
 **Skill hotbar:** `UISkillHotbar` exports `selectedHotbarSlot` and `assignSkillToSelectedSlot()`. Right-clicking a skill in UISkillBook calls the latter. Cooldown arcs are driven by opcode 234 (COOLDOWN) packets.
 
-**Character sprites:** `CharSelectPreview` lazily constructs real `MapleCharacter` instances per character ID and calls `draw()` at the slot's world position, giving accurate equipment previews at the character select screen.
+**Character sprites:** `CharSelectPreview` lazily constructs real `MapleCharacter` instances per character ID. On first request the load is async (fire-and-forget); once cached, `drawPreview()` is fully synchronous within the frame render pass, giving accurate equipment previews at the character select screen.

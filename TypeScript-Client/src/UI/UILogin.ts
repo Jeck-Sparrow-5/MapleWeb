@@ -24,6 +24,7 @@ import UIExplorerCreation from './UIExplorerCreation';
 import { SelectCharPicPacket, RegisterPicPacket } from '../Net/Packets/PicPackets';
 import { DeleteCharPacket } from '../Net/Packets/DeleteCharPacket';
 import { drawPreview, clearCache } from './CharSelectPreview';
+import { initUIPic, showPic, drawUIPic } from './UIPic';
 import Channel from '../Net/Models/Channel';
 import { Character } from '../Net/Models/Character';
 
@@ -147,6 +148,8 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   this.currentCharPage = 0;
   this.saveIdEnabled = !!localStorage.getItem('maple_saved_id');
 
+  initUIPic(canvas);   // load SoftKey WZ assets async (fire-and-forget)
+
   this.worldButtonImages = new Map<number, WZNode>();
   this.worldImages = new Map<number, WZNode>();
 
@@ -180,20 +183,15 @@ UILogin.initialize = async function (canvas: GameCanvas) {
       const pic = this.requirePic ?? 0;
 
       if (pic === 0) {
-        // No PIC required
         new SelectCharPacket(charId).dispatch();
       } else if (pic === 1) {
-        // Soft-key PIC — prompt then send SelectCharPicPacket
-        const entered = prompt('Enter your PIC (Personal ID Code):');
-        if (!entered) return;
-        new SelectCharPicPacket(entered, charId).dispatch();
+        showPic(canvas, 'enter', (entered) => {
+          new SelectCharPicPacket(entered, charId).dispatch();
+        });
       } else {
-        // First time — register PIC
-        const newPic = prompt('Set your PIC (6 digits):');
-        if (!newPic || newPic.length !== 6) return;
-        const confirm = prompt('Confirm PIC:');
-        if (confirm !== newPic) { alert('PICs do not match'); return; }
-        new RegisterPicPacket(charId, newPic).dispatch();
+        showPic(canvas, 'register', (newPic) => {
+          new RegisterPicPacket(charId, newPic).dispatch();
+        });
       }
     },
   });
@@ -899,6 +897,7 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
   this.uiLoginLoading?.draw(canvas, camera, lag, msPerTick, tdelta);
 
   UICommon.doRender(canvas, camera, lag, msPerTick, tdelta);
+  drawUIPic(canvas, camera);
 };
 
 UILogin.drawMask = function (canvas) {

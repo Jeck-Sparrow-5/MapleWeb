@@ -15,11 +15,9 @@ export default class CreateCharPacket extends OutPacket {
     shoes: number,
     weapon: number,
     gender: number,
-    job: number = 0,  // 0 = Explorer/Beginner
   ) {
     super(CREATE_CHAR_OPCODE as any);
     this.writeString(name);
-    this.writeInt(job);      // HeavenMS: job before face
     this.writeInt(face);
     this.writeInt(hair);
     this.writeInt(hairColor);

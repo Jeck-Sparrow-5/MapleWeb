@@ -259,8 +259,6 @@ class MapleCharacter {
 
     if (!this.baseBody[this.stance][frame]) {
       if (this.useStanceUntilMaxFrame) {
-        console.log("Animation ended, switching to stand or alert");
-
         this.onStanceFinish();
 
         if (this.isInAttack) {
@@ -269,8 +267,8 @@ class MapleCharacter {
           this.isInAlert = false;
         }
       } else {
-        console.log("Animation ended, looping back to 0");
         frame = 0;
+        this.frame = 0;
       }
     } else {
       this.frame = frame;
@@ -1075,8 +1073,14 @@ isCloseToMob = (inAllDirections = true) => {
 
     const isDrawable = (n: any) =>
       n.nTagName === "canvas" || n.nTagName === "uol";
-    const getParts = (img: any) =>
-      img.nGet(realStance)?.nGet(realFrame)?.nChildren ?? [];
+    const getParts = (img: any, isEquip = false) => {
+      const stanceNode = img.nGet(realStance);
+      const frameNode = stanceNode?.nGet(realFrame);
+      if (frameNode) return frameNode.nChildren ?? [];
+      // Equips often only ship frame 0 — fall back so weapon doesn't vanish on frames 1/2
+      if (isEquip) return stanceNode?.nGet(0)?.nChildren ?? [];
+      return [];
+    };
     const getFParts = (img: any) => {
       const exprNode = img.nGet(faceExpr);
       const frameNode = exprNode?.nGet(faceFrame);
@@ -1245,7 +1249,7 @@ isCloseToMob = (inAllDirections = true) => {
       } else if (isHair) {
         imgParts = getParts(img).filter((n: any) => n.nName !== "hairShade");
       } else {
-        imgParts = getParts(img);
+        imgParts = getParts(img, _fromEquip);
       }
 
       const drawableImgParts = imgParts.filter(isDrawable);

@@ -485,7 +485,7 @@ function getRaceKey(job: number): string {
 const CHAR_SLOTS = 3;
 const CHAR_SLOT_X_START = -177; // world x of slot 0 — centered between pageL(-260) and pageR(185)
 const CHAR_SLOT_X_STEP = 140;   // world px between slots
-const CHAR_SLOT_Y = -1170;      // world y of click area
+const CHAR_SLOT_Y = -1160;      // world y of click area
 
 UILogin.clearCharacterSlotButtons = function () {
   this.characterSlotButtons.forEach((btn) => ClickManager.removeButton(btn));
@@ -847,31 +847,35 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
 
     const charSelNode = this.uiLogin.nGet('CharSelect');
 
+    const charOffX = 40; // shift character right relative to slot center
+    const ccx = cx + charOffX; // character-centered x (screen)
+    const charWx = wx + charOffX; // character world x for drawPreview
+
     // Aura (frame 1) — behind character
     const auraImg = charSelNode?.nGet('character')?.nGet('1')?.nGetImage();
     if (auraImg?.width) {
-      canvas.drawImage({ img: auraImg, dx: cx - Math.floor(auraImg.width / 2) + 30, dy: cy - auraImg.height + 10 });
+      canvas.drawImage({ img: auraImg, dx: ccx - Math.floor(auraImg.width / 2), dy: cy - auraImg.height + 10 });
     }
 
-    // Race flag — behind character, 10px left of center
+    // Race flag — left of character
     const race = getRaceKey(char.stat.job);
     const flagNode = charSelNode?.nGet(race);
     const flagImg = flagNode?.nGet('0')?.nGetImage?.() ?? flagNode?.nGetImage?.();
     if (flagImg?.width) {
-      canvas.drawImage({ img: flagImg, dx: cx - 30, dy: cy - 120 });
+      canvas.drawImage({ img: flagImg, dx: cx - 15, dy: cy - 140 });
     }
 
     // Character sprite
-    drawPreview(canvas, camera, char, wx, CHAR_SLOT_Y, 16).catch(() => {});
+    drawPreview(canvas, camera, char, charWx, CHAR_SLOT_Y, 16).catch(() => {});
 
     // Platform (frame 0) — at feet
     const platImg = charSelNode?.nGet('character')?.nGet('0')?.nGetImage();
     if (platImg?.width) {
-      canvas.drawImage({ img: platImg, dx: cx - Math.floor(platImg.width / 2) + 30, dy: cy - 10 });
+      canvas.drawImage({ img: platImg, dx: ccx - Math.floor(platImg.width / 2), dy: cy - 10 });
     }
 
-    canvas.drawText({ text: char.stat.characterName, color: '#FFFFFF', x: cx + 20, y: cy + 20 });
-    canvas.drawText({ text: `Lv.${char.stat.level}`, color: '#FFFF88', x: cx + 20, y: cy + 34 });
+    canvas.drawText({ text: char.stat.characterName, color: '#FFFFFF', x: ccx, y: cy + 20, align: 'center' });
+    canvas.drawText({ text: `Lv.${char.stat.level}`, color: '#FFFF88', x: ccx, y: cy + 34, align: 'center' });
   });
 
   UIRaceSelect.draw(canvas);

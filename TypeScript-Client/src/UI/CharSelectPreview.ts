@@ -72,7 +72,7 @@ export async function getPreview(char: Character): Promise<MapleCharacter | null
     // Attach equipped items from character look
     for (const [slot, itemId] of char.look.eqSlots) {
       if (itemId > 0) {
-        try { await mc.attachEquip(slot, itemId); } catch (_) {}
+        try { await mc.attachEquip(-slot, itemId); } catch (_) {}
       }
     }
 
@@ -111,12 +111,6 @@ export async function drawPreview(
     mc.pos.right = false;
   }
   mc.flipped = true; // face right (sprites default face left, flip = right)
-
-  // Advance animation frame without calling full update() (which needs mc.map)
-  (mc as any).delay = ((mc as any).delay ?? 0) + msPerTick;
-  if ((mc as any).delay > (mc as any).nextDelay) {
-    (mc as any).advanceFrame?.();
-  }
 
   updateBlink(char.stat.characterId, mc);
   mc.draw(canvas, camera, 0, msPerTick, 0);

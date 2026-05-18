@@ -47,39 +47,25 @@ export function drawSkillEffects(canvas: GameCanvas, camera: CameraInterface) {
     const cx = e.x - camera.x;
     const cy = e.y - camera.y;
 
-    canvas.context.save();
-    canvas.context.globalAlpha = alpha * 0.9;
+    const r1 = 20 + t * 50;
+    const r2 = 8 + t * 20;
 
     // Expanding ring
-    const r1 = 20 + t * 50;
-    canvas.context.strokeStyle = e.color;
-    canvas.context.lineWidth = 4 * (1 - t) + 1;
-    canvas.context.beginPath();
-    canvas.context.arc(cx, cy, r1, 0, Math.PI * 2);
-    canvas.context.stroke();
+    canvas.drawCircle({ x: cx, y: cy, radius: r1,
+      strokeColor: e.color, strokeWidth: 4 * (1 - t) + 1, strokeAlpha: alpha * 0.9 });
 
     // Inner burst
-    const r2 = 8 + t * 20;
-    canvas.context.fillStyle = e.color;
-    canvas.context.globalAlpha = alpha * 0.4;
-    canvas.context.beginPath();
-    canvas.context.arc(cx, cy, r2, 0, Math.PI * 2);
-    canvas.context.fill();
+    canvas.drawCircle({ x: cx, y: cy, radius: r2,
+      color: e.color, alpha: alpha * 0.4 });
 
     // Radial lines
-    canvas.context.globalAlpha = alpha * 0.7;
-    canvas.context.strokeStyle = e.color;
-    canvas.context.lineWidth = 1.5;
     for (let k = 0; k < 8; k++) {
       const angle = (k / 8) * Math.PI * 2 + t * Math.PI;
-      const inner = r2;
-      const outer = r1 * 0.8;
-      canvas.context.beginPath();
-      canvas.context.moveTo(cx + Math.cos(angle) * inner, cy + Math.sin(angle) * inner);
-      canvas.context.lineTo(cx + Math.cos(angle) * outer, cy + Math.sin(angle) * outer);
-      canvas.context.stroke();
+      canvas.drawLine({
+        x1: cx + Math.cos(angle) * r2,  y1: cy + Math.sin(angle) * r2,
+        x2: cx + Math.cos(angle) * r1 * 0.8, y2: cy + Math.sin(angle) * r1 * 0.8,
+        color: e.color, width: 1.5, alpha: alpha * 0.7,
+      });
     }
-
-    canvas.context.restore();
   }
 }

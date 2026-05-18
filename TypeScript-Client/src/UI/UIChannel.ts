@@ -81,12 +81,7 @@ const UIChannel = {
     if (this.bgImg) {
       canvas.drawImage({ img: this.bgImg, dx: this.x, dy: this.y });
     } else {
-      canvas.context.save();
-      canvas.context.fillStyle = 'rgba(20,20,40,0.97)';
-      canvas.context.fillRect(this.x, this.y, this.W, this.H + 30);
-      canvas.context.strokeStyle = '#556688';
-      canvas.context.strokeRect(this.x, this.y, this.W, this.H + 30);
-      canvas.context.restore();
+      canvas.drawRect({ x: this.x, y: this.y, width: this.W, height: this.H + 30, color: '#141428', alpha: 0.97, strokeColor: '#556688', strokeWidth: 1 });
     }
 
     canvas.drawText({ text: 'Change Channel', color: '#FFDD88', x: this.x + 10, y: this.y + 14, fontSize: 12 });
@@ -98,10 +93,7 @@ const UIChannel = {
       const bx = this.x + 8 + col * 84;
       const by = this.y + 22 + row * 16;
       const isSelected = i === this.selectedChannel;
-      canvas.context.save();
-      canvas.context.fillStyle = isSelected ? 'rgba(100,130,200,0.9)' : 'rgba(40,50,80,0.7)';
-      canvas.context.fillRect(bx, by, 80, 13);
-      canvas.context.restore();
+      canvas.drawRect({ x: bx, y: by, width: 80, height: 13, color: isSelected ? '#6482c8' : '#283250', alpha: isSelected ? 0.9 : 0.7 });
       canvas.drawText({ text: `Ch.${i + 1}`, color: '#FFFFFF', x: bx + 25, y: by + 10, fontSize: 9 });
     }
 

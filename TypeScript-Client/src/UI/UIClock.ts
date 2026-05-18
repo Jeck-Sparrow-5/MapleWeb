@@ -50,17 +50,8 @@ const UIClock = {
     const cy = 8;
     const w = 70; const h = 16;
 
-    canvas.context.save();
-    canvas.context.fillStyle = 'rgba(0,0,0,0.6)';
-    canvas.context.fillRect(cx - w / 2, cy, w, h);
-    canvas.context.strokeStyle = '#556688';
-    canvas.context.strokeRect(cx - w / 2, cy, w, h);
-    canvas.context.fillStyle = state.isCountdown ? '#FF8844' : '#AADDFF';
-    canvas.context.font = 'bold 11px Arial';
-    canvas.context.textAlign = 'center';
-    canvas.context.fillText(text, cx, cy + 11);
-    canvas.context.textAlign = 'left';
-    canvas.context.restore();
+    canvas.drawRect({ x: cx - w / 2, y: cy, width: w, height: h, color: '#000000', alpha: 0.6, strokeColor: '#556688', strokeWidth: 1 });
+    canvas.drawText({ text, x: cx, y: cy + 11, color: state.isCountdown ? '#FF8844' : '#AADDFF', fontSize: 11, fontWeight: 'bold', align: 'center' });
   },
 };
 

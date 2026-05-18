@@ -147,12 +147,7 @@ const UIGameMenu = {
     if (this.bgImg) {
       canvas.drawImage({ img: this.bgImg, dx: this.x, dy: this.y });
     } else {
-      canvas.context.save();
-      canvas.context.fillStyle = 'rgba(20,20,40,0.95)';
-      canvas.context.fillRect(this.x, this.y, 93, 140);
-      canvas.context.strokeStyle = '#557799';
-      canvas.context.strokeRect(this.x, this.y, 93, 140);
-      canvas.context.restore();
+      canvas.drawRect({ x: this.x, y: this.y, width: 93, height: 140, color: '#141428', alpha: 0.95, strokeColor: '#557799', strokeWidth: 1 });
 
       const labels = ['Channel', 'Game Opt', 'Sys Opt', 'Cash Shop', 'Quit'];
       const colors = ['#AADDFF', '#AADDFF', '#AADDFF', '#FFDD44', '#FF8888'];

@@ -36,19 +36,11 @@ const UIStatusMessenger = {
 
     this.messages.forEach((msg, i) => {
       const y = baseY - i * LINE_HEIGHT;
-      // shadow
-      canvas.context.save();
-      canvas.context.globalAlpha = msg.opacity;
-      canvas.context.fillStyle = '#000000';
-      canvas.context.font = '11px Arial';
-      canvas.context.textAlign = 'right';
-      canvas.context.fillText(msg.text, baseX + 1, y + 1);
-      // text
-      canvas.context.fillStyle = msg.color;
-      canvas.context.fillText(msg.text, baseX, y);
-      canvas.context.restore();
+      canvas.drawText({ text: msg.text, x: baseX + 1, y: y + 1,
+        color: '#000000', fontSize: 11, align: 'right', alpha: msg.opacity });
+      canvas.drawText({ text: msg.text, x: baseX, y,
+        color: msg.color, fontSize: 11, align: 'right', alpha: msg.opacity });
     });
-    canvas.context.textAlign = 'left';
   },
 };
 

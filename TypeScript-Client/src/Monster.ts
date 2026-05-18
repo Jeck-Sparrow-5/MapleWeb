@@ -678,31 +678,10 @@ async addDrops() {
       flipped: !!this.flipped,
     });
 
-    // draw a box around the monster usefull for debugging
-    const boxColor = "red"; // You can set the desired box color
-    const borderWidth = 1; // You can adjust the border width as needed
-    canvas.context.strokeStyle = boxColor;
-    canvas.context.lineWidth = borderWidth;
-    canvas.context.strokeRect(
-      this.pos.x - camera.x - adjustX,
-      this.pos.y - camera.y - originY,
-      currentFrame.nWidth,
-      currentFrame.nHeight
-    );
-
     this.height = currentFrame.nHeight;
     this.width = currentFrame.nWidth;
     this.x = this.pos.x - adjustX;
     this.y = this.pos.y - originY;
-
-    // draw center of the monster
-    canvas.context.fillStyle = "red";
-    canvas.context.fillRect(
-      this.pos.x - camera.x - 2,
-      this.pos.y - camera.y - 2 - this.height / 2,
-      4,
-      4
-    );
 
     // Show HP bar only for a few seconds after being hit
     if (this.isShotHpBar) {

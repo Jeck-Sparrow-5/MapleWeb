@@ -229,12 +229,7 @@ class UISkillBook extends DragableMenu {
     if (this.bgImg) {
       canvas.drawImage({ img: this.bgImg, dx: this.x, dy: this.y });
     } else {
-      canvas.context.save();
-      canvas.context.fillStyle = 'rgba(30,30,50,0.92)';
-      canvas.context.fillRect(this.x, this.y, this.W, this.H);
-      canvas.context.strokeStyle = '#556688';
-      canvas.context.strokeRect(this.x, this.y, this.W, this.H);
-      canvas.context.restore();
+      canvas.drawRect({ x: this.x, y: this.y, width: this.W, height: this.H, color: '#1e1e32', alpha: 0.92, strokeColor: '#556688', strokeWidth: 1 });
     }
 
     canvas.drawText({ text: 'Skill Book', color: '#FFDD88', x: this.x + 10, y: this.y + 14, fontSize: 12 });
@@ -248,15 +243,9 @@ class UISkillBook extends DragableMenu {
       const iconToDraw = (sk.isPassive && lvl === 0) ? (sk.iconDisabled ?? sk.icon) : sk.icon;
 
       if (iconToDraw) {
-        canvas.context.save();
-        if (sk.isPassive) canvas.context.globalAlpha = 0.7;
-        canvas.context.drawImage(iconToDraw, sx, sy - 14, 26, 26);
-        canvas.context.restore();
+        canvas.drawImage({ img: iconToDraw, dx: sx, dy: sy - 14, dw: 26, dh: 26, alpha: sk.isPassive ? 0.7 : 1 });
       } else {
-        canvas.context.save();
-        canvas.context.fillStyle = sk.isPassive ? '#223344' : '#334455';
-        canvas.context.fillRect(sx, sy - 14, 26, 26);
-        canvas.context.restore();
+        canvas.drawRect({ x: sx, y: sy - 14, width: 26, height: 26, color: sk.isPassive ? '#223344' : '#334455' });
       }
 
       const maxStr = sk.maxLevel > 0 ? ` (${lvl}/${sk.maxLevel})` : '';

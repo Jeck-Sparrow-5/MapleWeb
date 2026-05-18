@@ -158,12 +158,7 @@ class UIWorldMap extends DragableMenu {
     if (this.bgImg) {
       canvas.drawImage({ img: this.bgImg, dx: this.x, dy: this.y });
     } else {
-      canvas.context.save();
-      canvas.context.fillStyle = 'rgba(10,10,25,0.97)';
-      canvas.context.fillRect(this.x, this.y, this.W, this.H);
-      canvas.context.strokeStyle = '#334466';
-      canvas.context.strokeRect(this.x, this.y, this.W, this.H);
-      canvas.context.restore();
+      canvas.drawRect({ x: this.x, y: this.y, width: this.W, height: this.H, color: '#0a0a19', alpha: 0.97, strokeColor: '#334466', strokeWidth: 1 });
     }
 
     canvas.drawText({ text: 'World Map', color: '#FFDD88', x: this.x + 10, y: this.y + 14, fontSize: 13 });
@@ -177,31 +172,18 @@ class UIWorldMap extends DragableMenu {
 
     // Actual world map image
     const mapArea = { x: this.x + 5, y: this.y + 55, w: this.W - 10, h: this.H - 85 };
-    canvas.context.save();
-    canvas.context.fillStyle = '#0a1208';
-    canvas.context.fillRect(mapArea.x, mapArea.y, mapArea.w, mapArea.h);
+    canvas.drawRect({ x: mapArea.x, y: mapArea.y, width: mapArea.w, height: mapArea.h, color: '#0a1208' });
     if (this.currentWorldMapImg) {
       try {
-        canvas.context.drawImage(this.currentWorldMapImg, mapArea.x, mapArea.y, mapArea.w, mapArea.h);
+        canvas.drawImage({ img: this.currentWorldMapImg, dx: mapArea.x, dy: mapArea.y, dw: mapArea.w, dh: mapArea.h });
       } catch (_) {}
     }
 
     // Player location dot — try WZ MapList cx/cy, fallback to center
     const dot = this.getPlayerDotOnMap(mapArea) ?? { x: mapArea.x + mapArea.w / 2, y: mapArea.y + mapArea.h / 2 };
-    canvas.context.fillStyle = '#FF4444';
-    canvas.context.strokeStyle = '#FFFFFF';
-    canvas.context.lineWidth = 1.5;
-    canvas.context.beginPath();
-    canvas.context.arc(dot.x, dot.y, 5, 0, Math.PI * 2);
-    canvas.context.fill();
-    canvas.context.stroke();
+    canvas.drawCircle({ x: dot.x, y: dot.y, radius: 5, color: '#FF4444', strokeColor: '#FFFFFF', strokeWidth: 1.5 });
     // Pulsing ring
-    canvas.context.strokeStyle = 'rgba(255,68,68,0.5)';
-    canvas.context.lineWidth = 1;
-    canvas.context.beginPath();
-    canvas.context.arc(dot.x, dot.y, 8 + Math.sin(Date.now() / 400) * 2, 0, Math.PI * 2);
-    canvas.context.stroke();
-    canvas.context.restore();
+    canvas.drawCircle({ x: dot.x, y: dot.y, radius: 8 + Math.sin(Date.now() / 400) * 2, color: undefined as any, strokeColor: '#ff4444', strokeWidth: 1, strokeAlpha: 0.5 });
 
     this.buttons.forEach((b) => b.draw(canvas, camera, lag, ms, td));
   }

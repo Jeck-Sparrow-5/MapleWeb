@@ -449,14 +449,8 @@ UIMap.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
     const alpha = age > CHAT_VISIBLE_DURATION - 1000
       ? Math.max(0, 1 - (age - (CHAT_VISIBLE_DURATION - 1000)) / 1000)
       : 1;
-    canvas.context.save();
-    canvas.context.globalAlpha = alpha;
-    canvas.context.font = '12px Arial';
-    canvas.context.fillStyle = '#000000';
-    canvas.context.fillText(m.text, 7, chatBaseY - (visibleMsgs.length - 1 - i) * 14 + 1);
-    canvas.context.fillStyle = m.color;
-    canvas.context.fillText(m.text, 6, chatBaseY - (visibleMsgs.length - 1 - i) * 14);
-    canvas.context.restore();
+    canvas.drawText({ text: m.text, x: 7, y: chatBaseY - (visibleMsgs.length - 1 - i) * 14 + 1, color: '#000000', fontSize: 12, alpha });
+    canvas.drawText({ text: m.text, x: 6, y: chatBaseY - (visibleMsgs.length - 1 - i) * 14, color: m.color, fontSize: 12, alpha });
   });
 
   canvas.drawImage({
@@ -536,14 +530,8 @@ UIMap.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
   const jobId    = MyCharacter.job ?? 0;
   const jobName  = jobId === 0 ? 'Beginner' : `Job ${jobId}`;
   if (charName) {
-    canvas.context.save();
-    canvas.context.font = 'bold 11px Arial';
-    canvas.context.fillStyle = '#FFFFFF';
-    canvas.context.fillText(charName, 8, 542 + startUIPosition.y);
-    canvas.context.font = '10px Arial';
-    canvas.context.fillStyle = '#AADDFF';
-    canvas.context.fillText(jobName, 8, 554 + startUIPosition.y);
-    canvas.context.restore();
+    canvas.drawText({ text: charName, x: 8, y: 542 + startUIPosition.y, color: '#FFFFFF', fontSize: 11, fontWeight: 'bold' });
+    canvas.drawText({ text: jobName, x: 8, y: 554 + startUIPosition.y, color: '#AADDFF', fontSize: 10 });
   }
 
   this.buttons.forEach((obj) => {

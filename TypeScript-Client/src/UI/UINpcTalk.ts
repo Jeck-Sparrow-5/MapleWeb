@@ -276,21 +276,17 @@ export default class UINpcTalk {
     }
 
     // Wrap text
-    canvas.context.save();
-    canvas.context.font = '12px Arial';
-    canvas.context.fillStyle = '#000000';
     const maxW = this.width - 170;
     const words = this.text.split(' ');
     let line = ''; let ty = this.y + 48;
     words.forEach((w) => {
       const test = line + w + ' ';
-      if (canvas.context.measureText(test).width > maxW && line) {
-        canvas.context.fillText(line, this.x + 166, ty);
+      if (canvas.measureText({ text: test, fontSize: 12 }).width > maxW && line) {
+        canvas.drawText({ text: line, x: this.x + 166, y: ty, color: '#000000', fontSize: 12 });
         line = w + ' '; ty += 16;
       } else line = test;
     });
-    canvas.context.fillText(line, this.x + 166, ty);
-    canvas.context.restore();
+    canvas.drawText({ text: line, x: this.x + 166, y: ty, color: '#000000', fontSize: 12 });
 
     // Selection choices
     if (this.type === NpcTalkType.Selection && this.choices.length) {
@@ -302,12 +298,7 @@ export default class UINpcTalk {
     // GetNumber — show current value
     if (this.type === NpcTalkType.GetNumber) {
       const numY = this.y + this.height - 30;
-      canvas.context.save();
-      canvas.context.fillStyle = 'rgba(255,255,255,0.9)';
-      canvas.context.fillRect(this.x + 130, numY, 80, 18);
-      canvas.context.strokeStyle = '#334466';
-      canvas.context.strokeRect(this.x + 130, numY, 80, 18);
-      canvas.context.restore();
+      canvas.drawRect({ x: this.x + 130, y: numY, width: 80, height: 18, color: '#ffffff', alpha: 0.9, strokeColor: '#334466', strokeWidth: 1 });
       canvas.drawText({ text: `${this.numberValue}`, color: '#000000', x: this.x + 165, y: numY + 13, fontSize: 11, align: 'center' } as any);
     }
 

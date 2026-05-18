@@ -596,15 +596,10 @@ MapleMap.render = function (
     const ry = r.y - camera.y;
     const frame = r.frames?.[r.frame ?? 0];
     if (frame?.img) {
-      canvas.context.drawImage(frame.img, rx - (frame.ox ?? 0), ry - (frame.oy ?? 0));
+      canvas.drawImage({ img: frame.img, dx: rx - (frame.ox ?? 0), dy: ry - (frame.oy ?? 0) });
     } else {
-      // Fallback yellow box
-      canvas.context.save();
-      canvas.context.fillStyle = 'rgba(255,200,50,0.6)';
-      canvas.context.strokeStyle = '#FFDD00';
-      canvas.context.fillRect(rx - 15, ry - 30, 30, 30);
-      canvas.context.strokeRect(rx - 15, ry - 30, 30, 30);
-      canvas.context.restore();
+      canvas.drawRect({ x: rx - 15, y: ry - 30, width: 30, height: 30,
+        color: '#FFC832', alpha: 0.6 });
     }
   });
 
@@ -615,24 +610,16 @@ MapleMap.render = function (
     (this as any).hitEffects.forEach((e: any) => {
       const alpha = 1 - (hitNow - e.startTime) / e.duration;
       const radius = 18 + (1 - alpha) * 10;
-      canvas.context.save();
-      canvas.context.globalAlpha = alpha * 0.8;
-      canvas.context.strokeStyle = '#FFEE44';
-      canvas.context.lineWidth = 2;
-      canvas.context.beginPath();
-      canvas.context.arc(e.x - camera.x, e.y - camera.y, radius, 0, Math.PI * 2);
-      canvas.context.stroke();
-      // Star lines
+      const ex = e.x - camera.x, ey = e.y - camera.y;
+      canvas.drawCircle({ x: ex, y: ey, radius,
+        strokeColor: '#FFEE44', strokeWidth: 2, strokeAlpha: alpha * 0.8 });
       for (let a = 0; a < 8; a++) {
-        const angle = (a / 8) * Math.PI * 2;
-        const dx = Math.cos(angle) * radius;
-        const dy = Math.sin(angle) * radius;
-        canvas.context.beginPath();
-        canvas.context.moveTo(e.x - camera.x + dx * 0.5, e.y - camera.y + dy * 0.5);
-        canvas.context.lineTo(e.x - camera.x + dx * 1.3, e.y - camera.y + dy * 1.3);
-        canvas.context.stroke();
+        const ang = (a / 8) * Math.PI * 2;
+        const dx = Math.cos(ang) * radius, dy = Math.sin(ang) * radius;
+        canvas.drawLine({ x1: ex + dx * 0.5, y1: ey + dy * 0.5,
+          x2: ex + dx * 1.3, y2: ey + dy * 1.3,
+          color: '#FFEE44', width: 1, alpha: alpha * 0.8 });
       }
-      canvas.context.restore();
     });
   }
 
@@ -641,18 +628,9 @@ MapleMap.render = function (
     if (!(m.statusMask ?? 0)) return;
     const mx = (m.pos?.x ?? m.x) - camera.x;
     const my = (m.pos?.y ?? m.y) - camera.y - (m.height ?? 60) - 8;
-    canvas.context.save();
-    if (m.statusMask & 0x2) {          // stun
-      canvas.context.fillStyle = '#AAAAFF';
-      canvas.context.fillText('★', mx - 4, my);
-    } else if (m.statusMask & 0x200) { // freeze
-      canvas.context.fillStyle = '#44AAFF';
-      canvas.context.fillText('❄', mx - 4, my);
-    } else if (m.statusMask & 0x400) { // poison
-      canvas.context.fillStyle = '#44FF44';
-      canvas.context.fillText('☠', mx - 4, my);
-    }
-    canvas.context.restore();
+    if (m.statusMask & 0x2)        canvas.drawText({ text: '★', x: mx - 4, y: my, color: '#AAAAFF' });
+    else if (m.statusMask & 0x200) canvas.drawText({ text: '❄', x: mx - 4, y: my, color: '#44AAFF' });
+    else if (m.statusMask & 0x400) canvas.drawText({ text: '☠', x: mx - 4, y: my, color: '#44FF44' });
     // Clear expired status
     if (m.statusExpiry && Date.now() > m.statusExpiry) m.statusMask = 0;
   });
@@ -662,30 +640,19 @@ MapleMap.render = function (
   if ((this as any).mists) {
     (this as any).mists = (this as any).mists.filter((m: any) => now < m.expiry);
     (this as any).mists.forEach((mist: any) => {
-      canvas.context.save();
-      canvas.context.globalAlpha = 0.35;
-      canvas.context.fillStyle = mist.type === 2 ? '#88FF44' : '#AAAAFF';
-      canvas.context.fillRect(
-        mist.rect.l - camera.x, mist.rect.t - camera.y,
-        mist.rect.r - mist.rect.l, mist.rect.b - mist.rect.t
-      );
-      canvas.context.restore();
+      canvas.drawRect({ x: mist.rect.l - camera.x, y: mist.rect.t - camera.y,
+        width: mist.rect.r - mist.rect.l, height: mist.rect.b - mist.rect.t,
+        color: mist.type === 2 ? '#88FF44' : '#AAAAFF', alpha: 0.35 });
     });
   }
 
   // Mystic doors
   if ((this as any).doors) {
     (this as any).doors.forEach((door: any) => {
-      const dx = door.x - camera.x;
-      const dy = door.y - camera.y;
-      canvas.context.save();
-      canvas.context.fillStyle = 'rgba(150,100,255,0.7)';
-      canvas.context.strokeStyle = '#AAAAFF';
-      canvas.context.beginPath();
-      canvas.context.ellipse(dx, dy, 20, 30, 0, 0, Math.PI * 2);
-      canvas.context.fill();
-      canvas.context.stroke();
-      canvas.context.restore();
+      const dx = door.x - camera.x, dy = door.y - camera.y;
+      // ellipse via rounded-rect approximation
+      canvas.drawRoundedRect({ x: dx - 20, y: dy - 30, width: 40, height: 60, radius: 20,
+        color: '#9664FF', alpha: 0.7, strokeColor: '#AAAAFF', strokeWidth: 1 });
     });
   }
 
@@ -697,20 +664,9 @@ MapleMap.render = function (
       if (!pet?.visible) return;
       const px = (pet.x ?? owner.pos?.x ?? 0) - camera.x;
       const py = (pet.y ?? owner.pos?.y ?? 0) - 30 - camera.y;
-      canvas.context.save();
-      canvas.context.fillStyle = 'rgba(255,180,80,0.8)';
-      canvas.context.strokeStyle = '#FFAA44';
-      canvas.context.lineWidth = 1;
-      canvas.context.beginPath();
-      canvas.context.ellipse(px, py, 14, 10, 0, 0, Math.PI * 2);
-      canvas.context.fill();
-      canvas.context.stroke();
-      canvas.context.fillStyle = '#FFFFFF';
-      canvas.context.font = '8px Arial';
-      canvas.context.textAlign = 'center';
-      canvas.context.fillText('Pet', px, py + 3);
-      canvas.context.textAlign = 'left';
-      canvas.context.restore();
+      canvas.drawRoundedRect({ x: px - 14, y: py - 10, width: 28, height: 20, radius: 10,
+        color: '#FFB450', alpha: 0.8, strokeColor: '#FFAA44', strokeWidth: 1 });
+      canvas.drawText({ text: 'Pet', x: px, y: py + 3, color: '#ffffff', fontSize: 8, align: 'center' });
     });
   };
   if (this.PlayerCharacter) renderPets(this.PlayerCharacter);
@@ -746,15 +702,8 @@ MapleMap.render = function (
       const px = portal.x - camera.x;
       const py = portal.y - camera.y;
       if (Math.abs(canvas.mouseX - px) < 30 && Math.abs(canvas.mouseY - py) < 30) {
-        canvas.context.save();
-        canvas.context.fillStyle = 'rgba(0,0,0,0.75)';
-        canvas.context.fillRect(px - 40, py - 22, 80, 16);
-        canvas.context.fillStyle = '#FFFFFF';
-        canvas.context.font = '10px Arial';
-        canvas.context.textAlign = 'center';
-        canvas.context.fillText(portal.toMapName, px, py - 9);
-        canvas.context.textAlign = 'left';
-        canvas.context.restore();
+        canvas.drawRect({ x: px - 40, y: py - 22, width: 80, height: 16, color: '#000000', alpha: 0.75 });
+        canvas.drawText({ text: portal.toMapName, x: px, y: py - 9, color: '#ffffff', fontSize: 10, align: 'center' });
       }
     });
   }

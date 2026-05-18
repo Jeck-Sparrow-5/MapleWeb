@@ -101,22 +101,14 @@ const UIOptionMenu = {
   draw(canvas: GameCanvas) {
     if (this.isHidden) return;
 
-    canvas.context.save();
-    canvas.context.fillStyle = 'rgba(20,20,40,0.97)';
-    canvas.context.fillRect(this.x, this.y, this.W, this.H);
-    canvas.context.strokeStyle = '#556688';
-    canvas.context.strokeRect(this.x, this.y, this.W, this.H);
+    canvas.drawRect({ x: this.x, y: this.y, width: this.W, height: this.H, color: '#141428', alpha: 0.97, strokeColor: '#556688', strokeWidth: 1 });
 
     // Tabs
     TABS.forEach((tab, i) => {
       const tx = this.x + 8 + i * 108;
       const active = this.activeTab === tab;
-      canvas.context.fillStyle = active ? 'rgba(80,100,160,0.9)' : 'rgba(40,50,80,0.7)';
-      canvas.context.fillRect(tx, this.y + 20, 100, 16);
-      canvas.context.restore(); canvas.context.save();
-      canvas.context.fillStyle = 'rgba(20,20,40,0.97)';
+      canvas.drawRect({ x: tx, y: this.y + 20, width: 100, height: 16, color: active ? '#5064a0' : '#283250', alpha: active ? 0.9 : 0.7 });
     });
-    canvas.context.restore();
 
     TABS.forEach((tab, i) => {
       const tx = this.x + 8 + i * 108;
@@ -139,10 +131,7 @@ const UIOptionMenu = {
         const ry = contentY + i * 34;
         const val = gameOptions[key] as boolean;
         canvas.drawText({ text: label, color: '#CCCCCC', x: this.x + 15, y: ry + 12, fontSize: 11 });
-        canvas.context.save();
-        canvas.context.fillStyle = val ? '#44AA44' : '#AA4444';
-        canvas.context.fillRect(this.x + 260, ry, 60, 20);
-        canvas.context.restore();
+        canvas.drawRect({ x: this.x + 260, y: ry, width: 60, height: 20, color: val ? '#44AA44' : '#AA4444' });
         canvas.drawText({ text: val ? 'ON' : 'OFF', color: '#FFFFFF', x: this.x + 278, y: ry + 13, fontSize: 10 });
       });
     } else if (this.activeTab === 'audio') {
@@ -160,10 +149,7 @@ const UIOptionMenu = {
         const bx = this.x + 15 + col * 108;
         const by = contentY + row * 30;
         canvas.drawText({ text: action, color: '#AAAACC', x: bx, y: by + 10, fontSize: 10 });
-        canvas.context.save();
-        canvas.context.fillStyle = 'rgba(40,50,80,0.8)';
-        canvas.context.fillRect(bx + 55, by, 45, 18);
-        canvas.context.restore();
+        canvas.drawRect({ x: bx + 55, y: by, width: 45, height: 18, color: '#283250', alpha: 0.8 });
         canvas.drawText({ text: key, color: '#FFFFFF', x: bx + 60, y: by + 12, fontSize: 9 });
       });
       canvas.drawText({ text: 'Edit bindings via Key Config (M → Controls)', color: '#666688', x: this.x + 15, y: this.y + this.H - 20, fontSize: 9 });

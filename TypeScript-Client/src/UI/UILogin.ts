@@ -786,10 +786,10 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
   // MapLogin shown during race select, NewChar backgrounds during creation
   if (!UIRaceSelect.isHidden) {
     for (const img of (UIRaceSelect as any)._mapLoginImgs ?? [])
-      try { canvas.context.drawImage(img, 0, 0); } catch (_) {}
+      try { canvas.drawImage({ img, dx: 0, dy: 0 }); } catch (_) {}
   } else if (!UIExplorerCreation.isHidden) {
     for (const img of (UIExplorerCreation as any)._bg ?? [])
-      try { canvas.context.drawImage(img, 0, 0, 800, 600); } catch (_) {}
+      try { canvas.drawImage({ img, dx: 0, dy: 0, dw: 800, dh: 600 }); } catch (_) {}
   }
 
   canvas.drawImage({
@@ -838,11 +838,7 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
     const isSelected = char.stat.characterId === this.selectedCharacterId;
 
     if (isSelected) {
-      canvas.context.save();
-      canvas.context.globalAlpha = 0.25;
-      canvas.context.fillStyle = '#FFFFFF';
-      canvas.context.fillRect(cx - 30, cy - 140, 120, 200);
-      canvas.context.restore();
+      canvas.drawRect({ x: cx - 30, y: cy - 140, width: 120, height: 200, color: '#FFFFFF', alpha: 0.25 });
     }
 
     const charSelNode = this.uiLogin.nGet('CharSelect');
@@ -893,13 +889,8 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
   const my = canvas.mouseY ?? 0;
   const wx = Math.round(mx + camera.x);
   const wy = Math.round(my + camera.y);
-  canvas.context.save();
-  canvas.context.fillStyle = 'rgba(0,0,0,0.65)';
-  canvas.context.fillRect(2, 2, 230, 16);
-  canvas.context.font = '11px monospace';
-  canvas.context.fillStyle = '#00FF88';
-  canvas.context.fillText(`screen(${mx},${my})  world(${wx},${wy})`, 6, 14);
-  canvas.context.restore();
+  canvas.drawRect({ x: 2, y: 2, width: 230, height: 16, color: '#000000', alpha: 0.65 });
+  canvas.drawText({ text: `screen(${mx},${my})  world(${wx},${wy})`, x: 6, y: 14, color: '#00FF88', fontSize: 11 });
 
   this.drawMask(canvas);
 
@@ -916,16 +907,14 @@ UILogin.drawMask = function (canvas) {
   const frameHeight = this.frameImg.height;
   const frameX = 0;
   const frameY = 0;
-  canvas.context.fillStyle = "#000000";
   const canvasWidth = canvas.context.canvas.width;
   const canvasHeight = canvas.context.canvas.height;
 
   // Draw black rectangles to mask areas outside the frame
-  canvas.context.fillRect(0, 0, frameX, canvasHeight); // Left mask
-  canvas.context.fillRect(frameX + frameWidth,0, canvasWidth - (frameX + frameWidth), canvasHeight); // Right mask
-  canvas.context.fillRect(frameX,0, frameWidth, frameY); // Top mask
-  canvas.context.fillRect(frameX, frameY + frameHeight, frameWidth, canvasHeight - (frameY + frameHeight)); // Bottom mask
-  canvas.context.restore();
+  canvas.drawRect({ x: 0, y: 0, width: frameX, height: canvasHeight, color: '#000000' }); // Left mask
+  canvas.drawRect({ x: frameX + frameWidth, y: 0, width: canvasWidth - (frameX + frameWidth), height: canvasHeight, color: '#000000' }); // Right mask
+  canvas.drawRect({ x: frameX, y: 0, width: frameWidth, height: frameY, color: '#000000' }); // Top mask
+  canvas.drawRect({ x: frameX, y: frameY + frameHeight, width: frameWidth, height: canvasHeight - (frameY + frameHeight), color: '#000000' }); // Bottom mask
 };
 
 UILogin.placeInputs = function () {

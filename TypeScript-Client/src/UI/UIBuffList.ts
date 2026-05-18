@@ -74,40 +74,25 @@ const UIBuffList = {
       const bx = startX - (i + 1) * (iconSize + gap);
       const by = baseY;
 
-      // Dark slot background
-      canvas.context.save();
-      canvas.context.fillStyle = 'rgba(0,0,0,0.5)';
-      canvas.context.fillRect(bx, by, iconSize, iconSize);
+      canvas.drawRect({ x: bx, y: by, width: iconSize, height: iconSize, color: '#000000', alpha: 0.5 });
 
       if (buff.icon) {
-        try {
-          canvas.context.drawImage(buff.icon, bx, by, iconSize, iconSize);
-        } catch (_) {}
+        canvas.drawImage({ img: buff.icon, dx: bx, dy: by, dw: iconSize, dh: iconSize });
       } else {
-        // Fallback colored square
-        canvas.context.fillStyle = '#334477';
-        canvas.context.fillRect(bx + 2, by + 2, iconSize - 4, iconSize - 4);
-        canvas.context.fillStyle = '#AAAAFF';
-        canvas.context.font = '7px Arial';
-        canvas.context.fillText(buff.name.substring(0, 4), bx + 2, by + 16);
+        canvas.drawRect({ x: bx + 2, y: by + 2, width: iconSize - 4, height: iconSize - 4, color: '#334477' });
+        canvas.drawText({ text: buff.name.substring(0, 4), x: bx + 2, y: by + 16, color: '#AAAAFF', fontSize: 7 });
       }
 
       // Time remaining arc
       const elapsed = Date.now() - buff.startTime;
       const remaining = 1 - elapsed / buff.durationMs;
-      canvas.context.strokeStyle = 'rgba(255,255,255,0.6)';
-      canvas.context.lineWidth = 2;
-      canvas.context.beginPath();
-      canvas.context.arc(
-        bx + iconSize / 2,
-        by + iconSize / 2,
-        iconSize / 2 - 2,
-        -Math.PI / 2,
-        -Math.PI / 2 + remaining * 2 * Math.PI
-      );
-      canvas.context.stroke();
-
-      canvas.context.restore();
+      canvas.drawArc({
+        x: bx + iconSize / 2, y: by + iconSize / 2,
+        radius: iconSize / 2 - 2,
+        startAngle: -Math.PI / 2,
+        endAngle: -Math.PI / 2 + remaining * 2 * Math.PI,
+        strokeColor: '#ffffff', strokeWidth: 2, strokeAlpha: 0.6,
+      });
     });
   },
 };

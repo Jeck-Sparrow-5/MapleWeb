@@ -65,61 +65,39 @@ const UISkillHotbar = {
       const sx = startX + i * (slotSize + gap);
       const skillId = hotbarSlots[i];
 
-      canvas.context.save();
-      canvas.context.fillStyle = 'rgba(0,0,0,0.65)';
-      canvas.context.strokeStyle = i === selectedHotbarSlot ? '#FFDD00' : '#445566';
-      canvas.context.lineWidth = i === selectedHotbarSlot ? 2 : 1;
-      canvas.context.fillRect(sx, y, slotSize, slotSize);
-      canvas.context.strokeRect(sx, y, slotSize, slotSize);
-      canvas.context.lineWidth = 1;
+      const selected = i === selectedHotbarSlot;
+      canvas.drawRect({ x: sx, y, width: slotSize, height: slotSize, color: '#000000', alpha: 0.65 });
+      canvas.drawRect({ x: sx, y, width: slotSize, height: slotSize,
+        strokeColor: selected ? '#FFDD00' : '#445566', strokeWidth: selected ? 2 : 1 });
 
       if (skillId !== null) {
         const icon = this.slotIcons.get(skillId);
         if (icon) {
-          try { canvas.context.drawImage(icon, sx + 2, y + 2, slotSize - 4, slotSize - 4); }
-          catch (_) {}
+          canvas.drawImage({ img: icon, dx: sx + 2, dy: y + 2, dw: slotSize - 4, dh: slotSize - 4 });
         } else {
-          canvas.context.fillStyle = '#334466';
-          canvas.context.fillRect(sx + 2, y + 2, slotSize - 4, slotSize - 4);
+          canvas.drawRect({ x: sx + 2, y: y + 2, width: slotSize - 4, height: slotSize - 4, color: '#334466' });
         }
         const lvl = skillLevels.get(skillId) ?? 0;
-        canvas.context.fillStyle = '#FFFF66';
-        canvas.context.font = '7px Arial';
-        canvas.context.fillText(`${lvl}`, sx + slotSize - 9, y + slotSize - 2);
+        canvas.drawText({ text: `${lvl}`, x: sx + slotSize - 9, y: y + slotSize - 2, color: '#FFFF66', fontSize: 7 });
 
-        // Cooldown arc overlay
         const cd = cooldowns.get(skillId);
         if (cd) {
           const remaining = cd.endTime - Date.now();
           if (remaining > 0) {
             const fraction = remaining / cd.totalMs;
-            canvas.context.save();
-            canvas.context.globalAlpha = 0.6;
-            canvas.context.fillStyle = '#000000';
-            canvas.context.beginPath();
-            canvas.context.moveTo(sx + slotSize / 2, y + slotSize / 2);
-            canvas.context.arc(sx + slotSize / 2, y + slotSize / 2, slotSize / 2,
-              -Math.PI / 2, -Math.PI / 2 + fraction * Math.PI * 2);
-            canvas.context.closePath();
-            canvas.context.fill();
-            canvas.context.globalAlpha = 1;
-            canvas.context.fillStyle = '#FFFFFF';
-            canvas.context.font = 'bold 9px Arial';
-            canvas.context.textAlign = 'center';
-            canvas.context.fillText(`${Math.ceil(remaining / 1000)}`, sx + slotSize / 2, y + slotSize / 2 + 4);
-            canvas.context.textAlign = 'left';
-            canvas.context.restore();
+            const cx = sx + slotSize / 2, cy = y + slotSize / 2;
+            canvas.drawArc({ x: cx, y: cy, radius: slotSize / 2,
+              startAngle: -Math.PI / 2, endAngle: -Math.PI / 2 + fraction * Math.PI * 2,
+              color: '#000000', alpha: 0.6 });
+            canvas.drawText({ text: `${Math.ceil(remaining / 1000)}`, x: cx, y: cy + 4,
+              color: '#ffffff', fontSize: 9, fontWeight: 'bold', align: 'center' });
           } else {
             cooldowns.delete(skillId);
           }
         }
       }
 
-      // Key label
-      canvas.context.fillStyle = '#AAAAAA';
-      canvas.context.font = '8px Arial';
-      canvas.context.fillText(i === 9 ? '0' : `${i + 1}`, sx + 2, y + 9);
-      canvas.context.restore();
+      canvas.drawText({ text: i === 9 ? '0' : `${i + 1}`, x: sx + 2, y: y + 9, color: '#aaaaaa', fontSize: 8 });
     }
   },
 };

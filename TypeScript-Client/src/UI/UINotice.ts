@@ -56,26 +56,19 @@ const UINotice = {
 
     const x = 200; const y = 200; const w = 400; const h = 130;
 
-    canvas.context.save();
-    canvas.context.fillStyle = 'rgba(0,0,0,0.8)';
-    canvas.context.fillRect(x, y, w, h);
-    canvas.context.strokeStyle = '#557799';
-    canvas.context.strokeRect(x, y, w, h);
+    canvas.drawRect({ x, y, width: w, height: h, color: '#000000', alpha: 0.8, strokeColor: '#557799', strokeWidth: 1 });
 
     // Word-wrap message
-    canvas.context.font = '12px Arial';
-    canvas.context.fillStyle = '#FFFFFF';
     const words = this.message.split(' ');
     let line = ''; let ly = y + 30;
     for (const word of words) {
       const test = line + word + ' ';
-      if (canvas.context.measureText(test).width > w - 20) {
-        canvas.context.fillText(line, x + 10, ly);
+      if (canvas.measureText({ text: test, fontSize: 12 }).width > w - 20) {
+        canvas.drawText({ text: line, x: x + 10, y: ly, color: '#FFFFFF', fontSize: 12 });
         line = word + ' '; ly += 18;
       } else line = test;
     }
-    canvas.context.fillText(line, x + 10, ly);
-    canvas.context.restore();
+    canvas.drawText({ text: line, x: x + 10, y: ly, color: '#FFFFFF', fontSize: 12 });
 
     this.buttons.forEach((b) => b.draw(canvas, { x: 0, y: 0 } as any, 0, 0, 0));
   },

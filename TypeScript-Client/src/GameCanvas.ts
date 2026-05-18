@@ -419,6 +419,9 @@ class GameCanvas {
     angle?: number;
     alpha?: number;
     color?: string;
+    strokeColor?: string;
+    strokeWidth?: number;
+    strokeAlpha?: number;
   }) {
     const x = opts.x || 0;
     const y = opts.y || 0;
@@ -427,10 +430,13 @@ class GameCanvas {
     const angle = opts.angle || 0;
     const alpha = opts.alpha ?? 1;
     const color = opts.color || "#000000";
-    const hex = PIXI.utils.string2hex(color);
+    const hex = color ? PIXI.utils.string2hex(color) : null;
+    const strokeHex = opts.strokeColor ? PIXI.utils.string2hex(opts.strokeColor) : null;
 
-    this._gfx.lineStyle(0);
-    this._gfx.beginFill(hex, alpha);
+    if (strokeHex !== null) this._gfx.lineStyle(opts.strokeWidth ?? 1, strokeHex, opts.strokeAlpha ?? 1);
+    else this._gfx.lineStyle(0);
+    if (hex !== null) this._gfx.beginFill(hex, alpha);
+    else this._gfx.beginFill(0, 0);
     if (angle !== 0) {
       const cx = x + width / 2, cy = y + height / 2;
       const rad = (angle * Math.PI) / 180;
@@ -468,6 +474,7 @@ class GameCanvas {
     fontSize?: number;
     fontFamily?: string;
     align?: string;
+    alpha?: number;
   }) {
     const text = opts.text ?? "";
     const x = opts.x ?? 0;
@@ -491,11 +498,11 @@ class GameCanvas {
     const t = this._getPoolText(style);
     t.text = text;
     t.style = style;
-    // anchor for alignment
     t.anchor.x = align === 'center' ? 0.5 : align === 'right' ? 1 : 0;
     t.anchor.y = 0;
     t.x = x;
     t.y = y;
+    t.alpha = opts.alpha ?? 1;
   }
 
   /**
@@ -537,6 +544,67 @@ class GameCanvas {
     this.context.restore();
 
     return textMetrics;
+  }
+
+  drawCircle(opts: {
+    x: number; y: number; radius: number;
+    color?: string; alpha?: number;
+    strokeColor?: string; strokeWidth?: number; strokeAlpha?: number;
+  }) {
+    const fill = opts.color ? PIXI.utils.string2hex(opts.color) : null;
+    const stroke = opts.strokeColor ? PIXI.utils.string2hex(opts.strokeColor) : null;
+    if (stroke !== null) this._gfx.lineStyle(opts.strokeWidth ?? 1, stroke, opts.strokeAlpha ?? 1);
+    else this._gfx.lineStyle(0);
+    if (fill !== null) this._gfx.beginFill(fill, opts.alpha ?? 1);
+    else this._gfx.beginFill(0, 0);
+    this._gfx.drawCircle(opts.x, opts.y, opts.radius);
+    this._gfx.endFill();
+  }
+
+  drawRoundedRect(opts: {
+    x: number; y: number; width: number; height: number; radius?: number;
+    color?: string; alpha?: number;
+    strokeColor?: string; strokeWidth?: number; strokeAlpha?: number;
+  }) {
+    const fill = opts.color ? PIXI.utils.string2hex(opts.color) : null;
+    const stroke = opts.strokeColor ? PIXI.utils.string2hex(opts.strokeColor) : null;
+    if (stroke !== null) this._gfx.lineStyle(opts.strokeWidth ?? 1, stroke, opts.strokeAlpha ?? 1);
+    else this._gfx.lineStyle(0);
+    if (fill !== null) this._gfx.beginFill(fill, opts.alpha ?? 1);
+    else this._gfx.beginFill(0, 0);
+    this._gfx.drawRoundedRect(opts.x, opts.y, opts.width, opts.height, opts.radius ?? 4);
+    this._gfx.endFill();
+  }
+
+  drawArc(opts: {
+    x: number; y: number; radius: number;
+    startAngle: number; endAngle: number; anticlockwise?: boolean;
+    strokeColor?: string; strokeWidth?: number; strokeAlpha?: number;
+    color?: string; alpha?: number;
+  }) {
+    const stroke = opts.strokeColor ? PIXI.utils.string2hex(opts.strokeColor) : null;
+    const fill = opts.color ? PIXI.utils.string2hex(opts.color) : null;
+    if (stroke !== null) this._gfx.lineStyle(opts.strokeWidth ?? 1, stroke, opts.strokeAlpha ?? 1);
+    else this._gfx.lineStyle(0);
+    if (fill !== null) this._gfx.beginFill(fill, opts.alpha ?? 1);
+    else this._gfx.beginFill(0, 0);
+    this._gfx.arc(opts.x, opts.y, opts.radius, opts.startAngle, opts.endAngle, opts.anticlockwise ?? false);
+    this._gfx.endFill();
+  }
+
+  drawPolygon(opts: {
+    points: number[];
+    color?: string; alpha?: number;
+    strokeColor?: string; strokeWidth?: number; strokeAlpha?: number;
+  }) {
+    const fill = opts.color ? PIXI.utils.string2hex(opts.color) : null;
+    const stroke = opts.strokeColor ? PIXI.utils.string2hex(opts.strokeColor) : null;
+    if (stroke !== null) this._gfx.lineStyle(opts.strokeWidth ?? 1, stroke, opts.strokeAlpha ?? 1);
+    else this._gfx.lineStyle(0);
+    if (fill !== null) this._gfx.beginFill(fill, opts.alpha ?? 1);
+    else this._gfx.beginFill(0, 0);
+    this._gfx.drawPolygon(opts.points);
+    this._gfx.endFill();
   }
 }
 

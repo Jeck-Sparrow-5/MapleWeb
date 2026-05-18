@@ -107,15 +107,8 @@ UIMiniMap.draw = function (canvas: GameCanvas) {
   const py = this.y;
 
   // Background
-  canvas.context.save();
-  canvas.context.fillStyle = 'rgba(0,0,0,0.65)';
-  canvas.context.fillRect(px, py, mapW, barH + mapH);
-  canvas.context.strokeStyle = '#555555';
-  canvas.context.strokeRect(px, py, mapW, barH + mapH);
-  canvas.context.fillStyle = '#FFFFFF';
-  canvas.context.font = '10px Arial';
-  canvas.context.fillText(MapleMap.names?.streetName ?? MapleMap.names?.mapName ?? '', px + 4, py + 11);
-  canvas.context.restore();
+  canvas.drawRect({ x: px, y: py, width: mapW, height: barH + mapH, color: '#000000', alpha: 0.65, strokeColor: '#555555', strokeWidth: 1 });
+  canvas.drawText({ text: MapleMap.names?.streetName ?? MapleMap.names?.mapName ?? '', x: px + 4, y: py + 11, color: '#FFFFFF', fontSize: 10 });
 
   if (this.mode === 'min') return;
 
@@ -134,21 +127,13 @@ UIMiniMap.draw = function (canvas: GameCanvas) {
     try {
       const img = this.mapImgNode.nGetImage?.();
       if (img) {
-        canvas.context.save();
-        canvas.context.drawImage(img, areaX, areaY, areaW, areaH);
-        canvas.context.restore();
+        canvas.drawImage({ img, dx: areaX, dy: areaY, dw: areaW, dh: areaH });
       }
     } catch (_) {
-      canvas.context.save();
-      canvas.context.fillStyle = '#223322';
-      canvas.context.fillRect(areaX, areaY, areaW, areaH);
-      canvas.context.restore();
+      canvas.drawRect({ x: areaX, y: areaY, width: areaW, height: areaH, color: '#223322' });
     }
   } else {
-    canvas.context.save();
-    canvas.context.fillStyle = '#223322';
-    canvas.context.fillRect(areaX, areaY, areaW, areaH);
-    canvas.context.restore();
+    canvas.drawRect({ x: areaX, y: areaY, width: areaW, height: areaH, color: '#223322' });
   }
 
   // Helper: world coord → minimap pixel, using centerX/Y offset from WZ
@@ -158,17 +143,12 @@ UIMiniMap.draw = function (canvas: GameCanvas) {
   const wToMX = (wx: number) => areaX + (wx - bounds.left) / bw * areaW;
   const wToMY = (wy: number) => areaY + (wy - bounds.top)  / bh * areaH;
 
-  canvas.context.save();
-
   // Portal markers (type-2 = warp portals)
   MapleMap.portals?.forEach((p: any) => {
     if (p.type !== 2) return;
     const mx = wToMX(p.x);
     const my = wToMY(p.y);
-    canvas.context.fillStyle = '#FFFF44';
-    canvas.context.beginPath();
-    canvas.context.arc(mx, my, 2, 0, Math.PI * 2);
-    canvas.context.fill();
+    canvas.drawCircle({ x: mx, y: my, radius: 2, color: '#FFFF44' });
   });
 
   // NPC markers (blue dots)
@@ -177,8 +157,7 @@ UIMiniMap.draw = function (canvas: GameCanvas) {
     const ny = npc.cy ?? (npc as any).pos?.y ?? 0;
     const mx = wToMX(nx);
     const my = wToMY(ny);
-    canvas.context.fillStyle = '#44AAFF';
-    canvas.context.fillRect(mx - 1, my - 1, 3, 3);
+    canvas.drawRect({ x: mx - 1, y: my - 1, width: 3, height: 3, color: '#44AAFF' });
   });
 
   // Other players (white dots)
@@ -186,26 +165,15 @@ UIMiniMap.draw = function (canvas: GameCanvas) {
     if (!c.pos) return;
     const mx = wToMX(c.pos.x);
     const my = wToMY(c.pos.y);
-    canvas.context.fillStyle = '#FFFFFF';
-    canvas.context.beginPath();
-    canvas.context.arc(mx, my, 2, 0, Math.PI * 2);
-    canvas.context.fill();
+    canvas.drawCircle({ x: mx, y: my, radius: 2, color: '#FFFFFF' });
   });
 
   // Player dot (red)
   if (MyCharacter.pos) {
     const mx = wToMX(MyCharacter.pos.x);
     const my = wToMY(MyCharacter.pos.y);
-    canvas.context.fillStyle = '#FF2222';
-    canvas.context.strokeStyle = '#FFFFFF';
-    canvas.context.lineWidth = 0.5;
-    canvas.context.beginPath();
-    canvas.context.arc(mx, my, 3, 0, Math.PI * 2);
-    canvas.context.fill();
-    canvas.context.stroke();
+    canvas.drawCircle({ x: mx, y: my, radius: 3, color: '#FF2222', strokeColor: '#FFFFFF', strokeWidth: 0.5 });
   }
-
-  canvas.context.restore();
 
   // NPC list on hover (show first 6, or always in large mode)
   const mx = (canvas as any).mouseX;
@@ -214,20 +182,14 @@ UIMiniMap.draw = function (canvas: GameCanvas) {
     (mx >= px && mx < px + mapW && my2 >= py && my2 < py + barH + mapH && MapleMap.npcs?.length > 0);
   if (showNpcList && MapleMap.npcs?.length > 0) {
     const listY = py + barH + mapH + 2;
-    canvas.context.save();
-    canvas.context.fillStyle = 'rgba(0,0,0,0.8)';
-    canvas.context.fillRect(px, listY, mapW, Math.min(MapleMap.npcs.length, 6) * 13 + 4);
-    canvas.context.font = '9px Arial';
-    canvas.context.fillStyle = '#AADDFF';
+    canvas.drawRect({ x: px, y: listY, width: mapW, height: Math.min(MapleMap.npcs.length, 6) * 13 + 4, color: '#000000', alpha: 0.8 });
     MapleMap.npcs.slice(0, 6).forEach((npc: any, i: number) => {
       const name = npc.strings?.name ?? `NPC ${npc.id}`;
-      canvas.context.fillText(name.substring(0, 20), px + 3, listY + 11 + i * 13);
+      canvas.drawText({ text: name.substring(0, 20), x: px + 3, y: listY + 11 + i * 13, color: '#AADDFF', fontSize: 9 });
     });
     if (MapleMap.npcs.length > 6) {
-      canvas.context.fillStyle = '#666688';
-      canvas.context.fillText(`+${MapleMap.npcs.length - 6} more`, px + 3, listY + 11 + 6 * 13);
+      canvas.drawText({ text: `+${MapleMap.npcs.length - 6} more`, x: px + 3, y: listY + 11 + 6 * 13, color: '#666688', fontSize: 9 });
     }
-    canvas.context.restore();
   }
 
   this.buttons.forEach((btn) => btn.draw(canvas, { x: 0, y: 0 } as any, 0, 0, 0));

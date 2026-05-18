@@ -73,12 +73,7 @@ UIQuit.draw = function (canvas: GameCanvas) {
   const w = 300;
   const h = 120;
 
-  canvas.context.save();
-  canvas.context.fillStyle = 'rgba(0,0,0,0.75)';
-  canvas.context.fillRect(cx - w / 2, cy - h / 2, w, h);
-  canvas.context.strokeStyle = '#888888';
-  canvas.context.strokeRect(cx - w / 2, cy - h / 2, w, h);
-  canvas.context.restore();
+  canvas.drawRect({ x: cx - w / 2, y: cy - h / 2, width: w, height: h, color: '#000000', alpha: 0.75, strokeColor: '#888888', strokeWidth: 1 });
 
   canvas.drawText({ text: 'Are you sure you want to quit?', color: '#FFFFFF', x: cx - 110, y: cy - 15 });
   canvas.drawText({ text: 'You will be returned to the login screen.', color: '#AAAAAA', x: cx - 125, y: cy + 5 });

@@ -98,12 +98,8 @@ const UIParty = {
   draw(canvas: GameCanvas) {
     if (this.isHidden) return;
 
-    canvas.context.save();
-    canvas.context.fillStyle = 'rgba(20,20,40,0.95)';
-    canvas.context.fillRect(this.x, this.y, this.W, this.H);
-    canvas.context.strokeStyle = '#556688';
-    canvas.context.strokeRect(this.x, this.y, this.W, this.H);
-    canvas.context.restore();
+    canvas.drawRect({ x: this.x, y: this.y, width: this.W, height: this.H,
+      color: '#14142B', alpha: 0.95, strokeColor: '#556688', strokeWidth: 1 });
 
     canvas.drawText({ text: 'Party', color: '#FFDD88', x: this.x + 10, y: this.y + 14, fontSize: 13 });
 
@@ -121,14 +117,10 @@ const UIParty = {
         const my = this.y + 35 + i * 26;
         const isMe = m.charId === MyCharacter.id;
         const online = m.channel >= 0;
-        canvas.context.save();
-        canvas.context.fillStyle = isMe ? 'rgba(80,100,160,0.5)' : 'transparent';
-        if (isMe) canvas.context.fillRect(this.x + 4, my - 2, this.W - 8, 22);
-        canvas.context.fillStyle = online ? '#88FF88' : '#888888';
-        canvas.context.beginPath();
-        canvas.context.arc(this.x + 12, my + 8, 4, 0, Math.PI * 2);
-        canvas.context.fill();
-        canvas.context.restore();
+        if (isMe) canvas.drawRect({ x: this.x + 4, y: my - 2, width: this.W - 8, height: 22,
+          color: '#5064A0', alpha: 0.5 });
+        canvas.drawCircle({ x: this.x + 12, y: my + 8, radius: 4,
+          color: online ? '#88FF88' : '#888888' });
         canvas.drawText({ text: m.name, color: online ? '#FFFFFF' : '#888888', x: this.x + 20, y: my + 11, fontSize: 11 });
         canvas.drawText({ text: `Lv.${m.level}`, color: '#AAAACC', x: this.x + 140, y: my + 11, fontSize: 9 });
       });

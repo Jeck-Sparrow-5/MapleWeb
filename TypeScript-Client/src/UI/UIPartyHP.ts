@@ -42,35 +42,16 @@ const UIPartyHP = {
       const ratio = m.maxHp > 0 ? Math.max(0, Math.min(1, m.hp / m.maxHp)) : 0;
       const fillW = Math.floor(ratio * barW);
 
-      // Background
-      canvas.context.save();
-      canvas.context.fillStyle = 'rgba(0,0,0,0.6)';
-      canvas.context.fillRect(startX, y, barW + 4, barH);
-
-      // HP fill
-      canvas.context.fillStyle = ratio > 0.5 ? '#44AA44' : ratio > 0.25 ? '#AAAA22' : '#AA2222';
-      canvas.context.fillRect(startX + 2, y + 2, fillW, barH - 4);
-
-      // Use WZ bar images if available
-      if (this.barFill) {
-        try {
-          canvas.context.drawImage(this.barFill, 0, 0, Math.floor(this.barFill.width * ratio), this.barFill.height,
-            startX + 2, y + (barH - this.barFill.height) / 2, fillW, this.barFill.height);
-        } catch (_) {}
+      canvas.drawRect({ x: startX, y, width: barW + 4, height: barH, color: '#000000', alpha: 0.6 });
+      const hpColor = ratio > 0.5 ? '#44AA44' : ratio > 0.25 ? '#AAAA22' : '#AA2222';
+      canvas.drawRect({ x: startX + 2, y: y + 2, width: fillW, height: barH - 4, color: hpColor });
+      if (this.barFill && fillW > 0) {
+        canvas.drawImage({ img: this.barFill,
+          sx: 0, sy: 0, sw: Math.floor(this.barFill.width * ratio), sh: this.barFill.height,
+          dx: startX + 2, dy: y + (barH - this.barFill.height) / 2, dw: fillW, dh: this.barFill.height });
       }
-
-      canvas.context.restore();
-
-      // Name + HP text
-      canvas.context.save();
-      canvas.context.font = '10px Arial';
-      canvas.context.fillStyle = '#FFFFFF';
-      canvas.context.fillText(`${m.name}`, startX + 4, y + 10);
-      canvas.context.fillStyle = '#AAAAAA';
-      canvas.context.textAlign = 'right';
-      canvas.context.fillText(`${m.hp}/${m.maxHp}`, startX + barW, y + 10);
-      canvas.context.textAlign = 'left';
-      canvas.context.restore();
+      canvas.drawText({ text: `${m.name}`, x: startX + 4, y: y + 10, color: '#ffffff', fontSize: 10 });
+      canvas.drawText({ text: `${m.hp}/${m.maxHp}`, x: startX + barW, y: y + 10, color: '#aaaaaa', fontSize: 10, align: 'right' });
     });
   },
 };

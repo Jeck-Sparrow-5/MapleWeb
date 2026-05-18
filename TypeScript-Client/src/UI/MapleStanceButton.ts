@@ -28,6 +28,13 @@ class MapleStanceButton extends MapleButton {
       stances[stance.nName] = first.nTagName === 'vector' ? first.nParent : first;
       return stances;
     }, {});
+    // Remap numeric stances (0/1/2/3) → named stances for buttons using numbered children
+    if (!this.stances[BUTTON_STANCE.NORMAL]) {
+      const map = ['normal', 'mouseOver', 'pressed', 'disabled'];
+      map.forEach((name, i) => {
+        if (this.stances[i] != null) this.stances[name] = this.stances[i];
+      });
+    }
     this.onUpdate = opts.onUpdate || function () {};
     this.isRelativeToCamera = opts.isRelativeToCamera || false;
     this.isPartOfUI = opts.isPartOfUI || false;
@@ -51,7 +58,9 @@ class MapleStanceButton extends MapleButton {
       const activeStance = this.isDisabled && this.stances[BUTTON_STANCE.DISABLED]
         ? BUTTON_STANCE.DISABLED
         : this.stance;
-      const currentFrame = this.stances[activeStance] ?? this.stances[BUTTON_STANCE.NORMAL];
+      const currentFrame = this.stances[activeStance]
+                        ?? this.stances[BUTTON_STANCE.NORMAL]
+                        ?? (Object.values(this.stances)[0] as any);
       const currentImage = currentFrame?.nGetImage?.();
       if (this.isRelativeToCamera) {
         canvas.drawImage({
@@ -70,7 +79,11 @@ class MapleStanceButton extends MapleButton {
   }
 
   getRect(camera: CameraInterface) {
-    const buttonImage = this.stances[BUTTON_STANCE.NORMAL].nGetImage();
+    const frame = this.stances[BUTTON_STANCE.NORMAL]
+                ?? this.stances[this.stance]
+                ?? Object.values(this.stances)[0] as any;
+    if (!frame) return { x: 0, y: 0, width: 0, height: 0 };
+    const buttonImage = frame.nGetImage();
     if (this.isPartOfUI) {
       return {
         x: this.x,

@@ -138,17 +138,6 @@ UILogin.initialize = async function (canvas: GameCanvas) {
 
   this.frameImg = this.uiLogin.nGet('Common')?.nGet('frame')?.nGetImage();
   this._chatsel  = this.uiLogin.nGet('Chatsel') ?? this.uiLogin.nGet('chatsel');
-  if (this._chatsel) {
-    const dbg = (name: string) => {
-      const n = this._chatsel.nGet(name);
-      if (!n) { console.log(`[chatsel] ${name}: NOT FOUND`); return; }
-      const children = n.nChildren?.map((c: any) =>
-        `${c.nName}(${c.nTagName}) x=${c.nX} y=${c.nY} val=${c.nValue}`).join(', ');
-      console.log(`[chatsel] ${name}: ${children ?? 'no children'} | nX=${n.nX} nY=${n.nY}`);
-    };
-    dbg('pageL'); dbg('pageR');
-    console.log('[chatsel] all children:', this._chatsel.nChildren?.map((c: any) => c.nName).join(', '));
-  }
   this.selectedWorldImage = this.uiLogin.nGet('Common')?.selectWorld?.nGetImage();
   this.worlds = [];
   this.characters = [];
@@ -241,12 +230,11 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   this.behindFrameButtons.add(deleteCharacterButton);
 
   // Page left (BtPageL) — world x=(CHAR_SLOT_X_START - 50), y around char slots
-  const pageLeftNode = this._chatsel?.nGet('pageL')
-                    ?? this.uiLogin.nGet('CharSelect')?.nGet('BtPageL');
+  const pageLeftNode = this.uiLogin.nGet('CharSelect')?.nGet('pageL');
   if (pageLeftNode) {
     const pageLeftBtn = new MapleStanceButton(canvas, {
-      x: CHAR_SLOT_X_START - 50,
-      y: CHAR_SLOT_Y - 60,
+      x: CHAR_SLOT_X_START + 20,
+      y: -1215,
       img: pageLeftNode.nChildren,
       onClick: () => {
         if (this.currentCharPage > 0) {
@@ -260,12 +248,11 @@ UILogin.initialize = async function (canvas: GameCanvas) {
     this.behindFrameButtons.add(pageLeftBtn);
   }
 
-  const pageRightNode = this._chatsel?.nGet('pageR')
-                     ?? this.uiLogin.nGet('CharSelect')?.nGet('BtPageR');
+  const pageRightNode = this.uiLogin.nGet('CharSelect')?.nGet('pageR');
   if (pageRightNode) {
     const pageRightBtn = new MapleStanceButton(canvas, {
-      x: CHAR_SLOT_X_START + CHAR_SLOTS * CHAR_SLOT_X_STEP + 10,
-      y: CHAR_SLOT_Y - 60,
+      x: CHAR_SLOT_X_START + CHAR_SLOTS * CHAR_SLOT_X_STEP + 45,
+      y: -1215,
       img: pageRightNode.nChildren,
       onClick: () => {
         const maxPage = Math.max(0, Math.ceil(this.characters.length / CHAR_SLOTS) - 1);
@@ -492,7 +479,7 @@ UILogin.initialize = async function (canvas: GameCanvas) {
 function getRaceKey(job: number): string {
   if (job >= 2000 && job < 3000) return 'aran';
   if (job >= 1000 && job < 2000) return 'knight';
-  return 'adventurer';
+  return 'adventure';
 }
 
 const CHAR_SLOTS = 3;
@@ -859,7 +846,10 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
     }
 
     // Aura (frame 1) — behind character
-    const auraImg = this._chatsel?.nGet('character')?.nGet('1')?.nGetImage();
+    const charSelNode = this.uiLogin.nGet('CharSelect');
+
+    // Aura (frame 1) — behind character
+    const auraImg = charSelNode?.nGet('character')?.nGet('1')?.nGetImage();
     if (auraImg?.width) {
       canvas.drawImage({ img: auraImg, dx: cx - Math.floor(auraImg.width / 2) + 30, dy: cy - auraImg.height + 10 });
     }
@@ -868,15 +858,15 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
     drawPreview(canvas, camera, char, wx, CHAR_SLOT_Y, 16).catch(() => {});
 
     // Platform (frame 0) — at feet
-    const platImg = this._chatsel?.nGet('character')?.nGet('0')?.nGetImage();
+    const platImg = charSelNode?.nGet('character')?.nGet('0')?.nGetImage();
     if (platImg?.width) {
       canvas.drawImage({ img: platImg, dx: cx - Math.floor(platImg.width / 2) + 30, dy: cy - 10 });
     }
 
-    // Race flag
+    // Race flag (adventure / knight / aran)
     const race = getRaceKey(char.stat.job);
-    const flagImg = this._chatsel?.nGet(race)?.nGetImage?.()
-                 ?? this._chatsel?.nGet(race)?.nGet('0')?.nGetImage?.();
+    const flagNode = charSelNode?.nGet(race);
+    const flagImg = flagNode?.nGet('0')?.nGetImage?.() ?? flagNode?.nGetImage?.();
     if (flagImg?.width) {
       canvas.drawImage({ img: flagImg, dx: cx + 65, dy: cy - 120 });
     }

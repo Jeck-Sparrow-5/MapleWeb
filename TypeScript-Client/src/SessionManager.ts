@@ -94,17 +94,14 @@ class SessionManager {
     }
 
     try {
-      let header: Uint8Array = new Uint8Array(4);
+      const header = new Uint8Array(4);
       this.crypto!.createHeader(header, bytes.length);
       this.crypto!.encrypt(bytes, bytes.length);
 
-      console.log('header bytes:', header);
-      console.log('data after encrypt:', bytes);
-
-      this.websocket!.send(header.buffer);
-      console.log('header sent');
-      this.websocket!.send(bytes.buffer);
-      console.log('data sent');
+      const packet = new Uint8Array(4 + bytes.length);
+      packet.set(header, 0);
+      packet.set(bytes, 4);
+      this.websocket!.send(packet.buffer);
       return true;
     } catch (error) {
       console.error('Failed to send message:', error);

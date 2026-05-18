@@ -11,23 +11,35 @@ export class MessageProcessor {
   }
 
   processMessage(data: ArrayBuffer): void {
+    let offset = 0;
     const bytes = new Uint8Array(data);
-    const payloadLength = this.crypto.checkLength(bytes);
-    console.log('payloadLength:', payloadLength);
 
-    const payload = bytes.subarray(Cryptography.HEADER_LENGTH);
-    this.crypto.decrypt(payload, payloadLength);
-    console.log('decrypted:', payload);
+    while (offset < bytes.length) {
+      if (offset + Cryptography.HEADER_LENGTH > bytes.length) break;
 
-    const view = new DataView(payload.buffer);
-    const opcode = view.getUint16(Cryptography.HEADER_LENGTH, true);
-    console.debug('opcode:', opcode);
+      const payloadLength = this.crypto.checkLength(bytes.subarray(offset, offset + 4));
+      if (payloadLength <= 0 || offset + Cryptography.HEADER_LENGTH + payloadLength > bytes.length) break;
 
-    const handler = this.handlerRegistry.getHandler(opcode);
-    if (handler) {
-      handler.handle(view);
-    } else {
-      console.warn('Unhandled opcode:', opcode);
+      // Decrypt payload in-place (slice = copy so original buffer untouched)
+      const payload = bytes.slice(offset + Cryptography.HEADER_LENGTH, offset + Cryptography.HEADER_LENGTH + payloadLength);
+      this.crypto.decrypt(payload, payloadLength);
+
+      // Build padded buffer so handlers still use HEADER_LENGTH+2 as data start
+      const padded = new Uint8Array(Cryptography.HEADER_LENGTH + payloadLength);
+      padded.set(payload, Cryptography.HEADER_LENGTH);
+      const view = new DataView(padded.buffer);
+
+      const opcode = view.getUint16(Cryptography.HEADER_LENGTH, true);
+      console.debug('opcode:', opcode);
+
+      const handler = this.handlerRegistry.getHandler(opcode);
+      if (handler) {
+        handler.handle(view);
+      } else {
+        console.warn('Unhandled opcode:', opcode);
+      }
+
+      offset += Cryptography.HEADER_LENGTH + payloadLength;
     }
   }
 }

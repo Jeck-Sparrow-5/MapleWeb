@@ -381,14 +381,25 @@ class GameCanvas {
       const sprite = this._getPoolSprite();
       sprite.texture = tex;
       sprite.alpha = alpha;
-      // pivot = rotation/flip center in local sprite coords
-      sprite.pivot.set(rx / scaleX, ry / scaleY);
-      // position = where pivot sits in world
-      sprite.x = dx + rx;
-      sprite.y = dy + ry;
       sprite.angle = angle;
-      sprite.scale.x = flipped ? -scaleX : scaleX;
       sprite.scale.y = scaleY;
+
+      if (flipped) {
+        // Canvas 2D flip: translate(effectiveWidth) then scale(-1,1) — independent of rx.
+        // For angle=0 (all character parts): local lx → screen dx + effectiveWidth - lx.
+        // PIXI equivalent: pivot at center (effectiveWidth/2), position at dx+center.
+        const cx = effectiveWidth / 2;
+        const cy = effectiveHeight / 2;
+        sprite.pivot.set(cx / scaleX, cy / scaleY);
+        sprite.x = dx + cx;
+        sprite.y = dy + cy;
+        sprite.scale.x = -scaleX;
+      } else {
+        sprite.pivot.set(rx / scaleX, ry / scaleY);
+        sprite.x = dx + rx;
+        sprite.y = dy + ry;
+        sprite.scale.x = scaleX;
+      }
     } catch (e) {
       console.warn('[pixi] drawImage failed:', e);
     }

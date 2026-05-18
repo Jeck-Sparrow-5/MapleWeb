@@ -862,7 +862,7 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
     }
 
     // Character sprite
-    drawPreview(canvas, camera, char, charWx, CHAR_SLOT_Y, 16).catch(() => {});
+    drawPreview(canvas, camera, char, charWx, CHAR_SLOT_Y, 16);
 
     // Platform (frame 0) — at feet
     const platImg = charSelNode?.nGet('character')?.nGet('0')?.nGetImage();

@@ -233,7 +233,7 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   const pageLeftNode = this.uiLogin.nGet('CharSelect')?.nGet('pageL');
   if (pageLeftNode) {
     const pageLeftBtn = new MapleStanceButton(canvas, {
-      x: CHAR_SLOT_X_START + 20,
+      x: -260,
       y: -1215,
       img: pageLeftNode.nChildren,
       onClick: () => {
@@ -251,7 +251,7 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   const pageRightNode = this.uiLogin.nGet('CharSelect')?.nGet('pageR');
   if (pageRightNode) {
     const pageRightBtn = new MapleStanceButton(canvas, {
-      x: CHAR_SLOT_X_START + CHAR_SLOTS * CHAR_SLOT_X_STEP + 45,
+      x: 185,
       y: -1215,
       img: pageRightNode.nChildren,
       onClick: () => {
@@ -483,9 +483,9 @@ function getRaceKey(job: number): string {
 }
 
 const CHAR_SLOTS = 3;
-const CHAR_SLOT_X_START = -280; // world x of slot 0 (canvas ~92 at charselect camera)
+const CHAR_SLOT_X_START = -177; // world x of slot 0 — centered between pageL(-260) and pageR(185)
 const CHAR_SLOT_X_STEP = 140;   // world px between slots
-const CHAR_SLOT_Y = -1380;      // world y of click area
+const CHAR_SLOT_Y = -1170;      // world y of click area
 
 UILogin.clearCharacterSlotButtons = function () {
   this.characterSlotButtons.forEach((btn) => ClickManager.removeButton(btn));
@@ -845,13 +845,20 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
       canvas.context.restore();
     }
 
-    // Aura (frame 1) — behind character
     const charSelNode = this.uiLogin.nGet('CharSelect');
 
     // Aura (frame 1) — behind character
     const auraImg = charSelNode?.nGet('character')?.nGet('1')?.nGetImage();
     if (auraImg?.width) {
       canvas.drawImage({ img: auraImg, dx: cx - Math.floor(auraImg.width / 2) + 30, dy: cy - auraImg.height + 10 });
+    }
+
+    // Race flag — behind character, 10px left of center
+    const race = getRaceKey(char.stat.job);
+    const flagNode = charSelNode?.nGet(race);
+    const flagImg = flagNode?.nGet('0')?.nGetImage?.() ?? flagNode?.nGetImage?.();
+    if (flagImg?.width) {
+      canvas.drawImage({ img: flagImg, dx: cx - 30, dy: cy - 120 });
     }
 
     // Character sprite
@@ -861,14 +868,6 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
     const platImg = charSelNode?.nGet('character')?.nGet('0')?.nGetImage();
     if (platImg?.width) {
       canvas.drawImage({ img: platImg, dx: cx - Math.floor(platImg.width / 2) + 30, dy: cy - 10 });
-    }
-
-    // Race flag (adventure / knight / aran)
-    const race = getRaceKey(char.stat.job);
-    const flagNode = charSelNode?.nGet(race);
-    const flagImg = flagNode?.nGet('0')?.nGetImage?.() ?? flagNode?.nGetImage?.();
-    if (flagImg?.width) {
-      canvas.drawImage({ img: flagImg, dx: cx + 65, dy: cy - 120 });
     }
 
     canvas.drawText({ text: char.stat.characterName, color: '#FFFFFF', x: cx + 20, y: cy + 20 });

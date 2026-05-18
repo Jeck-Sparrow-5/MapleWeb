@@ -9,9 +9,8 @@ export class CharacterListHandler extends PacketHandler {
   async handle(data: DataView): Promise<void> {
     let offset = Cryptography.HEADER_LENGTH + 2;
 
-    const channelStatus = data.getInt8(offset += 1); // always 0
-    const characterCount = data.getInt8(offset += 1);
-    console.log('Character Count:', characterCount);
+    const channelStatus = data.getInt8(offset); offset += 1;
+    const characterCount = data.getInt8(offset); offset += 1;
 
     const characters: Character[] = [];
     if (characterCount > 0) {
@@ -129,14 +128,11 @@ export class CharacterListHandler extends PacketHandler {
     const ap = data.getInt16(offset, true);
     offset += 2;
 
-    const sp = data.getInt16(offset, true);
-    offset += 2;
-
     const exp = data.getInt32(offset, true);
     offset += 4;
 
-    const fame = data.getInt16(offset, true);
-    offset += 2;
+    const fame = data.getInt32(offset, true);
+    offset += 4;
 
     const gachaExp = data.getInt32(offset, true);
     offset += 4;
@@ -144,9 +140,9 @@ export class CharacterListHandler extends PacketHandler {
     const mapId = data.getInt32(offset, true);
     offset += 4;
 
-    const spawnPoint = data.getInt32(offset, true);
-    offset += 4;
-    offset += 1; // skip 0
+    const spawnPoint = data.getInt8(offset);
+    offset += 1;
+    offset += 4; // writeInt(0) padding
 
     return {
       stat: new Stat(
@@ -168,7 +164,7 @@ export class CharacterListHandler extends PacketHandler {
         mp,
         maxMp,
         ap,
-        sp,
+        0,  // sp — not sent in this server's CHARACTER_LIST packet
         exp,
         fame,
         gachaExp,
@@ -232,6 +228,7 @@ export class CharacterListHandler extends PacketHandler {
       offset += 4;
       petIds.push(petId);
     }
+    offset += 1; // extra byte after pets (cash pet flag or padding)
 
     return {
       look: new Look(

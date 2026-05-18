@@ -47,7 +47,8 @@
       "Bash(git checkout *)",
       "Bash(curl -s https://api.github.com/repos/ryantpayton/MapleStory-Client/contents/IO/UITypes)",
       "Bash(curl -s \"https://api.github.com/repos/ryantpayton/MapleStory-Client/contents/IO/UITypes?per_page=200\")",
-      "Bash(curl -s \"https://api.github.com/repos/ryantpayton/MapleStory-Client/search/code?q=hair+color+creation\")"
+      "Bash(curl -s \"https://api.github.com/repos/ryantpayton/MapleStory-Client/search/code?q=hair+color+creation\")",
+      "Read(//c/Users/jorge/OneDrive/Desktop/**)"
     ],
     "additionalDirectories": [
       "\\tmp",

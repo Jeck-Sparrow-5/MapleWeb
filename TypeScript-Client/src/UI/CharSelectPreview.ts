@@ -9,6 +9,27 @@ import { CameraInterface } from '../Camera';
 // Cache of MapleCharacter preview instances keyed by characterId
 const previewCache = new Map<number, MapleCharacter>();
 
+// Blink state per character
+const blinkState = new Map<number, { nextBlink: number; blinkEnd: number }>();
+
+function updateBlink(id: number, mc: MapleCharacter): void {
+  const now = Date.now();
+  let state = blinkState.get(id);
+  if (!state) {
+    state = { nextBlink: now + 2000 + Math.random() * 3000, blinkEnd: 0 };
+    blinkState.set(id, state);
+  }
+  if (now < state.blinkEnd) {
+    (mc as any).setFaceExpr?.('blink', 0);
+  } else {
+    (mc as any).setFaceExpr?.('default', 0);
+    if (now >= state.nextBlink) {
+      state.blinkEnd   = now + 150;
+      state.nextBlink  = now + 3000 + Math.random() * 3000;
+    }
+  }
+}
+
 export async function getPreview(char: Character): Promise<MapleCharacter | null> {
   const id = char.stat.characterId;
   if (previewCache.has(id)) return previewCache.get(id)!;
@@ -22,7 +43,7 @@ export async function getPreview(char: Character): Promise<MapleCharacter | null
       maxMp: char.stat.maxMp,
       exp: char.stat.exp,
       fame: 0,
-      Hair: char.look.hair,
+      hair: char.look.hair,
       inventory: new Inventory({}),
       stats: new Stats({
         level: char.stat.level,
@@ -39,10 +60,17 @@ export async function getPreview(char: Character): Promise<MapleCharacter | null
 
     mc.skinColor = char.look.skinColor;
     mc.face = char.look.face;
-    mc.Hair = char.look.hair;
     mc.gender = char.look.gender;
 
     await mc.load();
+
+    // Attach equipped items from character look
+    for (const [slot, itemId] of char.look.eqSlots) {
+      if (itemId > 0) {
+        try { await mc.attachEquip(slot, itemId); } catch (_) {}
+      }
+    }
+
     mc.setStance('stand1', 0, false, true);
     previewCache.set(id, mc);
     return mc;
@@ -67,12 +95,23 @@ export async function drawPreview(
   const mc = await getPreview(char);
   if (!mc) return;
 
-  // Temporarily set position to the slot world coords
   const origX = mc.pos?.x ?? 0;
   const origY = mc.pos?.y ?? 0;
-  if (mc.pos) { mc.pos.x = worldX; mc.pos.y = worldY; }
+  if (mc.pos) {
+    mc.pos.x     = worldX;
+    mc.pos.y     = worldY;
+    mc.pos.fh    = true;   // stand1 stance
+    mc.pos.left  = false;
+    mc.pos.right = false;
+  }
+  mc.flipped = true; // face right (sprites default face left, flip = right)
 
-  mc.update(msPerTick);
+  // Advance animation frame without calling full update() (which needs mc.map)
+  (mc as any).delay = ((mc as any).delay ?? 0) + msPerTick;
+  if ((mc as any).delay > (mc as any).nextDelay) {
+    (mc as any).advanceFrame?.();
+  }
+
   mc.draw(canvas, camera, 0, msPerTick, 0);
 
   if (mc.pos) { mc.pos.x = origX; mc.pos.y = origY; }

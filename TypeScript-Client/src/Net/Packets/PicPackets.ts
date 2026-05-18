@@ -6,6 +6,7 @@ export class SelectCharPicPacket extends OutPacket {
     this.writeString(pic);
     this.writeInt(characterId);
     this.writeString('00-00-00-00-00-00');
+    this.writeString('');
   }
 }
 

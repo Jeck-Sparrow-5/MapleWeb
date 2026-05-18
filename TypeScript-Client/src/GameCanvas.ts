@@ -1,3 +1,5 @@
+import * as PIXI from 'pixi.js';
+
 class GameCanvas {
   scaleX;
   scaleY;
@@ -14,6 +16,15 @@ class GameCanvas {
   gameWrapper: HTMLElement;
   game: HTMLCanvasElement;
   context: CanvasRenderingContext2D;
+
+  // PixiJS renderer
+  _pixiApp: PIXI.Application;
+  _texCache: WeakMap<HTMLImageElement, PIXI.Texture> = new WeakMap();
+  _spritePool: PIXI.Sprite[] = [];
+  _spriteIdx: number = 0;
+  _gfx: PIXI.Graphics = new PIXI.Graphics();   // single batched graphics object
+  _textPool: PIXI.Text[] = [];
+  _textIdx: number = 0;
 
   constructor(gameWrapper: HTMLElement) {
     this.scaleX = 1;
@@ -110,13 +121,88 @@ class GameCanvas {
     if (!this.game) {
       throw new Error("GameCanvas: game element not found");
     }
-    if (this.game.getContext === null) {
-      throw new Error("GameCanvas: getContext is null");
-    }
     this.context = this.game.getContext("2d")!;
+
+    // PIXI WebGL renderer — inserted before the 2D overlay canvas
+    this._pixiApp = new PIXI.Application({
+      width: this.game.width,
+      height: this.game.height,
+      backgroundAlpha: 0,
+      antialias: false,
+      autoStart: false,
+      resolution: 1,
+    });
+    const pixiCanvas = this._pixiApp.view as HTMLCanvasElement;
+    pixiCanvas.style.position = 'absolute';
+    pixiCanvas.style.top = '0';
+    pixiCanvas.style.left = '0';
+    pixiCanvas.style.pointerEvents = 'none';
+    // 2D overlay on top (transparent background, receives pointer events)
+    this.game.style.position = 'absolute';
+    this.game.style.top = '0';
+    this.game.style.left = '0';
+    this.game.style.background = 'transparent';
+    gameWrapper.insertBefore(pixiCanvas, this.game);
+
+    // Graphics on top of sprites (rects/lines drawn after sprites)
+    (this._pixiApp.stage as any).addChild(this._gfx);
 
     this.listenMouse();
     this.listenKeyboard();
+  }
+
+  _getTex(img: HTMLImageElement): PIXI.Texture {
+    let tex = this._texCache.get(img);
+    if (!tex) {
+      tex = PIXI.Texture.from(img);
+      this._texCache.set(img, tex);
+    }
+    return tex;
+  }
+
+  _getPoolSprite(): PIXI.Sprite {
+    if (this._spriteIdx < this._spritePool.length) {
+      const s = this._spritePool[this._spriteIdx++];
+      s.visible = true;
+      return s;
+    }
+    const s = new PIXI.Sprite();
+    (this._pixiApp.stage as any).addChild(s);
+    this._spritePool.push(s);
+    this._spriteIdx++;
+    return s;
+  }
+
+  beginFrame() {
+    this._spriteIdx = 0;
+    this._textIdx = 0;
+    this._gfx.clear();
+    this.context.clearRect(0, 0, this.game.width, this.game.height);
+    const w = this.game.width;
+    const h = this.game.height;
+    if (this._pixiApp.renderer.width !== w || this._pixiApp.renderer.height !== h) {
+      this._pixiApp.renderer.resize(w, h);
+    }
+  }
+
+  endFrame() {
+    for (let i = this._spriteIdx; i < this._spritePool.length; i++) this._spritePool[i].visible = false;
+    for (let i = this._textIdx; i < this._textPool.length; i++) this._textPool[i].visible = false;
+    this._pixiApp.renderer.render(this._pixiApp.stage);
+  }
+
+  _getPoolText(style: PIXI.TextStyle): PIXI.Text {
+    if (this._textIdx < this._textPool.length) {
+      const t = this._textPool[this._textIdx++];
+      t.visible = true;
+      t.style = style;
+      return t;
+    }
+    const t = new PIXI.Text('', style);
+    (this._pixiApp.stage as any).addChild(t);
+    this._textPool.push(t);
+    this._textIdx++;
+    return t;
   }
 
   listenMouse() {
@@ -235,53 +321,47 @@ class GameCanvas {
     alpha?: number;
   }) {
     const img = opts.img;
+    if (!img?.width) return;
 
-    if (!img) {
-      return;
-    }
-
-    const sx = opts.sx !== undefined ? opts.sx : 0;
-    const sy = opts.sy !== undefined ? opts.sy : 0;
-    const sw = opts.sw !== undefined ? opts.sw : img.width - sx;
-    const sh = opts.sh !== undefined ? opts.sh : img.height - sy;
-
-    const dx = opts.dx !== undefined ? opts.dx : 0;
-    const dy = opts.dy !== undefined ? opts.dy : 0;
-    const dw = opts.dw !== undefined ? opts.dw : sw;
-    const dh = opts.dh !== undefined ? opts.dh : sh;
-
-    const flipped = opts.flipped !== undefined ? opts.flipped : false;
-    const angle = opts.angle !== undefined ? opts.angle : 0;
-    const alpha = opts.alpha !== undefined ? opts.alpha : 1;
-    const scaleX = opts.scaleX !== undefined ? opts.scaleX : 1;
-    const scaleY = opts.scaleY !== undefined ? opts.scaleY : 1;
-
-    const effectiveWidth = dw * scaleX;
-    const effectiveHeight = dh * scaleY;
-
-    const rx = opts.rx !== undefined ? opts.rx : effectiveWidth / 2;
-    const ry = opts.ry !== undefined ? opts.ry : effectiveHeight / 2;
-
-    this.context.save();
     try {
-      this.context.globalAlpha = alpha;
+      const sx = opts.sx ?? 0;
+      const sy = opts.sy ?? 0;
+      const sw = opts.sw ?? img.width - sx;
+      const sh = opts.sh ?? img.height - sy;
+      const dx = opts.dx ?? 0;
+      const dy = opts.dy ?? 0;
+      const flipped = opts.flipped ?? false;
+      const angle = opts.angle ?? 0;
+      const alpha = opts.alpha ?? 1;
+      const scaleX = opts.scaleX ?? 1;
+      const scaleY = opts.scaleY ?? 1;
+      const effectiveWidth = sw * scaleX;
+      const effectiveHeight = sh * scaleY;
+      const rx = opts.rx ?? effectiveWidth / 2;
+      const ry = opts.ry ?? effectiveHeight / 2;
 
-      this.context.translate(dx + rx, dy + ry);
-      this.context.rotate(((angle % 360) * Math.PI) / 180);
-      this.context.translate(-rx, -ry);
-
-      if (flipped) {
-        this.context.translate((img.width * scaleX * sw) / img.width, 0);
-        this.context.scale(-1, 1);
+      const baseTex = this._getTex(img as HTMLImageElement);
+      // Sub-texture if cropped
+      let tex: PIXI.Texture;
+      if (sx === 0 && sy === 0 && sw === img.width && sh === img.height) {
+        tex = baseTex;
+      } else {
+        tex = new PIXI.Texture(baseTex.baseTexture, new PIXI.Rectangle(sx, sy, sw, sh));
       }
 
-      if (sw > 0 && sh > 0) {
-        this.context.drawImage(img, sx, sy, sw, sh, 0, 0, effectiveWidth, effectiveHeight);
-      }
+      const sprite = this._getPoolSprite();
+      sprite.texture = tex;
+      sprite.alpha = alpha;
+      // pivot = rotation/flip center in local sprite coords
+      sprite.pivot.set(rx / scaleX, ry / scaleY);
+      // position = where pivot sits in world
+      sprite.x = dx + rx;
+      sprite.y = dy + ry;
+      sprite.angle = angle;
+      sprite.scale.x = flipped ? -scaleX : scaleX;
+      sprite.scale.y = scaleY;
     } catch (e) {
-      console.warn('[canvas] drawImage failed:', e, 'img:', img, 'sw:', sw, 'sh:', sh);
-    } finally {
-      this.context.restore();
+      console.warn('[pixi] drawImage failed:', e);
     }
   }
 
@@ -315,15 +395,9 @@ class GameCanvas {
     const color = opts.color || "#000000";
     const width = opts.width || 1;
 
-    this.context.save();
-    this.context.beginPath();
-    this.context.moveTo(x1, y1);
-    this.context.lineTo(x2, y2);
-    this.context.globalAlpha = alpha;
-    this.context.strokeStyle = color;
-    this.context.lineWidth = width;
-    this.context.stroke();
-    this.context.restore();
+    this._gfx.lineStyle(width, PIXI.utils.string2hex(color), alpha);
+    this._gfx.moveTo(x1, y1);
+    this._gfx.lineTo(x2, y2);
   }
 
   /**
@@ -351,18 +425,24 @@ class GameCanvas {
     const width = opts.width || 0;
     const height = opts.height || 0;
     const angle = opts.angle || 0;
-    const alpha = opts.alpha || 1;
+    const alpha = opts.alpha ?? 1;
     const color = opts.color || "#000000";
+    const hex = PIXI.utils.string2hex(color);
 
-    this.context.save();
-
-    this.context.globalAlpha = alpha;
-    this.context.fillStyle = color;
-    this.context.translate(x, y);
-    this.context.rotate(((angle % 360) * Math.PI) / 180);
-    this.context.fillRect(0, 0, width, height);
-
-    this.context.restore();
+    this._gfx.lineStyle(0);
+    this._gfx.beginFill(hex, alpha);
+    if (angle !== 0) {
+      const cx = x + width / 2, cy = y + height / 2;
+      const rad = (angle * Math.PI) / 180;
+      // rotated rect via transform on a Graphics — use Matrix
+      const m = new PIXI.Matrix().translate(-cx, -cy).rotate(rad).translate(cx, cy);
+      this._gfx.setMatrix(m);
+      this._gfx.drawRect(x, y, width, height);
+      this._gfx.setMatrix(new PIXI.Matrix());
+    } else {
+      this._gfx.drawRect(x, y, width, height);
+    }
+    this._gfx.endFill();
   }
 
   /**
@@ -389,28 +469,33 @@ class GameCanvas {
     fontFamily?: string;
     align?: string;
   }) {
-    const text = opts.text || "";
-    const x = opts.x || 0;
-    const y = opts.y || 0;
-    const color = opts.color || "#000000";
-    const fontWeight = opts.fontWeight || "";
-    const fontStyle = opts.fontStyle || "";
+    const text = opts.text ?? "";
+    const x = opts.x ?? 0;
+    const y = opts.y ?? 0;
+    const color = opts.color || "#ffffff";
+    const fontWeight = (opts.fontWeight || "normal") as PIXI.TextStyleFontWeight;
+    const fontStyle = (opts.fontStyle || "normal") as PIXI.TextStyleFontStyle;
     const fontSize = opts.fontSize || 12;
     const fontFamily = opts.fontFamily || "Arial";
-    const textAlign = opts.align || "left";
+    const align = (opts.align || "left") as PIXI.TextStyleAlign;
 
-    this.context.save();
+    const style = new PIXI.TextStyle({
+      fill: color,
+      fontWeight,
+      fontStyle,
+      fontSize,
+      fontFamily,
+      align,
+    });
 
-    this.context.textBaseline = "top";
-    this.context.fillStyle = color;
-    this.context.font = `${fontWeight} ${fontStyle} ${fontSize}px ${fontFamily}`;
-
-    // todo: fix this
-    this.context.textAlign = textAlign as CanvasTextAlign;
-
-    this.context.fillText(text, x, y);
-
-    this.context.restore();
+    const t = this._getPoolText(style);
+    t.text = text;
+    t.style = style;
+    // anchor for alignment
+    t.anchor.x = align === 'center' ? 0.5 : align === 'right' ? 1 : 0;
+    t.anchor.y = 0;
+    t.x = x;
+    t.y = y;
   }
 
   /**

@@ -157,6 +157,6 @@ export class OutPacket {
   }
 
   public getBuffer(): ArrayBuffer {
-    return this.getBytes().buffer;
+    return this.getBytes().buffer as ArrayBuffer;
   }
 }

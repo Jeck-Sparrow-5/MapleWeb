@@ -159,7 +159,7 @@ export class NXReader {
 
     // PNG magic: 89 50 4E 47
     if (raw[0] === 0x89 && raw[1] === 0x50 && raw[2] === 0x4E && raw[3] === 0x47) {
-      const blob = new Blob([raw], { type: 'image/png' });
+      const blob = new Blob([raw as unknown as BlobPart], { type: 'image/png' });
       const img = new Image();
       img.src = URL.createObjectURL(blob);
       return img;
@@ -231,7 +231,7 @@ export class NXReader {
     if (!mime) return new Audio();
 
     if (skip > 0) data = data.subarray(skip);
-    const blob = new Blob([data], { type: mime });
+    const blob = new Blob([data as unknown as BlobPart], { type: mime });
     return new Audio(URL.createObjectURL(blob));
   }
 }

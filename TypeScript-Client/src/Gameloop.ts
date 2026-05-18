@@ -26,6 +26,7 @@ class GameLoop {
     msPerTick: number,
     tdelta: number
   ) {
+    canvas.beginFrame();
     canvas.drawRect({
       x: 0,
       y: 0,
@@ -34,6 +35,7 @@ class GameLoop {
       color: "#000000",
     });
     StateManager.doRender(canvas, camera, lag, msPerTick, tdelta);
+    canvas.endFrame();
   }
 
   postRender(canvas: GameCanvas) {

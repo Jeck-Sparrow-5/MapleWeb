@@ -6,6 +6,7 @@ const STYLES = ['3', '4', '5', '6'];
 
 const NameTagRenderer = {
   parts: {} as Record<string, { l: any; m: any; r: any; lw: number; mw: number; rw: number; h: number }>,
+  _widthCache: new Map<string, number>(),
   initialized: false,
 
   async initialize() {
@@ -43,7 +44,11 @@ const NameTagRenderer = {
       return;
     }
 
-    const textW = canvas.measureText({ text: name, fontSize: 11 }).width;
+    let textW = this._widthCache.get(name);
+    if (textW === undefined) {
+      textW = canvas.measureText({ text: name, fontSize: 11 }).width;
+      this._widthCache.set(name, textW);
+    }
     const totalW = p.lw + textW + p.rw;
     const bx = cx - totalW / 2;
 

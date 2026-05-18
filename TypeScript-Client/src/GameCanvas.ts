@@ -33,6 +33,11 @@ class GameCanvas {
   _textPool: PIXI.Text[] = [];
   _textIdx: number = 0;
   _styleCache: Map<string, PIXI.TextStyle> = new Map();
+  _colorCache: Map<string, number> = new Map();
+  _subTexCache: Map<string, PIXI.Texture> = new Map();
+  _sharedMatrix: PIXI.Matrix = new PIXI.Matrix();
+  _identityMatrix: PIXI.Matrix = new PIXI.Matrix();
+  _cachedRect: DOMRect = new DOMRect();
 
   constructor(gameWrapper: HTMLElement) {
     this.scaleX = 1;
@@ -159,6 +164,8 @@ class GameCanvas {
     this._bgLayer.addChild(this._bgGfx);
     this._fgLayer.addChild(this._fgGfx);
 
+    this._cachedRect = gameWrapper.getBoundingClientRect();
+
     this.listenMouse();
     this.listenKeyboard();
   }
@@ -215,6 +222,15 @@ class GameCanvas {
     this._pixiApp.renderer.render(this._pixiApp.stage);
   }
 
+  _colorToNum(color: string): number {
+    let n = this._colorCache.get(color);
+    if (n === undefined) {
+      n = new PIXI.Color(color).toNumber();
+      this._colorCache.set(color, n);
+    }
+    return n;
+  }
+
   _getCachedStyle(key: string, opts: Partial<PIXI.ITextStyle>): PIXI.TextStyle {
     let s = this._styleCache.get(key);
     if (!s) { s = new PIXI.TextStyle(opts); this._styleCache.set(key, s); }
@@ -235,10 +251,12 @@ class GameCanvas {
   }
 
   listenMouse() {
+    window.addEventListener("resize", () => {
+      this._cachedRect = this.gameWrapper.getBoundingClientRect();
+    });
     this.gameWrapper.addEventListener("mousemove", (e) => {
-      const rectangle = this.gameWrapper.getBoundingClientRect();
-      this.mouseX = (e.clientX - rectangle.left) / this.scaleX;
-      this.mouseY = (e.clientY - rectangle.top) / this.scaleY;
+      this.mouseX = (e.clientX - this._cachedRect.left) / this.scaleX;
+      this.mouseY = (e.clientY - this._cachedRect.top) / this.scaleY;
     });
     this.gameWrapper.addEventListener("mousedown", (e) => {
       if (e.which === 1) {
@@ -375,7 +393,12 @@ class GameCanvas {
       if (sx === 0 && sy === 0 && sw === img.width && sh === img.height) {
         tex = baseTex;
       } else {
-        tex = new PIXI.Texture(baseTex.baseTexture, new PIXI.Rectangle(sx, sy, sw, sh));
+        const subKey = `${baseTex.baseTexture.uid}:${sx}:${sy}:${sw}:${sh}`;
+        tex = this._subTexCache.get(subKey)!;
+        if (!tex) {
+          tex = new PIXI.Texture(baseTex.baseTexture, new PIXI.Rectangle(sx, sy, sw, sh));
+          if (!(img instanceof HTMLCanvasElement)) this._subTexCache.set(subKey, tex);
+        }
       }
 
       const sprite = this._getPoolSprite();
@@ -435,7 +458,7 @@ class GameCanvas {
     const color = opts.color || "#000000";
     const width = opts.width || 1;
 
-    this._fgGfx.lineStyle(width, new PIXI.Color(color).toNumber(), alpha);
+    this._fgGfx.lineStyle(width, this._colorToNum(color), alpha);
     this._fgGfx.moveTo(x1, y1);
     this._fgGfx.lineTo(x2, y2);
   }
@@ -470,8 +493,8 @@ class GameCanvas {
     const angle = opts.angle || 0;
     const alpha = opts.alpha ?? 1;
     const color = opts.color || "#000000";
-    const hex = color ? new PIXI.Color(color).toNumber() : null;
-    const strokeHex = opts.strokeColor ? new PIXI.Color(opts.strokeColor).toNumber() : null;
+    const hex = color ? this._colorToNum(color) : null;
+    const strokeHex = opts.strokeColor ? this._colorToNum(opts.strokeColor) : null;
 
     if (strokeHex !== null) this._fgGfx.lineStyle(opts.strokeWidth ?? 1, strokeHex, opts.strokeAlpha ?? 1);
     else this._fgGfx.lineStyle(0);
@@ -481,10 +504,10 @@ class GameCanvas {
       const cx = x + width / 2, cy = y + height / 2;
       const rad = (angle * Math.PI) / 180;
       // rotated rect via transform on a Graphics — use Matrix
-      const m = new PIXI.Matrix().translate(-cx, -cy).rotate(rad).translate(cx, cy);
-      this._fgGfx.setMatrix(m);
+      this._sharedMatrix.identity().translate(-cx, -cy).rotate(rad).translate(cx, cy);
+      this._fgGfx.setMatrix(this._sharedMatrix);
       this._fgGfx.drawRect(x, y, width, height);
-      this._fgGfx.setMatrix(new PIXI.Matrix());
+      this._fgGfx.setMatrix(this._identityMatrix);
     } else {
       this._fgGfx.drawRect(x, y, width, height);
     }
@@ -585,8 +608,8 @@ class GameCanvas {
     color?: string; alpha?: number;
     strokeColor?: string; strokeWidth?: number; strokeAlpha?: number;
   }) {
-    const fill = opts.color ? new PIXI.Color(opts.color).toNumber() : null;
-    const stroke = opts.strokeColor ? new PIXI.Color(opts.strokeColor).toNumber() : null;
+    const fill = opts.color ? this._colorToNum(opts.color) : null;
+    const stroke = opts.strokeColor ? this._colorToNum(opts.strokeColor) : null;
     if (stroke !== null) this._fgGfx.lineStyle(opts.strokeWidth ?? 1, stroke, opts.strokeAlpha ?? 1);
     else this._fgGfx.lineStyle(0);
     if (fill !== null) this._fgGfx.beginFill(fill, opts.alpha ?? 1);
@@ -600,8 +623,8 @@ class GameCanvas {
     color?: string; alpha?: number;
     strokeColor?: string; strokeWidth?: number; strokeAlpha?: number;
   }) {
-    const fill = opts.color ? new PIXI.Color(opts.color).toNumber() : null;
-    const stroke = opts.strokeColor ? new PIXI.Color(opts.strokeColor).toNumber() : null;
+    const fill = opts.color ? this._colorToNum(opts.color) : null;
+    const stroke = opts.strokeColor ? this._colorToNum(opts.strokeColor) : null;
     if (stroke !== null) this._fgGfx.lineStyle(opts.strokeWidth ?? 1, stroke, opts.strokeAlpha ?? 1);
     else this._fgGfx.lineStyle(0);
     if (fill !== null) this._fgGfx.beginFill(fill, opts.alpha ?? 1);
@@ -616,8 +639,8 @@ class GameCanvas {
     strokeColor?: string; strokeWidth?: number; strokeAlpha?: number;
     color?: string; alpha?: number;
   }) {
-    const stroke = opts.strokeColor ? new PIXI.Color(opts.strokeColor).toNumber() : null;
-    const fill = opts.color ? new PIXI.Color(opts.color).toNumber() : null;
+    const stroke = opts.strokeColor ? this._colorToNum(opts.strokeColor) : null;
+    const fill = opts.color ? this._colorToNum(opts.color) : null;
     if (stroke !== null) this._fgGfx.lineStyle(opts.strokeWidth ?? 1, stroke, opts.strokeAlpha ?? 1);
     else this._fgGfx.lineStyle(0);
     if (fill !== null) this._fgGfx.beginFill(fill, opts.alpha ?? 1);
@@ -631,8 +654,8 @@ class GameCanvas {
     color?: string; alpha?: number;
     strokeColor?: string; strokeWidth?: number; strokeAlpha?: number;
   }) {
-    const fill = opts.color ? new PIXI.Color(opts.color).toNumber() : null;
-    const stroke = opts.strokeColor ? new PIXI.Color(opts.strokeColor).toNumber() : null;
+    const fill = opts.color ? this._colorToNum(opts.color) : null;
+    const stroke = opts.strokeColor ? this._colorToNum(opts.strokeColor) : null;
     if (stroke !== null) this._fgGfx.lineStyle(opts.strokeWidth ?? 1, stroke, opts.strokeAlpha ?? 1);
     else this._fgGfx.lineStyle(0);
     if (fill !== null) this._fgGfx.beginFill(fill, opts.alpha ?? 1);

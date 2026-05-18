@@ -530,6 +530,10 @@ MapleMap.update = function (msPerTick) {
   });
 };
 
+// Pre-allocated layer buckets — reused every frame, zero allocation after init.
+const _renderLayers: { objects: any[]; tiles: any[]; monsters: any[]; characters: any[]; npcs: any[] }[] =
+  Array.from({ length: 8 }, () => ({ objects: [], tiles: [], monsters: [], characters: [], npcs: [] }));
+
 MapleMap.render = function (
   canvas: GameCanvas,
   camera: CameraInterface,
@@ -541,26 +545,37 @@ MapleMap.render = function (
     return;
   }
 
-  currentMonsters = currentMonsters.filter((m) => !m.destroyed);
+  if (currentMonsters.some((m) => m.destroyed)) {
+    currentMonsters = currentMonsters.filter((m) => !m.destroyed);
+  }
   const draw = (obj: any) =>
     obj.draw(canvas, camera, lag, msPerTick, tdelta);
 
   this.backgrounds.filter((bg: Background) => !bg.front).forEach(draw);
 
-  for (let i = 0; i <= 7; i += 1) {
-    const inCurrentLayer = (obj: Obj) => obj.layer === i;
-    this.objects.filter(inCurrentLayer).forEach(draw);
-    this.tiles.filter(inCurrentLayer).forEach(draw);
-    this.monsters.filter(inCurrentLayer).forEach(draw);
-    this.characters.filter(inCurrentLayer).forEach(draw);
-    this.npcs.filter(inCurrentLayer).forEach(draw);
+  // Clear buckets from previous frame
+  for (let i = 0; i < 8; i++) {
+    const l = _renderLayers[i];
+    l.objects.length = 0; l.tiles.length = 0; l.monsters.length = 0;
+    l.characters.length = 0; l.npcs.length = 0;
+  }
+  // Partition into layer buckets — O(n) instead of O(n×8)
+  const inLayer = (o: any) => o.layer >= 0 && o.layer <= 7;
+  this.objects.forEach((o: any) => { if (inLayer(o)) _renderLayers[o.layer].objects.push(o); });
+  this.tiles.forEach((t: any) => { if (inLayer(t)) _renderLayers[t.layer].tiles.push(t); });
+  this.monsters.forEach((m: any) => { if (inLayer(m)) _renderLayers[m.layer].monsters.push(m); });
+  this.characters.forEach((c: any) => { if (inLayer(c)) _renderLayers[c.layer].characters.push(c); });
+  this.npcs.forEach((n: any) => { if (inLayer(n)) _renderLayers[n.layer].npcs.push(n); });
+  for (let i = 0; i < 8; i++) {
+    const l = _renderLayers[i];
+    l.objects.forEach(draw); l.tiles.forEach(draw); l.monsters.forEach(draw);
+    l.characters.forEach(draw); l.npcs.forEach(draw);
   }
 
-  const notInAnyLayer = (obj: any) => !(obj.layer >= 0 && obj.layer <= 7);
-  currentMonsters.filter(notInAnyLayer).forEach(draw);
-  this.monsters.filter(notInAnyLayer).forEach(draw);
-  this.characters.filter(notInAnyLayer).forEach(draw);
-  this.npcs.filter(notInAnyLayer).forEach(draw);
+  currentMonsters.filter((m: any) => !inLayer(m)).forEach(draw);
+  this.monsters.filter((m: any) => !inLayer(m)).forEach(draw);
+  this.characters.filter((c: any) => !inLayer(c)).forEach(draw);
+  this.npcs.filter((n: any) => !inLayer(n)).forEach(draw);
 
   this.portals.forEach(draw);
   this.backgrounds.filter((bg: Background) => !!bg.front).forEach(draw);
@@ -604,7 +619,8 @@ MapleMap.render = function (
   });
 
   // Hit flash effects
-  const hitNow = Date.now();
+  const now = Date.now();
+  const hitNow = now;
   if ((this as any).hitEffects) {
     (this as any).hitEffects = (this as any).hitEffects.filter((e: any) => hitNow - e.startTime < e.duration);
     (this as any).hitEffects.forEach((e: any) => {
@@ -632,11 +648,10 @@ MapleMap.render = function (
     else if (m.statusMask & 0x200) canvas.drawText({ text: '❄', x: mx - 4, y: my, color: '#44AAFF' });
     else if (m.statusMask & 0x400) canvas.drawText({ text: '☠', x: mx - 4, y: my, color: '#44FF44' });
     // Clear expired status
-    if (m.statusExpiry && Date.now() > m.statusExpiry) m.statusMask = 0;
+    if (m.statusExpiry && now > m.statusExpiry) m.statusMask = 0;
   });
 
   // Mist clouds (poison, smoke)
-  const now = Date.now();
   if ((this as any).mists) {
     (this as any).mists = (this as any).mists.filter((m: any) => now < m.expiry);
     (this as any).mists.forEach((mist: any) => {

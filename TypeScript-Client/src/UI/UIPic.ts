@@ -1,11 +1,38 @@
 import NXManager from '../wz-utils/NXManager';
 import GameCanvas from '../GameCanvas';
 import ClickManager from './ClickManager';
-import { MapleStanceButton, BUTTON_STANCE } from './MapleStanceButton';
+import { MapleStanceButton } from './MapleStanceButton';
 import MapleInput from './MapleInput';
 import { CameraInterface } from '../Camera';
 
 type Mode = 'enter' | 'register_first' | 'register_confirm';
+
+// SoftKey dialog dimensions
+// Bottom digit row y = 95 + 3*43 = 224; need ~50px below for OK/Cancel
+const SK_W = 215;
+const SK_H = 280;
+
+// Positioned in upper-center — keeps row 4 above character-name bars (y~440)
+const SK_X = Math.floor((800 - SK_W) / 2);  // 292
+const SK_Y = 100;  // top of dialog at y=100, bottom at 380, row4 at y=324
+
+// keypos(index, row): position of digit button relative to SoftKey top-left
+// Row 0 starts at y=95, rows spaced 43px. Columns start at x=27, spaced 45px.
+// Row 3 (digit 0) has extra +90 offset.
+function keypos(index: number, row: number): { x: number; y: number } {
+  let x = index * 45;
+  const y = row * 43;
+  if (row === 3) x += 45 * 2;
+  return { x: SK_X + 27 + x, y: SK_Y + 95 + y };
+}
+
+// Digit → (index, row) mapping — 3×3 grid for 1-9, row 3 for 0
+const DIGIT_MAP: Record<number, [number, number]> = {
+  1: [0, 0], 2: [1, 0], 3: [2, 0],
+  4: [0, 1], 5: [1, 1], 6: [2, 1],
+  7: [0, 2], 8: [1, 2], 9: [2, 2],
+  0: [0, 3],
+};
 
 interface UIPicState {
   visible: boolean;
@@ -37,13 +64,6 @@ const UIPic: UIPicState = {
   initialized: false,
 };
 
-// SoftKey sits at fixed screen position
-const SK_X = 201;  // screen x of SoftKey background
-const SK_Y = 166;  // screen y of SoftKey background
-const INPUT_X = 280;
-const INPUT_Y = 215;
-const INPUT_W = 140;
-
 export async function initUIPic(canvas: GameCanvas): Promise<void> {
   if (UIPic.initialized) return;
   UIPic.initialized = true;
@@ -54,35 +74,40 @@ export async function initUIPic(canvas: GameCanvas): Promise<void> {
 
   UIPic.bgImg = sk.nGet('backgrnd')?.nGetImage?.() ?? sk.nGet('0')?.nGetImage?.();
 
-  // BtOK
+  // Control buttons — placed at bottom-right of SoftKey using HeavenMS layout
+  // BtOK: right-bottom, BtCancel: left of OK, BtDel: above those
+  const btOkNode   = sk.nGet('BtOK');
+  const btCancelNode = sk.nGet('BtCancel');
+  const btDelNode  = sk.nGet('BtDel');
+
+  // Row 3: y = 95 + 3*43 = 224 within SoftKey → absolute SK_Y+224
+  // Layout: [Cancel][0][Del-arrow][OK]  — cancel leftmost, ok rightmost
+  const ctrlY   = SK_Y + 224;
+  const cancelX = SK_X + 27;   // leftmost column
+  // digit 0 stays at keypos(0,3) = SK_X+117 (middle)
+  const delX    = SK_X + 162;  // Del (backspace ←) at row 2 rightmost, reused for row 3
+  const okX     = SK_X + 162;  // OK rightmost column, row 3
+
   UIPic.btOk = new MapleStanceButton(canvas, {
-    x: SK_X + 201,
-    y: SK_Y + 144,
-    img: sk.nGet('BtOK')?.nChildren ?? [],
-    isPartOfUI: true,
-    isHidden: true,
+    x: okX, y: ctrlY,
+    img: btOkNode?.nChildren ?? [],
+    isPartOfUI: true, isHidden: true,
     onClick: () => _confirm(canvas),
   });
   ClickManager.addButton(UIPic.btOk);
 
-  // BtCancel
   UIPic.btCancel = new MapleStanceButton(canvas, {
-    x: SK_X + 159,
-    y: SK_Y + 144,
-    img: sk.nGet('BtCancel')?.nChildren ?? [],
-    isPartOfUI: true,
-    isHidden: true,
+    x: cancelX, y: ctrlY,
+    img: btCancelNode?.nChildren ?? [],
+    isPartOfUI: true, isHidden: true,
     onClick: () => hide(),
   });
   ClickManager.addButton(UIPic.btCancel);
 
-  // BtDel
   UIPic.btDel = new MapleStanceButton(canvas, {
-    x: SK_X + 203,
-    y: SK_Y + 116,
-    img: sk.nGet('BtDel')?.nChildren ?? [],
-    isPartOfUI: true,
-    isHidden: true,
+    x: delX, y: ctrlY - 43,  // row 2 right side (43px above row 3)
+    img: btDelNode?.nChildren ?? [],
+    isPartOfUI: true, isHidden: true,
     onClick: () => {
       if (!UIPic.input) return;
       const v = UIPic.input.input.value;
@@ -91,33 +116,19 @@ export async function initUIPic(canvas: GameCanvas): Promise<void> {
   });
   ClickManager.addButton(UIPic.btDel);
 
-  // BtNum 0-9
-  const numPositions = [
-    [SK_X + 22,  SK_Y + 116], // 0
-    [SK_X + 22,  SK_Y + 55],  // 1
-    [SK_X + 68,  SK_Y + 55],  // 2
-    [SK_X + 113, SK_Y + 55],  // 3
-    [SK_X + 22,  SK_Y + 85],  // 4
-    [SK_X + 68,  SK_Y + 85],  // 5
-    [SK_X + 113, SK_Y + 85],  // 6
-    [SK_X + 68,  SK_Y + 116], // 7
-    [SK_X + 113, SK_Y + 116], // 8
-    [SK_X + 159, SK_Y + 55],  // 9
-  ];
-
+  // Digit buttons 0-9 using keypos formula
   const btNumNode = sk.nGet('BtNum');
-  for (let i = 0; i <= 9; i++) {
-    const [bx, by] = numPositions[i];
-    const digit = String(i);
+  for (const [digit, [idx, row]] of Object.entries(DIGIT_MAP)) {
+    const d = Number(digit);
+    const pos = keypos(idx, row);
     const btn = new MapleStanceButton(canvas, {
-      x: bx, y: by,
-      img: btNumNode?.nGet(String(i))?.nChildren ?? [],
-      isPartOfUI: true,
-      isHidden: true,
+      x: pos.x, y: pos.y,
+      img: btNumNode?.nGet(String(d))?.nChildren ?? [],
+      isPartOfUI: true, isHidden: true,
       onClick: () => {
         if (!UIPic.input) return;
         const v = UIPic.input.input.value;
-        if (v.length < 6) UIPic.input.input.value = v + digit;
+        if (v.length < 6) UIPic.input.input.value = v + String(d);
       },
     });
     ClickManager.addButton(btn);
@@ -148,7 +159,7 @@ function _confirm(canvas: GameCanvas) {
   } else {
     if (val !== UIPic.firstPic) {
       UIPic.input!.input.value = '';
-      UIPic.input!.input.placeholder = 'PICs did not match';
+      UIPic.input!.input.placeholder = 'Mismatch — try again';
       return;
     }
     const confirmed = UIPic.firstPic;
@@ -170,22 +181,21 @@ export function showPic(
 
   if (UIPic.input) { UIPic.input.remove(); UIPic.input = null; }
 
+  // Input overlaid in the text-display area of SoftKey (top of dialog)
   UIPic.input = new MapleInput(canvas, {
-    x: INPUT_X,
-    y: INPUT_Y,
-    width: INPUT_W,
+    x: SK_X + 5,
+    y: SK_Y + 58,
+    width: SK_W - 10,
     height: 20,
     color: '#222222',
     type: 'password',
-    focusListeners: [],
-    focusoutListeners: [],
     submitListeners: [() => _confirm(canvas)],
   });
   UIPic.input.input.maxLength = 6;
-  UIPic.input.input.placeholder = mode === 'register' ? 'Enter new PIC (6 digits)' : 'Enter PIC';
+  UIPic.input.input.style.opacity = '0'; // hide raw input — we draw dots instead
 
   _setVisible(true);
-  UIPic.input.input.focus();
+  setTimeout(() => UIPic.input?.input.focus(), 50);
 }
 
 export function hide() {
@@ -198,39 +208,41 @@ export function drawUIPic(canvas: GameCanvas, _camera: CameraInterface) {
   if (!UIPic.visible) return;
 
   // Dim overlay
-  canvas.drawRect({ x: 0, y: 0, width: 800, height: 600, color: '#000000', alpha: 0.5 });
+  canvas.drawRect({ x: 0, y: 0, width: 800, height: 600, color: '#000000', alpha: 0.55 });
 
-  // SoftKey background
-  if (UIPic.bgImg?.width) {
+  // SoftKey background from WZ
+  if (UIPic.bgImg?.width > 1) {
     canvas.drawImage({ img: UIPic.bgImg, dx: SK_X, dy: SK_Y });
   } else {
-    canvas.drawRoundedRect({ x: SK_X, y: SK_Y, width: 265, height: 185, radius: 6,
-      color: '#1a1a2e', alpha: 0.97, strokeColor: '#556688', strokeWidth: 1 });
+    // Fallback panel
+    canvas.drawRoundedRect({ x: SK_X, y: SK_Y, width: SK_W, height: SK_H, radius: 6,
+      color: '#1e1e30', alpha: 0.97, strokeColor: '#556688', strokeWidth: 1 });
   }
 
-  // Label
-  const label = UIPic.mode === 'register_first'
-    ? 'Set new PIC (6 digits)'
-    : UIPic.mode === 'register_confirm'
-    ? 'Confirm PIC'
+  // Label at top of SoftKey
+  const label = UIPic.mode === 'register_first' ? 'Set new PIC (6 digits)'
+    : UIPic.mode === 'register_confirm' ? 'Confirm PIC'
     : 'Enter PIC';
-  canvas.drawText({ text: label, x: SK_X + 132, y: SK_Y + 22, color: '#ffffff', fontSize: 11, align: 'center' });
+  canvas.drawText({ text: label, x: SK_X + SK_W / 2, y: SK_Y + 20,
+    color: '#ffffff', fontSize: 11, align: 'center' });
 
-  // Dot display (show filled circles per digit entered)
+  // Dot indicator (filled = entered, empty = not yet)
   const entered = UIPic.input?.input.value?.length ?? 0;
+  const dotStartX = SK_X + SK_W / 2 - (6 * 14) / 2 + 7;
+  const dotY = SK_Y + 65;
   for (let i = 0; i < 6; i++) {
-    const dotX = SK_X + 75 + i * 20;
-    const dotY = SK_Y + 42;
+    const dx = dotStartX + i * 14;
     if (i < entered) {
-      canvas.drawCircle({ x: dotX, y: dotY, radius: 5, color: '#4488ff' });
+      canvas.drawCircle({ x: dx, y: dotY, radius: 5, color: '#5599ff' });
     } else {
-      canvas.drawCircle({ x: dotX, y: dotY, radius: 5, strokeColor: '#888888', strokeWidth: 1 });
+      canvas.drawCircle({ x: dx, y: dotY, radius: 5, strokeColor: '#888888', strokeWidth: 1 });
     }
   }
 
   // Draw buttons
-  UIPic.btOk?.draw(canvas, { x: 0, y: 0 } as any, 0, 0, 0);
-  UIPic.btCancel?.draw(canvas, { x: 0, y: 0 } as any, 0, 0, 0);
-  UIPic.btDel?.draw(canvas, { x: 0, y: 0 } as any, 0, 0, 0);
-  UIPic.btNums.forEach(b => b.draw(canvas, { x: 0, y: 0 } as any, 0, 0, 0));
+  const cam = { x: 0, y: 0 } as CameraInterface;
+  UIPic.btOk?.draw(canvas, cam, 0, 0, 0);
+  UIPic.btCancel?.draw(canvas, cam, 0, 0, 0);
+  UIPic.btDel?.draw(canvas, cam, 0, 0, 0);
+  UIPic.btNums.forEach(b => b.draw(canvas, cam, 0, 0, 0));
 }

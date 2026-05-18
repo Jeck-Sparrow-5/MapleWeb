@@ -41,6 +41,9 @@ class Monster {
   hp: number = 0;
   mp: number = 0;
   name: string = "";
+  _cachedNameWidth: number = -1;
+  _cachedLevelWidth: number = -1;
+  _cachedLevelTag: string = '';
   DamageIndicator: any = null;
   destroyed: boolean = false;
   height: number = 0;
@@ -533,9 +536,10 @@ async addDrops() {
       color: "#ffffff",
       align: "center",
     };
-    const nameWidth = Math.ceil(
-      canvas.measureText(nameOpts).width + tagPadding
-    );
+    if (this._cachedNameWidth < 0) {
+      this._cachedNameWidth = Math.ceil(canvas.measureText(nameOpts).width + tagPadding);
+    }
+    const nameWidth = this._cachedNameWidth;
     const nameTagX = Math.round(this.pos.x - camera.x - nameWidth / 2);
 
     canvas.drawRect({
@@ -558,9 +562,11 @@ async addDrops() {
       color: "#ffffff",
       align: "center",
     };
-    const levelWidth = Math.ceil(
-      canvas.measureText(levelOpts).width + tagPadding
-    );
+    if (this._cachedLevelTag !== levelTagText) {
+      this._cachedLevelWidth = Math.ceil(canvas.measureText(levelOpts).width + tagPadding);
+      this._cachedLevelTag = levelTagText;
+    }
+    const levelWidth = this._cachedLevelWidth;
     const levelTagX = Math.round(this.pos.x - camera.x - levelWidth / 2);
 
     canvas.drawRect({

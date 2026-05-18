@@ -72,6 +72,8 @@ class MapleCharacter {
   pos: Physics;
   bodyRects: any = [];
   bodyStartPoistion: any = { x: 0, y: 0 };
+  _cachedNameWidth: number = -1;
+  _cachedNameStr: string = '';
   isInAttack: boolean = false;
   currentAttackStance: string = 'swingO1';
   _npcLocked: boolean = false;
@@ -1136,7 +1138,7 @@ isCloseToMob = (inAllDirections = true) => {
       armOverWeapon:            114,
     };
 
-    const addFrame = (p: any, vslot: any) => {
+    const addFrame = (p: any, vslot: any, isExtraEquip: boolean) => {
       try {
         p.nResolveUOL();
       } catch (ex) {
@@ -1208,7 +1210,7 @@ isCloseToMob = (inAllDirections = true) => {
       } else {
         zIdx = baseZ;               // unknown body/hair/face layer: zmap
       }
-      drawableFrames.push({ img: part.nGetImage(), z: zIdx, x, y });
+      drawableFrames.push({ img: part.nGetImage(), z: zIdx, x, y, isExtraEquip });
     };
 
     const imgs = [
@@ -1225,7 +1227,7 @@ isCloseToMob = (inAllDirections = true) => {
       imgs.push(...equips);
     }
 
-    imgs.forEach((img) => {
+    imgs.forEach((img, imgIdx) => {
       if (!img) {
         return;
       }
@@ -1254,7 +1256,8 @@ isCloseToMob = (inAllDirections = true) => {
 
       const drawableImgParts = imgParts.filter(isDrawable);
 
-      drawableImgParts.forEach((p: any) => addFrame(p, imgVslot));
+      const isExtraEquip = imgIdx >= 6;
+      drawableImgParts.forEach((p: any) => addFrame(p, imgVslot, isExtraEquip));
     });
 
     drawableFrames.sort((a: any, b: any) => a.z - b.z);
@@ -1329,13 +1332,7 @@ isCloseToMob = (inAllDirections = true) => {
       frameIsFlipped
     );
 
-    // this is inefficient to call everything just to get it without equips, but it's temporary
-    const drawableBodyFrames = this.getDrawableFrames(
-      this.stance,
-      this.frame,
-      frameIsFlipped,
-      false
-    );
+    const drawableBodyFrames = drawableFrames.filter((f: any) => !f.isExtraEquip);
 
     const mx = imgdir.nGet("move")?.nGet("nX", 0) ?? 0;
     const moveX = !characterIsFlipped ? mx : -mx;
@@ -1420,9 +1417,11 @@ isCloseToMob = (inAllDirections = true) => {
       color: "#ffffff",
       align: "center",
     };
-    const nameWidth = Math.ceil(
-      canvas.measureText(nameOpts).width + tagPadding
-    );
+    if (this.name !== this._cachedNameStr) {
+      this._cachedNameWidth = Math.ceil(canvas.measureText(nameOpts).width + tagPadding);
+      this._cachedNameStr = this.name;
+    }
+    const nameWidth = this._cachedNameWidth;
     const nameTagX = Math.round(this.pos.x - camera.x - nameWidth / 2);
     canvas.drawRect({
       x: nameTagX,

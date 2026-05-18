@@ -5,6 +5,7 @@ import { JobsMainType } from '../Constants/Jobs';
 import { Character } from '../Net/Models/Character';
 import GameCanvas from '../GameCanvas';
 import { CameraInterface } from '../Camera';
+import Randomizer from '../Tools/Randomizer';
 
 // Cache of MapleCharacter preview instances keyed by characterId
 const previewCache = new Map<number, MapleCharacter>();
@@ -16,16 +17,20 @@ function updateBlink(id: number, mc: MapleCharacter): void {
   const now = Date.now();
   let state = blinkState.get(id);
   if (!state) {
-    state = { nextBlink: now + 2000 + Math.random() * 3000, blinkEnd: 0 };
+    // Stagger initial blink per character so they don't all blink together
+    state = { nextBlink: now + Randomizer.getRandomInteger(2000, 5000), blinkEnd: 0 };
     blinkState.set(id, state);
   }
   if (now < state.blinkEnd) {
-    (mc as any).setFaceExpr?.('blink', 0);
+    // cycle through blink frames 0→1→2 over the 150ms blink duration
+    const elapsed = now - (state.blinkEnd - 150);
+    const blinkFrame = Math.min(2, Math.floor(elapsed / 50));
+    (mc as any).setFaceExpr?.('blink', blinkFrame);
   } else {
     (mc as any).setFaceExpr?.('default', 0);
     if (now >= state.nextBlink) {
-      state.blinkEnd   = now + 150;
-      state.nextBlink  = now + 3000 + Math.random() * 3000;
+      state.blinkEnd  = now + 150;
+      state.nextBlink = now + Randomizer.getRandomInteger(3000, 6000);
     }
   }
 }
@@ -82,6 +87,7 @@ export async function getPreview(char: Character): Promise<MapleCharacter | null
 
 export function clearCache() {
   previewCache.clear();
+  blinkState.clear();
 }
 
 export async function drawPreview(
@@ -112,6 +118,7 @@ export async function drawPreview(
     (mc as any).advanceFrame?.();
   }
 
+  updateBlink(char.stat.characterId, mc);
   mc.draw(canvas, camera, 0, msPerTick, 0);
 
   if (mc.pos) { mc.pos.x = origX; mc.pos.y = origY; }

@@ -1077,8 +1077,12 @@ isCloseToMob = (inAllDirections = true) => {
       n.nTagName === "canvas" || n.nTagName === "uol";
     const getParts = (img: any) =>
       img.nGet(realStance)?.nGet(realFrame)?.nChildren ?? [];
-    const getFParts = (img: any) =>
-      img.nGet(faceExpr)?.nGet(faceFrame)?.nChildren ?? [];
+    const getFParts = (img: any) => {
+      const exprNode = img.nGet(faceExpr);
+      const frameNode = exprNode?.nGet(faceFrame);
+      // Some expressions (e.g. "default") have no numbered frames — use expr children directly
+      return frameNode?.nChildren ?? exprNode?.nChildren ?? [];
+    };
 
     const twoChars = /.{1,2}/g;
     const [hat, faceAcc, ...equips] = this.equips;
@@ -1104,6 +1108,7 @@ isCloseToMob = (inAllDirections = true) => {
     const drawableFrames: any = [];
     const baseImgs = new Set([this.body, this.head, this.Hair, this.Face]);
     let _fromEquip = false;
+    let _isFace = false;
 
     // Explicit z overrides based on HeavenMS layer order (back→front).
     // Applies to all parts (body + equip). Unknown equip layers use floor=50.
@@ -1192,6 +1197,8 @@ isCloseToMob = (inAllDirections = true) => {
       const zOverride = LAYER_Z[realZ];
       if (zOverride != null) {
         zIdx = zOverride;           // known layer — explicit position
+      } else if (_isFace) {
+        zIdx = LAYER_Z['face'];     // face parts always above head/body
       } else if (_fromEquip) {
         zIdx = Math.max(baseZ < 0 ? 0 : baseZ, 50); // unknown equip layer: floor between hair and head
       } else {
@@ -1219,10 +1226,11 @@ isCloseToMob = (inAllDirections = true) => {
         return;
       }
       _fromEquip = !baseImgs.has(img);
+      _isFace    = img === this.Face || img === faceAcc;
 
       const imgVslot = img.info?.vslot?.nValue ?? '';
       const isHead = img === this.head;
-      const isFace = img === this.Face || img === faceAcc;
+      const isFace = _isFace;
       const isHair = img === this.Hair;
 
       if (isFace && useBackHead) {

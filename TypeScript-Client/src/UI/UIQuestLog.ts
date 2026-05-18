@@ -147,12 +147,7 @@ class UIQuestLog extends DragableMenu {
     if (this.bgImg) {
       canvas.drawImage({ img: this.bgImg, dx: this.x, dy: this.y });
     } else {
-      canvas.context.save();
-      canvas.context.fillStyle = 'rgba(20,20,40,0.95)';
-      canvas.context.fillRect(this.x, this.y, this.W, this.H);
-      canvas.context.strokeStyle = '#557799';
-      canvas.context.strokeRect(this.x, this.y, this.W, this.H);
-      canvas.context.restore();
+      canvas.drawRect({ x: this.x, y: this.y, width: this.W, height: this.H, color: '#14142a', alpha: 0.95, strokeColor: '#557799', strokeWidth: 1 });
     }
 
     canvas.drawText({ text: 'Quest Log', color: '#FFDD88', x: this.x + 10, y: this.y + 14, fontSize: 12 });
@@ -160,10 +155,7 @@ class UIQuestLog extends DragableMenu {
     // Tabs
     (['active', 'completed'] as const).forEach((t, i) => {
       const tx = this.x + 8 + i * 115;
-      canvas.context.save();
-      canvas.context.fillStyle = this.tab === t ? 'rgba(80,100,160,0.9)' : 'rgba(40,40,70,0.8)';
-      canvas.context.fillRect(tx, this.y + 22, 108, 16);
-      canvas.context.restore();
+      canvas.drawRect({ x: tx, y: this.y + 22, width: 108, height: 16, color: this.tab === t ? '#5064a0' : '#282846', alpha: this.tab === t ? 0.9 : 0.8 });
       canvas.drawText({ text: t === 'active' ? 'In Progress' : 'Completed', color: '#FFFFFF', x: tx + 18, y: this.y + 32, fontSize: 10 });
     });
 
@@ -181,10 +173,7 @@ class UIQuestLog extends DragableMenu {
       const info = this.questInfoCache.get(q.id);
       const name = info?.name ?? q.name ?? `Quest ${q.id}`;
 
-      canvas.context.save();
-      canvas.context.fillStyle = isSelected ? 'rgba(100,130,200,0.8)' : 'transparent';
-      if (isSelected) canvas.context.fillRect(this.x + 6, qy - 2, this.W - 12, 20);
-      canvas.context.restore();
+      if (isSelected) canvas.drawRect({ x: this.x + 6, y: qy - 2, width: this.W - 12, height: 20, color: '#6482c8', alpha: 0.8 });
 
       const dot = q.state === 'completed' ? '✓' : '●';
       const dotColor = q.state === 'completed' ? '#88FF88' : '#FFAA44';
@@ -197,12 +186,7 @@ class UIQuestLog extends DragableMenu {
       const q = visible[this.selectedIndex];
       const info = this.questInfoCache.get(q.id);
       const detailY = this.y + 42 + topH + 8;
-      canvas.context.save();
-      canvas.context.fillStyle = 'rgba(15,15,35,0.85)';
-      canvas.context.fillRect(this.x + 6, detailY, this.W - 12, this.H - topH - 60);
-      canvas.context.strokeStyle = '#446688';
-      canvas.context.strokeRect(this.x + 6, detailY, this.W - 12, this.H - topH - 60);
-      canvas.context.restore();
+      canvas.drawRect({ x: this.x + 6, y: detailY, width: this.W - 12, height: this.H - topH - 60, color: '#0f0f23', alpha: 0.85, strokeColor: '#446688', strokeWidth: 1 });
 
       if (info) {
         canvas.drawText({ text: info.name, color: '#FFEE88', x: this.x + 10, y: detailY + 14, fontSize: 11 });

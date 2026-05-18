@@ -165,16 +165,9 @@ const UIOptionMenu = {
     const fillW = Math.round((value / 100) * sliderW);
 
     canvas.drawText({ text: label, color: '#CCCCCC', x: this.x + 15, y: y + 10, fontSize: 11 });
-    canvas.context.save();
-    canvas.context.fillStyle = 'rgba(40,50,80,0.8)';
-    canvas.context.fillRect(sliderX, y + 2, sliderW, 10);
-    canvas.context.fillStyle = '#4488CC';
-    canvas.context.fillRect(sliderX, y + 2, fillW, 10);
-    canvas.context.fillStyle = '#FFFFFF';
-    canvas.context.beginPath();
-    canvas.context.arc(sliderX + fillW, y + 7, 6, 0, Math.PI * 2);
-    canvas.context.fill();
-    canvas.context.restore();
+    canvas.drawRect({ x: sliderX, y: y + 2, width: sliderW, height: 10, color: '#283250', alpha: 0.8 });
+    canvas.drawRect({ x: sliderX, y: y + 2, width: fillW, height: 10, color: '#4488CC' });
+    canvas.drawCircle({ x: sliderX + fillW, y: y + 7, radius: 6, color: '#FFFFFF' });
     canvas.drawText({ text: `${value}%`, color: '#AAAAFF', x: sliderX + sliderW + 6, y: y + 10, fontSize: 10 });
   },
 };

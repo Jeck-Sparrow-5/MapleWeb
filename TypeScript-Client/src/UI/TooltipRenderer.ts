@@ -53,8 +53,7 @@ const TooltipRenderer = {
     const pad = 8;
     const lineH = 16;
     const maxW = Math.max(...lines.map((l) => {
-      canvas.context.font = '11px Arial';
-      return canvas.context.measureText(l.text).width;
+      return canvas.measureText({ text: l.text, fontSize: 11 }).width;
     }));
     const w = maxW + pad * 2;
     const h = lines.length * lineH + pad * 2;
@@ -63,20 +62,11 @@ const TooltipRenderer = {
     const tx = Math.min(x + 12, canvas.context.canvas.width - w - 4);
     const ty = Math.max(y - h - 4, 4);
 
-    canvas.context.save();
-    canvas.context.fillStyle = 'rgba(10,10,30,0.95)';
-    canvas.context.strokeStyle = '#557799';
-    canvas.context.lineWidth = 1;
-    canvas.context.fillRect(tx, ty, w, h);
-    canvas.context.strokeRect(tx, ty, w, h);
+    canvas.drawRect({ x: tx, y: ty, width: w, height: h, color: '#0A0A1E', alpha: 0.95, strokeColor: '#557799', strokeWidth: 1 });
 
     lines.forEach((line, i) => {
-      canvas.context.font = i === 0 ? 'bold 11px Arial' : '11px Arial';
-      canvas.context.fillStyle = line.color;
-      canvas.context.fillText(line.text, tx + pad, ty + pad + (i + 1) * lineH - 4);
+      canvas.drawText({ text: line.text, x: tx + pad, y: ty + pad + (i + 1) * lineH - 4, color: line.color, fontSize: 11, fontWeight: i === 0 ? 'bold' : 'normal' });
     });
-
-    canvas.context.restore();
   },
 };
 

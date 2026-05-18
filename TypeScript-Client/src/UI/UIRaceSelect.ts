@@ -173,7 +173,7 @@ const UIRaceSelect = {
 
 
     if (this._textGL) {
-      try { canvas.context.drawImage(this._textGL, Math.floor((800 - 182) / 2), 60, 182, 39); } catch (_) {}
+      try { canvas.drawImage({ img: this._textGL, dx: Math.floor((800 - 182) / 2), dy: 60, dw: 182, dh: 39 }); } catch (_) {}
     } else {
       canvas.drawText({ text: 'Select Race', color: '#FFDD88', x: 340, y: 85, fontSize: 16 });
     }
@@ -194,19 +194,16 @@ const UIRaceSelect = {
         img = imgs.normal;
       }
 
-      canvas.context.save();
       if (!race.available) {
         // Greyscale + dim for unavailable races (fallback if no disabled image)
         if (!imgs.disabled) canvas.context.filter = 'grayscale(80%) opacity(45%)';
       }
       if (img) {
-        try { canvas.context.drawImage(img, x, y, w, h); } catch (_) {}
+        try { canvas.drawImage({ img, dx: x, dy: y, dw: w, dh: h }); } catch (_) {}
       } else {
-        canvas.context.fillStyle = race.available ? 'rgba(40,55,100,0.8)' : 'rgba(30,30,40,0.6)';
-        canvas.context.fillRect(x, y, w, h);
+        canvas.drawRect({ x, y, width: w, height: h, color: race.available ? '#283764' : '#1e1e28', alpha: race.available ? 0.8 : 0.6 });
       }
       canvas.context.filter = 'none';
-      canvas.context.restore();
 
       canvas.drawText({
         text: race.label,
@@ -221,19 +218,14 @@ const UIRaceSelect = {
     const desc = this._raceText[textIdx];
     if (desc) {
       const dx = Math.floor((800 - 579) / 2);
-      try { canvas.context.drawImage(desc, dx, 358, 579, 163); } catch (_) {}
+      try { canvas.drawImage({ img: desc, dx, dy: 358, dw: 579, dh: 163 }); } catch (_) {}
     }
 
     this.buttons.forEach(b => b.draw(canvas, { x: 0, y: 0 } as any, 0, 0, 0));
 
     // Debug: show mouse coordinates — remove once layout is finalized
-    canvas.context.save();
-    canvas.context.fillStyle = 'rgba(0,0,0,0.6)';
-    canvas.context.fillRect(4, 4, 120, 18);
-    canvas.context.font = '11px monospace';
-    canvas.context.fillStyle = '#00FF88';
-    canvas.context.fillText(`x:${(canvas as any).mouseX ?? 0}  y:${(canvas as any).mouseY ?? 0}`, 8, 17);
-    canvas.context.restore();
+    canvas.drawRect({ x: 4, y: 4, width: 120, height: 18, color: '#000000', alpha: 0.6 });
+    canvas.drawText({ text: `x:${(canvas as any).mouseX ?? 0}  y:${(canvas as any).mouseY ?? 0}`, color: '#00FF88', x: 8, y: 17, fontSize: 11 });
   },
 };
 

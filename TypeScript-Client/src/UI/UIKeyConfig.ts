@@ -116,12 +116,7 @@ const UIKeyConfig = {
   draw(canvas: GameCanvas) {
     if (this.isHidden) return;
 
-    canvas.context.save();
-    canvas.context.fillStyle = 'rgba(20,20,40,0.95)';
-    canvas.context.fillRect(this.x, this.y, this.W, this.H);
-    canvas.context.strokeStyle = '#556688';
-    canvas.context.strokeRect(this.x, this.y, this.W, this.H);
-    canvas.context.restore();
+    canvas.drawRect({ x: this.x, y: this.y, width: this.W, height: this.H, color: '#141428', alpha: 0.95, strokeColor: '#556688', strokeWidth: 1 });
 
     canvas.drawText({ text: 'Key Configuration', color: '#FFDD88', x: this.x + 10, y: this.y + 14, fontSize: 12 });
     if (this.editingAction) {
@@ -132,10 +127,7 @@ const UIKeyConfig = {
       const ry = this.y + 40 + i * 25;
       const isEditing = this.editingAction === action;
       canvas.drawText({ text: action, color: '#CCCCCC', x: this.x + 10, y: ry, fontSize: 11 });
-      canvas.context.save();
-      canvas.context.fillStyle = isEditing ? 'rgba(100,130,200,0.8)' : 'rgba(40,50,80,0.7)';
-      canvas.context.fillRect(this.x + 160, ry - 11, 90, 16);
-      canvas.context.restore();
+      canvas.drawRect({ x: this.x + 160, y: ry - 11, width: 90, height: 16, color: isEditing ? '#6482c8' : '#283250', alpha: isEditing ? 0.8 : 0.7 });
       canvas.drawText({ text: isEditing ? '...' : key.toUpperCase(), color: '#FFFFFF', x: this.x + 165, y: ry, fontSize: 11 });
     });
 

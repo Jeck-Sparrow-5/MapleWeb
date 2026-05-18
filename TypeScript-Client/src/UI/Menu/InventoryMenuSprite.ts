@@ -686,10 +686,7 @@ class InventoryMenuSprite extends DragableMenu {
         // Still dragging — draw ghost at cursor
         const icon = getItemIconSync(this._dragItem.itemId);
         if (icon && mx !== undefined && my !== undefined) {
-          canvas.context.save();
-          canvas.context.globalAlpha = 0.7;
-          try { canvas.context.drawImage(icon, mx - 15, my - 15, 30, 30); } catch (_) {}
-          canvas.context.restore();
+          try { canvas.drawImage({ img: icon, dx: mx - 15, dy: my - 15, dw: 30, dh: 30, alpha: 0.7 }); } catch (_) {}
         }
       }
     }

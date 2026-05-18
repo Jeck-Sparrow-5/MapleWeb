@@ -94,12 +94,7 @@ class UIUserList extends DragableMenu {
     if (this.bgImg) {
       canvas.drawImage({ img: this.bgImg, dx: this.x, dy: this.y });
     } else {
-      canvas.context.save();
-      canvas.context.fillStyle = 'rgba(20,20,40,0.95)';
-      canvas.context.fillRect(this.x, this.y, this.W, this.H);
-      canvas.context.strokeStyle = '#556688';
-      canvas.context.strokeRect(this.x, this.y, this.W, this.H);
-      canvas.context.restore();
+      canvas.drawRect({ x: this.x, y: this.y, width: this.W, height: this.H, color: '#14141E', alpha: 0.95, strokeColor: '#556688', strokeWidth: 1 });
     }
 
     canvas.drawText({ text: 'Buddy List', color: '#FFDD88', x: this.x + 10, y: this.y + 14, fontSize: 12 });
@@ -112,14 +107,8 @@ class UIUserList extends DragableMenu {
     buddyList.slice(0, 14).forEach((entry, i) => {
       const ey = this.y + 28 + i * 25;
       const online = entry.channel >= 0;
-      canvas.context.save();
-      canvas.context.fillStyle = i === this.selectedIndex ? 'rgba(100,130,200,0.7)' : 'transparent';
-      if (i === this.selectedIndex) canvas.context.fillRect(this.x + 4, ey - 2, this.W - 8, 22);
-      canvas.context.fillStyle = online ? '#88FF88' : '#888888';
-      canvas.context.beginPath();
-      canvas.context.arc(this.x + 12, ey + 7, 5, 0, Math.PI * 2);
-      canvas.context.fill();
-      canvas.context.restore();
+      if (i === this.selectedIndex) canvas.drawRect({ x: this.x + 4, y: ey - 2, width: this.W - 8, height: 22, color: '#6482C8', alpha: 0.7 });
+      canvas.drawCircle({ x: this.x + 12, y: ey + 7, radius: 5, color: online ? '#88FF88' : '#888888' });
       canvas.drawText({ text: entry.name, color: online ? '#FFFFFF' : '#888888', x: this.x + 22, y: ey + 10, fontSize: 11 });
       if (online) {
         canvas.drawText({ text: `Ch.${entry.channel + 1}`, color: '#AACCAA', x: this.x + 200, y: ey + 10, fontSize: 9 });

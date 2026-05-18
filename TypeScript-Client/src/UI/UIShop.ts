@@ -161,22 +161,14 @@ class UIShop extends DragableMenu {
   draw(canvas: GameCanvas, camera: CameraInterface, lag: number, ms: number, td: number) {
     if (this.isHidden || !this.loaded) return;
 
-    canvas.context.save();
-    canvas.context.fillStyle = 'rgba(20,20,40,0.95)';
-    canvas.context.fillRect(this.x, this.y, this.W, this.H);
-    canvas.context.strokeStyle = '#557799';
-    canvas.context.strokeRect(this.x, this.y, this.W, this.H);
-    canvas.context.restore();
+    canvas.drawRect({ x: this.x, y: this.y, width: this.W, height: this.H, color: '#14141E', alpha: 0.95, strokeColor: '#557799', strokeWidth: 1 });
 
     canvas.drawText({ text: 'Shop', color: '#FFDD88', x: this.x + 10, y: this.y + 14, fontSize: 12 });
 
     // Tabs
     ['buy', 'sell'].forEach((t, i) => {
       const tx = this.x + 10 + i * 80;
-      canvas.context.save();
-      canvas.context.fillStyle = this.tab === t ? 'rgba(80,100,160,0.9)' : 'rgba(40,40,70,0.8)';
-      canvas.context.fillRect(tx, this.y + 22, 72, 16);
-      canvas.context.restore();
+      canvas.drawRect({ x: tx, y: this.y + 22, width: 72, height: 16, color: this.tab === t ? '#5064A0' : '#282846', alpha: this.tab === t ? 0.9 : 0.8 });
       canvas.drawText({ text: t.toUpperCase(), color: '#FFFFFF', x: tx + 20, y: this.y + 32, fontSize: 10 });
     });
 
@@ -186,13 +178,10 @@ class UIShop extends DragableMenu {
     visible.forEach((item, i) => {
       const iy = this.y + 42 + i * 32;
       const selected = i === this.selectedIndex;
-      canvas.context.save();
-      canvas.context.fillStyle = selected ? 'rgba(100,130,200,0.8)' : 'rgba(40,50,80,0.7)';
-      canvas.context.fillRect(this.x + 6, iy, this.W - 12, 28);
-      canvas.context.restore();
+      canvas.drawRect({ x: this.x + 6, y: iy, width: this.W - 12, height: 28, color: selected ? '#6482C8' : '#283250', alpha: selected ? 0.8 : 0.7 });
       const shopIcon = item.icon ?? getItemIconSync(item.itemId);
       if (shopIcon) {
-        try { canvas.context.drawImage(shopIcon, this.x + 8, iy + 1, 26, 26); } catch (_) {}
+        try { canvas.drawImage({ img: shopIcon, dx: this.x + 8, dy: iy + 1, dw: 26, dh: 26 }); } catch (_) {}
       }
       canvas.drawText({ text: item.name.substring(0, 22), color: '#FFFFFF', x: this.x + 36, y: iy + 11, fontSize: 10 });
       canvas.drawText({ text: `${item.price} meso`, color: '#FFEE66', x: this.x + 36, y: iy + 22, fontSize: 9 });

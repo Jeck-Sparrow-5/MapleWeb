@@ -199,14 +199,7 @@ const UICashShop = {
     if (this.isHidden) return;
 
     // Background
-    canvas.context.save();
-    canvas.context.fillStyle = 'rgba(8,12,28,0.98)';
-    canvas.context.fillRect(this.x, this.y, this.W, this.H);
-    canvas.context.strokeStyle = '#AA8833';
-    canvas.context.lineWidth = 2;
-    canvas.context.strokeRect(this.x, this.y, this.W, this.H);
-    canvas.context.lineWidth = 1;
-    canvas.context.restore();
+    canvas.drawRect({ x: this.x, y: this.y, width: this.W, height: this.H, color: '#08081C', alpha: 0.98, strokeColor: '#AA8833', strokeWidth: 2 });
 
     // Title
     canvas.drawText({ text: '✦ CASH SHOP ✦', color: '#FFDD44', x: this.x + 10, y: this.y + 18, fontSize: 14 });
@@ -219,20 +212,12 @@ const UICashShop = {
     CATEGORIES.forEach((cat, i) => {
       const tx = this.x + 140 + i * 110;
       const active = this.activeTab === cat;
-      canvas.context.save();
-      canvas.context.fillStyle = active ? 'rgba(180,140,40,0.9)' : 'rgba(40,50,80,0.8)';
-      canvas.context.fillRect(tx, this.y + 28, 106, 20);
-      canvas.context.strokeStyle = active ? '#FFCC44' : '#334466';
-      canvas.context.strokeRect(tx, this.y + 28, 106, 20);
-      canvas.context.restore();
+      canvas.drawRect({ x: tx, y: this.y + 28, width: 106, height: 20, color: active ? '#B48C28' : '#283250', alpha: active ? 0.9 : 0.8, strokeColor: active ? '#FFCC44' : '#334466', strokeWidth: 1 });
       canvas.drawText({ text: cat, color: active ? '#000000' : '#AAAACC', x: tx + 10, y: this.y + 41, fontSize: 10 });
     });
 
     // Sidebar (categories)
-    canvas.context.save();
-    canvas.context.fillStyle = 'rgba(20,25,50,0.9)';
-    canvas.context.fillRect(this.x + 4, this.y + 50, 130, this.H - 90);
-    canvas.context.restore();
+    canvas.drawRect({ x: this.x + 4, y: this.y + 50, width: 130, height: this.H - 90, color: '#141932', alpha: 0.9 });
 
     canvas.drawText({ text: 'Categories', color: '#FFCC44', x: this.x + 10, y: this.y + 66, fontSize: 10 });
     CATEGORIES.forEach((cat, i) => {
@@ -262,24 +247,18 @@ const UICashShop = {
       const cx = gridX + col * cellW; const cy = gridY + row * cellH;
       const isSelected = i === this.selectedIdx;
 
-      canvas.context.save();
-      canvas.context.fillStyle = isSelected ? 'rgba(180,140,20,0.3)' : 'rgba(20,25,50,0.8)';
-      canvas.context.strokeStyle = isSelected ? '#FFCC44' : '#334466';
-      canvas.context.fillRect(cx, cy, cellW - 4, cellH - 4);
-      canvas.context.strokeRect(cx, cy, cellW - 4, cellH - 4);
+      canvas.drawRect({ x: cx, y: cy, width: cellW - 4, height: cellH - 4, color: isSelected ? '#B48C14' : '#141932', alpha: isSelected ? 0.3 : 0.8, strokeColor: isSelected ? '#FFCC44' : '#334466', strokeWidth: 1 });
 
       // Item icon
       const icon = item.icon ?? getItemIconSync(item.itemId);
       if (icon) {
-        try { canvas.context.drawImage(icon, cx + 44, cy + 8, 40, 40); } catch (_) {}
+        try { canvas.drawImage({ img: icon, dx: cx + 44, dy: cy + 8, dw: 40, dh: 40 }); } catch (_) {}
       } else {
-        canvas.context.fillStyle = '#223355';
-        canvas.context.fillRect(cx + 44, cy + 8, 40, 40);
+        canvas.drawRect({ x: cx + 44, y: cy + 8, width: 40, height: 40, color: '#223355' });
       }
 
       // Item name (truncated)
       const name = item.name.length > 14 ? item.name.substring(0, 13) + '…' : item.name;
-      canvas.context.restore();
       canvas.drawText({ text: name, color: '#FFFFFF', x: cx + (cellW - 4) / 2, y: cy + 56, fontSize: 9, align: 'center' } as any);
       canvas.drawText({ text: `${item.price} NX`, color: '#FFAA00', x: cx + (cellW - 4) / 2, y: cy + 70, fontSize: 9, align: 'center' } as any);
     });

@@ -153,12 +153,7 @@ class UIStorage extends DragableMenu {
     if (this.bgImg) {
       canvas.drawImage({ img: this.bgImg, dx: this.x, dy: this.y });
     } else {
-      canvas.context.save();
-      canvas.context.fillStyle = 'rgba(20,20,40,0.95)';
-      canvas.context.fillRect(this.x, this.y, this.W, this.H);
-      canvas.context.strokeStyle = '#557799';
-      canvas.context.strokeRect(this.x, this.y, this.W, this.H);
-      canvas.context.restore();
+      canvas.drawRect({ x: this.x, y: this.y, width: this.W, height: this.H, color: '#14141E', alpha: 0.95, strokeColor: '#557799', strokeWidth: 1 });
     }
 
     canvas.drawText({ text: 'Storage', color: '#FFDD88', x: this.x + 10, y: this.y + 14, fontSize: 12 });
@@ -177,32 +172,20 @@ class UIStorage extends DragableMenu {
         const isSelected = idx === this.selectedSlot;
         const item = this.items[idx];
 
-        canvas.context.save();
-        canvas.context.fillStyle = isSelected ? 'rgba(100,130,200,0.8)' : 'rgba(40,50,80,0.7)';
-        canvas.context.strokeStyle = isSelected ? '#AADDFF' : '#334455';
-        canvas.context.fillRect(sx, sy, slotSize, slotSize);
-        canvas.context.strokeRect(sx, sy, slotSize, slotSize);
+        canvas.drawRect({ x: sx, y: sy, width: slotSize, height: slotSize, color: isSelected ? '#6482C8' : '#283250', alpha: isSelected ? 0.8 : 0.7, strokeColor: isSelected ? '#AADDFF' : '#334455', strokeWidth: 1 });
 
         if (item) {
           const icon = getItemIconSync(item.itemId);
           if (icon) {
-            try { canvas.context.drawImage(icon, sx + 2, sy + 2, slotSize - 4, slotSize - 4); } catch (_) {}
+            try { canvas.drawImage({ img: icon, dx: sx + 2, dy: sy + 2, dw: slotSize - 4, dh: slotSize - 4 }); } catch (_) {}
           } else {
-            canvas.context.fillStyle = '#334466';
-            canvas.context.fillRect(sx + 2, sy + 2, slotSize - 4, slotSize - 4);
-            canvas.context.fillStyle = '#AAAAFF';
-            canvas.context.font = '7px Arial';
-            canvas.context.fillText(`${item.itemId}`.slice(-4), sx + 2, sy + 14);
+            canvas.drawRect({ x: sx + 2, y: sy + 2, width: slotSize - 4, height: slotSize - 4, color: '#334466' });
+            canvas.drawText({ text: `${item.itemId}`.slice(-4), x: sx + 2, y: sy + 14, color: '#AAAAFF', fontSize: 7 });
           }
           if (item.quantity > 1) {
-            canvas.context.fillStyle = '#FFFF66';
-            canvas.context.font = '8px Arial';
-            canvas.context.textAlign = 'right';
-            canvas.context.fillText(`${item.quantity}`, sx + slotSize - 2, sy + slotSize - 2);
-            canvas.context.textAlign = 'left';
+            canvas.drawText({ text: `${item.quantity}`, x: sx + slotSize - 2, y: sy + slotSize - 2, color: '#FFFF66', fontSize: 8, align: 'right' });
           }
         }
-        canvas.context.restore();
       }
     }
 

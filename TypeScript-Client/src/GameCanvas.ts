@@ -19,12 +19,20 @@ class GameCanvas {
 
   // PixiJS renderer
   _pixiApp: PIXI.Application;
-  _texCache: WeakMap<HTMLImageElement, PIXI.Texture> = new WeakMap();
+  _texCache: WeakMap<any, PIXI.Texture> = new WeakMap();
+  _updatedThisFrame: Set<PIXI.BaseTexture> = new Set();
+  _texUpdateCount: WeakMap<PIXI.BaseTexture, number> = new WeakMap();
+  // Three fixed layers — bg → sprites → fg (HP bars, text, UI)
+  _bgLayer: PIXI.Container = new PIXI.Container();
+  _spriteLayer: PIXI.Container = new PIXI.Container();
+  _fgLayer: PIXI.Container = new PIXI.Container();
   _spritePool: PIXI.Sprite[] = [];
   _spriteIdx: number = 0;
-  _gfx: PIXI.Graphics = new PIXI.Graphics();   // single batched graphics object
+  _bgGfx: PIXI.Graphics = new PIXI.Graphics();
+  _fgGfx: PIXI.Graphics = new PIXI.Graphics();
   _textPool: PIXI.Text[] = [];
   _textIdx: number = 0;
+  _styleCache: Map<string, PIXI.TextStyle> = new Map();
 
   constructor(gameWrapper: HTMLElement) {
     this.scaleX = 1;
@@ -127,7 +135,7 @@ class GameCanvas {
     this._pixiApp = new PIXI.Application({
       width: this.game.width,
       height: this.game.height,
-      backgroundAlpha: 0,
+      backgroundColor: 0x000000,  // native black fill — no drawRect needed
       antialias: false,
       autoStart: false,
       resolution: 1,
@@ -137,25 +145,39 @@ class GameCanvas {
     pixiCanvas.style.top = '0';
     pixiCanvas.style.left = '0';
     pixiCanvas.style.pointerEvents = 'none';
-    // 2D overlay on top (transparent background, receives pointer events)
     this.game.style.position = 'absolute';
     this.game.style.top = '0';
     this.game.style.left = '0';
     this.game.style.background = 'transparent';
     gameWrapper.insertBefore(pixiCanvas, this.game);
 
-    // Graphics on top of sprites (rects/lines drawn after sprites)
-    (this._pixiApp.stage as any).addChild(this._gfx);
+    // Layer order: background → sprites → foreground (HP bars, text, UI)
+    const stage = this._pixiApp.stage as any;
+    stage.addChild(this._bgLayer);
+    stage.addChild(this._spriteLayer);
+    stage.addChild(this._fgLayer);
+    this._bgLayer.addChild(this._bgGfx);
+    this._fgLayer.addChild(this._fgGfx);
 
     this.listenMouse();
     this.listenKeyboard();
   }
 
-  _getTex(img: HTMLImageElement): PIXI.Texture {
+  _getTex(img: any): PIXI.Texture {
     let tex = this._texCache.get(img);
     if (!tex) {
       tex = PIXI.Texture.from(img);
       this._texCache.set(img, tex);
+    }
+    // Canvas textures: re-upload at most once per frame, stop after 180 frames
+    if (img instanceof HTMLCanvasElement) {
+      const bt = tex.baseTexture;
+      const count = this._texUpdateCount.get(bt) ?? 0;
+      if (count < 180 && !this._updatedThisFrame.has(bt)) {
+        bt.update();
+        this._updatedThisFrame.add(bt);
+        this._texUpdateCount.set(bt, count + 1);
+      }
     }
     return tex;
   }
@@ -167,7 +189,7 @@ class GameCanvas {
       return s;
     }
     const s = new PIXI.Sprite();
-    (this._pixiApp.stage as any).addChild(s);
+    this._spriteLayer.addChild(s);
     this._spritePool.push(s);
     this._spriteIdx++;
     return s;
@@ -176,7 +198,9 @@ class GameCanvas {
   beginFrame() {
     this._spriteIdx = 0;
     this._textIdx = 0;
-    this._gfx.clear();
+    this._bgGfx.clear();
+    this._fgGfx.clear();
+    this._updatedThisFrame.clear();
     this.context.clearRect(0, 0, this.game.width, this.game.height);
     const w = this.game.width;
     const h = this.game.height;
@@ -191,15 +215,20 @@ class GameCanvas {
     this._pixiApp.renderer.render(this._pixiApp.stage);
   }
 
+  _getCachedStyle(key: string, opts: Partial<PIXI.ITextStyle>): PIXI.TextStyle {
+    let s = this._styleCache.get(key);
+    if (!s) { s = new PIXI.TextStyle(opts); this._styleCache.set(key, s); }
+    return s;
+  }
+
   _getPoolText(style: PIXI.TextStyle): PIXI.Text {
     if (this._textIdx < this._textPool.length) {
       const t = this._textPool[this._textIdx++];
       t.visible = true;
-      t.style = style;
       return t;
     }
     const t = new PIXI.Text('', style);
-    (this._pixiApp.stage as any).addChild(t);
+    this._fgLayer.addChild(t);
     this._textPool.push(t);
     this._textIdx++;
     return t;
@@ -395,9 +424,9 @@ class GameCanvas {
     const color = opts.color || "#000000";
     const width = opts.width || 1;
 
-    this._gfx.lineStyle(width, PIXI.utils.string2hex(color), alpha);
-    this._gfx.moveTo(x1, y1);
-    this._gfx.lineTo(x2, y2);
+    this._fgGfx.lineStyle(width, new PIXI.Color(color).toNumber(), alpha);
+    this._fgGfx.moveTo(x1, y1);
+    this._fgGfx.lineTo(x2, y2);
   }
 
   /**
@@ -430,25 +459,25 @@ class GameCanvas {
     const angle = opts.angle || 0;
     const alpha = opts.alpha ?? 1;
     const color = opts.color || "#000000";
-    const hex = color ? PIXI.utils.string2hex(color) : null;
-    const strokeHex = opts.strokeColor ? PIXI.utils.string2hex(opts.strokeColor) : null;
+    const hex = color ? new PIXI.Color(color).toNumber() : null;
+    const strokeHex = opts.strokeColor ? new PIXI.Color(opts.strokeColor).toNumber() : null;
 
-    if (strokeHex !== null) this._gfx.lineStyle(opts.strokeWidth ?? 1, strokeHex, opts.strokeAlpha ?? 1);
-    else this._gfx.lineStyle(0);
-    if (hex !== null) this._gfx.beginFill(hex, alpha);
-    else this._gfx.beginFill(0, 0);
+    if (strokeHex !== null) this._fgGfx.lineStyle(opts.strokeWidth ?? 1, strokeHex, opts.strokeAlpha ?? 1);
+    else this._fgGfx.lineStyle(0);
+    if (hex !== null) this._fgGfx.beginFill(hex, alpha);
+    else this._fgGfx.beginFill(0, 0);
     if (angle !== 0) {
       const cx = x + width / 2, cy = y + height / 2;
       const rad = (angle * Math.PI) / 180;
       // rotated rect via transform on a Graphics — use Matrix
       const m = new PIXI.Matrix().translate(-cx, -cy).rotate(rad).translate(cx, cy);
-      this._gfx.setMatrix(m);
-      this._gfx.drawRect(x, y, width, height);
-      this._gfx.setMatrix(new PIXI.Matrix());
+      this._fgGfx.setMatrix(m);
+      this._fgGfx.drawRect(x, y, width, height);
+      this._fgGfx.setMatrix(new PIXI.Matrix());
     } else {
-      this._gfx.drawRect(x, y, width, height);
+      this._fgGfx.drawRect(x, y, width, height);
     }
-    this._gfx.endFill();
+    this._fgGfx.endFill();
   }
 
   /**
@@ -486,14 +515,8 @@ class GameCanvas {
     const fontFamily = opts.fontFamily || "Arial";
     const align = (opts.align || "left") as PIXI.TextStyleAlign;
 
-    const style = new PIXI.TextStyle({
-      fill: color,
-      fontWeight,
-      fontStyle,
-      fontSize,
-      fontFamily,
-      align,
-    });
+    const styleKey = `${color}|${fontSize}|${fontWeight}|${fontStyle}|${fontFamily}|${align}`;
+    const style = this._getCachedStyle(styleKey, { fill: color, fontWeight, fontStyle, fontSize, fontFamily, align });
 
     const t = this._getPoolText(style);
     t.text = text;
@@ -551,14 +574,14 @@ class GameCanvas {
     color?: string; alpha?: number;
     strokeColor?: string; strokeWidth?: number; strokeAlpha?: number;
   }) {
-    const fill = opts.color ? PIXI.utils.string2hex(opts.color) : null;
-    const stroke = opts.strokeColor ? PIXI.utils.string2hex(opts.strokeColor) : null;
-    if (stroke !== null) this._gfx.lineStyle(opts.strokeWidth ?? 1, stroke, opts.strokeAlpha ?? 1);
-    else this._gfx.lineStyle(0);
-    if (fill !== null) this._gfx.beginFill(fill, opts.alpha ?? 1);
-    else this._gfx.beginFill(0, 0);
-    this._gfx.drawCircle(opts.x, opts.y, opts.radius);
-    this._gfx.endFill();
+    const fill = opts.color ? new PIXI.Color(opts.color).toNumber() : null;
+    const stroke = opts.strokeColor ? new PIXI.Color(opts.strokeColor).toNumber() : null;
+    if (stroke !== null) this._fgGfx.lineStyle(opts.strokeWidth ?? 1, stroke, opts.strokeAlpha ?? 1);
+    else this._fgGfx.lineStyle(0);
+    if (fill !== null) this._fgGfx.beginFill(fill, opts.alpha ?? 1);
+    else this._fgGfx.beginFill(0, 0);
+    this._fgGfx.drawCircle(opts.x, opts.y, opts.radius);
+    this._fgGfx.endFill();
   }
 
   drawRoundedRect(opts: {
@@ -566,14 +589,14 @@ class GameCanvas {
     color?: string; alpha?: number;
     strokeColor?: string; strokeWidth?: number; strokeAlpha?: number;
   }) {
-    const fill = opts.color ? PIXI.utils.string2hex(opts.color) : null;
-    const stroke = opts.strokeColor ? PIXI.utils.string2hex(opts.strokeColor) : null;
-    if (stroke !== null) this._gfx.lineStyle(opts.strokeWidth ?? 1, stroke, opts.strokeAlpha ?? 1);
-    else this._gfx.lineStyle(0);
-    if (fill !== null) this._gfx.beginFill(fill, opts.alpha ?? 1);
-    else this._gfx.beginFill(0, 0);
-    this._gfx.drawRoundedRect(opts.x, opts.y, opts.width, opts.height, opts.radius ?? 4);
-    this._gfx.endFill();
+    const fill = opts.color ? new PIXI.Color(opts.color).toNumber() : null;
+    const stroke = opts.strokeColor ? new PIXI.Color(opts.strokeColor).toNumber() : null;
+    if (stroke !== null) this._fgGfx.lineStyle(opts.strokeWidth ?? 1, stroke, opts.strokeAlpha ?? 1);
+    else this._fgGfx.lineStyle(0);
+    if (fill !== null) this._fgGfx.beginFill(fill, opts.alpha ?? 1);
+    else this._fgGfx.beginFill(0, 0);
+    this._fgGfx.drawRoundedRect(opts.x, opts.y, opts.width, opts.height, opts.radius ?? 4);
+    this._fgGfx.endFill();
   }
 
   drawArc(opts: {
@@ -582,14 +605,14 @@ class GameCanvas {
     strokeColor?: string; strokeWidth?: number; strokeAlpha?: number;
     color?: string; alpha?: number;
   }) {
-    const stroke = opts.strokeColor ? PIXI.utils.string2hex(opts.strokeColor) : null;
-    const fill = opts.color ? PIXI.utils.string2hex(opts.color) : null;
-    if (stroke !== null) this._gfx.lineStyle(opts.strokeWidth ?? 1, stroke, opts.strokeAlpha ?? 1);
-    else this._gfx.lineStyle(0);
-    if (fill !== null) this._gfx.beginFill(fill, opts.alpha ?? 1);
-    else this._gfx.beginFill(0, 0);
-    this._gfx.arc(opts.x, opts.y, opts.radius, opts.startAngle, opts.endAngle, opts.anticlockwise ?? false);
-    this._gfx.endFill();
+    const stroke = opts.strokeColor ? new PIXI.Color(opts.strokeColor).toNumber() : null;
+    const fill = opts.color ? new PIXI.Color(opts.color).toNumber() : null;
+    if (stroke !== null) this._fgGfx.lineStyle(opts.strokeWidth ?? 1, stroke, opts.strokeAlpha ?? 1);
+    else this._fgGfx.lineStyle(0);
+    if (fill !== null) this._fgGfx.beginFill(fill, opts.alpha ?? 1);
+    else this._fgGfx.beginFill(0, 0);
+    this._fgGfx.arc(opts.x, opts.y, opts.radius, opts.startAngle, opts.endAngle, opts.anticlockwise ?? false);
+    this._fgGfx.endFill();
   }
 
   drawPolygon(opts: {
@@ -597,14 +620,14 @@ class GameCanvas {
     color?: string; alpha?: number;
     strokeColor?: string; strokeWidth?: number; strokeAlpha?: number;
   }) {
-    const fill = opts.color ? PIXI.utils.string2hex(opts.color) : null;
-    const stroke = opts.strokeColor ? PIXI.utils.string2hex(opts.strokeColor) : null;
-    if (stroke !== null) this._gfx.lineStyle(opts.strokeWidth ?? 1, stroke, opts.strokeAlpha ?? 1);
-    else this._gfx.lineStyle(0);
-    if (fill !== null) this._gfx.beginFill(fill, opts.alpha ?? 1);
-    else this._gfx.beginFill(0, 0);
-    this._gfx.drawPolygon(opts.points);
-    this._gfx.endFill();
+    const fill = opts.color ? new PIXI.Color(opts.color).toNumber() : null;
+    const stroke = opts.strokeColor ? new PIXI.Color(opts.strokeColor).toNumber() : null;
+    if (stroke !== null) this._fgGfx.lineStyle(opts.strokeWidth ?? 1, stroke, opts.strokeAlpha ?? 1);
+    else this._fgGfx.lineStyle(0);
+    if (fill !== null) this._fgGfx.beginFill(fill, opts.alpha ?? 1);
+    else this._fgGfx.beginFill(0, 0);
+    this._fgGfx.drawPolygon(opts.points);
+    this._fgGfx.endFill();
   }
 }
 

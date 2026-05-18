@@ -366,7 +366,7 @@ const UIExplorerCreation = {
     const cam = camera ?? { x: 0, y: 0 };
 
     for (const bg of this._bg)
-      try { canvas.context.drawImage(bg, 0, BG_Y); } catch (_) {}
+      try { canvas.drawImage({ img: bg, dx: 0, dy: BG_Y }); } catch (_) {}
 
     if (this._step === 'name' || this._step === 'waiting') {
       this._drawNamePanel(canvas);
@@ -390,12 +390,9 @@ const UIExplorerCreation = {
   _drawRightPanel(canvas: GameCanvas, _cam?: any) {
     // charSet board (back)
     if (this._charSetImg) {
-      try { canvas.context.drawImage(this._charSetImg, RIGHT_X, CHARSET_Y); } catch (_) {}
+      try { canvas.drawImage({ img: this._charSetImg, dx: RIGHT_X, dy: CHARSET_Y }); } catch (_) {}
     } else {
-      canvas.context.save();
-      canvas.context.fillStyle = 'rgba(80,48,16,0.92)';
-      canvas.context.fillRect(RIGHT_X, CHARSET_Y, 168, 100);
-      canvas.context.restore();
+      canvas.drawRect({ x: RIGHT_X, y: CHARSET_Y, width: 168, height: 100, color: '#503010', alpha: 0.92 });
     }
 
     // avatarSel bars — on top of charSet, behind arrow buttons
@@ -417,7 +414,7 @@ const UIExplorerCreation = {
       const sx = BAR_WX - (_cam?.x ?? 0);
       const sy = (BAR_WY0 + i * ROW_DY) - (_cam?.y ?? 0);
       const bar = this._avatarSel[i];
-      if (bar) try { canvas.context.drawImage(bar, sx, sy - Math.floor(BAR_H / 2)); } catch (_) {}
+      if (bar) try { canvas.drawImage({ img: bar, dx: sx, dy: sy - Math.floor(BAR_H / 2) }); } catch (_) {}
       canvas.drawText({ text: `${vals[i]}`, color: '#2a1000', x: VAL_WX - (_cam?.x ?? 0), y: sy + 1, fontSize: 11, align: 'center' });
     }
   },
@@ -425,12 +422,9 @@ const UIExplorerCreation = {
   // Step 1: charName board only — no scroll, no charset
   _drawNamePanel(canvas: GameCanvas) {
     if (this._charNameImg) {
-      try { canvas.context.drawImage(this._charNameImg, RIGHT_X, CHARNAME_Y); } catch (_) {}
+      try { canvas.drawImage({ img: this._charNameImg, dx: RIGHT_X, dy: CHARNAME_Y }); } catch (_) {}
     } else {
-      canvas.context.save();
-      canvas.context.fillStyle = 'rgba(80,48,16,0.92)';
-      canvas.context.fillRect(RIGHT_X, CHARNAME_Y, 168, 60);
-      canvas.context.restore();
+      canvas.drawRect({ x: RIGHT_X, y: CHARNAME_Y, width: 168, height: 60, color: '#503010', alpha: 0.92 });
       canvas.drawText({ text: 'NAME OF CHARACTER', color: '#f0d080', x: RIGHT_X + 6, y: CHARNAME_Y + 12, fontSize: 8 });
     }
 

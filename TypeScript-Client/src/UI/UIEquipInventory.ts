@@ -151,26 +151,14 @@ class UIEquipInventory extends DragableMenu {
     if (this.bgImg) {
       canvas.drawImage({ img: this.bgImg, dx: this.x, dy: this.y });
     } else {
-      canvas.context.save();
-      canvas.context.fillStyle = 'rgba(20,20,40,0.95)';
-      canvas.context.fillRect(this.x, this.y, this.W, this.H);
-      canvas.context.strokeStyle = '#556688';
-      canvas.context.strokeRect(this.x, this.y, this.W, this.H);
-      canvas.context.restore();
+      canvas.drawRect({ x: this.x, y: this.y, width: this.W, height: this.H, color: '#141428', alpha: 0.95, strokeColor: '#556688', strokeWidth: 1 });
     }
 
     // Tab labels
     TABS.forEach((tab, i) => {
       const active = tab === this.currentTab;
-      canvas.context.save();
-      canvas.context.fillStyle = active ? 'rgba(80,100,160,0.9)' : 'rgba(40,40,70,0.7)';
-      canvas.context.fillRect(this.x + 4 + i * 42, this.y + 22, 38, 14);
-      canvas.context.fillStyle = '#FFFFFF';
-      canvas.context.font = '9px Arial';
-      canvas.context.textAlign = 'center';
-      canvas.context.fillText(['Eq','$','Pet','Drd'][i], this.x + 23 + i * 42, this.y + 32);
-      canvas.context.textAlign = 'left';
-      canvas.context.restore();
+      canvas.drawRect({ x: this.x + 4 + i * 42, y: this.y + 22, width: 38, height: 14, color: active ? '#5064A0' : '#282846', alpha: active ? 0.9 : 0.7 });
+      canvas.drawText({ text: ['Eq','$','Pet','Drd'][i], x: this.x + 23 + i * 42, y: this.y + 32, color: '#FFFFFF', fontSize: 9, align: 'center' });
     });
 
     canvas.drawText({ text: 'Equipment', color: '#FFDD88', x: this.x + 8, y: this.y + 14, fontSize: 11 });
@@ -187,31 +175,21 @@ class UIEquipInventory extends DragableMenu {
         const isSelected = slot.slotId === this.selectedSlot;
         const item = equipped.get(slot.slotId);
 
-        canvas.context.save();
-        canvas.context.fillStyle = isSelected ? 'rgba(100,130,200,0.8)' : 'rgba(40,50,80,0.6)';
-        canvas.context.strokeStyle = isSelected ? '#AADDFF' : '#334455';
-        canvas.context.fillRect(sx, sy, 28, 28);
-        canvas.context.strokeRect(sx, sy, 28, 28);
+        canvas.drawRect({ x: sx, y: sy, width: 28, height: 28, color: isSelected ? '#6482C8' : '#283250', alpha: isSelected ? 0.8 : 0.6, strokeColor: isSelected ? '#AADDFF' : '#334455', strokeWidth: 1 });
 
         if (item) {
           const icon = getItemIconSync(item.itemId);
           if (icon) {
-            try { canvas.context.drawImage(icon, sx + 1, sy + 1, 26, 26); } catch (_) {}
+            try { canvas.drawImage({ img: icon, dx: sx + 1, dy: sy + 1, dw: 26, dh: 26 }); } catch (_) {}
           } else {
-            canvas.context.fillStyle = '#446688';
-            canvas.context.fillRect(sx + 2, sy + 2, 24, 24);
+            canvas.drawRect({ x: sx + 2, y: sy + 2, width: 24, height: 24, color: '#446688' });
           }
           if (mx >= sx && mx < sx + 28 && my >= sy && my < sy + 28) {
             TooltipRenderer.drawItemTooltip(canvas, item.itemId, getItemNameSync(item.itemId), mx, my);
           }
         } else {
-          canvas.context.fillStyle = '#444466';
-          canvas.context.font = '7px Arial';
-          canvas.context.textAlign = 'center';
-          canvas.context.fillText(slot.label, sx + 14, sy + 16);
-          canvas.context.textAlign = 'left';
+          canvas.drawText({ text: slot.label, x: sx + 14, y: sy + 16, color: '#444466', fontSize: 7, align: 'center' });
         }
-        canvas.context.restore();
       });
     } else {
       // Cash (1) / Setup (2) / Etc (3) — show inventory grid
@@ -231,19 +209,14 @@ class UIEquipInventory extends DragableMenu {
         const row = Math.floor(i / cols);
         const sx = startX + col * (cellSize + 2);
         const sy = startY + row * (cellSize + 2);
-        canvas.context.save();
-        canvas.context.fillStyle = 'rgba(40,50,80,0.6)';
-        canvas.context.strokeStyle = '#334455';
-        canvas.context.fillRect(sx, sy, cellSize, cellSize);
-        canvas.context.strokeRect(sx, sy, cellSize, cellSize);
+        canvas.drawRect({ x: sx, y: sy, width: cellSize, height: cellSize, color: '#283250', alpha: 0.6, strokeColor: '#334455', strokeWidth: 1 });
         const icon = getItemIconSync(item.itemId);
         if (icon) {
-          try { canvas.context.drawImage(icon, sx + 2, sy + 2, cellSize - 4, cellSize - 4); } catch (_) {}
+          try { canvas.drawImage({ img: icon, dx: sx + 2, dy: sy + 2, dw: cellSize - 4, dh: cellSize - 4 }); } catch (_) {}
         }
         if (mx >= sx && mx < sx + cellSize && my >= sy && my < sy + cellSize) {
           TooltipRenderer.drawItemTooltip(canvas, item.itemId, getItemNameSync(item.itemId), mx, my);
         }
-        canvas.context.restore();
       });
       if (tabItems.length === 0) {
         canvas.drawText({ text: 'No items', color: '#666688', x: this.x + 60, y: this.y + 150 });

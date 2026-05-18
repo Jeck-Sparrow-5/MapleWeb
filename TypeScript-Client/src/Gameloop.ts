@@ -27,13 +27,6 @@ class GameLoop {
     tdelta: number
   ) {
     canvas.beginFrame();
-    canvas.drawRect({
-      x: 0,
-      y: 0,
-      width: config.width,
-      height: config.height,
-      color: "#000000",
-    });
     StateManager.doRender(canvas, camera, lag, msPerTick, tdelta);
     canvas.endFrame();
   }

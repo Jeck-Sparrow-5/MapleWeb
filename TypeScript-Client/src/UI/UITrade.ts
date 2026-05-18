@@ -93,12 +93,7 @@ const UITrade = {
   draw(canvas: GameCanvas) {
     if (this.isHidden) return;
 
-    canvas.context.save();
-    canvas.context.fillStyle = 'rgba(20,20,40,0.97)';
-    canvas.context.fillRect(this.x, this.y, this.W, this.H);
-    canvas.context.strokeStyle = '#667799';
-    canvas.context.strokeRect(this.x, this.y, this.W, this.H);
-    canvas.context.restore();
+    canvas.drawRect({ x: this.x, y: this.y, width: this.W, height: this.H, color: '#14141E', alpha: 0.97, strokeColor: '#667799', strokeWidth: 1 });
 
     canvas.drawText({ text: 'Trade', color: '#FFDD88', x: this.x + 10, y: this.y + 14, fontSize: 13 });
     canvas.drawText({ text: `Trading with: ${this.partnerName}`, color: '#AAAACC', x: this.x + 10, y: this.y + 30, fontSize: 10 });
@@ -106,10 +101,7 @@ const UITrade = {
     // My side
     const halfW = this.W / 2 - 10;
     canvas.drawText({ text: MyCharacter.name || 'You', color: '#88FFAA', x: this.x + 8, y: this.y + 48, fontSize: 10 });
-    canvas.context.save();
-    canvas.context.strokeStyle = '#334466';
-    canvas.context.strokeRect(this.x + 8, this.y + 52, halfW, 120);
-    canvas.context.restore();
+    canvas.drawRect({ x: this.x + 8, y: this.y + 52, width: halfW, height: 120, strokeColor: '#334466', strokeWidth: 1 });
 
     if (this.mySlots.length === 0) {
       canvas.drawText({ text: '(drag items here)', color: '#444466', x: this.x + 18, y: this.y + 115, fontSize: 9 });
@@ -120,10 +112,7 @@ const UITrade = {
     // Partner side
     const partnerX = this.x + halfW + 18;
     canvas.drawText({ text: this.partnerName, color: '#FFAAAA', x: partnerX, y: this.y + 48, fontSize: 10 });
-    canvas.context.save();
-    canvas.context.strokeStyle = '#334466';
-    canvas.context.strokeRect(partnerX, this.y + 52, halfW, 120);
-    canvas.context.restore();
+    canvas.drawRect({ x: partnerX, y: this.y + 52, width: halfW, height: 120, strokeColor: '#334466', strokeWidth: 1 });
 
     if (this.partnerSlots.length === 0) {
       canvas.drawText({ text: '(waiting...)', color: '#444466', x: partnerX + 10, y: this.y + 115, fontSize: 9 });

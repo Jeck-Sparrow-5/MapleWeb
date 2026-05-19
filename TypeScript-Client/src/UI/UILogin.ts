@@ -142,6 +142,7 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   this.uiLogin = await NXManager.get('UI.wz/Login.img');
 
   this.frameImg = this.uiLogin.nGet('Common')?.nGet('frame')?.nGetImage();
+
   this._chatsel  = this.uiLogin.nGet('Chatsel') ?? this.uiLogin.nGet('chatsel');
   this.selectedWorldImage = this.uiLogin.nGet('Common')?.selectWorld?.nGetImage();
   this.worlds = [];
@@ -506,10 +507,20 @@ function getRaceKey(job: number): string {
   return 'adventure';
 }
 
+// Character select slot glow animation state (plays once, holds at last frame)
+let _glowFrameIdx = 0;
+let _glowElapsed  = 0;
+function _resetGlow() { _glowFrameIdx = 0; _glowElapsed = 0; }
+function _advanceGlow(msPerTick: number) {
+  _glowElapsed += msPerTick;
+  while (_glowElapsed >= 100) { _glowElapsed -= 100; _glowFrameIdx++; }
+}
+
 const CHAR_SLOTS = 3;
 const CHAR_SLOT_X_START = -177; // world x of slot 0 — centered between pageL(-260) and pageR(185)
 const CHAR_SLOT_X_STEP = 140;   // world px between slots
 const CHAR_SLOT_Y = -1160;      // world y of click area
+const CHAR_OFF_X = 40;          // character sprite offset from slot center
 
 UILogin.clearCharacterSlotButtons = function () {
   this.characterSlotButtons.forEach((btn) => ClickManager.removeButton(btn));
@@ -522,6 +533,7 @@ UILogin.createCharacterSlotButtons = function () {
   // Default selection = first character
   if (this.characters.length > 0 && this.selectedCharacterId === null) {
     this.selectedCharacterId = this.characters[0].stat.characterId;
+    _resetGlow();
   }
 
   const pageStart = (this.currentCharPage ?? 0) * CHAR_SLOTS;
@@ -534,6 +546,7 @@ UILogin.createCharacterSlotButtons = function () {
       isHidden: false, // must be false so ClickManager processes it; not in behindFrameButtons so it won't render
       onClick: () => {
         this.selectedCharacterId = char.stat.characterId;
+        _resetGlow();
       },
     });
     ClickManager.addButton(btn);
@@ -651,6 +664,22 @@ UILogin.createWorldButtons = function () {
 UILogin.doUpdate = function (msPerTick, camera, canvas) {
   UICommon.doUpdate(msPerTick);
 
+  // Full-character hit detection — released click over any character slot
+  const mouseReleased = (this as any)._prevMouseDown && !canvas.clicked;
+  (this as any)._prevMouseDown = canvas.clicked;
+  if (mouseReleased && LoginState.currentSubState === LoginSubState.CHARACTER_SELECT) {
+    const pageStart = (this.currentCharPage ?? 0) * CHAR_SLOTS;
+    this.characters.slice(pageStart, pageStart + CHAR_SLOTS).forEach((char, i) => {
+      const sx = (CHAR_SLOT_X_START + i * CHAR_SLOT_X_STEP + CHAR_OFF_X) - camera.x;
+      const sy = CHAR_SLOT_Y - camera.y;
+      if (canvas.mouseX >= sx - 55 && canvas.mouseX <= sx + 55 &&
+          canvas.mouseY >= sy - 160 && canvas.mouseY <= sy + 20) {
+        this.selectedCharacterId = char.stat.characterId;
+        _resetGlow();
+      }
+    });
+  }
+
   // Overlay state → camera transitions (all in one place, no circular deps)
   const raceHidden     = UIRaceSelect.isHidden;
   const creationHidden = UIExplorerCreation.isHidden;
@@ -686,6 +715,7 @@ UILogin.doUpdate = function (msPerTick, camera, canvas) {
   const wasScrollActive = this.scrollOpenAnimation.active;
   this.scrollOpenAnimation.update(msPerTick);
   this.uiLoginLoading?.update(msPerTick);
+  _advanceGlow(msPerTick);
   if (this.channelSelectAnimation) {
     this.channelSelectAnimation.update(msPerTick);
   }
@@ -861,15 +891,11 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
     const cy = CHAR_SLOT_Y - camera.y;
     const isSelected = char.stat.characterId === this.selectedCharacterId;
 
-    if (isSelected) {
-      canvas.drawRect({ x: cx - 30, y: cy - 140, width: 120, height: 200, color: '#FFFFFF', alpha: 0.25 });
-    }
 
     const charSelNode = this.uiLogin.nGet('CharSelect');
 
-    const charOffX = 40; // shift character right relative to slot center
-    const ccx = cx + charOffX; // character-centered x (screen)
-    const charWx = wx + charOffX; // character world x for drawPreview
+    const ccx = cx + CHAR_OFF_X;
+    const charWx = wx + CHAR_OFF_X;
 
     // Aura (frame 1) — behind character
     const auraImg = charSelNode?.nGet('character')?.nGet('1')?.nGetImage();
@@ -894,16 +920,35 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
       canvas.drawImage({ img: platImg, dx: ccx - Math.floor(platImg.width / 2), dy: cy - 10 });
     }
 
-    // Head glow effect (effect/0) — screen-space, above character head
+    // Feet glow (effect/0, ty=+16) — loops continuously while selected
+    // Head glow (effect/1, ty=-491) — plays once on select, holds at last frame
     if (isSelected) {
-      const eNode = charSelNode?.nGet('effect')?.nGet('0');
-      if (eNode) {
-        const frames = eNode.nChildren?.filter((c: any) => c.nTagName === 'canvas') ?? [];
-        if (frames.length) {
-          const fNode = frames[Math.floor(Date.now() / 100) % frames.length];
+      const effBase = charSelNode?.nGet('effect');
+
+      // Feet (effect/0) — continuous loop via Date.now()
+      const e0 = effBase?.nGet('0');
+      if (e0) {
+        const f0s = e0.nChildren?.filter((c: any) => c.nTagName === 'canvas') ?? [];
+        if (f0s.length) {
+          const fNode = f0s[Math.floor(Date.now() / 100) % f0s.length];
           const fImg = fNode?.nGetImage?.();
           if (fImg?.width) {
-            canvas.drawImage({ img: fImg, dx: ccx - fImg.width / 2, dy: cy - fImg.height - 30 });
+            // feet effect: use screen-space Y (origin nY=-205 would push off-screen)
+            canvas.drawImage({ img: fImg, dx: ccx - fImg.width / 2, dy: cy - fImg.height / 2 + 10 });
+          }
+        }
+      }
+
+      // Head (effect/1) — plays once, holds at last frame
+      const e1 = effBase?.nGet('1');
+      if (e1) {
+        const f1s = e1.nChildren?.filter((c: any) => c.nTagName === 'canvas') ?? [];
+        if (f1s.length) {
+          const fNode = f1s[Math.min(_glowFrameIdx, f1s.length - 1)];
+          const fImg = fNode?.nGetImage?.();
+          if (fImg?.width) {
+            const orig = fNode?.nChildren?.find((c: any) => c.nName === 'origin');
+            canvas.drawImage({ img: fImg, dx: (charWx - 5 - camera.x) - (orig?.nX ?? 0), dy: (CHAR_SLOT_Y - 491 - camera.y) - (orig?.nY ?? 0) });
           }
         }
       }
@@ -920,9 +965,9 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
       const totalTagW = tagL.width + nameW + tagR.width;
       const tagX = ccx - totalTagW / 2;
       const tagY = cy + 20;
-      canvas.drawImage({ img: tagL, dx: tagX,                              dy: tagY, dw: tagL.width, dh: tagL.height });
-      canvas.drawImage({ img: tagM, dx: tagX + tagL.width,                 dy: tagY, dw: nameW,      dh: tagM.height });
-      canvas.drawImage({ img: tagR, dx: tagX + tagL.width + nameW,         dy: tagY, dw: tagR.width, dh: tagR.height });
+      canvas.drawImage({ img: tagL, dx: tagX,                    dy: tagY });
+      canvas.drawImage({ img: tagM, dx: tagX + tagL.width,       dy: tagY, scaleX: nameW / tagM.width });
+      canvas.drawImage({ img: tagR, dx: tagX + tagL.width + nameW, dy: tagY });
       canvas.drawText({ text: char.stat.characterName, x: ccx, y: tagY + 4, color: '#ffffff', fontSize: 11, align: 'center' });
     } else {
       NameTagRenderer.draw(canvas, camera, charWx, CHAR_SLOT_Y + 28, char.stat.characterName, '3');

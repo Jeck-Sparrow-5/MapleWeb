@@ -145,14 +145,19 @@ class GameCanvas {
     // Increase default sprite batch size — reduces draw-call splits on busy maps
     (PIXI as any).BatchRenderer.defaultBatchSize = 8192;
 
+    (PIXI.settings as any).RENDER_OPTIONS = { ...((PIXI.settings as any).RENDER_OPTIONS ?? {}), hello: false };
+    PIXI.BaseTexture.defaultOptions.scaleMode = PIXI.SCALE_MODES.NEAREST; // crisp pixel art
+    PIXI.settings.ROUND_PIXELS = true;                                     // snap to integer coords
+
     // PIXI WebGL renderer — inserted before the 2D overlay canvas
     this._pixiApp = new PIXI.Application({
       width: this.game.width,
       height: this.game.height,
-      backgroundColor: 0x000000,  // native black fill — no drawRect needed
+      backgroundColor: 0x000000,
       antialias: false,
       autoStart: false,
       resolution: 1,
+      resizeTo: gameWrapper,
     });
     const pixiCanvas = this._pixiApp.view as HTMLCanvasElement;
     pixiCanvas.style.position = 'absolute';
@@ -331,11 +336,6 @@ class GameCanvas {
     this._fgGfx.clear();
     this._updatedThisFrame.clear();
     this.context.clearRect(0, 0, this.game.width, this.game.height);
-    const w = this.game.width;
-    const h = this.game.height;
-    if (this._pixiApp.renderer.width !== w || this._pixiApp.renderer.height !== h) {
-      this._pixiApp.renderer.resize(w, h);
-    }
   }
 
   endFrame() {

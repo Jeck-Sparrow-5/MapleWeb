@@ -13,9 +13,10 @@ export class SelectCharPicPacket extends OutPacket {
 export class RegisterPicPacket extends OutPacket {
   constructor(characterId: number, pic: string) {
     super(OutPacketOpcode.REGISTER_PIC);
-    this.writeInt(characterId);
-    this.writeByte(0);       // flag byte Cosmic reads between charId and PIC
-    this.writeString(pic);
-    this.writeString('000000000000_00000000'); // HWID — Cosmic expects [0-9A-F]{12}_[0-9A-F]{8}
+    this.writeByte(0);                           // 1. discarded byte
+    this.writeInt(characterId);                  // 2. character ID
+    this.writeString('00-00-00-00-00-00');        // 3. MAC
+    this.writeString('000000000000_00000000');    // 4. HWID [0-9A-F]{12}_[0-9A-F]{8}
+    this.writeString(pic);                       // 5. PIC
   }
 }

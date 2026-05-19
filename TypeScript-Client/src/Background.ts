@@ -245,16 +245,34 @@ class Background {
       yEnd += config.height;
     }
 
-    for (dx = Math.floor(xBegin); dx <= xEnd; dx += cx) {
-      for (dy = Math.floor(yBegin); dy <= yEnd; dy += cy) {
-        canvas.drawImage({
-          img: currentImage,
-          flipped: !!this.flipped,
-          alpha,
-          angle,
-          dx,
-          dy,
-        });
+    // TilingSprite valid only when repeat period matches natural image size (no gaps/overlap/stretch)
+    const canTile = (this.tileX || this.tileY) && cx === width && cy === height && angle === 0;
+    if (canTile) {
+      canvas.drawTiledImage({
+        img: currentImage,
+        flipped: !!this.flipped,
+        alpha,
+        dx: Math.floor(xBegin),
+        dy: Math.floor(yBegin),
+        tileX: this.tileX,
+        tileY: this.tileY,
+        cx,
+        cy,
+        w: width,
+        h: height,
+      });
+    } else {
+      for (dx = Math.floor(xBegin); dx <= xEnd; dx += cx) {
+        for (dy = Math.floor(yBegin); dy <= yEnd; dy += cy) {
+          canvas.drawImage({
+            img: currentImage,
+            flipped: !!this.flipped,
+            alpha,
+            angle,
+            dx,
+            dy,
+          });
+        }
       }
     }
   }

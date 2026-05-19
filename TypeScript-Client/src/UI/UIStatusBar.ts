@@ -1,0 +1,59 @@
+import GameCanvas from '../GameCanvas';
+import MyCharacter from '../MyCharacter';
+import config from '../Config';
+
+const BAR_H    = 52;
+const BAR_Y    = config.height - BAR_H;
+const W        = config.width;
+const GAUGE_H  = 12;
+const EXP_H    = 6;
+const PAD      = 8;
+const GAUGE_W  = 200;
+const HP_Y     = BAR_Y + 10;
+const MP_Y     = BAR_Y + 28;
+const EXP_Y    = config.height - EXP_H;
+
+const UIStatusBar = {
+  draw(canvas: GameCanvas) {
+    const c = MyCharacter;
+    if (!c?.stats) return;
+
+    // Background
+    canvas.drawRect({ x: 0, y: BAR_Y, width: W, height: BAR_H, color: '#0a0a14', alpha: 0.85 });
+    // top divider
+    canvas.drawRect({ x: 0, y: BAR_Y, width: W, height: 1, color: '#334466', alpha: 1 });
+
+    // --- HP bar ---
+    const hpPct = Math.max(0, Math.min(1, c.hp / c.maxHp));
+    canvas.drawRect({ x: PAD, y: HP_Y, width: GAUGE_W, height: GAUGE_H, color: '#1a0000', alpha: 1 });
+    if (hpPct > 0)
+      canvas.drawRect({ x: PAD, y: HP_Y, width: Math.floor(GAUGE_W * hpPct), height: GAUGE_H, color: '#cc2222', alpha: 1 });
+    canvas.drawText({ text: `HP  ${c.hp}/${c.maxHp}`, x: PAD + GAUGE_W + 6, y: HP_Y + 10, color: '#ffaaaa', fontSize: 10 });
+
+    // --- MP bar ---
+    const mpPct = Math.max(0, Math.min(1, c.mp / c.maxMp));
+    canvas.drawRect({ x: PAD, y: MP_Y, width: GAUGE_W, height: GAUGE_H, color: '#00001a', alpha: 1 });
+    if (mpPct > 0)
+      canvas.drawRect({ x: PAD, y: MP_Y, width: Math.floor(GAUGE_W * mpPct), height: GAUGE_H, color: '#2255cc', alpha: 1 });
+    canvas.drawText({ text: `MP  ${c.mp}/${c.maxMp}`, x: PAD + GAUGE_W + 6, y: MP_Y + 10, color: '#aaaaff', fontSize: 10 });
+
+    // --- Level + name (center) ---
+    const lv = c.stats?.level ?? 1;
+    canvas.drawText({ text: `Lv.${lv}`, x: W / 2 - 30, y: BAR_Y + 18, color: '#f5a623', fontSize: 11, fontWeight: 'bold', align: 'right' });
+    canvas.drawText({ text: c.name ?? '', x: W / 2 - 24, y: BAR_Y + 18, color: '#ffffff', fontSize: 11, align: 'left' });
+
+    // --- Mesos (right) ---
+    const mesos = (c as any).mesos ?? c.inventory?.mesos ?? 0;
+    canvas.drawText({ text: `${mesos.toLocaleString()} mesos`, x: W - PAD, y: BAR_Y + 18, color: '#ffe066', fontSize: 10, align: 'right' });
+
+    // --- EXP bar (very bottom, full width) ---
+    const expPct = c.maxExp > 0 ? Math.max(0, Math.min(1, c.exp / c.maxExp)) : 0;
+    canvas.drawRect({ x: 0, y: EXP_Y, width: W, height: EXP_H, color: '#1a1400', alpha: 1 });
+    if (expPct > 0)
+      canvas.drawRect({ x: 0, y: EXP_Y, width: Math.floor(W * expPct), height: EXP_H, color: '#e8a020', alpha: 1 });
+    const expPctText = c.maxExp > 0 ? `${(expPct * 100).toFixed(2)}%` : '0%';
+    canvas.drawText({ text: expPctText, x: W / 2, y: EXP_Y + 5, color: '#ffe09a', fontSize: 9, align: 'center' });
+  },
+};
+
+export default UIStatusBar;

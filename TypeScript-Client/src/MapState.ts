@@ -32,6 +32,7 @@ import MovePlayerPacket from "./Net/Packets/MovePlayerPacket";
 import SessionManager from "./SessionManager";
 import UISkillBook, { skillLevels } from "./UI/UISkillBook";
 import UIClock from "./UI/UIClock";
+import UIStatusBar from "./UI/UIStatusBar";
 import UseSkillPacket from "./Net/Packets/UseSkillPacket";
 import UIEquipInventory from "./UI/UIEquipInventory";
 import UIBuffList from "./UI/UIBuffList";
@@ -432,6 +433,7 @@ MapStateInstance.doRender = function (
     this.miniMap.draw(canvas);
     UIGameMenu.draw(canvas, camera, lag, msPerTick, tdelta);
     drawSkillEffects(canvas, camera);
+    UIStatusBar.draw(canvas);
     ChatBubbleRenderer.update();
     UISkillHotbar.draw(canvas);
     UIClock.draw(canvas);

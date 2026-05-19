@@ -915,6 +915,7 @@ isCloseToMob = (inAllDirections = true) => {
   }
 
   checkForMobsHit = () => {
+    if (!this.map) return;
     if (!this.isDead) {
       const currentTime = new Date().getTime();
 

@@ -26,7 +26,7 @@ const BTN_ROW_H   = 40;
 
 const FALLBACK_OK_OX     = BTN_START_X + 2 * BTN_COL_W; const FALLBACK_OK_OY     = BTN_START_Y + 3 * BTN_ROW_H;
 const FALLBACK_CANCEL_OX = BTN_START_X;                  const FALLBACK_CANCEL_OY = BTN_START_Y + 3 * BTN_ROW_H;
-const FALLBACK_DEL_OX    = BTN_START_X + 3 * BTN_COL_W; const FALLBACK_DEL_OY    = BTN_START_Y + 2 * BTN_ROW_H;
+const FALLBACK_DEL_OX    = BTN_START_X;                  const FALLBACK_DEL_OY    = BTN_START_Y + 3 * BTN_ROW_H;
 
 function _digitFallbackOx(idx: number, _row: number): number {
   return BTN_START_X + idx * BTN_COL_W;

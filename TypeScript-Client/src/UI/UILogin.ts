@@ -27,6 +27,7 @@ import { SelectCharPicPacket, RegisterPicPacket } from '../Net/Packets/PicPacket
 import { DeleteCharPacket } from '../Net/Packets/DeleteCharPacket';
 import { drawPreview, clearCache, setPreviewStance } from './CharSelectPreview';
 import { initUIPic, showPic, drawUIPic } from './UIPic';
+import PLAY_AUDIO from '../Audio/PlayAudio';
 import Channel from '../Net/Models/Channel';
 import { Character } from '../Net/Models/Character';
 
@@ -156,6 +157,11 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   this.saveIdEnabled = !!localStorage.getItem('maple_saved_id');
 
   initUIPic(canvas);   // load SoftKey WZ assets async (fire-and-forget)
+
+  // Preload login UI sounds
+  NXManager.get('Sound.wz/UI.img/scroll').then((n: any) => {
+    if (n) (this as any)._scrollSound = n.nGetAudio?.();
+  }).catch(() => {});
 
   this.worldButtonImages = new Map<number, WZNode>();
   this.worldImages = new Map<number, WZNode>();
@@ -593,6 +599,7 @@ UILogin.createWorldButtons = function () {
           this.scrollOpenAnimation.reset();
           this.scrollOpenAnimation.active = true;
           this.selectedWorldId = world.id;
+          if ((this as any)._scrollSound) PLAY_AUDIO((this as any)._scrollSound, 0.7);
 
           this.scrollContentFadeIn.active = false;
           this.scrollContentFadeIn.alpha = 0;
@@ -870,6 +877,29 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
       try { canvas.drawImage({ img, dx: 0, dy: 0, dw: 800, dh: 600 }); } catch (_) {}
   }
 
+  // Head glow behind frame UI — draw before frameImg so it renders beneath it
+  if (this.selectedCharacterId !== null) {
+    const pageStart2 = (this.currentCharPage ?? 0) * CHAR_SLOTS;
+    const selIdx = this.characters.slice(pageStart2, pageStart2 + CHAR_SLOTS)
+      .findIndex(c => c.stat.characterId === this.selectedCharacterId);
+    if (selIdx >= 0) {
+      const selWx = CHAR_SLOT_X_START + selIdx * CHAR_SLOT_X_STEP + CHAR_OFF_X;
+      const csNode = this.uiLogin.nGet('CharSelect');
+      const e1 = csNode?.nGet('effect')?.nGet('1');
+      if (e1) {
+        const f1s = e1.nChildren?.filter((c: any) => c.nTagName === 'canvas') ?? [];
+        if (f1s.length) {
+          const fNode = f1s[Math.min(_glowFrameIdx, f1s.length - 1)];
+          const fImg = fNode?.nGetImage?.();
+          if (fImg?.width) {
+            const orig = fNode?.nChildren?.find((c: any) => c.nName === 'origin');
+            canvas.drawImage({ img: fImg, dx: (selWx - 5 - camera.x) - (orig?.nX ?? 0), dy: (CHAR_SLOT_Y - 365 - camera.y) - (orig?.nY ?? 0) });
+          }
+        }
+      }
+    }
+  }
+
   canvas.drawImage({
     img: this.frameImg,
     dx: 0,
@@ -935,6 +965,7 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
       canvas.drawImage({ img: flagImg, dx: cx - 15, dy: cy - 137 });
     }
 
+
     // Character sprite
     drawPreview(canvas, camera, char, charWx, CHAR_SLOT_Y, 16);
 
@@ -944,35 +975,16 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
       canvas.drawImage({ img: platImg, dx: ccx - Math.floor(platImg.width / 2), dy: cy - 10 });
     }
 
-    // Feet glow (effect/0, ty=+16) — loops continuously while selected
-    // Head glow (effect/1, ty=-491) — plays once on select, holds at last frame
+    // Feet glow (effect/0) — continuous loop via Date.now()
     if (isSelected) {
-      const effBase = charSelNode?.nGet('effect');
-
-      // Feet (effect/0) — continuous loop via Date.now()
-      const e0 = effBase?.nGet('0');
+      const e0 = charSelNode?.nGet('effect')?.nGet('0');
       if (e0) {
         const f0s = e0.nChildren?.filter((c: any) => c.nTagName === 'canvas') ?? [];
         if (f0s.length) {
           const fNode = f0s[Math.floor(Date.now() / 100) % f0s.length];
           const fImg = fNode?.nGetImage?.();
           if (fImg?.width) {
-            // feet effect: use screen-space Y (origin nY=-205 would push off-screen)
             canvas.drawImage({ img: fImg, dx: ccx - fImg.width / 2, dy: cy - fImg.height / 2 + 10 });
-          }
-        }
-      }
-
-      // Head (effect/1) — plays once, holds at last frame
-      const e1 = effBase?.nGet('1');
-      if (e1) {
-        const f1s = e1.nChildren?.filter((c: any) => c.nTagName === 'canvas') ?? [];
-        if (f1s.length) {
-          const fNode = f1s[Math.min(_glowFrameIdx, f1s.length - 1)];
-          const fImg = fNode?.nGetImage?.();
-          if (fImg?.width) {
-            const orig = fNode?.nChildren?.find((c: any) => c.nName === 'origin');
-            canvas.drawImage({ img: fImg, dx: (charWx - 5 - camera.x) - (orig?.nX ?? 0), dy: (CHAR_SLOT_Y - 491 - camera.y) - (orig?.nY ?? 0) });
           }
         }
       }
@@ -1006,7 +1018,7 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
       const scrollImg = scrollFrames[scrollFrameIdx]?.nGetImage?.();
       // Content: charInfo (183×115, origin 45,57)
       const infoImg = charSelNode?.nGet('charInfo')?.nGetImage?.();
-      const ORIG_X = -03, ORIG_Y = 130;
+      const ORIG_X = -3, ORIG_Y = 130;
 
       // Center 217px scroll on character, position above head
       const scrollX = ccx - 108;
@@ -1056,6 +1068,14 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
 
   UIRaceSelect.draw(canvas);
   UIExplorerCreation.draw(canvas, camera);
+
+  // World / channel label during character select
+  if (LoginState.currentSubState === LoginSubState.CHARACTER_SELECT &&
+      this.selectedWorldId !== null && this.selectedChannelIndex !== null) {
+    const worldName = this.worlds.find(w => w.id === this.selectedWorldId)?.name ?? '';
+    const chLabel = `${worldName}  Ch.${this.selectedChannelIndex + 1}`;
+    canvas.drawText({ text: chLabel, color: '#ffffff', fontSize: 12, fontWeight: 'bold', x: 277 - camera.x, y: -1410 - camera.y, align: 'center' });
+  }
 
   canvas.drawText({
     text: "Ver. 0.83",

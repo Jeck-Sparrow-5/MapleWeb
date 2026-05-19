@@ -677,11 +677,17 @@ async addDrops() {
 
     const adjustX = !this.flipped ? originX : currentFrame.nWidth - originX;
 
+    const mask = (this as any).statusMask ?? 0;
+    const tint = mask & 0x200 ? 0x8888FF  // freeze → blue
+               : mask & 0x2   ? 0xAAAAAA  // stun   → grey
+               : mask & 0x400 ? 0x88FF88  // poison → green
+               : 0xFFFFFF;
     canvas.drawImage({
       img: currentImage,
       dx: this.pos.x - camera.x - adjustX,
       dy: this.pos.y - camera.y - originY,
       flipped: !!this.flipped,
+      tint,
     });
 
     this.height = currentFrame.nHeight;

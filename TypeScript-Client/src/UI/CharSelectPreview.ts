@@ -60,7 +60,7 @@ async function loadPreview(char: Character): Promise<void> {
       if (itemId > 0) try { await mc.attachEquip(-slot, itemId); } catch (_) {}
     }
     const stance = stanceOverride.get(id) ?? 'stand1';
-    mc.setStance(stance, 0, false, true);
+    mc.setStance(stance, 0, false, stance !== 'walk1');
     previewCache.set(id, mc);
   } catch (e) {
     console.warn('[CharSelectPreview] failed to load preview for', id, e);
@@ -79,7 +79,7 @@ export function clearCache() {
 export function setPreviewStance(charId: number, stance: string): void {
   stanceOverride.set(charId, stance);
   const mc = previewCache.get(charId);
-  if (mc) mc.setStance(stance, 0, false, true);
+  if (mc) mc.setStance(stance, 0, false, stance !== 'walk1'); // walk1 loops forward; others oscillate
 }
 
 /** Synchronous — only draws if character is already cached. Kicks off async load if not. */
@@ -102,13 +102,19 @@ export function drawPreview(
 
   const origX = mc.pos?.x ?? 0;
   const origY = mc.pos?.y ?? 0;
+  const wantWalk = stanceOverride.get(id) === 'walk1';
   if (mc.pos) {
     mc.pos.x = worldX; mc.pos.y = worldY;
-    mc.pos.fh = true; mc.pos.left = false; mc.pos.right = false;
+    mc.pos.fh = true;
+    mc.pos.left = false;
+    mc.pos.right = wantWalk;
   }
-  mc.flipped = true;
+  mc.flipped = !wantWalk; // walking right = face right (not flipped); standing = face left
 
   updateBlink(id, mc);
+  mc.update(msPerTick * 1.5); // advance animation frames (1.5× speed for smoother walk)
+  // pos.update() inside mc.update() moves the character — reset to worldX/Y before drawing
+  if (mc.pos) { mc.pos.x = worldX; mc.pos.y = worldY; }
   const savedName = mc.name;
   mc.name = '';        // suppress MapleCharacter's own name tag — UILogin draws it
   mc.draw(canvas, camera, 0, msPerTick, 0);

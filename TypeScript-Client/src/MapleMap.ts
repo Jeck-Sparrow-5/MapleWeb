@@ -1,5 +1,5 @@
 ﻿import NXManager from "./wz-utils/NXManager";
-import { setLoadingProgress, resetLoadingProgress } from "./LoadingProgress";
+import { setLoadingProgress, resetLoadingProgress, showTransitionOverlay, hideTransitionOverlay } from "./LoadingProgress";
 import SessionManager from "./SessionManager";
 import { NpcTalkPacket } from "./Net/Packets/NpcInteractPacket";
 import TouchReactorPacket from "./Net/Packets/TouchReactorPacket";
@@ -86,9 +86,11 @@ MapleMap.load = async function (id: number | string) {
   const startTime = new Date().getTime();
   // Free old map's GPU textures before loading new map to prevent VRAM exhaustion
   if (this.doneLoading) (this as any).canvas?.disposeAllTextures();
+  const isTransition = !!(this as any)._hasLoaded; // false on first load, true on map changes
+  if (isTransition) showTransitionOverlay();
   this.doneLoading = false;
   resetLoadingProgress();
-  setLoadingProgress(0, 'Connecting…');
+  setLoadingProgress(0, isTransition ? 'Changing map…' : 'Connecting…');
 
   let filename = "UI.wz/MapLogin.img";
   if (id !== "MapLogin") {
@@ -190,6 +192,8 @@ MapleMap.load = async function (id: number | string) {
   setTimeout(() => {
     setLoadingProgress(100, 'Ready!');
     this.doneLoading = true;
+    if (isTransition) hideTransitionOverlay(500);
+    (this as any)._hasLoaded = true;
   }, Math.max(0, remaining));
 
   this.itemDrops = [];

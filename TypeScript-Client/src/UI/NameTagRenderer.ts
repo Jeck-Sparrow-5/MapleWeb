@@ -10,6 +10,7 @@ const NameTagRenderer = {
   initialized: false,
 
   async initialize() {
+    if (this.initialized) return;
     const node = await NXManager.get('UI.wz/NameTag.img');
     if (!node) return;
     for (const style of STYLES) {
@@ -52,9 +53,9 @@ const NameTagRenderer = {
     const totalW = p.lw + textW + p.rw;
     const bx = cx - totalW / 2;
 
-    canvas.drawImage({ img: p.l, dx: bx, dy: cy, dw: p.lw, dh: p.h });
-    canvas.drawImage({ img: p.m, dx: bx + p.lw, dy: cy, dw: textW, dh: p.h });
-    canvas.drawImage({ img: p.r, dx: bx + p.lw + textW, dy: cy, dw: p.rw, dh: p.h });
+    canvas.drawImage({ img: p.l, dx: bx,                    dy: cy });
+    canvas.drawImage({ img: p.m, dx: bx + p.lw,             dy: cy, scaleX: textW / p.mw });
+    canvas.drawImage({ img: p.r, dx: bx + p.lw + textW,     dy: cy });
 
     canvas.drawText({ text: name, x: cx + 1, y: cy + p.h - 3 + 1, color: '#000000', fontSize: 11, align: 'center' });
     canvas.drawText({ text: name, x: cx,     y: cy + p.h - 3,     color: '#ffffff', fontSize: 11, align: 'center' });

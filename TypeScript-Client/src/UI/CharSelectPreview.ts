@@ -7,9 +7,10 @@ import GameCanvas from '../GameCanvas';
 import { CameraInterface } from '../Camera';
 import Randomizer from '../Tools/Randomizer';
 
-const previewCache = new Map<number, MapleCharacter>();
-const loadingSet  = new Set<number>();
-const blinkState  = new Map<number, { nextBlink: number; blinkEnd: number }>();
+const previewCache  = new Map<number, MapleCharacter>();
+const loadingSet    = new Set<number>();
+const blinkState    = new Map<number, { nextBlink: number; blinkEnd: number }>();
+const stanceOverride = new Map<number, string>(); // desired stance per char id
 
 function updateBlink(id: number, mc: MapleCharacter): void {
   const now = Date.now();
@@ -58,7 +59,8 @@ async function loadPreview(char: Character): Promise<void> {
     for (const [slot, itemId] of char.look.eqSlots) {
       if (itemId > 0) try { await mc.attachEquip(-slot, itemId); } catch (_) {}
     }
-    mc.setStance('stand1', 0, false, true);
+    const stance = stanceOverride.get(id) ?? 'stand1';
+    mc.setStance(stance, 0, false, true);
     previewCache.set(id, mc);
   } catch (e) {
     console.warn('[CharSelectPreview] failed to load preview for', id, e);
@@ -71,6 +73,13 @@ export function clearCache() {
   previewCache.clear();
   blinkState.clear();
   loadingSet.clear();
+  stanceOverride.clear();
+}
+
+export function setPreviewStance(charId: number, stance: string): void {
+  stanceOverride.set(charId, stance);
+  const mc = previewCache.get(charId);
+  if (mc) mc.setStance(stance, 0, false, true);
 }
 
 /** Synchronous — only draws if character is already cached. Kicks off async load if not. */
@@ -100,7 +109,10 @@ export function drawPreview(
   mc.flipped = true;
 
   updateBlink(id, mc);
+  const savedName = mc.name;
+  mc.name = '';        // suppress MapleCharacter's own name tag — UILogin draws it
   mc.draw(canvas, camera, 0, msPerTick, 0);
+  mc.name = savedName;
 
   if (mc.pos) { mc.pos.x = origX; mc.pos.y = origY; }
 }

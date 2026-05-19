@@ -63,6 +63,7 @@ export class CharacterListHandler extends PacketHandler {
     let result = '';
     for (let i = 0; i < length; i++) {
       const charCode = data.getUint8(offset + i);
+      if (charCode === 0) break; // null terminator
       result += String.fromCharCode(charCode);
     }
     return result;

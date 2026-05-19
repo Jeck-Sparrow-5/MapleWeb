@@ -74,6 +74,9 @@ class MapleCharacter {
   bodyStartPoistion: any = { x: 0, y: 0 };
   _cachedNameWidth: number = -1;
   _cachedNameStr: string = '';
+  _cachedHatKey: string = '';
+  _cachedHatIntersection: Set<string> = new Set();
+  _partVisibilityCache: Map<string, boolean> = new Map();
   isInAttack: boolean = false;
   currentAttackStance: string = 'swingO1';
   _npcLocked: boolean = false;
@@ -1104,11 +1107,17 @@ isCloseToMob = (inAllDirections = true) => {
         return acc;
       }
     }, "");
-    const hatVslotPairs = new Set(hatVslot.match(twoChars));
-    const hatSmapPairs = new Set(hatSmapValues.match(twoChars));
-    const hatSmapIntersection = new Set(
-      [...hatVslotPairs].filter((val) => hatSmapPairs.has(val))
-    );
+    const hatKey = hatVslot + ':' + hatSmapValues;
+    if (hatKey !== this._cachedHatKey) {
+      const hatVslotPairs = new Set<string>(hatVslot.match(twoChars) ?? []);
+      const hatSmapPairs = new Set<string>(hatSmapValues.match(twoChars) ?? []);
+      this._cachedHatIntersection = new Set<string>(
+        [...hatVslotPairs].filter((val) => hatSmapPairs.has(val))
+      );
+      this._cachedHatKey = hatKey;
+      this._partVisibilityCache.clear();
+    }
+    const hatSmapIntersection = this._cachedHatIntersection;
 
     const map: any = {};
     const drawableFrames: any = [];
@@ -1174,26 +1183,30 @@ isCloseToMob = (inAllDirections = true) => {
       x -= adjustX;
       y -= part.origin.nY;
 
-      const partVslot = vslot;
-      const partSmapValue = this.smap.getValueFromName(part.z.nValue) || "";
-      const partVslotPairs = new Set(vslot.match(twoChars));
-      const partSmapPairs = new Set(partSmapValue.match(twoChars));
-      const partSmapIntersection = new Set(
-        [...partVslotPairs].filter((val) => partSmapPairs.has(val))
-      );
-      const intersectionWithHat = [...partSmapIntersection].filter((val) => {
-        return hatSmapIntersection.has(val);
-      });
-      const invisibleZs: any = intersectionWithHat.reduce(
-        (acc: any, val: any) => {
-          (this.smap.getNamesFromValue(val) || []).forEach((z: number) => {
-            acc.add(z);
-          });
-          return acc;
-        },
-        new Set()
-      );
-      if (invisibleZs.has(part.z.nValue)) {
+      const partZ = part.z.nValue;
+      const visCacheKey = vslot + ':' + partZ;
+      let isInvisible = this._partVisibilityCache.get(visCacheKey);
+      if (isInvisible === undefined) {
+        const partSmapValue = this.smap.getValueFromName(partZ) || "";
+        const partVslotPairs = new Set<string>(vslot.match(twoChars) ?? []);
+        const partSmapPairs = new Set<string>(partSmapValue.match(twoChars) ?? []);
+        const partSmapIntersection = new Set<string>(
+          [...partVslotPairs].filter((val) => partSmapPairs.has(val))
+        );
+        const intersectionWithHat = [...partSmapIntersection].filter((val) =>
+          hatSmapIntersection.has(val)
+        );
+        const invisibleZs: Set<any> = intersectionWithHat.reduce(
+          (acc: Set<any>, val: any) => {
+            (this.smap.getNamesFromValue(val) || []).forEach((z: number) => acc.add(z));
+            return acc;
+          },
+          new Set()
+        );
+        isInvisible = invisibleZs.has(partZ);
+        this._partVisibilityCache.set(visCacheKey, isInvisible);
+      }
+      if (isInvisible) {
         return;
       }
 

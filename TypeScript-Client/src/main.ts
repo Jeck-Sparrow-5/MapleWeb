@@ -35,6 +35,12 @@ const startGame = async () => {
   // await MySocket.initialize();
   await StateManager.setState(LoginState, canvas);
 
+  const loadingOverlay = document.getElementById('loading-overlay');
+  if (loadingOverlay) {
+    loadingOverlay.classList.add('fade-out');
+    loadingOverlay.addEventListener('transitionend', () => loadingOverlay.remove(), { once: true });
+  }
+
   let Loop = new GameLoop(canvas);
   Loop.gameLoop();
 };

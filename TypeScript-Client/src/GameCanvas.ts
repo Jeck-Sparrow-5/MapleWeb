@@ -38,6 +38,7 @@ class GameCanvas {
   _sharedMatrix: PIXI.Matrix = new PIXI.Matrix();
   _identityMatrix: PIXI.Matrix = new PIXI.Matrix();
   _cachedRect: DOMRect = new DOMRect();
+  _contextLost: boolean = false;
 
   constructor(gameWrapper: HTMLElement) {
     this.scaleX = 1;
@@ -156,6 +157,20 @@ class GameCanvas {
     this.game.style.background = 'transparent';
     gameWrapper.insertBefore(pixiCanvas, this.game);
 
+    pixiCanvas.addEventListener('webglcontextlost', (e: Event) => {
+      e.preventDefault(); // allow browser to restore the context
+      this._contextLost = true;
+      console.warn('[pixi] WebGL context lost — rendering paused');
+    }, false);
+    pixiCanvas.addEventListener('webglcontextrestored', () => {
+      this._contextLost = false;
+      // Caches hold stale GPU handles — clear so textures re-upload on next draw
+      this._subTexCache.clear();
+      this._texUpdateCount = new WeakMap();
+      this._updatedThisFrame.clear();
+      console.info('[pixi] WebGL context restored');
+    }, false);
+
     // Layer order: background → sprites → foreground (HP bars, text, UI)
     const stage = this._pixiApp.stage as any;
     stage.addChild(this._bgLayer);
@@ -203,6 +218,7 @@ class GameCanvas {
   }
 
   beginFrame() {
+    if (this._contextLost) return;
     this._spriteIdx = 0;
     this._textIdx = 0;
     this._bgGfx.clear();
@@ -217,6 +233,7 @@ class GameCanvas {
   }
 
   endFrame() {
+    if (this._contextLost) return;
     for (let i = this._spriteIdx; i < this._spritePool.length; i++) this._spritePool[i].visible = false;
     for (let i = this._textIdx; i < this._textPool.length; i++) this._textPool[i].visible = false;
     this._pixiApp.renderer.render(this._pixiApp.stage);

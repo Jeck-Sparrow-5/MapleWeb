@@ -22,7 +22,7 @@ class MapleStanceButton extends MapleButton {
   constructor(canvas: GameCanvas | null, opts: any) {
     super(opts);
     this.stance = opts.stance || BUTTON_STANCE.NORMAL;
-    this.stances = (this.img ?? []).reduce((stances: any, stance: any) => {
+    this.stances = (Array.isArray(this.img) ? this.img : []).reduce((stances: any, stance: any) => {
       const first = stance?.nChildren?.[0];
       if (!first) return stances;
       stances[stance.nName] = first.nTagName === 'vector' ? first.nParent : first;

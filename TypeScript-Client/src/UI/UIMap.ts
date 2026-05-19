@@ -467,20 +467,6 @@ UIMap.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
 
   this.drawLevel(canvas, MyCharacter.stats.level);
 
-  canvas.drawText({
-    text: MyCharacter.stats.job,
-    color: "#ffffff",
-    x: 85,
-    y: 570 + startUIPosition.y,
-  });
-
-  canvas.drawText({
-    text: MyCharacter.name,
-    color: "#ffffff",
-    x: 85,
-    y: 585 + startUIPosition.y,
-  });
-
   canvas.drawImage({
     img: this.bars,
     dx: 215,

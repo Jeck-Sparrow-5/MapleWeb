@@ -6,7 +6,6 @@ import {MapleStanceButton} from "./MapleStanceButton";
 import ClickManager from "./ClickManager";
 import GameCanvas from "../GameCanvas";
 import LoginState, {LoginSubState} from '../LoginState';
-import Camera from '../Camera';
 import WZNode from '../wz-utils/WZNode';
 import FrameAnimation from './FrameAnimation';
 import MapleButton from './MapleButton';
@@ -23,11 +22,11 @@ import { getJobName } from '../Constants/Jobs';
 import SelectCharPacket from '../Net/Packets/SelectCharPacket';
 import UIRaceSelect from './UIRaceSelect';
 import UIExplorerCreation from './UIExplorerCreation';
-import { SelectCharPicPacket, RegisterPicPacket } from '../Net/Packets/PicPackets';
+import { SelectCharPicPacket } from '../Net/Packets/PicPackets';
 import { DeleteCharPacket } from '../Net/Packets/DeleteCharPacket';
 import { drawPreview, clearCache, setPreviewStance } from './CharSelectPreview';
 import { initUIPic, showPic, drawUIPic } from './UIPic';
-import PLAY_AUDIO from '../Audio/PlayAudio';
+import UIWorldSelect from './UIWorldSelect';
 import Channel from '../Net/Models/Channel';
 import { Character } from '../Net/Models/Character';
 
@@ -158,10 +157,13 @@ UILogin.initialize = async function (canvas: GameCanvas) {
 
   initUIPic(canvas);   // load SoftKey WZ assets async (fire-and-forget)
 
-  // Preload login UI sounds
-  NXManager.get('Sound.wz/UI.img/scroll').then((n: any) => {
-    if (n) (this as any)._scrollSound = n.nGetAudio?.();
-  }).catch(() => {});
+  await UIWorldSelect.initialize(
+    canvas,
+    this.uiLogin,
+    this.selectedWorldImage,
+    (step) => this.stepImage(step),
+    () => this.showLoading(),
+  );
 
   this.worldButtonImages = new Map<number, WZNode>();
   this.worldImages = new Map<number, WZNode>();
@@ -195,15 +197,11 @@ UILogin.initialize = async function (canvas: GameCanvas) {
       const charId = this.selectedCharacterId;
       const pic = this.requirePic ?? 0;
 
-      if (pic === 0) {
+      if (pic === 0 || pic === 2) {
         new SelectCharPacket(charId).dispatch();
       } else if (pic === 1) {
         showPic(canvas, 'enter', (entered) => {
           new SelectCharPicPacket(entered, charId).dispatch();
-        });
-      } else {
-        showPic(canvas, 'register', (newPic) => {
-          new RegisterPicPacket(charId, newPic).dispatch();
         });
       }
     },
@@ -451,36 +449,7 @@ UILogin.initialize = async function (canvas: GameCanvas) {
 
   this.newCharStats = Random.generateDiceRollStats();
 
-  const dx = Math.floor(-215);
-  const dy = Math.floor(-830 - Camera.y);
-  this.scrollOpenAnimation = new FrameAnimation(this.uiLogin.nGet('WorldSelect')?.nGet('scroll')?.nGet(0), dx, dy);
-  this.scrollContentFadeIn = {
-    active: false,
-    startTime: 0,
-    duration: 500,
-    alpha: 0,
-  };
-  this.selectWorldChannelImgAnimation = {
-    active: false,
-    type: 'slideIn',
-    startTime: 0,
-    duration: 500,
-    startX: -100,
-    targetX: 0,
-    currentX: 0,
-    alpha: 1,
-  };
   this.selectCharacterImgAnimation = {
-    active: false,
-    type: 'slideIn',
-    startTime: 0,
-    duration: 500,
-    startX: -100,
-    targetX: 0,
-    currentX: 0,
-    alpha: 1,
-  };
-  this.selectedWorldImageAnimation = {
     active: false,
     type: 'slideIn',
     startTime: 0,
@@ -520,9 +489,8 @@ function _triggerStartGame(login: typeof UILogin, canvas: GameCanvas) {
   if (charId === null) return;
   const pic = login.requirePic ?? 0;
   if (!config.websocketUrl) { LoginState.enterGame(); return; }
-  if (pic === 0) { new SelectCharPacket(charId).dispatch(); }
+  if (pic === 0 || pic === 2) { new SelectCharPacket(charId).dispatch(); } // pic=2 = register: skip if PIC disabled server-side
   else if (pic === 1) { showPic(canvas, 'enter', (entered) => { new SelectCharPicPacket(entered, charId).dispatch(); }); }
-  else { showPic(canvas, 'register', (newPic) => { new RegisterPicPacket(charId, newPic).dispatch(); }); }
 }
 
 function _selectCharacter(login: typeof UILogin, newId: number) {
@@ -580,110 +548,16 @@ UILogin.createCharacterSlotButtons = function () {
 };
 
 UILogin.resetWorld = function () {
-  this.worldButtons.forEach((button, index) => {
-    ClickManager.removeButton(button);
-    this.behindFrameButtons.delete(button);
-  });
+  UIWorldSelect.reset();
 }
 
 UILogin.createWorldButtons = function () {
-  this.worlds.forEach((world: World) => {
-    const buttonImage = this.uiLogin.nGet('WorldSelect')?.BtWorld?.nGet(world.id, null);
-    if (buttonImage) {
-      this.worldButtonImages.set(world.id, buttonImage);
-      const worldButton = new MapleStanceButton(this.gameCanvas, {
-        x: -250 + this.worldButtonImages.size * 27,
-        y: -800,
-        img: buttonImage?.nChildren ?? [],
-        onClick: () => {
-          this.scrollOpenAnimation.reset();
-          this.scrollOpenAnimation.active = true;
-          this.selectedWorldId = world.id;
-          if ((this as any)._scrollSound) PLAY_AUDIO((this as any)._scrollSound, 0.7);
-
-          this.scrollContentFadeIn.active = false;
-          this.scrollContentFadeIn.alpha = 0;
-
-          this.channelSelectAnimation = null;
-
-          this.channelButtons.forEach((button, index) => {
-            ClickManager.removeButton(button);
-          });
-          this.channelButtons = [];
-
-          const lastChClickTime: Record<number, number> = {};
-          for (let i = 0; i < 20; i++) {
-            const row = Math.floor(i / 4);
-            const col = i % 4;
-            const isActive = i < world.channels.length;
-
-            const channelButton = new MapleStanceButton(this.gameCanvas, {
-              x: -145 + col * 92,
-              y: -620 + row * 30,
-              img: this.uiLogin.nGet('WorldSelect')?.nGet('channel')?.nGet(i)?.nChildren ?? [],
-              isHidden: false,
-              onClick: async () => {
-                if (!isActive) return;
-                const now = Date.now();
-                const doubleClick = now - (lastChClickTime[i] ?? 0) < 400;
-                lastChClickTime[i] = now;
-
-                this.selectedChannelIndex = i;
-                this.channelSelectAnimation = new FrameAnimation(
-                  this.uiLogin.nGet('WorldSelect')?.nGet('channel')?.nGet('chSelect'),
-                  -145 + col * 92 - 10,
-                  -620 + row * 30 - 10
-                );
-                this.channelSelectAnimation.active = true;
-
-                if (doubleClick && this.selectedWorldId !== null) {
-                  if (!config.websocketUrl) {
-                    await LoginState.switchToSubState(LoginSubState.CHARACTER_SELECT);
-                  } else {
-                    this.showLoading();
-                    new CharacterListRequestPacket(this.selectedWorldId, i + 1).dispatch();
-                  }
-                }
-              },
-            });
-            if (isActive) ClickManager.addButton(channelButton);
-            this.channelButtons.push(channelButton);
-          }
-
-          const enterChannelButton = new MapleStanceButton(this.gameCanvas, {
-            x: 135,
-            y: -470,
-            img: this.uiLogin.nGet('WorldSelect')?.BtGoworld?.nChildren ?? [],
-            onClick: async () => {
-              if (!config.websocketUrl) {
-                await LoginState.switchToSubState(LoginSubState.CHARACTER_SELECT);
-                return;
-              }
-              if (this.selectedWorldId !== null && this.selectedChannelIndex !== null) {
-                this.showLoading();
-                new CharacterListRequestPacket(this.selectedWorldId, this.selectedChannelIndex + 1).dispatch();
-              }
-            },
-            isHidden: false
-          });
-          ClickManager.addButton(enterChannelButton);
-          this.channelButtons.push(enterChannelButton);
-        },
-      });
-      ClickManager.addButton(worldButton);
-      this.worldButtons.push(worldButton);
-      this.behindFrameButtons.add(worldButton);
-    } else {
-      console.warn(`World button image for world ${world.id} not found.`);
-    }
-
-    const image = this.uiLogin.nGet('WorldSelect')?.world?.nGet(world.id, null);
-    if (image) {
-      this.worldImages.set(world.id, image);
-    } else {
-      console.warn(`World image for world ${world.id} not found.`);
-    }
+  UIWorldSelect.setWorlds(this.worlds);
+  UIWorldSelect.createWorldButtons((worldId, channelIdx) => {
+    new CharacterListRequestPacket(worldId, channelIdx + 1).dispatch();
   });
+  // Keep world buttons in behindFrameButtons so they render via UILogin's button loop
+  UIWorldSelect.worldButtons.forEach(btn => this.behindFrameButtons.add(btn));
 }
 
 UILogin.doUpdate = function (msPerTick, camera, canvas) {
@@ -743,44 +617,10 @@ UILogin.doUpdate = function (msPerTick, camera, canvas) {
   // Route clicks to UIExplorerCreation look buttons (handled internally via ClickManager)
   // Draw call keeps it active — no extra routing needed here
 
-  const wasScrollActive = this.scrollOpenAnimation.active;
-  this.scrollOpenAnimation.update(msPerTick);
+  UIWorldSelect.doUpdate(msPerTick);
   this.uiLoginLoading?.update(msPerTick);
   _advanceGlow(msPerTick);
-  if (this.channelSelectAnimation) {
-    this.channelSelectAnimation.update(msPerTick);
-  }
-  if (wasScrollActive && !this.scrollOpenAnimation.active && this.selectedWorldId !== null) {
-    this.scrollContentFadeIn.active = true;
-    this.scrollContentFadeIn.startTime = Date.now();
-    this.scrollContentFadeIn.alpha = 0;
-  }
 
-  if (this.scrollContentFadeIn.active) {
-    const elapsed = Date.now() - this.scrollContentFadeIn.startTime;
-    this.scrollContentFadeIn.alpha = Math.min(elapsed / this.scrollContentFadeIn.duration, 1);
-
-    if (this.scrollContentFadeIn.alpha === 1) {
-      this.scrollContentFadeIn.active = false;
-    }
-  }
-
-  if (this.selectWorldChannelImgAnimation.active) {
-    const elapsed = Date.now() - this.selectWorldChannelImgAnimation.startTime;
-    if (this.selectWorldChannelImgAnimation.type === 'slideIn') {
-      this.selectWorldChannelImgAnimation.currentX = Math.min(
-        this.selectWorldChannelImgAnimation.startX + (elapsed / this.selectWorldChannelImgAnimation.duration) * (this.selectWorldChannelImgAnimation.targetX - this.selectWorldChannelImgAnimation.startX),
-        this.selectWorldChannelImgAnimation.targetX
-      );
-      this.selectWorldChannelImgAnimation.alpha = Math.min(elapsed / this.selectWorldChannelImgAnimation.duration, 1);
-    } else if (this.selectWorldChannelImgAnimation.type === 'fadeOut') {
-      this.selectWorldChannelImgAnimation.alpha = Math.max(1 - elapsed / this.selectWorldChannelImgAnimation.duration, 0);
-    }
-
-    if (this.selectWorldChannelImgAnimation.alpha === 0) {
-      this.selectWorldChannelImgAnimation.active = false;
-    }
-  }
   if (this.selectCharacterImgAnimation.active) {
     const elapsed = Date.now() - this.selectCharacterImgAnimation.startTime;
     if (this.selectCharacterImgAnimation.type === 'slideIn') {
@@ -797,22 +637,6 @@ UILogin.doUpdate = function (msPerTick, camera, canvas) {
       this.selectCharacterImgAnimation.active = false;
     }
   }
-  if (this.selectedWorldImageAnimation.active) {
-    const elapsed = Date.now() - this.selectedWorldImageAnimation.startTime;
-    if (this.selectedWorldImageAnimation.type === 'slideIn') {
-      this.selectedWorldImageAnimation.currentX = Math.min(
-        this.selectedWorldImageAnimation.startX + (elapsed / this.selectedWorldImageAnimation.duration) * (this.selectedWorldImageAnimation.targetX - this.selectedWorldImageAnimation.startX),
-        this.selectedWorldImageAnimation.targetX
-      );
-      this.selectedWorldImageAnimation.alpha = Math.min(elapsed / this.selectedWorldImageAnimation.duration, 1);
-    } else if (this.selectedWorldImageAnimation.type === 'fadeOut') {
-      this.selectedWorldImageAnimation.alpha = Math.max(1 - elapsed / this.selectedWorldImageAnimation.duration, 0);
-    }
-
-    if (this.selectedWorldImageAnimation.alpha === 0) {
-      this.selectedWorldImageAnimation.active = false;
-    }
-  }
 };
 
 UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
@@ -824,7 +648,7 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
   //   dy: this.diceY - camera.y - currDiceFrame.origin.nY,
   // });
 
-  this.scrollOpenAnimation.draw(canvas, camera, lag, msPerTick, tdelta);
+  UIWorldSelect.drawScrollAnim(canvas, camera, lag, msPerTick, tdelta);
 
   const overlayActive = !UIRaceSelect.isHidden || !UIExplorerCreation.isHidden;
   const savedClicked = canvas.clicked;
@@ -834,39 +658,7 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
   });
   if (overlayActive) (canvas as any).clicked = savedClicked;
 
-  if (typeof this.selectedWorldId !== 'undefined' && this.selectedWorldId !== null) {
-    const worldImage = this.worldImages.get(this.selectedWorldId);
-    if (worldImage) {
-      canvas.drawImage({
-        img: worldImage.nGetImage(),
-        dx: 225,
-        dy: -680 - Camera.y,
-        alpha: this.scrollContentFadeIn.alpha
-      });
-    } else {
-      console.warn(`World image for selected world ${this.selectedWorldId} not found.`);
-    }
-
-    this.channelButtons.forEach((obj) => {
-      if (!obj.isHidden) {
-        const stanceButton = obj as MapleStanceButton;
-        const currentFrame = stanceButton.stances[stanceButton.stance];
-        const currentImage = currentFrame?.nGetImage();
-        if (currentImage) {
-          canvas.drawImage({
-            img: currentImage,
-            dx: obj.x - camera.x,
-            dy: obj.y - camera.y,
-            alpha: this.scrollContentFadeIn.alpha
-          });
-        }
-      }
-    });
-
-    if (this.channelSelectAnimation) {
-      this.channelSelectAnimation.draw(canvas, camera, lag, msPerTick, tdelta);
-    }
-  }
+  UIWorldSelect.drawContent(canvas, camera);
 
   // MapLogin shown during race select, NewChar backgrounds during creation
   if (!UIRaceSelect.isHidden) {
@@ -912,14 +704,7 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
   });
   if (overlayActive) (canvas as any).clicked = savedClicked;
 
-  if (this.selectWorldChannelImgAnimation.active) {
-    canvas.drawImage({
-      img: this.stepImage(1),
-      dx: this.selectWorldChannelImgAnimation.currentX,
-      dy: 30,
-      alpha: this.selectWorldChannelImgAnimation.alpha
-    });
-  }
+  UIWorldSelect.drawTopAnimations(canvas);
 
   if (this.selectCharacterImgAnimation.active) {
     canvas.drawImage({
@@ -930,13 +715,6 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
     });
   }
 
-  if (this.selectedWorldImageAnimation.active && this.selectedWorldImage) {
-    canvas.drawImage({
-      img: this.selectedWorldImage,
-      dx: this.selectedWorldImageAnimation.currentX,
-      dy: 100,
-    });
-  }
 
   const pageStart = (this.currentCharPage ?? 0) * CHAR_SLOTS;
   this.characters.slice(pageStart, pageStart + CHAR_SLOTS).forEach((char, i) => {
@@ -1167,30 +945,11 @@ UILogin.hideLoading = function () {
 };
 
 UILogin.startSelectWorldChannelImgSlideIn = function () {
-  const targetX = 0;
-  this.selectWorldChannelImgAnimation = {
-    active: true,
-    type: 'slideIn',
-    startTime: Date.now(),
-    duration: 500,
-    startX: targetX - 100,
-    targetX: targetX,
-    currentX: targetX,
-    alpha: 0
-  };
+  UIWorldSelect.startSelectWorldChannelImgSlideIn();
 };
 
 UILogin.startSelectWorldChannelImgFadeOut = function () {
-  this.selectWorldChannelImgAnimation = {
-    active: true,
-    type: 'fadeOut',
-    startTime: Date.now(),
-    duration: 500,
-    startX: 0,
-    targetX: 0,
-    currentX: 0,
-    alpha: 1
-  };
+  UIWorldSelect.startSelectWorldChannelImgFadeOut();
 };
 
 UILogin.startSelectCharacterImgSlideIn = function () {
@@ -1221,17 +980,7 @@ UILogin.startSelectCharacterImgFadeOut = function () {
 };
 
 UILogin.startSelectedWorldSlideIn = function () {
-  const targetX = 0;
-  this.selectedWorldImageAnimation = {
-    active: true,
-    type: 'slideIn',
-    startTime: Date.now(),
-    duration: 500,
-    startX: targetX - 100,
-    targetX: targetX,
-    currentX: targetX,
-    alpha: 0
-  };
+  UIWorldSelect.startSelectedWorldSlideIn();
 };
 
 UILogin.stepImage = function (stepId: number) {

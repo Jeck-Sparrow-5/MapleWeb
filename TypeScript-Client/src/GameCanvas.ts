@@ -19,7 +19,7 @@ class GameCanvas {
 
   // PixiJS renderer
   _pixiApp: PIXI.Application;
-  _texCache: WeakMap<any, PIXI.Texture> = new WeakMap();
+  _texCache: Map<any, PIXI.Texture> = new Map();
   _updatedThisFrame: Set<PIXI.BaseTexture> = new Set();
   _texUpdateCount: WeakMap<PIXI.BaseTexture, number> = new WeakMap();
   // Three fixed layers — bg → sprites → fg (HP bars, text, UI)
@@ -39,6 +39,11 @@ class GameCanvas {
   _identityMatrix: PIXI.Matrix = new PIXI.Matrix();
   _cachedRect: DOMRect = new DOMRect();
   _contextLost: boolean = false;
+  _tilingPool: PIXI.TilingSprite[] = [];
+  _tilingIdx: number = 0;
+  _particleLayer: PIXI.ParticleContainer = new PIXI.ParticleContainer(4096, { uvs: true, alpha: true }, 1024, true);
+  _particlePool: PIXI.Sprite[] = [];
+  _particleIdx: number = 0;
 
   constructor(gameWrapper: HTMLElement) {
     this.scaleX = 1;
@@ -137,6 +142,9 @@ class GameCanvas {
     }
     this.context = this.game.getContext("2d")!;
 
+    // Increase default sprite batch size — reduces draw-call splits on busy maps
+    (PIXI as any).BatchRenderer.defaultBatchSize = 8192;
+
     // PIXI WebGL renderer — inserted before the 2D overlay canvas
     this._pixiApp = new PIXI.Application({
       width: this.game.width,
@@ -157,27 +165,44 @@ class GameCanvas {
     this.game.style.background = 'transparent';
     gameWrapper.insertBefore(pixiCanvas, this.game);
 
+    let _contextLostTimer: ReturnType<typeof setTimeout> | null = null;
+
     pixiCanvas.addEventListener('webglcontextlost', (e: Event) => {
-      e.preventDefault(); // allow browser to restore the context
+      e.preventDefault();
       this._contextLost = true;
       console.warn('[pixi] WebGL context lost — rendering paused');
+      // If GPU can't restore within 6s, show fatal overlay
+      _contextLostTimer = setTimeout(() => {
+        _contextLostTimer = null;
+        if (this._contextLost) this._showContextLostOverlay();
+      }, 6000);
     }, false);
+
     pixiCanvas.addEventListener('webglcontextrestored', () => {
+      if (_contextLostTimer !== null) {
+        clearTimeout(_contextLostTimer);
+        _contextLostTimer = null;
+      }
       this._contextLost = false;
-      // Caches hold stale GPU handles — clear so textures re-upload on next draw
       this._subTexCache.clear();
       this._texUpdateCount = new WeakMap();
       this._updatedThisFrame.clear();
       console.info('[pixi] WebGL context restored');
     }, false);
 
-    // Layer order: background → sprites → foreground (HP bars, text, UI)
+    // Layer order: background → sprites → foreground → particles (damage numbers on top)
     const stage = this._pixiApp.stage as any;
     stage.addChild(this._bgLayer);
     stage.addChild(this._spriteLayer);
     stage.addChild(this._fgLayer);
+    stage.addChild(this._particleLayer);
     this._bgLayer.addChild(this._bgGfx);
     this._fgLayer.addChild(this._fgGfx);
+    // No interaction traversal — we handle clicks ourselves
+    this._bgLayer.interactiveChildren = false;
+    this._spriteLayer.interactiveChildren = false;
+    this._fgLayer.interactiveChildren = false;
+    this._particleLayer.interactiveChildren = false;
 
     this._cachedRect = gameWrapper.getBoundingClientRect();
 
@@ -191,11 +216,12 @@ class GameCanvas {
       tex = PIXI.Texture.from(img);
       this._texCache.set(img, tex);
     }
-    // Canvas textures: re-upload at most once per frame, stop after 180 frames
+    // Canvas textures: re-upload at most once per frame, stop after 3600 frames (~60s)
+    // Long window covers slow network / async NX bitmap decodes that arrive late
     if (img instanceof HTMLCanvasElement) {
       const bt = tex.baseTexture;
       const count = this._texUpdateCount.get(bt) ?? 0;
-      if (count < 180 && !this._updatedThisFrame.has(bt)) {
+      if (count < 3600 && !this._updatedThisFrame.has(bt)) {
         bt.update();
         this._updatedThisFrame.add(bt);
         this._texUpdateCount.set(bt, count + 1);
@@ -208,6 +234,7 @@ class GameCanvas {
     if (this._spriteIdx < this._spritePool.length) {
       const s = this._spritePool[this._spriteIdx++];
       s.visible = true;
+      s.tint = 0xFFFFFF;
       return s;
     }
     const s = new PIXI.Sprite();
@@ -217,10 +244,89 @@ class GameCanvas {
     return s;
   }
 
+  _getParticleSprite(): PIXI.Sprite {
+    if (this._particleIdx < this._particlePool.length) {
+      const s = this._particlePool[this._particleIdx++];
+      s.visible = true;
+      return s;
+    }
+    const s = new PIXI.Sprite();
+    this._particleLayer.addChild(s);
+    this._particlePool.push(s);
+    this._particleIdx++;
+    return s;
+  }
+
+  _getTilingSprite(): PIXI.TilingSprite {
+    if (this._tilingIdx < this._tilingPool.length) {
+      const ts = this._tilingPool[this._tilingIdx++];
+      ts.visible = true;
+      return ts;
+    }
+    const ts = new PIXI.TilingSprite(PIXI.Texture.EMPTY, 0, 0);
+    this._bgLayer.addChild(ts);
+    this._tilingPool.push(ts);
+    this._tilingIdx++;
+    return ts;
+  }
+
+  drawTiledImage(opts: {
+    img: any;
+    dx: number;
+    dy: number;
+    tileX: boolean;
+    tileY: boolean;
+    cx: number;
+    cy: number;
+    w: number;
+    h: number;
+    alpha?: number;
+    flipped?: boolean;
+  }) {
+    const img = opts.img;
+    if (!img?.width) return;
+    const alpha = opts.alpha ?? 1;
+    const flipped = opts.flipped ?? false;
+    const tex = this._getTex(img);
+    const ts = this._getTilingSprite();
+    ts.texture = tex;
+    ts.alpha = alpha;
+    const cx = opts.cx || opts.w;
+    const cy = opts.cy || opts.h;
+    const screenW = this._pixiApp.renderer.width;
+    const screenH = this._pixiApp.renderer.height;
+    ts.tileScale.set((cx / opts.w) * (flipped ? -1 : 1), cy / opts.h);
+    if (opts.tileX && opts.tileY) {
+      ts.x = 0; ts.y = 0; ts.width = screenW; ts.height = screenH;
+      ts.tilePosition.set(opts.dx, opts.dy);
+    } else if (opts.tileX) {
+      ts.x = 0; ts.y = opts.dy; ts.width = screenW; ts.height = opts.h;
+      ts.tilePosition.set(opts.dx, 0);
+    } else {
+      ts.x = opts.dx; ts.y = 0; ts.width = opts.w; ts.height = screenH;
+      ts.tilePosition.set(0, opts.dy);
+    }
+  }
+
+  drawParticle(opts: { img: any; dx: number; dy: number; alpha?: number }) {
+    const img = opts.img;
+    if (!img?.width) return;
+    const screenW = this._pixiApp.renderer.width;
+    const screenH = this._pixiApp.renderer.height;
+    if (opts.dx + img.width < 0 || opts.dx > screenW || opts.dy + img.height < 0 || opts.dy > screenH) return;
+    const s = this._getParticleSprite();
+    s.texture = this._getTex(img);
+    s.x = opts.dx;
+    s.y = opts.dy;
+    s.alpha = opts.alpha ?? 1;
+  }
+
   beginFrame() {
     if (this._contextLost) return;
     this._spriteIdx = 0;
     this._textIdx = 0;
+    this._tilingIdx = 0;
+    this._particleIdx = 0;
     this._bgGfx.clear();
     this._fgGfx.clear();
     this._updatedThisFrame.clear();
@@ -236,7 +342,46 @@ class GameCanvas {
     if (this._contextLost) return;
     for (let i = this._spriteIdx; i < this._spritePool.length; i++) this._spritePool[i].visible = false;
     for (let i = this._textIdx; i < this._textPool.length; i++) this._textPool[i].visible = false;
+    for (let i = this._tilingIdx; i < this._tilingPool.length; i++) this._tilingPool[i].visible = false;
+    for (let i = this._particleIdx; i < this._particlePool.length; i++) this._particlePool[i].visible = false;
     this._pixiApp.renderer.render(this._pixiApp.stage);
+  }
+
+  disposeAllTextures() {
+    this._texCache.forEach((tex) => {
+      if (!tex.baseTexture.destroyed) tex.baseTexture.destroy();
+    });
+    this._texCache.clear();
+    this._subTexCache.clear();
+    this._texUpdateCount = new WeakMap();
+    this._updatedThisFrame.clear();
+  }
+
+  _showContextLostOverlay() {
+    const existing = document.getElementById('webgl-lost-overlay');
+    if (existing) return;
+    const overlay = document.createElement('div');
+    overlay.id = 'webgl-lost-overlay';
+    Object.assign(overlay.style, {
+      position: 'fixed', inset: '0', zIndex: '99999',
+      background: 'rgba(0,0,0,0.92)',
+      display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center',
+      fontFamily: 'Arial, sans-serif', color: '#ffffff', gap: '16px',
+    });
+    overlay.innerHTML = `
+      <div style="font-size:22px;font-weight:bold;color:#f5a623;">Graphics Error</div>
+      <div style="font-size:14px;color:#cccccc;text-align:center;max-width:340px;">
+        The WebGL context was lost and could not be restored.<br>
+        This usually means the GPU ran out of memory.
+      </div>
+      <button id="webgl-reload-btn" style="
+        margin-top:8px;padding:10px 28px;font-size:14px;font-weight:bold;
+        background:#f5a623;color:#000;border:none;border-radius:6px;cursor:pointer;">
+        Reload Game
+      </button>`;
+    document.body.appendChild(overlay);
+    document.getElementById('webgl-reload-btn')?.addEventListener('click', () => location.reload());
   }
 
   _colorToNum(color: string): number {
@@ -383,6 +528,7 @@ class GameCanvas {
     rx?: number;
     ry?: number;
     alpha?: number;
+    tint?: number;
   }) {
     const img = opts.img;
     if (!img?.width) return;
@@ -418,11 +564,19 @@ class GameCanvas {
         }
       }
 
+      // Viewport cull — skip sprites fully off-screen
+      const screenW = this._pixiApp.renderer.width;
+      const screenH = this._pixiApp.renderer.height;
+      const cullPad = angle !== 0 ? Math.max(effectiveWidth, effectiveHeight) : 0;
+      if (dx + effectiveWidth + cullPad < 0 || dx - cullPad > screenW ||
+          dy + effectiveHeight + cullPad < 0 || dy - cullPad > screenH) return;
+
       const sprite = this._getPoolSprite();
       sprite.texture = tex;
       sprite.alpha = alpha;
       sprite.angle = angle;
       sprite.scale.y = scaleY;
+      sprite.tint = opts.tint ?? 0xFFFFFF;
 
       if (flipped) {
         // Canvas 2D flip: translate(effectiveWidth) then scale(-1,1) — independent of rx.

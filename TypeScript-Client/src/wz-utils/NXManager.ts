@@ -1,7 +1,10 @@
 ﻿import { NXNode } from './NXNode';
 import { NXRangeReader } from './NXRangeReader';
+import { setLoadingProgress } from '../LoadingProgress';
 
 const fileCache = new Map<string, NXNode>();
+let _nxPending = 0;
+let _nxDone    = 0;
 
 function nxName(path: string): string {
   return path.split('/')[0].replace(/\.wz$/, '');
@@ -9,9 +12,19 @@ function nxName(path: string): string {
 
 async function fetchNX(name: string): Promise<NXNode> {
   if (fileCache.has(name)) return fileCache.get(name)!;
+  _nxPending++;
+  setLoadingProgress(
+    (_nxDone / Math.max(_nxPending, 1)) * 18,
+    `Fetching ${name}.nx…`
+  );
   const url = `wz_client/${name}.nx`;
   const root = await new NXRangeReader(url).parse();
   fileCache.set(name, root);
+  _nxDone++;
+  setLoadingProgress(
+    (_nxDone / Math.max(_nxPending, 1)) * 18,
+    `Loaded ${name}.nx`
+  );
   return root;
 }
 

@@ -1,4 +1,5 @@
 ﻿import NXManager from "./wz-utils/NXManager";
+import { setLoadingProgress, resetLoadingProgress } from "./LoadingProgress";
 import SessionManager from "./SessionManager";
 import { NpcTalkPacket } from "./Net/Packets/NpcInteractPacket";
 import TouchReactorPacket from "./Net/Packets/TouchReactorPacket";
@@ -83,7 +84,11 @@ const minLoadTimeInSeconds = 1;
 
 MapleMap.load = async function (id: number | string) {
   const startTime = new Date().getTime();
+  // Free old map's GPU textures before loading new map to prevent VRAM exhaustion
+  if (this.doneLoading) (this as any).canvas?.disposeAllTextures();
   this.doneLoading = false;
+  resetLoadingProgress();
+  setLoadingProgress(0, 'Connecting…');
 
   let filename = "UI.wz/MapLogin.img";
   if (id !== "MapLogin") {
@@ -91,6 +96,7 @@ MapleMap.load = async function (id: number | string) {
     const strId = `${id}`.padStart(9, "0");
     filename = `Map.wz/Map/Map${prefix}/${strId}.img`;
   }
+  setLoadingProgress(20, 'Fetching map data…');
   this.wzNode = await NXManager.get(filename);
   this.isTown = !!this.wzNode.info?.town?.nValue;
   console.log(`is town: ${this.isTown}`);
@@ -113,18 +119,26 @@ MapleMap.load = async function (id: number | string) {
     AudioManager.playBackgroundMusic(bgmPath).catch(() => {});
   }
 
+  setLoadingProgress(25, 'Loading terrain…');
   this.footholds = this.loadFootholds(this.wzNode.foothold);
   this.boundaries = this.loadBoundaries(this.wzNode, this.footholds);
   Camera.setBoundaries(this.boundaries); // debugging
   Camera.lookAt(this.boundaries.left, this.boundaries.top); // debugging
+  setLoadingProgress(32, 'Loading backgrounds…');
   this.backgrounds = await this.loadBackgrounds(this.wzNode.back);
+  setLoadingProgress(50, 'Loading tiles…');
   this.tiles = await this.loadTiles(this.wzNode);
+  setLoadingProgress(65, 'Loading objects…');
   this.objects = await this.loadObjects(this.wzNode);
+  setLoadingProgress(74, 'Loading portals…');
   this.portals = await this.loadPortals(this.wzNode.portal);
+  setLoadingProgress(80, 'Loading map info…');
   this.names = await this.loadNames(id as number);
   // Only load WZ-defined NPCs/mobs when offline; server sends SPAWN packets when connected
   if (!SessionManager.isConnected()) {
+    setLoadingProgress(85, 'Loading NPCs…');
     await this.loadNPCs(this.wzNode.life);
+    setLoadingProgress(91, 'Loading monsters…');
     await this.loadMonsters(this.wzNode.life);
   }
 
@@ -165,15 +179,18 @@ MapleMap.load = async function (id: number | string) {
     }
   } catch (_) {}
 
+  setLoadingProgress(96, 'Loading interactables…');
   Timer.doReset();
 
   this.id = id;
 
   const endTime = new Date().getTime();
   console.log(`MapleMap.load ${id} took ${endTime - startTime}ms`);
+  const remaining = minLoadTimeInSeconds * 500 - (endTime - startTime);
   setTimeout(() => {
+    setLoadingProgress(100, 'Ready!');
     this.doneLoading = true;
-  }, minLoadTimeInSeconds * 500 - (endTime - startTime));
+  }, Math.max(0, remaining));
 
   this.itemDrops = [];
 

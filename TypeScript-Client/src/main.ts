@@ -9,6 +9,7 @@ import StateManager from "./StateManager";
 import LoginState from "./LoginState";
 import GameCanvas from "./GameCanvas";
 import ClickManager from "./UI/ClickManager";
+import MapleMap from "./MapleMap";
 
 import config from "./Config";
 
@@ -33,12 +34,20 @@ const startGame = async () => {
   Camera.initialize();
   Timer.initialize();
   // await MySocket.initialize();
+  (MapleMap as any).canvas = canvas;
   await StateManager.setState(LoginState, canvas);
 
   const loadingOverlay = document.getElementById('loading-overlay');
   if (loadingOverlay) {
-    loadingOverlay.classList.add('fade-out');
-    loadingOverlay.addEventListener('transitionend', () => loadingOverlay.remove(), { once: true });
+    // Wait until MapleMap signals doneLoading before fading out
+    const waitForMap = () => new Promise<void>(resolve => {
+      const check = () => (MapleMap as any).doneLoading ? resolve() : requestAnimationFrame(check);
+      check();
+    });
+    waitForMap().then(() => setTimeout(() => {
+      loadingOverlay.classList.add('fade-out');
+      loadingOverlay.addEventListener('transitionend', () => loadingOverlay.remove(), { once: true });
+    }, 2000));
   }
 
   let Loop = new GameLoop(canvas);

@@ -20,7 +20,7 @@ export class Stat {
     public readonly remainingAp: number,
     public readonly remainingSp: number,
     public readonly exp: number,
-    public readonly frame: number,
+    public readonly fame: number,
     public readonly gachaExp: number,
     public readonly mapId: number,
     public readonly spawnPoint: number,

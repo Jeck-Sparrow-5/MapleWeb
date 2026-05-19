@@ -59,33 +59,16 @@ export class DamageIndicator {
     alpha: number = 1
   ) => {
     if (damageNumber <= 0) {
-      let image = otherNumberNode?.["Miss"]?.nGetImage();
-      canvas.drawImage({
-        img: image,
-        dx: position.x,
-        dy: position.y,
-        alpha,
-      });
+      const image = otherNumberNode?.["Miss"]?.nGetImage();
+      canvas.drawParticle({ img: image, dx: position.x, dy: position.y, alpha });
     } else {
       [...`${damageNumber}`].reduce((x, digit, index) => {
         let image = otherNumberNode?.[digit]?.nGetImage();
         let y = position.y;
-        if (index % 2 === 1) {
-          y += 4;
-        }
-
-        if (index === 0) {
-          image = firstNumberNode?.[digit]?.nGetImage();
-          y -= 4;
-        }
-
-        canvas.drawImage({
-          img: image,
-          dx: x,
-          dy: y,
-          alpha,
-        });
-        x += image.width - 5;
+        if (index % 2 === 1) y += 4;
+        if (index === 0) { image = firstNumberNode?.[digit]?.nGetImage(); y -= 4; }
+        canvas.drawParticle({ img: image, dx: x, dy: y, alpha });
+        x += image?.width ? image.width - 5 : 0;
         return x;
       }, position.x);
     }

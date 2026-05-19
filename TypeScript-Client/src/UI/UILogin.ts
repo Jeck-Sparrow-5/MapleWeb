@@ -18,6 +18,8 @@ import UILoginLoading from './UILoginLoading';
 import AcceptTOSPacket from '../Net/Packets/AcceptTOSPacket';
 import World from '../Net/Models/World';
 import CharacterListRequestPacket from '../Net/Packets/CharacterListRequestPacket';
+import NameTagRenderer from './NameTagRenderer';
+import { getJobName } from '../Constants/Jobs';
 import SelectCharPacket from '../Net/Packets/SelectCharPacket';
 import UIRaceSelect from './UIRaceSelect';
 import UIExplorerCreation from './UIExplorerCreation';
@@ -48,6 +50,7 @@ interface UILoginInterface {
   ) => void;
   placeInputs: () => void;
   removeInputs: () => void;
+  _doLogin: (() => Promise<void>) | null;
   showLoading: () => void;
   hideLoading: () => void;
   drawMask: (canvas: GameCanvas) => void;
@@ -115,6 +118,7 @@ interface UILoginInterface {
   characters: Character[];
   selectedCharacterId: number | null;
   requirePic: number;
+  maxCharacterSlots: number;
   characterSlotButtons: MapleButton[];
   createCharacterSlotButtons: () => void;
   clearCharacterSlotButtons: () => void;
@@ -145,7 +149,9 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   this.characterSlotButtons = [];
   this.selectedCharacterId = null;
   this.requirePic = 0;
+  this.maxCharacterSlots = 3;
   this.currentCharPage = 0;
+  NameTagRenderer.initialize();
   this.saveIdEnabled = !!localStorage.getItem('maple_saved_id');
 
   initUIPic(canvas);   // load SoftKey WZ assets async (fire-and-forget)
@@ -309,27 +315,32 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   ClickManager.addButton(this.channelBackButton);
   this.inFrontOfFrameButtons.push(this.channelBackButton);
 
+  const doLogin = async () => {
+    if (!config.websocketUrl) {
+      this.worlds.push(new World(0, 'Test', 1, 'Message', [
+        new Channel(1, 'Test', 1, false)
+      ]));
+      await LoginState.switchToSubState(LoginSubState.WORLD_SELECT);
+      return;
+    }
+    if (this.saveIdEnabled && this.inputUsn?.input.value) {
+      localStorage.setItem('maple_saved_id', this.inputUsn.input.value);
+    }
+    this.showLoading();
+    new LoginPacket(this.inputUsn?.input.value, this.inputPwd?.input.value).dispatch();
+  };
+  this._doLogin = doLogin;
+
   const loginButton = new MapleStanceButton(canvas, {
     x: 223,
     y: -85,
     img: this.uiLogin.nGet('Title')?.nGet('BtLogin')?.nChildren ?? [],
-    onClick: async () => {
-      if (!config.websocketUrl) { // @todo: remove this check when the login screen is fully implemented
-        this.worlds.push(new World(0, 'Test', 1, 'Message', [
-          new Channel(1, 'Test', 1, false)
-        ]));
-        await LoginState.switchToSubState(LoginSubState.WORLD_SELECT);
-        return;
-      }
-      if (this.saveIdEnabled && this.inputUsn?.input.value) {
-        localStorage.setItem('maple_saved_id', this.inputUsn.input.value);
-      }
-      this.showLoading();
-      new LoginPacket(this.inputUsn?.input.value, this.inputPwd?.input.value).dispatch();
-    },
+    onClick: doLogin,
   });
   ClickManager.addButton(loginButton);
   this.behindFrameButtons.add(loginButton);
+  this.inputUsn?.addSubmitListener(doLogin);
+  this.inputPwd?.addSubmitListener(doLogin);
 
   // Save ID (BtLoginIDSave)
   const saveIdButton = new MapleStanceButton(canvas, {
@@ -474,6 +485,21 @@ UILogin.initialize = async function (canvas: GameCanvas) {
   };
 };
 
+function getJobIconIndex(job: number): number {
+  if (job >= 100 && job < 200) return 0;
+  if (job >= 200 && job < 300) return 1;
+  if (job >= 300 && job < 400) return 2;
+  if (job >= 400 && job < 500) return 3;
+  if (job >= 500 && job < 600) return 4;
+  if (job >= 1100 && job < 1200) return 0;
+  if (job >= 1200 && job < 1300) return 1;
+  if (job >= 1300 && job < 1400) return 2;
+  if (job >= 1400 && job < 1500) return 3;
+  if (job >= 1500 && job < 1600) return 4;
+  if (job >= 2100) return 0;
+  return 0;
+}
+
 function getRaceKey(job: number): string {
   if (job >= 2000 && job < 3000) return 'aran';
   if (job >= 1000 && job < 2000) return 'knight';
@@ -505,14 +531,14 @@ UILogin.createCharacterSlotButtons = function () {
       x: wx,
       y: CHAR_SLOT_Y,
       img: this.uiLogin.nGet('CharSelect')?.nGet('BtSelect')?.nChildren ?? [],
-      isHidden: true, // invisible hit-area; character drawn separately in doRender
+      isHidden: false, // must be false so ClickManager processes it; not in behindFrameButtons so it won't render
       onClick: () => {
         this.selectedCharacterId = char.stat.characterId;
       },
     });
     ClickManager.addButton(btn);
     this.characterSlotButtons.push(btn);
-    this.behindFrameButtons.add(btn);
+    // intentionally NOT added to behindFrameButtons — click-only, drawn separately in doRender
   });
 };
 
@@ -868,9 +894,102 @@ UILogin.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
       canvas.drawImage({ img: platImg, dx: ccx - Math.floor(platImg.width / 2), dy: cy - 10 });
     }
 
-    canvas.drawText({ text: char.stat.characterName, color: '#FFFFFF', x: ccx, y: cy + 20, align: 'center' });
-    canvas.drawText({ text: `Lv.${char.stat.level}`, color: '#FFFF88', x: ccx, y: cy + 34, align: 'center' });
+    // Head glow effect (effect/0) — screen-space, above character head
+    if (isSelected) {
+      const eNode = charSelNode?.nGet('effect')?.nGet('0');
+      if (eNode) {
+        const frames = eNode.nChildren?.filter((c: any) => c.nTagName === 'canvas') ?? [];
+        if (frames.length) {
+          const fNode = frames[Math.floor(Date.now() / 100) % frames.length];
+          const fImg = fNode?.nGetImage?.();
+          if (fImg?.width) {
+            canvas.drawImage({ img: fImg, dx: ccx - fImg.width / 2, dy: cy - fImg.height - 30 });
+          }
+        }
+      }
+    }
+
+    // Name tag — CharSelect-specific L/M/R with selected/unselected state
+    const tagStyle = isSelected ? '1' : '0';
+    const tagNode = charSelNode?.nGet('nameTag')?.nGet(tagStyle);
+    const tagL = tagNode?.nGet('0')?.nGetImage?.();
+    const tagM = tagNode?.nGet('1')?.nGetImage?.();
+    const tagR = tagNode?.nGet('2')?.nGetImage?.();
+    const nameW = canvas.measureText({ text: char.stat.characterName, fontSize: 11 }).width;
+    if (tagL?.width > 1 && tagM?.width > 1 && tagR?.width > 1) {
+      const totalTagW = tagL.width + nameW + tagR.width;
+      const tagX = ccx - totalTagW / 2;
+      const tagY = cy + 20;
+      canvas.drawImage({ img: tagL, dx: tagX,                              dy: tagY, dw: tagL.width, dh: tagL.height });
+      canvas.drawImage({ img: tagM, dx: tagX + tagL.width,                 dy: tagY, dw: nameW,      dh: tagM.height });
+      canvas.drawImage({ img: tagR, dx: tagX + tagL.width + nameW,         dy: tagY, dw: tagR.width, dh: tagR.height });
+      canvas.drawText({ text: char.stat.characterName, x: ccx, y: tagY + 4, color: '#ffffff', fontSize: 11, align: 'center' });
+    } else {
+      NameTagRenderer.draw(canvas, camera, charWx, CHAR_SLOT_Y + 28, char.stat.characterName, '3');
+    }
+
+    // Level + job name below name tag
+    canvas.drawText({ text: `Lv.${char.stat.level} ${getJobName(char.stat.job)}`, color: '#FFFF88', x: ccx, y: cy + 42, align: 'center' });
+
+    // charInfo1 panel — WZ image 183×151 origin(45,57), drawn to right of character
+    if (isSelected) {
+      const s = char.stat;
+      // Pick charInfo1 (151px tall, has fame row) vs charInfo (115px, no fame)
+      const infoNode = charSelNode?.nGet(s.gender === 1 ? 'charInfo3' : 'charInfo1');
+      const infoImg  = infoNode?.nGetImage?.();
+      const ORIG_X = 45, ORIG_Y = 57;
+      // Anchor: fixed right-side position clear of all 3 character slots
+      const anchorX = 590;
+      const anchorY = 310;
+      const panelX = anchorX - ORIG_X;  // 545
+      const panelY = anchorY - ORIG_Y;  // 253
+
+      if (infoImg?.width > 1) {
+        canvas.drawImage({ img: infoImg, dx: panelX, dy: panelY });
+      } else {
+        canvas.drawRoundedRect({ x: panelX, y: panelY, width: 183, height: 151, radius: 4, color: '#0a0a1a', alpha: 0.9, strokeColor: '#334466', strokeWidth: 1 });
+      }
+
+      // Text content — positions relative to panel top-left (panelX, panelY)
+      // Row 1: name (centered)
+      canvas.drawText({ text: s.characterName, color: '#ffffff', fontSize: 11, fontWeight: 'bold', x: panelX + 92, y: panelY + 14, align: 'center' });
+      // Row 2: Lv. + job name + job class icon
+      canvas.drawText({ text: `Lv.${s.level}`, color: '#ffee44', fontSize: 10, x: panelX + 14, y: panelY + 30 });
+      canvas.drawText({ text: getJobName(s.job), color: '#aaddff', fontSize: 10, x: panelX + 55, y: panelY + 30 });
+      const jobIconImg = charSelNode?.nGet('icon')?.nGet('job')?.nGet(String(getJobIconIndex(s.job)))?.nGetImage?.();
+      if (jobIconImg?.width > 1) canvas.drawImage({ img: jobIconImg, dx: panelX + 14, dy: panelY + 43 });
+      // Row 3+: stats (two columns)
+      const col1x = panelX + 14, col2x = panelX + 98;
+      const statLabelColor = '#99aacc', statValColor = '#ffffff';
+      const fs = 10;
+      canvas.drawText({ text: 'STR', color: statLabelColor, fontSize: fs, x: col1x,      y: panelY + 58 });
+      canvas.drawText({ text: String(s.str), color: statValColor, fontSize: fs, x: col1x + 28, y: panelY + 58 });
+      canvas.drawText({ text: 'DEX', color: statLabelColor, fontSize: fs, x: col2x,      y: panelY + 58 });
+      canvas.drawText({ text: String(s.dex), color: statValColor, fontSize: fs, x: col2x + 28, y: panelY + 58 });
+      canvas.drawText({ text: 'INT', color: statLabelColor, fontSize: fs, x: col1x,      y: panelY + 73 });
+      canvas.drawText({ text: String(s.int), color: statValColor, fontSize: fs, x: col1x + 28, y: panelY + 73 });
+      canvas.drawText({ text: 'LUK', color: statLabelColor, fontSize: fs, x: col2x,      y: panelY + 73 });
+      canvas.drawText({ text: String(s.luk), color: statValColor, fontSize: fs, x: col2x + 28, y: panelY + 73 });
+      canvas.drawText({ text: 'HP',  color: statLabelColor, fontSize: fs, x: col1x,      y: panelY + 88 });
+      canvas.drawText({ text: `${s.hp}/${s.maxHp}`, color: statValColor, fontSize: fs, x: col1x + 22, y: panelY + 88 });
+      canvas.drawText({ text: 'MP',  color: statLabelColor, fontSize: fs, x: col2x,      y: panelY + 88 });
+      canvas.drawText({ text: `${s.mp}/${s.maxMp}`, color: statValColor, fontSize: fs, x: col2x + 22, y: panelY + 88 });
+      // Fame row (charInfo1 extra 36px)
+      canvas.drawText({ text: 'Fame', color: statLabelColor, fontSize: fs, x: col1x,     y: panelY + 112 });
+      canvas.drawText({ text: String(s.fame), color: statValColor, fontSize: fs, x: col1x + 34, y: panelY + 112 });
+      const rankMov = char.rank?.rankMovement ?? 0;
+      const rankIconName = rankMov > 0 ? 'up' : rankMov < 0 ? 'down' : 'same';
+      const rankIconImg = charSelNode?.nGet('icon')?.nGet(rankIconName)?.nGetImage?.();
+      if (rankIconImg?.width > 1) canvas.drawImage({ img: rankIconImg, dx: col1x + 58, dy: panelY + 112 });
+      canvas.drawText({ text: 'EXP',  color: statLabelColor, fontSize: fs, x: col2x,     y: panelY + 112 });
+      canvas.drawText({ text: String(s.exp), color: statValColor, fontSize: fs, x: col2x + 26, y: panelY + 112 });
+    }
   });
+
+  // Slot count — bottom of char select area
+  const usedSlots = this.characters.length;
+  const maxSlots = this.maxCharacterSlots;
+  canvas.drawText({ text: `Characters: ${usedSlots} / ${maxSlots}`, color: '#aaaaaa', fontSize: 10, x: 400, y: 560, align: 'center' });
 
   UIRaceSelect.draw(canvas);
   UIExplorerCreation.draw(canvas, camera);
@@ -935,6 +1054,10 @@ UILogin.placeInputs = function () {
   const savedId = localStorage.getItem('maple_saved_id');
   if (savedId && this.inputUsn) {
     this.inputUsn.input.value = savedId;
+  }
+  if (this._doLogin) {
+    this.inputUsn?.addSubmitListener(this._doLogin);
+    this.inputPwd?.addSubmitListener(this._doLogin);
   }
 }
 

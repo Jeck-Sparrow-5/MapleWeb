@@ -18,13 +18,13 @@ let _dragOffY = 0;
 const INPUT_OX = 5;
 const INPUT_OY = 58;
 
-// Button offsets relative to window origin (WZ has no position data; matched from HeavenMS layout)
+// Button offsets relative to window origin (WZ has no position data)
 const BTN_START_X = 10;
-const BTN_START_Y = 95;
-const BTN_COL_W   = 38;
-const BTN_ROW_H   = 38;
+const BTN_START_Y = 90;
+const BTN_COL_W   = 40;
+const BTN_ROW_H   = 40;
 
-const FALLBACK_OK_OX     = BTN_START_X + 3 * BTN_COL_W; const FALLBACK_OK_OY     = BTN_START_Y + 3 * BTN_ROW_H;
+const FALLBACK_OK_OX     = BTN_START_X + 2 * BTN_COL_W; const FALLBACK_OK_OY     = BTN_START_Y + 3 * BTN_ROW_H;
 const FALLBACK_CANCEL_OX = BTN_START_X;                  const FALLBACK_CANCEL_OY = BTN_START_Y + 3 * BTN_ROW_H;
 const FALLBACK_DEL_OX    = BTN_START_X + 3 * BTN_COL_W; const FALLBACK_DEL_OY    = BTN_START_Y + 2 * BTN_ROW_H;
 
@@ -165,7 +165,7 @@ function _setVisible(v: boolean) {
   }
 }
 
-function _confirm(canvas: GameCanvas) {
+function _confirm(_canvas: GameCanvas) {
   const val = UIPic.input?.input.value ?? '';
   if (val.length < 6) return;
 

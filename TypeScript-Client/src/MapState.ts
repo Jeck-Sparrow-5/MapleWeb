@@ -33,6 +33,7 @@ import SessionManager from "./SessionManager";
 import UISkillBook, { skillLevels } from "./UI/UISkillBook";
 import UIClock from "./UI/UIClock";
 import UseSkillPacket from "./Net/Packets/UseSkillPacket";
+import { keyBindings } from "./UI/UIKeyConfig";
 import UIEquipInventory from "./UI/UIEquipInventory";
 import UIBuffList from "./UI/UIBuffList";
 import UIGameMenu from "./UI/UIGameMenu";
@@ -76,6 +77,11 @@ async function initializeMapState(map = defaultMap, isFirstUpdate = false, spawn
     await UIMap.initialize();
   }
 
+  // Release any focused input so keyboard movement works immediately
+  if (document.activeElement instanceof HTMLElement) {
+    (document.activeElement as HTMLElement).blur();
+  }
+
   // Find spawn portal matching spawnPoint id, fallback to first type-0 portal, then map center
   const portals: any[] = MapleMap.portals ?? [];
   let spawnX: number | null = null;
@@ -94,11 +100,14 @@ async function initializeMapState(map = defaultMap, isFirstUpdate = false, spawn
 
   if (spawnX !== null && spawnY !== null) {
     MyCharacter.pos.x = spawnX;
-    MyCharacter.pos.y = spawnY;
+    MyCharacter.pos.y = spawnY - 100; // spawn above portal so physics drops onto foothold
   } else {
     MyCharacter.pos.x = Math.floor((MapleMap.boundaries.right + MapleMap.boundaries.left) / 2);
-    MyCharacter.pos.y = MapleMap.boundaries.top + 100; // spawn near top so gravity drops to foothold
+    MyCharacter.pos.y = MapleMap.boundaries.top + 100;
   }
+  MyCharacter.pos.fh = null; // ensure physics starts with no foothold → falls to ground
+  MyCharacter.pos.vx = 0;
+  MyCharacter.pos.vy = 0;
 }
 
 MapStateInstance.changeMap = async function (map = defaultMap, spawnPoint = 0) {
@@ -108,11 +117,27 @@ MapStateInstance.changeMap = async function (map = defaultMap, spawnPoint = 0) {
   }
 };
 
+let _cachedCanvas: GameCanvas | null = null;
+
 MapStateInstance.initialize = async function (gameCanvas?: GameCanvas) {
-  // StateManager passes the GameCanvas as first arg; fall back to DOM lookup
-  const canvas: GameCanvas = gameCanvas ?? (document.getElementById('game') as any);
+  // Cache the canvas on first valid call; reuse on map-change re-initializations
+  const canvas = (gameCanvas?.keys ? gameCanvas : _cachedCanvas) as GameCanvas;
+  if (!canvas?.keys) { console.error('[MapState] initialize called without a GameCanvas'); return; }
+  _cachedCanvas = canvas;
 
   this.UIMenus = [];
+
+  // Initialize synchronously before any await — doUpdate may fire during async init
+  if (!this.previousKeyboardState) {
+    this.previousKeyboardState = {
+      up: false, down: false, left: false, right: false,
+      i: false, s: false, k: false, e: false, q: false, m: false,
+      '1': false, '2': false, '3': false, '4': false, '5': false,
+      '6': false, '7': false, '8': false, '9': false, '0': false,
+      f1: false, f2: false, f3: false, f4: false, f5: false,
+      f6: false, f7: false, f8: false, f9: false, f10: false,
+    };
+  }
 
   await UIQuit.initialize(canvas);
   this.quitDialog = UIQuit;
@@ -189,6 +214,16 @@ MapStateInstance.doUpdate = function (
   camera: CameraInterface,
   canvas: GameCanvas
 ) {
+  if (!this.previousKeyboardState) {
+    this.previousKeyboardState = {
+      up:false,down:false,left:false,right:false,
+      i:false,s:false,k:false,e:false,q:false,m:false,
+      '1':false,'2':false,'3':false,'4':false,'5':false,
+      '6':false,'7':false,'8':false,'9':false,'0':false,
+      f1:false,f2:false,f3:false,f4:false,f5:false,
+      f6:false,f7:false,f8:false,f9:false,f10:false,
+    };
+  }
   if (!!MapleMap.doneLoading) {
     MapleMap.update(msPerTick);
 
@@ -204,34 +239,17 @@ MapStateInstance.doUpdate = function (
       if (canvas.isKeyDown("right")) {
         MyCharacter.rightClick();
       }
-      if (canvas.isKeyDown("alt")) {
-        MyCharacter.jump();
-      }
-      if (canvas.isKeyDown("ctrl")) {
-        MyCharacter.attack();
-      }
-      if (canvas.isKeyDown("z")) {
-        MyCharacter.pickUp();
-      }
+      const pkb = this.previousKeyboardState as any;
+      if (canvas.isKeyDown(keyBindings.jump))   MyCharacter.jump();
+      if (canvas.isKeyDown(keyBindings.attack)) MyCharacter.attack();
+      if (canvas.isKeyDown(keyBindings.pickup)) MyCharacter.pickUp();
 
-      if (canvas.isKeyDown("s") && !this.previousKeyboardState.s) {
-        this.statsMenu.setIsHidden(!this.statsMenu.isHidden);
-      }
-      if (canvas.isKeyDown("i") && !this.previousKeyboardState.i) {
-        this.inventoryMenu.setIsHidden(!this.inventoryMenu.isHidden);
-      }
-      if (canvas.isKeyDown("k") && !this.previousKeyboardState.k) {
-        this.skillBook?.setIsHidden(!this.skillBook.isHidden);
-      }
-      if (canvas.isKeyDown("e") && !this.previousKeyboardState.e) {
-        this.equipInventory?.setIsHidden(!this.equipInventory.isHidden);
-      }
-      if (canvas.isKeyDown("q") && !this.previousKeyboardState.q) {
-        this.questLog?.setIsHidden(!this.questLog.isHidden);
-      }
-      if (canvas.isKeyDown("m") && !this.previousKeyboardState.m) {
-        UIGameMenu.toggle();
-      }
+      if (canvas.isKeyDown(keyBindings.stats)     && !pkb[keyBindings.stats])     this.statsMenu.setIsHidden(!this.statsMenu.isHidden);
+      if (canvas.isKeyDown(keyBindings.inventory) && !pkb[keyBindings.inventory]) this.inventoryMenu.setIsHidden(!this.inventoryMenu.isHidden);
+      if (canvas.isKeyDown(keyBindings.skill)     && !pkb[keyBindings.skill])     this.skillBook?.setIsHidden(!this.skillBook.isHidden);
+      if (canvas.isKeyDown(keyBindings.equip)     && !pkb[keyBindings.equip])     this.equipInventory?.setIsHidden(!this.equipInventory.isHidden);
+      if (canvas.isKeyDown(keyBindings.quest)     && !pkb[keyBindings.quest])     this.questLog?.setIsHidden(!this.questLog.isHidden);
+      if (canvas.isKeyDown(keyBindings.menu)      && !pkb[keyBindings.menu])      UIGameMenu.toggle();
 
       // Skill hotbar: keys 1-9 = slots 0-8, 0 = slot 9
       const numberKeys = ['1','2','3','4','5','6','7','8','9','0'] as const;
@@ -330,6 +348,9 @@ MapStateInstance.doUpdate = function (
     }
 
     // Cash shop mouse routing + scroll
+    if (!UIKeyConfig.isHidden && canvas.clicked) {
+      UIKeyConfig.onMouseDown(canvas.mouseX, canvas.mouseY);
+    }
     if (canvas.clicked && !UIGameMenu.isHidden) {
       UIGameMenu.onMouseDown(canvas.mouseX, canvas.mouseY, canvas);
     }
@@ -378,12 +399,13 @@ MapStateInstance.doUpdate = function (
       }
     }
 
-    this.previousKeyboardState.i = canvas.isKeyDown("i");
-    this.previousKeyboardState.s = canvas.isKeyDown("s");
-    this.previousKeyboardState.k = canvas.isKeyDown("k");
-    this.previousKeyboardState.e = canvas.isKeyDown("e");
-    this.previousKeyboardState.q = canvas.isKeyDown("q");
-    this.previousKeyboardState.m = canvas.isKeyDown("m");
+    const pkb2 = (this.previousKeyboardState ?? {}) as any;
+    pkb2[keyBindings.inventory] = canvas.isKeyDown(keyBindings.inventory);
+    pkb2[keyBindings.stats]     = canvas.isKeyDown(keyBindings.stats);
+    pkb2[keyBindings.skill]     = canvas.isKeyDown(keyBindings.skill);
+    pkb2[keyBindings.equip]     = canvas.isKeyDown(keyBindings.equip);
+    pkb2[keyBindings.quest]     = canvas.isKeyDown(keyBindings.quest);
+    pkb2[keyBindings.menu]      = canvas.isKeyDown(keyBindings.menu);
     this.previousKeyboardState.up = canvas.isKeyDown("up");
     this.previousKeyboardState.down = canvas.isKeyDown("down");
     this.previousKeyboardState.left = canvas.isKeyDown("left");
@@ -400,7 +422,7 @@ MapStateInstance.doUpdate = function (
 
     UIMap.doUpdate(msPerTick, camera, canvas);
 
-    this.UIMenus.forEach((menu) => {
+    (this.UIMenus ?? []).forEach((menu) => {
       menu.update(msPerTick, camera, canvas);
     });
   }
@@ -413,6 +435,8 @@ MapStateInstance.doRender = function (
   msPerTick: number,
   tdelta: number
 ) {
+  // Guard: initialize is async — skip render until critical state is ready
+  if (!this.miniMap || !this.quitDialog) return;
   if (!!MapleMap.doneLoading) {
     MapleMap.render(canvas, camera, lag, msPerTick, tdelta);
 
@@ -420,7 +444,7 @@ MapStateInstance.doRender = function (
       MyCharacter.draw(canvas, camera, lag, msPerTick, tdelta);
     }
 
-    this.UIMenus.forEach((menu) => {
+    (this.UIMenus ?? []).forEach((menu) => {
       menu.draw(canvas, camera, lag, msPerTick, tdelta);
     });
 

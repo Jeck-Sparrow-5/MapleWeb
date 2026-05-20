@@ -44,6 +44,7 @@ const LoginState: LoginState = {
   currentSubState: LoginSubState.LOGIN_SCREEN,
 
   async initialize(canvas?: GameCanvas): Promise<void> {
+    if (canvas) (this as any)._canvas = canvas; // persist for enterGame
     MyCharacter.deactivate();
     await MapleMap.load("MapLogin");
 
@@ -111,7 +112,7 @@ const LoginState: LoginState = {
 
   async enterGame(): Promise<void> {
     UILogin.removeInputs();
-    await StateManager.setState(MapState);
+    await StateManager.setState(MapState, (this as any)._canvas);
     MapleMap.PlayerCharacter = MyCharacter;
   },
 };

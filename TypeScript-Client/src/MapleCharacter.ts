@@ -1286,7 +1286,7 @@ isCloseToMob = (inAllDirections = true) => {
     msPerTick: number,
     tdelta: number
   ) {
-    // console.log(this.frame, `${Math.round(1000 / msPerTick)}fps`);
+    if (!this.baseBody || !this.stance) return; // not loaded yet
     // set whether the character is flipped prior to drawing
     if (this.pos.right && !this.pos.left) {
       this.flipped = true;
@@ -1354,6 +1354,14 @@ isCloseToMob = (inAllDirections = true) => {
     const rotate = imgdir.nGet("rotate")?.nGet("nValue", 0) ?? 0;
     const angle = !characterIsFlipped ? rotate : 360 - rotate;
 
+    // Foot offset: bottom of lowest body frame (in pos-relative coords) minus pos.y.
+    // Subtracting this from dy ensures the character's feet land exactly on the foothold.
+    let footOffset = 0;
+    for (const f of drawableBodyFrames) {
+      const bottom = f.y + moveY + (f.img?.height ?? 0);
+      if (bottom > footOffset) footOffset = bottom;
+    }
+
     let spriteWidth = 0;
     let spriteHeight = 0;
     let minDx = 0;
@@ -1362,7 +1370,7 @@ isCloseToMob = (inAllDirections = true) => {
     // draws all parts of the character: head, body, etc..
     drawableFrames.forEach((frame: any) => {
       const dx = Math.floor(this.pos.x + frame.x - camera.x + moveX);
-      const dy = Math.floor(this.pos.y + frame.y - camera.y + moveY);
+      const dy = Math.floor(this.pos.y + frame.y - camera.y + moveY - footOffset);
 
       canvas.drawImage({
         img: frame.img,
@@ -1381,7 +1389,7 @@ isCloseToMob = (inAllDirections = true) => {
 
     drawableBodyFrames.forEach((frame: any) => {
       const dx = Math.floor(this.pos.x + frame.x - camera.x + moveX);
-      const dy = Math.floor(this.pos.y + frame.y - camera.y + moveY);
+      const dy = Math.floor(this.pos.y + frame.y - camera.y + moveY - footOffset);
 
       this.bodyRects.push({
         x: dx + camera.x,

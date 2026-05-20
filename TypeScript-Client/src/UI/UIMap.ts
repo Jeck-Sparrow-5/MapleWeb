@@ -432,6 +432,7 @@ UIMap.drawNumbers = function (canvas, hp, maxHp, mp, maxMp, exp, maxExp) {
 };
 
 UIMap.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
+  if (!this.chatHistory) return; // not yet initialized
   // Scroll chat with mouse wheel when hovering over chat area
   if (canvas.scrolledUp)   chatScrollOffset = Math.min(chatScrollOffset + 1, Math.max(0, this.chatHistory.length - 8));
   if (canvas.scrolledDown) chatScrollOffset = Math.max(chatScrollOffset - 1, 0);

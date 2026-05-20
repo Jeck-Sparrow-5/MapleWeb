@@ -481,18 +481,20 @@ class GameCanvas {
     });
   }
   listenKeyboard() {
-    window.onkeydown = (e) => {
-      if (this.focusGame && !this.focusInput) {
-        e.preventDefault();
-        this.pressedKeys[e.keyCode] = true;
-      }
-    };
-    window.onkeyup = (e) => {
-      if (this.focusGame && !this.focusInput) {
-        e.preventDefault();
-        this.pressedKeys[e.keyCode] = false;
-      }
-    };
+    // Movement keyCodes always processed regardless of focusInput
+    const movementKeys = new Set([37, 38, 39, 40, 18, 17]); // arrows + alt + ctrl
+    window.addEventListener('keydown', (e) => {
+      if (!this.focusGame) return;
+      if (this.focusInput && !movementKeys.has(e.keyCode)) return;
+      e.preventDefault();
+      this.pressedKeys[e.keyCode] = true;
+    });
+    window.addEventListener('keyup', (e) => {
+      if (!this.focusGame) return;
+      if (this.focusInput && !movementKeys.has(e.keyCode)) return;
+      e.preventDefault();
+      this.pressedKeys[e.keyCode] = false;
+    });
   }
   isKeyDown(key: string) {
     return !!this.pressedKeys[this.keys[key]] || !!this.pressedKeys[key];

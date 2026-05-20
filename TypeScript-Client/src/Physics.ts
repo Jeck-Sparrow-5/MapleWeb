@@ -326,39 +326,39 @@ class Physics {
           }
           (x = nx), (y = ny);
         } else {
-          let dx1 = vx * delta;
-          let dy1 = vy * delta;
+          // Trapezoidal integration: average old and new velocity for first airborne sub-step
+          const eff_vx = _firstAirStep ? (vx_pre + vx) * 0.5 : vx;
+          const eff_vy = _firstAirStep ? (vy_pre + vy) * 0.5 : vy;
+          _firstAirStep = false;
+          let dx1 = eff_vx * delta;
+          let dy1 = eff_vy * delta;
           let distance = 1;
           let nnx = x + dx1;
           let nny = y + dy1;
 
           for (let f of Object.values<any>(MapleMap.footholds || {})) {
-            let dx2 = f.x2 - f.x1,
-              dy2 = f.y2 - f.y1;
-            let dx3 = x - f.x1,
-              dy3 = y - f.y1;
-            let denom = dx1 * dy2 - dy1 * dx2;
-            let n1 = (dx1 * dy3 - dy1 * dx3) / denom;
-            let n2 = (dx2 * dy3 - dy2 * dx3) / denom;
-            if (
-              n1 >= 0 &&
-              n1 <= 1 &&
-              n2 >= 0 &&
-              denom < 0 &&
-              f != this.djump &&
-              n2 <= distance
-            )
-              if (
-                this.group == f.group ||
-                dx2 > 0 ||
-                f.group == 0 ||
-                f.cantThrough
-              ) {
-                nnx = x + n2 * dx1;
-                nny = y + n2 * dy1;
-                distance = n2;
-                fh = f;
-              }
+            const dx2 = f.x2 - f.x1;
+            const dy2 = f.y2 - f.y1;
+            const dx3 = x - f.x1;
+            const dy3 = y - f.y1;
+            const denom = dx1 * dy2 - dy1 * dx2;
+            // Integer cross-product checks: avoid division for n1 range test.
+            // denom < 0 required. Then n1 = A/denom ∈ [0,1] ↔ A ∈ [denom, 0].
+            if (denom >= 0) continue;
+            const A = dx1 * dy3 - dy1 * dx3;
+            if (A > 0 || A < denom) continue; // n1 out of [0,1]
+            const B = dx2 * dy3 - dy2 * dx3;
+            if (B > 0) continue; // n2 < 0
+            // n2 <= distance ↔ B/denom <= distance ↔ B >= denom*distance (denom<0 flips)
+            if (B < denom * distance) continue;
+            if (f === this.djump) continue;
+            if (this.group == f.group || dx2 > 0 || f.group == 0 || f.cantThrough) {
+              const n2 = B / denom;
+              nnx = x + n2 * dx1;
+              nny = y + n2 * dy1;
+              distance = n2;
+              fh = f;
+            }
           }
 
           x = nnx;

@@ -223,11 +223,12 @@ UIMap.doUpdate = function (msPerTick, camera, canvas) {
     console.log("First update");
     this.chat = new MapleInput(canvas, {
       x: 5,
-      y: 540 + startUIPosition.y,
-      width: 530,
-      color: "#000000",
-      background: "#ffffff",
-      height: 13,
+      y: 532 + startUIPosition.y,
+      width: 490,
+      color: '#e8e8e8',
+      background: 'rgba(0,0,0,0.75)',
+      height: 16,
+      fontSize: 12,
     });
     this.chat.addSubmitListener(() => {
       const msg = this.chat!.input.value;
@@ -437,23 +438,7 @@ UIMap.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
   if (canvas.scrolledUp)   chatScrollOffset = Math.min(chatScrollOffset + 1, Math.max(0, this.chatHistory.length - 8));
   if (canvas.scrolledDown) chatScrollOffset = Math.max(chatScrollOffset - 1, 0);
 
-  // Chat history — 8 visible lines above chat input
-  const now = Date.now();
-  const chatBaseY = 524 + startUIPosition.y;
-  // When scrolled, show history; when not, show recent+fading
-  const allMsgs = chatScrollOffset > 0
-    ? this.chatHistory.slice(-(8 + chatScrollOffset), -chatScrollOffset || undefined)
-    : this.chatHistory.filter((m) => now - m.timestamp < CHAT_VISIBLE_DURATION).slice(-8);
-  const visibleMsgs = allMsgs;
-  visibleMsgs.forEach((m, i) => {
-    const age = now - m.timestamp;
-    const alpha = age > CHAT_VISIBLE_DURATION - 1000
-      ? Math.max(0, 1 - (age - (CHAT_VISIBLE_DURATION - 1000)) / 1000)
-      : 1;
-    canvas.drawText({ text: m.text, x: 7, y: chatBaseY - (visibleMsgs.length - 1 - i) * 14 + 1, color: '#000000', fontSize: 12, alpha });
-    canvas.drawText({ text: m.text, x: 6, y: chatBaseY - (visibleMsgs.length - 1 - i) * 14, color: m.color, fontSize: 12, alpha });
-  });
-
+  // Status bar drawn first
   canvas.drawImage({
     img: this.statusBg,
     dx: 0,
@@ -466,27 +451,67 @@ UIMap.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
     dy: 529 + startUIPosition.y,
   });
 
+  // Chat history panel — drawn over status bar background, 8 lines
+  const LINES = 8;
+  const LINE_H = 14;
+  const now = Date.now();
+  const chatPanelW = 500;
+  const chatInputY = 532 + startUIPosition.y;
+  const chatBaseY  = chatInputY - 4; // bottom of text area, just above input
+
+  const allMsgs = chatScrollOffset > 0
+    ? this.chatHistory.slice(-(LINES + chatScrollOffset), -chatScrollOffset || undefined)
+    : this.chatHistory.filter((m) => now - m.timestamp < CHAT_VISIBLE_DURATION).slice(-LINES);
+  const visibleMsgs = allMsgs;
+
+  if (visibleMsgs.length > 0 || canvas.focusInput) {
+    canvas.drawRect({
+      x: 0,
+      y: chatBaseY - LINES * LINE_H,
+      width: chatPanelW,
+      height: LINES * LINE_H + 4,
+      color: '#000000',
+      alpha: 0.55,
+    });
+  }
+
+  visibleMsgs.forEach((m, i) => {
+    const age = now - m.timestamp;
+    const alpha = chatScrollOffset > 0 ? 1
+      : age > CHAT_VISIBLE_DURATION - 1000
+      ? Math.max(0, 1 - (age - (CHAT_VISIBLE_DURATION - 1000)) / 1000)
+      : 1;
+    const ty = chatBaseY - (visibleMsgs.length - 1 - i) * LINE_H;
+    canvas.drawText({ text: m.text, x: 7, y: ty + 1, color: '#000000', fontSize: 12, alpha });
+    canvas.drawText({ text: m.text, x: 6, y: ty,     color: m.color,   fontSize: 12, alpha });
+  });
+
   this.drawLevel(canvas, MyCharacter.stats.level);
 
+  const barsImageY = 567 + startUIPosition.y;
   canvas.drawImage({
     img: this.bars,
     dx: 215,
-    dy: 567 + startUIPosition.y,
+    dy: barsImageY,
   });
 
   const { hp, maxHp, mp, maxMp, exp, maxExp } = MyCharacter;
 
-  // Single drawRect per bar replaces per-pixel drawImage loops (was 315 sprite calls/frame)
-  const barY = 581 + startUIPosition.y;
-  const barH = this.barGray?.height ?? 10;
-  const gray  = '#2a2a2a';
-  const hpFill  = Math.floor((hp / maxHp) * 105);
-  const mpFill  = Math.floor((mp / maxMp) * 105);
-  const expBarLength = 115;
-  const expFill = maxExp > 0 ? Math.floor((exp / maxExp) * expBarLength) : 0;
-  if (hpFill  < 105)          canvas.drawRect({ x: 321 - 105 + hpFill,                y: barY, width: 105 - hpFill,              height: barH, color: gray });
-  if (mpFill  < 105)          canvas.drawRect({ x: 429 - 105 + mpFill,                y: barY, width: 105 - mpFill,              height: barH, color: gray });
-  if (expFill < expBarLength) canvas.drawRect({ x: 552 - expBarLength + expFill,       y: barY, width: expBarLength - expFill,    height: barH, color: gray });
+  // Gray overlay covers the EMPTY portion of each bar.
+  // barY must align with the bars image so the overlay actually overlaps.
+  const barY  = barsImageY;
+  const barH  = this.barGray?.height ?? 10;
+  const gray  = '#000000';
+  const HP_W  = 105, MP_W = 105, EXP_W = 115;
+  const HP_X  = 216, MP_X = 324,  EXP_X = 437;
+
+  const hpFill  = maxHp  > 0 ? Math.min(HP_W,  Math.floor((hp  / maxHp)  * HP_W))  : 0;
+  const mpFill  = maxMp  > 0 ? Math.min(MP_W,  Math.floor((mp  / maxMp)  * MP_W))  : 0;
+  const expFill = maxExp > 0 ? Math.min(EXP_W, Math.floor((exp / maxExp) * EXP_W)) : 0;
+
+  if (hpFill  < HP_W)  canvas.drawRect({ x: HP_X  + hpFill,  y: barY, width: HP_W  - hpFill,  height: barH, color: gray });
+  if (mpFill  < MP_W)  canvas.drawRect({ x: MP_X  + mpFill,  y: barY, width: MP_W  - mpFill,  height: barH, color: gray });
+  if (expFill < EXP_W) canvas.drawRect({ x: EXP_X + expFill, y: barY, width: EXP_W - expFill, height: barH, color: gray });
 
   canvas.drawImage({
     img: this.graduation,

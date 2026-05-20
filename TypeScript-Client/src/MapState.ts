@@ -244,12 +244,26 @@ MapStateInstance.doUpdate = function (
       if (canvas.isKeyDown(keyBindings.attack)) MyCharacter.attack();
       if (canvas.isKeyDown(keyBindings.pickup)) MyCharacter.pickUp();
 
-      if (canvas.isKeyDown(keyBindings.stats)     && !pkb[keyBindings.stats])     this.statsMenu.setIsHidden(!this.statsMenu.isHidden);
-      if (canvas.isKeyDown(keyBindings.inventory) && !pkb[keyBindings.inventory]) this.inventoryMenu.setIsHidden(!this.inventoryMenu.isHidden);
-      if (canvas.isKeyDown(keyBindings.skill)     && !pkb[keyBindings.skill])     this.skillBook?.setIsHidden(!this.skillBook.isHidden);
-      if (canvas.isKeyDown(keyBindings.equip)     && !pkb[keyBindings.equip])     this.equipInventory?.setIsHidden(!this.equipInventory.isHidden);
-      if (canvas.isKeyDown(keyBindings.quest)     && !pkb[keyBindings.quest])     this.questLog?.setIsHidden(!this.questLog.isHidden);
-      if (canvas.isKeyDown(keyBindings.menu)      && !pkb[keyBindings.menu])      UIGameMenu.toggle();
+      if (canvas.isKeyDown(keyBindings.stats)        && !pkb[keyBindings.stats])        this.statsMenu.setIsHidden(!this.statsMenu.isHidden);
+      if (canvas.isKeyDown(keyBindings.inventory)    && !pkb[keyBindings.inventory])    this.inventoryMenu.setIsHidden(!this.inventoryMenu.isHidden);
+      if (canvas.isKeyDown(keyBindings.skill)        && !pkb[keyBindings.skill])        this.skillBook?.setIsHidden(!this.skillBook.isHidden);
+      if (canvas.isKeyDown(keyBindings.equip)        && !pkb[keyBindings.equip])        this.equipInventory?.setIsHidden(!this.equipInventory.isHidden);
+      if (canvas.isKeyDown(keyBindings.quest)        && !pkb[keyBindings.quest])        this.questLog?.setIsHidden(!this.questLog.isHidden);
+      if (canvas.isKeyDown(keyBindings.menu)         && !pkb[keyBindings.menu])         UIGameMenu.toggle();
+      if (canvas.isKeyDown(keyBindings.worldmap)     && !pkb[keyBindings.worldmap])     this.worldMap?.setIsHidden(!this.worldMap.isHidden);
+      if (canvas.isKeyDown(keyBindings.minimap)      && !pkb[keyBindings.minimap])      (this.miniMap as any)?.toggle?.();
+      if (canvas.isKeyDown(keyBindings.party)        && !pkb[keyBindings.party])        UIParty.toggle?.();
+      if (canvas.isKeyDown(keyBindings.friends)      && !pkb[keyBindings.friends])      this.userList?.setIsHidden(!this.userList.isHidden);
+      if (canvas.isKeyDown(keyBindings.sit)          && !pkb[keyBindings.sit])          (MyCharacter as any).sit?.();
+      // Chat shortcut keys — focus chat input with command prefix
+      const chatFocus = (prefix: string) => {
+        const chatInput = (UIMap as any).chat?.input;
+        if (chatInput) { chatInput.value = prefix; chatInput.focus(); }
+      };
+      if (canvas.isKeyDown(keyBindings.partychat)    && !pkb[keyBindings.partychat])    chatFocus('/p ');
+      if (canvas.isKeyDown(keyBindings.guildchat)    && !pkb[keyBindings.guildchat])    chatFocus('/g ');
+      if (canvas.isKeyDown(keyBindings.alliancechat) && !pkb[keyBindings.alliancechat]) chatFocus('/a ');
+      if (canvas.isKeyDown(keyBindings.whisper)      && !pkb[keyBindings.whisper])      chatFocus('/w ');
 
       // Skill hotbar: keys 1-9 = slots 0-8, 0 = slot 9
       const numberKeys = ['1','2','3','4','5','6','7','8','9','0'] as const;
@@ -400,12 +414,10 @@ MapStateInstance.doUpdate = function (
     }
 
     const pkb2 = (this.previousKeyboardState ?? {}) as any;
-    pkb2[keyBindings.inventory] = canvas.isKeyDown(keyBindings.inventory);
-    pkb2[keyBindings.stats]     = canvas.isKeyDown(keyBindings.stats);
-    pkb2[keyBindings.skill]     = canvas.isKeyDown(keyBindings.skill);
-    pkb2[keyBindings.equip]     = canvas.isKeyDown(keyBindings.equip);
-    pkb2[keyBindings.quest]     = canvas.isKeyDown(keyBindings.quest);
-    pkb2[keyBindings.menu]      = canvas.isKeyDown(keyBindings.menu);
+    // Track all bound keys in one pass
+    for (const key of Object.values(keyBindings)) {
+      pkb2[key] = canvas.isKeyDown(key as string);
+    }
     this.previousKeyboardState.up = canvas.isKeyDown("up");
     this.previousKeyboardState.down = canvas.isKeyDown("down");
     this.previousKeyboardState.left = canvas.isKeyDown("left");
@@ -418,7 +430,7 @@ MapStateInstance.doUpdate = function (
       (this.previousKeyboardState as any)[fk] = canvas.isKeyDown(fk as any);
     }
 
-    Camera.lookAt(MyCharacter.pos.x, MyCharacter.pos.y - 78);
+    Camera.lookAt(MyCharacter.pos.x, MyCharacter.pos.y);
 
     UIMap.doUpdate(msPerTick, camera, canvas);
 

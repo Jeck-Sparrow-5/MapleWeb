@@ -68,6 +68,10 @@ class MapleInput {
         e.preventDefault();
         e.stopPropagation();
         this.submitListeners.forEach((listener: Function) => listener());
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        input.value = '';
+        input.blur();
       }
     });
 

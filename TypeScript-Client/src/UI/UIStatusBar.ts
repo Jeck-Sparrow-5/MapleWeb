@@ -1,6 +1,14 @@
 import GameCanvas from '../GameCanvas';
 import MyCharacter from '../MyCharacter';
 import config from '../Config';
+import { getQuickSlots, getQuickSlotIcons } from './UIKeyConfig';
+
+const QS_SIZE  = 32;
+const QS_COUNT = 8;
+const QS_GAP   = 2;
+const QS_TOTAL = QS_COUNT * (QS_SIZE + QS_GAP) - QS_GAP;
+const QS_Y     = config.height - 52 - QS_SIZE - 6;
+const QS_X0    = Math.floor((config.width - QS_TOTAL) / 2);
 
 const BAR_H    = 52;
 const BAR_Y    = config.height - BAR_H;
@@ -45,6 +53,24 @@ const UIStatusBar = {
     // --- Mesos (right) ---
     const mesos = (c as any).mesos ?? c.inventory?.mesos ?? 0;
     canvas.drawText({ text: `${mesos.toLocaleString()} mesos`, x: W - PAD, y: BAR_Y + 18, color: '#ffe066', fontSize: 10, align: 'right' });
+
+    // --- Quick slot bar (above status bar) ---
+    const slots = getQuickSlots();
+    const icons = getQuickSlotIcons();
+    for (let qi = 0; qi < QS_COUNT; qi++) {
+      const qx = QS_X0 + qi * (QS_SIZE + QS_GAP);
+      canvas.drawRect({ x: qx, y: QS_Y, width: QS_SIZE, height: QS_SIZE, color: '#000000', alpha: 0.65 });
+      canvas.drawRect({ x: qx, y: QS_Y, width: QS_SIZE, height: QS_SIZE, strokeColor: '#334466', strokeWidth: 1 });
+      const action = slots[qi];
+      if (action) {
+        const icon = icons[action];
+        if (icon?.width > 1) {
+          const scale = (QS_SIZE - 4) / Math.max(icon.width, icon.height);
+          canvas.drawImage({ img: icon, dx: qx + 2, dy: QS_Y + 2, scaleX: scale, scaleY: scale });
+        }
+      }
+      canvas.drawText({ text: `${qi + 1}`, x: qx + 2, y: QS_Y + 9, color: '#445566', fontSize: 7 });
+    }
 
     // --- EXP bar (very bottom, full width) ---
     const expPct = c.maxExp > 0 ? Math.max(0, Math.min(1, c.exp / c.maxExp)) : 0;

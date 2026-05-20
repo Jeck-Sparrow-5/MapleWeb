@@ -54,13 +54,14 @@ Camera.initialize = function () {
   targetY = 0;
 };
 
-const easeSpeed = 0.1;
+// Follow speed per frame — 0.25 matches HeavenClient snappy feel
+const easeSpeed = 0.25;
 let targetX = 0;
 let targetY = 0;
 
-// only usefull when the game resolution is not 800x600
-// const bottomSafeGap = 0; // 800x600
-const bottomSafeGap = 200; // 1280x720
+// Vertical fraction: player's feet appear at this % from top of screen
+const Y_FRACTION = 0.65;
+
 Camera.setBoundaries = function ({
   left,
   right,
@@ -72,7 +73,7 @@ Camera.setBoundaries = function ({
   top: number;
   bottom: number;
 }) {
-  this.boundaries = { left, right, top, bottom: bottom - bottomSafeGap };
+  this.boundaries = { left, right, top, bottom };
 };
 
 Camera.setTopLeft = function (x: number, y: number): void {
@@ -85,6 +86,7 @@ Camera.lookAt = function (x, y) {
   const height = this.height;
   const boundaries = this.boundaries;
 
+  // Horizontal: center on x
   if (boundaries.right - boundaries.left < width) {
     const leftGap = (width - (boundaries.right - boundaries.left)) / 2;
     targetX = Math.round(boundaries.left - leftGap);
@@ -96,15 +98,17 @@ Camera.lookAt = function (x, y) {
     targetX = Math.round(x - width / 2);
   }
 
+  // Vertical: place y at Y_FRACTION from top (feet slightly below center)
+  const yOffset = Math.round(height * Y_FRACTION);
   if (boundaries.bottom - boundaries.top < height) {
     const topGap = (height - (boundaries.bottom - boundaries.top)) / 2;
     targetY = Math.round(boundaries.top - topGap);
-  } else if (y - height / 2 < boundaries.top) {
+  } else if (y - yOffset < boundaries.top) {
     targetY = boundaries.top;
-  } else if (y + height / 2 > boundaries.bottom) {
+  } else if (y - yOffset + height > boundaries.bottom) {
     targetY = boundaries.bottom - height;
   } else {
-    targetY = Math.round(y - height / 2);
+    targetY = y - yOffset;
   }
 };
 

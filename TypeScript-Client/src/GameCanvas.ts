@@ -34,6 +34,7 @@ class GameCanvas {
   _uiSpriteIdx: number = 0;
   _bgGfx: PIXI.Graphics = new PIXI.Graphics();
   _fgGfx: PIXI.Graphics = new PIXI.Graphics();
+  _uiFgGfx: PIXI.Graphics = new PIXI.Graphics();
   _textPool: PIXI.Text[] = [];
   _textIdx: number = 0;
   _uiTextPool: PIXI.Text[] = [];
@@ -212,6 +213,7 @@ class GameCanvas {
     stage.addChild(this._particleLayer);
     this._bgLayer.addChild(this._bgGfx);
     this._fgLayer.addChild(this._fgGfx);
+    this._uiTextLayer.addChild(this._uiFgGfx);
     this._bgLayer.interactiveChildren = false;
     this._spriteLayer.interactiveChildren = false;
     this._fgLayer.interactiveChildren = false;
@@ -364,6 +366,7 @@ class GameCanvas {
     this.uiMode = false;
     this._bgGfx.clear();
     this._fgGfx.clear();
+    this._uiFgGfx.clear();
     this._updatedThisFrame.clear();
     this.context.clearRect(0, 0, this.game.width, this.game.height);
   }
@@ -730,22 +733,22 @@ class GameCanvas {
     const hex = color ? this._colorToNum(color) : null;
     const strokeHex = opts.strokeColor ? this._colorToNum(opts.strokeColor) : null;
 
-    if (strokeHex !== null) this._fgGfx.lineStyle(opts.strokeWidth ?? 1, strokeHex, opts.strokeAlpha ?? 1);
-    else this._fgGfx.lineStyle(0);
-    if (hex !== null) this._fgGfx.beginFill(hex, alpha);
-    else this._fgGfx.beginFill(0, 0);
+    const gfx = this.uiMode ? this._uiFgGfx : this._fgGfx;
+    if (strokeHex !== null) gfx.lineStyle(opts.strokeWidth ?? 1, strokeHex, opts.strokeAlpha ?? 1);
+    else gfx.lineStyle(0);
+    if (hex !== null) gfx.beginFill(hex, alpha);
+    else gfx.beginFill(0, 0);
     if (angle !== 0) {
       const cx = x + width / 2, cy = y + height / 2;
       const rad = (angle * Math.PI) / 180;
-      // rotated rect via transform on a Graphics — use Matrix
       this._sharedMatrix.identity().translate(-cx, -cy).rotate(rad).translate(cx, cy);
-      this._fgGfx.setMatrix(this._sharedMatrix);
-      this._fgGfx.drawRect(x, y, width, height);
-      this._fgGfx.setMatrix(this._identityMatrix);
+      gfx.setMatrix(this._sharedMatrix);
+      gfx.drawRect(x, y, width, height);
+      gfx.setMatrix(this._identityMatrix);
     } else {
-      this._fgGfx.drawRect(x, y, width, height);
+      gfx.drawRect(x, y, width, height);
     }
-    this._fgGfx.endFill();
+    gfx.endFill();
   }
 
   /**

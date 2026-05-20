@@ -28,6 +28,12 @@ const KEY_POS: Record<string, [number, number]> = {
   ctrl:[39,259], alt:[137,259], space:[234,259],
 };
 
+// Per-key slot widths for wider keys (height stays 28 for all)
+const KEY_W: Record<string, number> = {
+  ctrl:42, alt:42, space:118, enter:32, shift:46,
+  backspace:40, tab:36, capslock:42, pipe:28,
+};
+
 // key name → key[] WZ texture index (from HeavenMS load_key_textures)
 const KEY_TEX_IDX: Record<string, number> = {
   esc:1,
@@ -115,6 +121,10 @@ const UIKeyConfig = {
   selectedKey: null as string | null,
   hoveredKey: null as string | null,
 
+  // Quick slot bar — 8 assignable action slots
+  quickSlots: new Array(8).fill(null) as (string | null)[],
+  _selectedQuickSlot: -1,
+
   async initialize(canvas: GameCanvas) {
     if (this.initialized) return;
     if (!canvas?.keys) { console.warn('[UIKeyConfig] no canvas.keys'); return; }
@@ -177,11 +187,15 @@ const UIKeyConfig = {
       this._btnOffsets.push({ ox, oy });
     };
 
-    addBtn(keyNode?.nGet('BtClose'),   this.W - 20,  4,           () => this.hide());
-    addBtn(keyNode?.nGet('BtDefault'), 8,            this.H - 26, () => { stagedBindings = { ...defaultBindings }; });
-    addBtn(keyNode?.nGet('BtDelete'),  60,           this.H - 26, () => { if (this.selectedKey) { this._unbindKey(this.selectedKey); this.selectedKey = null; } });
-    addBtn(keyNode?.nGet('BtOK'),      this.W - 106, this.H - 26, () => { Object.assign(keyBindings, stagedBindings); persist(); sendKeymapPacket(); this.hide(); });
-    addBtn(keyNode?.nGet('BtCancel'),  this.W - 56,  this.H - 26, () => { stagedBindings = { ...keyBindings }; this.hide(); });
+    // Close: HeavenMS formula bg_dimensions.x() - 18, 3
+    addBtn(keyNode?.nGet('BtClose'),   this.W - 18,  3,           () => this.hide());
+    // Bottom row: Default | Delete | Help on left, OK | Cancel on right
+    const BY = this.H - 23; // button y (~350 for 373-height bg)
+    addBtn(keyNode?.nGet('BtDefault'), 8,            BY, () => { stagedBindings = { ...defaultBindings }; });
+    addBtn(keyNode?.nGet('BtDelete'),  73,           BY, () => { if (this.selectedKey) { this._unbindKey(this.selectedKey); this.selectedKey = null; } });
+    addBtn(keyNode?.nGet('BtHelp'),    145,          BY, () => { /* help panel not implemented */ });
+    addBtn(keyNode?.nGet('BtOK'),      this.W - 100, BY, () => { Object.assign(keyBindings, stagedBindings); persist(); sendKeymapPacket(); this.hide(); });
+    addBtn(keyNode?.nGet('BtCancel'),  this.W - 53,  BY, () => { stagedBindings = { ...keyBindings }; this.hide(); });
 
     ClickManager.addDragableMenu(this);
   },
@@ -210,8 +224,7 @@ const UIKeyConfig = {
   },
 
   _unboundActions(): string[] {
-    const bound = new Set(Object.values(stagedBindings));
-    return Object.keys(ACTION_LABEL).filter(a => !bound.has(stagedBindings[a]));
+    return Object.keys(ACTION_LABEL).filter(a => !stagedBindings[a]);
   },
 
   // ── Draggable interface (used by ClickManager) ──────────────────────────────
@@ -250,7 +263,10 @@ const UIKeyConfig = {
       const iy = row === 0 ? TRAY_Y1 : TRAY_Y2;
       if (rx >= ix && rx < ix + ICON_SIZE && ry >= iy && ry < iy + ICON_SIZE) {
         const action = allActions[i];
-        if (this.selectedKey) {
+        if (this._selectedQuickSlot >= 0) {
+          this.quickSlots[this._selectedQuickSlot] = action;
+          this._selectedQuickSlot = -1;
+        } else if (this.selectedKey) {
           this._bindAction(action, this.selectedKey);
           this.selectedKey = null;
         }
@@ -261,7 +277,8 @@ const UIKeyConfig = {
     // Hit-test key slots (keyboard area, y=91+)
     const KEY_SLOT = 28;
     for (const [keyName, [kx, ky]] of Object.entries(KEY_POS)) {
-      if (rx >= kx && rx < kx + KEY_SLOT && ry >= ky && ry < ky + KEY_SLOT) {
+      const slotW = KEY_W[keyName] ?? KEY_SLOT;
+      if (rx >= kx && rx < kx + slotW && ry >= ky && ry < ky + KEY_SLOT) {
         if (this.selectedKey === keyName) {
           this.selectedKey = null;
         } else if (this.selectedKey === null) {
@@ -277,6 +294,20 @@ const UIKeyConfig = {
           this.selectedKey = null;
         }
         return true;
+      }
+    }
+
+    // Hit-test quick slot config panel (below keyboard)
+    const QS = 30, QS_PAD = 4, QS_COUNT = 8;
+    const QS_X0 = 8, QS_RY = this.H - 75;
+    if (ry >= QS_RY && ry < QS_RY + QS) {
+      for (let qi = 0; qi < QS_COUNT; qi++) {
+        const qx = QS_X0 + qi * (QS + QS_PAD);
+        if (rx >= qx && rx < qx + QS) {
+          this._selectedQuickSlot = (this._selectedQuickSlot === qi) ? -1 : qi;
+          this.selectedKey = null;
+          return true;
+        }
       }
     }
 
@@ -300,7 +331,8 @@ const UIKeyConfig = {
     // 2. Action icon tray — two rows of 20 icons above the keyboard (y+25, y+55)
     const ICON_SIZE = 28, ICON_STEP = 30;
     const allActions = Object.keys(ACTION_ICON_IDX);
-    const boundKeys = new Set(Object.values(stagedBindings));
+    const mx = (canvas as any).mouseX ?? -1, my = (canvas as any).mouseY ?? -1;
+    let hoveredAction: string | null = null;
     allActions.forEach((action, i) => {
       const row = i < 20 ? 0 : 1;
       const col = i < 20 ? i : i - 20;
@@ -308,6 +340,10 @@ const UIKeyConfig = {
       const iy = this.y + (row === 0 ? 25 : 55);
       const isBound = !!stagedBindings[action];
       const icon = this.actionIcons[action];
+
+      const isHovered = mx >= ix && mx < ix + ICON_SIZE && my >= iy && my < iy + ICON_SIZE;
+      if (isHovered) hoveredAction = action;
+      if (isHovered) canvas.drawRect({ x: ix - 1, y: iy - 1, width: ICON_SIZE + 2, height: ICON_SIZE + 2, color: '#AADDFF', alpha: 0.4 });
 
       if (icon?.width > 1) {
         const scale = ICON_SIZE / Math.max(icon.width, icon.height);
@@ -322,24 +358,34 @@ const UIKeyConfig = {
       }
     });
 
-    // Hint: selected key or default
-    const hint = this.selectedKey
-      ? `Key [${this.selectedKey.toUpperCase()}] selected — click action above to bind, or another key to swap`
-      : 'Click a key on the keyboard, then click an action icon above to bind';
-    canvas.drawText({ text: hint, color: this.selectedKey ? '#AADDFF' : '#778899',
-      x: this.x + 8, y: this.y + this.H - 32, fontSize: 9 });
+    // Hint bar
+    const hint = this._selectedQuickSlot >= 0
+      ? `Quick slot ${this._selectedQuickSlot + 1} selected — click an action icon above to assign`
+      : this.selectedKey
+        ? `Key [${this.selectedKey.toUpperCase()}] selected — click action above to bind, or another key to swap`
+        : 'Click a key to bind, or click a quick slot then an action icon';
+    const hintColor = this._selectedQuickSlot >= 0 ? '#FFDD88' : this.selectedKey ? '#AADDFF' : '#778899';
+    canvas.drawText({ text: hint, color: hintColor,
+      x: this.x + 8, y: this.y + this.H - 85, fontSize: 9 });
 
     // 3. Keyboard — key label glyphs + action icons on bound keys
     const KEY_SLOT = 28;
+    let hoveredKey: string | null = null;
     for (const [keyName, [kx, ky]] of Object.entries(KEY_POS)) {
       const ax = this.x + kx, ay = this.y + ky;
+      const slotW = KEY_W[keyName] ?? KEY_SLOT;
       const isSelected = this.selectedKey === keyName;
+      const isHovKey = mx >= ax && mx < ax + slotW && my >= ay && my < ay + KEY_SLOT;
+      if (isHovKey) hoveredKey = keyName;
       const boundAction = this._actionForKey(keyName);
 
-      // Selection highlight
+      // Hover or selection highlight
       if (isSelected) {
-        canvas.drawRect({ x: ax, y: ay, width: KEY_SLOT, height: KEY_SLOT,
+        canvas.drawRect({ x: ax, y: ay, width: slotW, height: KEY_SLOT,
           color: '#4488FF', alpha: 0.5 });
+      } else if (isHovKey) {
+        canvas.drawRect({ x: ax, y: ay, width: slotW, height: KEY_SLOT,
+          color: '#AADDFF', alpha: 0.2 });
       }
 
       // Key label glyph from WZ key[] — drawn in top-left corner of slot
@@ -362,9 +408,51 @@ const UIKeyConfig = {
       }
     }
 
-    // 4. Buttons
+    // 4. Quick slot config panel — 8 assignable slots above button row
+    const QS = 30, QS_PAD = 4, QS_COUNT = 8;
+    const QS_X0 = this.x + 8, QS_RY_ABS = this.y + this.H - 75;
+    canvas.drawText({ text: 'Quick Slots', x: QS_X0, y: QS_RY_ABS - 8, color: '#99AABB', fontSize: 8 });
+    for (let qi = 0; qi < QS_COUNT; qi++) {
+      const qx = QS_X0 + qi * (QS + QS_PAD);
+      const qy = QS_RY_ABS;
+      const isQSel = this._selectedQuickSlot === qi;
+      const qAction = this.quickSlots[qi];
+      canvas.drawRect({ x: qx, y: qy, width: QS, height: QS,
+        color: isQSel ? '#224488' : '#0a0a18', alpha: 0.9 });
+      canvas.drawRect({ x: qx, y: qy, width: QS, height: QS,
+        strokeColor: isQSel ? '#AADDFF' : '#334466', strokeWidth: 1 });
+      if (qAction) {
+        const icon = this.actionIcons[qAction];
+        if (icon?.width > 1) {
+          const scale = (QS - 4) / Math.max(icon.width, icon.height);
+          canvas.drawImage({ img: icon, dx: qx + 2, dy: qy + 2, scaleX: scale, scaleY: scale });
+        } else {
+          canvas.drawText({ text: (ACTION_LABEL[qAction] ?? qAction).slice(0, 3),
+            color: '#AABBCC', x: qx + 2, y: qy + 20, fontSize: 7 });
+        }
+      }
+      canvas.drawText({ text: `${qi + 1}`, x: qx + 2, y: qy + 9, color: '#445566', fontSize: 7 });
+    }
+
+    // 5. Hover tooltip for icon tray or keyboard key
+    const tooltipAction = hoveredAction ?? (hoveredKey ? this._actionForKey(hoveredKey) : null);
+    const tooltipLabel = tooltipAction ? (ACTION_LABEL[tooltipAction] ?? tooltipAction)
+      : hoveredKey ? hoveredKey.toUpperCase() : null;
+    if (tooltipLabel) {
+      const tw = tooltipLabel.length * 6 + 8;
+      const tx = Math.min(mx + 10, this.x + this.W - tw - 4);
+      const ty = my - 18;
+      canvas.drawRect({ x: tx - 2, y: ty - 2, width: tw, height: 16, color: '#000000', alpha: 0.75 });
+      canvas.drawText({ text: tooltipLabel, color: '#FFFFFF', x: tx + 2, y: ty + 11, fontSize: 10 });
+    }
+
+    // 6. Buttons
     this.buttons.forEach(b => b.draw(canvas, { x: 0, y: 0 } as any, 0, 0, 0));
   },
 };
 
 export default UIKeyConfig;
+
+// Exported so UIStatusBar can render the gameplay quick slot bar
+export function getQuickSlots() { return UIKeyConfig.quickSlots; }
+export function getQuickSlotIcons() { return UIKeyConfig.actionIcons; }

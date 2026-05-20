@@ -845,14 +845,15 @@ class GameCanvas {
     color?: string; alpha?: number;
     strokeColor?: string; strokeWidth?: number; strokeAlpha?: number;
   }) {
-    const fill = opts.color ? this._colorToNum(opts.color) : null;
+    const gfx   = this.uiMode ? this._uiFgGfx : this._fgGfx;
+    const fill   = opts.color       ? this._colorToNum(opts.color)       : null;
     const stroke = opts.strokeColor ? this._colorToNum(opts.strokeColor) : null;
-    if (stroke !== null) this._fgGfx.lineStyle(opts.strokeWidth ?? 1, stroke, opts.strokeAlpha ?? 1);
-    else this._fgGfx.lineStyle(0);
-    if (fill !== null) this._fgGfx.beginFill(fill, opts.alpha ?? 1);
-    else this._fgGfx.beginFill(0, 0);
-    this._fgGfx.drawCircle(opts.x, opts.y, opts.radius);
-    this._fgGfx.endFill();
+    if (stroke !== null) gfx.lineStyle(opts.strokeWidth ?? 1, stroke, opts.strokeAlpha ?? 1);
+    else gfx.lineStyle(0);
+    if (fill !== null) gfx.beginFill(fill, opts.alpha ?? 1);
+    else gfx.beginFill(0, 0);
+    gfx.drawCircle(opts.x, opts.y, opts.radius);
+    gfx.endFill();
   }
 
   drawRoundedRect(opts: {

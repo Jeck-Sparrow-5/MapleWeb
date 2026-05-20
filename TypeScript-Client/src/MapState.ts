@@ -65,32 +65,44 @@ export interface MapState extends UIState {
 
 const MapStateInstance = {} as MapState;
 
-async function initializeMapState(map = defaultMap, isFirstUpdate = false) {
+async function initializeMapState(map = defaultMap, isFirstUpdate = false, spawnPoint = 0) {
   await MyCharacter.load();
   MyCharacter.activate();
-  // Henesys
   await MapleMap.load(map);
 
   MyCharacter.map = MapleMap;
 
   if (isFirstUpdate) {
-    // todo: additional UI initialization if needed
     await UIMap.initialize();
   }
 
-  const xMid = Math.floor(
-    (MapleMap.boundaries.right + MapleMap.boundaries.left) / 2
-  );
-  const yMid = Math.floor(
-    (MapleMap.boundaries.bottom + MapleMap.boundaries.top) / 2
-  );
+  // Find spawn portal matching spawnPoint id, fallback to first type-0 portal, then map center
+  const portals: any[] = MapleMap.portals ?? [];
+  let spawnX: number | null = null;
+  let spawnY: number | null = null;
 
-  MyCharacter.pos.x = xMid;
-  MyCharacter.pos.y = yMid;
+  // Try exact ID match first (portal node name === spawnPoint)
+  const exactPortal = portals.find((p: any) => parseInt(p.wzNode?.nName) === spawnPoint);
+  if (exactPortal) {
+    spawnX = exactPortal.x;
+    spawnY = exactPortal.y;
+  } else {
+    // Fall back to first type-0 spawn portal
+    const spawnPortal = portals.find((p: any) => p.type === 0);
+    if (spawnPortal) { spawnX = spawnPortal.x; spawnY = spawnPortal.y; }
+  }
+
+  if (spawnX !== null && spawnY !== null) {
+    MyCharacter.pos.x = spawnX;
+    MyCharacter.pos.y = spawnY;
+  } else {
+    MyCharacter.pos.x = Math.floor((MapleMap.boundaries.right + MapleMap.boundaries.left) / 2);
+    MyCharacter.pos.y = MapleMap.boundaries.top + 100; // spawn near top so gravity drops to foothold
+  }
 }
 
-MapStateInstance.changeMap = async function (map = defaultMap) {
-  await initializeMapState(map);
+MapStateInstance.changeMap = async function (map = defaultMap, spawnPoint = 0) {
+  await initializeMapState(map, false, spawnPoint);
   if (this.miniMap?.initialized) {
     this.miniMap.loadMapData();
   }

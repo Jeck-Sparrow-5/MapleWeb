@@ -195,6 +195,10 @@ class Physics {
     let vx = this.vx;
     let vy = this.vy;
     let fh = this.fh;
+    // Trapezoidal integration: save velocity before force application
+    const vx_pre = vx;
+    const vy_pre = vy;
+    let _firstAirStep = true; // use averaged velocity only on first airborne sub-step
 
     if (this.isClimbing) {
       this.x = this.x + vx * delta;

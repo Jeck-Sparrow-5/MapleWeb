@@ -189,11 +189,11 @@ export class SetFieldHandler extends PacketHandler {
     return offset;
   }
 
-  private async enterMap(mapId: number, _spawnPoint: number): Promise<void> {
+  private async enterMap(mapId: number, spawnPoint: number): Promise<void> {
     if (mapId <= 0) return;
     if (StateManager.currentState !== MapState) {
       await StateManager.setState(MapState);
     }
-    await (MapState as any).changeMap(mapId);
+    await (MapState as any).changeMap(mapId, spawnPoint);
   }
 }

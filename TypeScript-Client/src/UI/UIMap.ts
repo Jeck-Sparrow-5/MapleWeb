@@ -475,33 +475,17 @@ UIMap.doRender = function (canvas, camera, lag, msPerTick, tdelta) {
 
   const { hp, maxHp, mp, maxMp, exp, maxExp } = MyCharacter;
 
-  const numHpGrays = 105 - Math.floor((hp / maxHp) * 105);
-  for (let i = 0; i < numHpGrays; i += 1) {
-    canvas.drawImage({
-      img: this.barGray,
-      dx: 321 - i,
-      dy: 581 + startUIPosition.y,
-    });
-  }
-
-  const numMpGrays = 105 - Math.floor((mp / maxMp) * 105);
-  for (let i = 0; i < numMpGrays; i += 1) {
-    canvas.drawImage({
-      img: this.barGray,
-      dx: 429 - i,
-      dy: 581 + startUIPosition.y,
-    });
-  }
-
+  // Single drawRect per bar replaces per-pixel drawImage loops (was 315 sprite calls/frame)
+  const barY = 581 + startUIPosition.y;
+  const barH = this.barGray?.height ?? 10;
+  const gray  = '#2a2a2a';
+  const hpFill  = Math.floor((hp / maxHp) * 105);
+  const mpFill  = Math.floor((mp / maxMp) * 105);
   const expBarLength = 115;
-  const numExpGrays = expBarLength - Math.floor((exp / maxExp) * expBarLength);
-  for (let i = 0; i < numExpGrays; i += 1) {
-    canvas.drawImage({
-      img: this.barGray,
-      dx: 552 - i,
-      dy: 581 + startUIPosition.y,
-    });
-  }
+  const expFill = maxExp > 0 ? Math.floor((exp / maxExp) * expBarLength) : 0;
+  if (hpFill  < 105)          canvas.drawRect({ x: 321 - 105 + hpFill,                y: barY, width: 105 - hpFill,              height: barH, color: gray });
+  if (mpFill  < 105)          canvas.drawRect({ x: 429 - 105 + mpFill,                y: barY, width: 105 - mpFill,              height: barH, color: gray });
+  if (expFill < expBarLength) canvas.drawRect({ x: 552 - expBarLength + expFill,       y: barY, width: expBarLength - expFill,    height: barH, color: gray });
 
   canvas.drawImage({
     img: this.graduation,

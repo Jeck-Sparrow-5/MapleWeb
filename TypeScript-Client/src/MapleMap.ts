@@ -100,6 +100,10 @@ MapleMap.load = async function (id: number | string) {
   }
   setLoadingProgress(20, 'Fetching map data…');
   this.wzNode = await NXManager.get(filename);
+  if (!this.wzNode) {
+    console.error(`[MapleMap] Map file not found: ${filename}`);
+    return;
+  }
   this.isTown = !!this.wzNode.info?.town?.nValue;
   console.log(`is town: ${this.isTown}`);
   console.log("Map WZ Node:", this.wzNode);

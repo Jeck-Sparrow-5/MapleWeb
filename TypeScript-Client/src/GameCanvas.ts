@@ -221,12 +221,16 @@ class GameCanvas {
       tex = PIXI.Texture.from(img);
       this._texCache.set(img, tex);
     }
-    // Canvas textures: re-upload at most once per frame, stop after 3600 frames (~60s)
-    // Long window covers slow network / async NX bitmap decodes that arrive late
+    // Canvas textures: upload for a short window, restart window when decode completes.
+    // NXNode sets _mwDecoded=true on the canvas element after async bitmap decode.
     if (img instanceof HTMLCanvasElement) {
       const bt = tex.baseTexture;
+      if ((img as any)._mwDecoded) {
+        (img as any)._mwDecoded = false;
+        this._texUpdateCount.set(bt, 0); // restart upload window after decode
+      }
       const count = this._texUpdateCount.get(bt) ?? 0;
-      if (count < 3600 && !this._updatedThisFrame.has(bt)) {
+      if (count < 5 && !this._updatedThisFrame.has(bt)) {
         bt.update();
         this._updatedThisFrame.add(bt);
         this._texUpdateCount.set(bt, count + 1);
@@ -348,13 +352,29 @@ class GameCanvas {
   }
 
   disposeAllTextures() {
+    const toDestroy: PIXI.BaseTexture[] = [];
     this._texCache.forEach((tex) => {
-      if (!tex.baseTexture.destroyed) tex.baseTexture.destroy();
+      if (!tex.baseTexture.destroyed) toDestroy.push(tex.baseTexture);
     });
     this._texCache.clear();
     this._subTexCache.clear();
     this._texUpdateCount = new WeakMap();
     this._updatedThisFrame.clear();
+    // Destroy GPU resources in idle time — avoids synchronous frame stutter
+    const destroyBatch = () => {
+      const batch = toDestroy.splice(0, 10);
+      batch.forEach(bt => { if (!bt.destroyed) bt.destroy(); });
+      if (toDestroy.length > 0) {
+        'requestIdleCallback' in window
+          ? (window as any).requestIdleCallback(destroyBatch)
+          : setTimeout(destroyBatch, 50);
+      }
+    };
+    if (toDestroy.length > 0) {
+      'requestIdleCallback' in window
+        ? (window as any).requestIdleCallback(destroyBatch)
+        : setTimeout(destroyBatch, 50);
+    }
   }
 
   _showContextLostOverlay() {
@@ -446,7 +466,8 @@ class GameCanvas {
       }
     });
     window.addEventListener("mousedown", (e) => {
-      this.focusGame = e.target === this.game;
+      const t = e.target as Node;
+      this.focusGame = t === this.game || this.gameWrapper.contains(t);
     });
     this.gameWrapper.addEventListener("DOMMouseScroll", (e: any) => {
       // firefox

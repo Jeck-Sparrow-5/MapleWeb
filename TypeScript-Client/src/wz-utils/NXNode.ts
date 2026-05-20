@@ -79,6 +79,7 @@ export class NXNode {
             target.width  = cv.width;
             target.height = cv.height;
             target.getContext('2d')!.drawImage(cv, 0, 0);
+            (target as any)._mwDecoded = true; // signal GameCanvas to re-upload
           })
           .catch((err: any) => {
             console.warn('[NX] bitmap decode failed', err);

@@ -1327,10 +1327,10 @@ isCloseToMob = (inAllDirections = true) => {
           this.setStance(Stance.jump);
         } else if (this.pos.left !== this.pos.right) {
           this.setStance(Stance.walk1);
+        } else if ((this.pos as any).down) {
+          this.setStance(Stance.prone);
         } else {
           this.setStance(Stance.stand1);
-          // this here usefull to test stance
-          // this.setStance(Stance.proneStab);
         }
       }
     }

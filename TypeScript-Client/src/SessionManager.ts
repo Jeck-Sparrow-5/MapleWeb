@@ -39,7 +39,6 @@ class SessionManager {
         this.websocket.addEventListener('close', (event) => {
           this.websocket = null;
           console.log('WebSocket closed:', event.code, event);
-          alert('WebSocket closed');
         });
 
         this.websocket.addEventListener('message', (event) => {

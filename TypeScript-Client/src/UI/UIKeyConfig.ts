@@ -124,6 +124,11 @@ const UIKeyConfig = {
   selectedKey: null as string | null,
   hoveredKey: null as string | null,
 
+  // Drag state
+  _dragAction: null as string | null,  // action being dragged
+  _dragFromKey: null as string | null, // source key if dragged from a bound key (null = from tray)
+  _dragX: 0, _dragY: 0,
+
   async initialize(canvas: GameCanvas) {
     if (this.initialized) return;
     if (!canvas?.keys) { console.warn('[UIKeyConfig] no canvas.keys'); return; }
@@ -134,10 +139,37 @@ const UIKeyConfig = {
       Object.entries(canvas.keys).map(([n, c]) => [c, n])
     );
 
-    // Global keydown: ESC cancels selection
+    // Global keydown: ESC cancels selection / drag
     window.addEventListener('keydown', (e) => {
       if (this.isHidden) return;
-      if (e.keyCode === canvas.keys.esc) { this.selectedKey = null; e.preventDefault(); }
+      if (e.keyCode === canvas.keys.esc) { this.selectedKey = null; this._dragAction = null; this._dragFromKey = null; e.preventDefault(); }
+    });
+
+    // Global mouseUp: complete or cancel drag
+    window.addEventListener('mouseup', (e) => {
+      if (this.isHidden || !this._dragAction) return;
+      const rect = (e.target as HTMLElement)?.getBoundingClientRect?.() ?? { left: 0, top: 0 };
+      const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+      const rx = mx - this.x, ry = my - this.y;
+      const KEY_SLOT = Math.round(28 * SC);
+
+      // Try drop onto a key slot
+      let dropped = false;
+      for (const [keyName, [kx, ky]] of Object.entries(KEY_POS)) {
+        const skx = Math.round(kx * SC), sky = Math.round(ky * SC);
+        const slotW = Math.round((KEY_W[keyName] ?? 28) * SC);
+        if (rx >= skx && rx < skx + slotW && ry >= sky && ry < sky + KEY_SLOT) {
+          this._bindAction(this._dragAction!, keyName);
+          dropped = true;
+          break;
+        }
+      }
+      // If dropped on tray area or missed — unbind source key (remove from keyboard)
+      if (!dropped && this._dragFromKey) {
+        this._unbindKey(this._dragFromKey);
+      }
+      this._dragAction = null;
+      this._dragFromKey = null;
     });
 
     // Source confirmed from NX data: UIWindow.img/KeyConfig
@@ -251,21 +283,21 @@ const UIKeyConfig = {
     if (this.isHidden) return false;
     const rx = mx - this.x, ry = my - this.y;
 
-    // Hit-test action icon tray (scaled)
+    // Hit-test action icon tray — below keyboard (scaled)
     const ICON_SIZE = Math.round(28 * SC), ICON_STEP = Math.round(30 * SC);
-    const TRAY_Y1 = Math.round(25 * SC), TRAY_Y2 = Math.round(55 * SC);
+    const TRAY_Y1 = Math.round(277 * SC), TRAY_Y2 = Math.round(308 * SC);
     const allActions = Object.keys(ACTION_ICON_IDX);
     for (let i = 0; i < allActions.length; i++) {
       const row = i < 20 ? 0 : 1;
       const col = i < 20 ? i : i - 20;
-      const ix = Math.round(8 * SC) + col * ICON_STEP;
+      const ix = Math.round(13 * SC) + col * ICON_STEP;
       const iy = row === 0 ? TRAY_Y1 : TRAY_Y2;
       if (rx >= ix && rx < ix + ICON_SIZE && ry >= iy && ry < iy + ICON_SIZE) {
-        const action = allActions[i];
-        if (this.selectedKey) {
-          this._bindAction(action, this.selectedKey);
-          this.selectedKey = null;
-        }
+        // Start drag from tray
+        this._dragAction = allActions[i];
+        this._dragFromKey = null;
+        this._dragX = mx; this._dragY = my;
+        this.selectedKey = null;
         return true;
       }
     }
@@ -276,19 +308,16 @@ const UIKeyConfig = {
       const skx = Math.round(kx * SC), sky = Math.round(ky * SC);
       const slotW = Math.round((KEY_W[keyName] ?? 28) * SC);
       if (rx >= skx && rx < skx + slotW && ry >= sky && ry < sky + KEY_SLOT) {
-        if (this.selectedKey === keyName) {
+        const boundAction = this._actionForKey(keyName);
+        if (boundAction) {
+          // Start drag from key — allows repositioning or removal
+          this._dragAction = boundAction;
+          this._dragFromKey = keyName;
+          this._dragX = mx; this._dragY = my;
           this.selectedKey = null;
-        } else if (this.selectedKey === null) {
-          this.selectedKey = keyName;
         } else {
-          // Swap actions between two selected keys
-          const srcAction = this._actionForKey(this.selectedKey);
-          const dstAction = this._actionForKey(keyName);
-          if (srcAction) stagedBindings[srcAction] = keyName;
-          else this._unbindKey(keyName);
-          if (dstAction) stagedBindings[dstAction] = this.selectedKey;
-          else this._unbindKey(this.selectedKey);
-          this.selectedKey = null;
+          // Empty key — select it for binding via tray drag
+          this.selectedKey = this.selectedKey === keyName ? null : keyName;
         }
         return true;
       }
@@ -311,7 +340,7 @@ const UIKeyConfig = {
         x: this.x + 10, y: this.y + 14, fontSize: 12, fontWeight: 'bold' });
     }
 
-    // 2. Action icon tray — two rows scaled with SC
+    // 2. Action icon tray — below keyboard, two rows
     const ICON_SIZE = Math.round(28 * SC), ICON_STEP = Math.round(30 * SC);
     const allActions = Object.keys(ACTION_ICON_IDX);
     const mx = (canvas as any).mouseX ?? -1, my = (canvas as any).mouseY ?? -1;
@@ -319,8 +348,8 @@ const UIKeyConfig = {
     allActions.forEach((action, i) => {
       const row = i < 20 ? 0 : 1;
       const col = i < 20 ? i : i - 20;
-      const ix = this.x + Math.round(8 * SC) + col * ICON_STEP;
-      const iy = this.y + Math.round((row === 0 ? 25 : 55) * SC);
+      const ix = this.x + Math.round(13 * SC) + col * ICON_STEP;
+      const iy = this.y + Math.round((row === 0 ? 277 : 308) * SC);
       const isBound = !!stagedBindings[action];
       const icon = this.actionIcons[action];
 
@@ -384,7 +413,22 @@ const UIKeyConfig = {
       }
     }
 
-    // 4. Hover tooltip for icon tray or keyboard key
+    // 4. Drag ghost — icon follows cursor
+    if (this._dragAction) {
+      const dicon = this.actionIcons[this._dragAction];
+      const dsize = Math.round(32 * SC);
+      const dgx = mx - dsize / 2, dgy = my - dsize / 2;
+      if (dicon?.width > 1) {
+        const dscale = dsize / Math.max(dicon.width, dicon.height);
+        canvas.drawImage({ img: dicon, dx: dgx, dy: dgy, scaleX: dscale, scaleY: dscale, alpha: 0.85 });
+      } else {
+        canvas.drawRect({ x: dgx, y: dgy, width: dsize, height: dsize, color: '#4488FF', alpha: 0.7 });
+        canvas.drawText({ text: (ACTION_LABEL[this._dragAction] ?? this._dragAction).slice(0,4),
+          color: '#FFFFFF', x: dgx + 2, y: dgy + dsize - 4, fontSize: Math.round(7 * SC) });
+      }
+    }
+
+    // 6. Hover tooltip for icon tray or keyboard key
     const tooltipAction = hoveredAction ?? (hoveredKey ? this._actionForKey(hoveredKey) : null);
     const tooltipLabel = tooltipAction ? (ACTION_LABEL[tooltipAction] ?? tooltipAction)
       : hoveredKey ? hoveredKey.toUpperCase() : null;

@@ -444,6 +444,9 @@ MapStateInstance.doRender = function (
       MyCharacter.draw(canvas, camera, lag, msPerTick, tdelta);
     }
 
+    // Switch to UI layer — all draws from here go above world sprites/text
+    canvas.uiMode = true;
+
     (this.UIMenus ?? []).forEach((menu) => {
       menu.draw(canvas, camera, lag, msPerTick, tdelta);
     });

@@ -712,26 +712,22 @@ MapleMap.render = function (
   if (this.PlayerCharacter) renderPets(this.PlayerCharacter);
   this.characters?.forEach((c: any) => renderPets(c));
 
-  // Name tags above NPCs
+  // Chat bubbles above NPCs (names hidden)
   this.npcs.forEach((npc: any) => {
     const nx = npc.x ?? (npc as any).pos?.x ?? 0;
     const ny = (npc.cy ?? (npc as any).pos?.y ?? 0) - 80;
-    const name = npc.strings?.name ?? '';
-    if (name) NameTagRenderer.draw(canvas, camera, nx, ny, name, '5');
     ChatBubbleRenderer.draw(canvas, camera, npc.oId ?? npc.id, nx, ny);
   });
 
-  // Name tags + bubbles above other players
+  // Chat bubbles above other players (names hidden)
   this.characters.forEach((char: any) => {
     if (!char.pos) return;
-    NameTagRenderer.draw(canvas, camera, char.pos.x, char.pos.y - 90, char.name ?? '', '3');
     ChatBubbleRenderer.draw(canvas, camera, char.id, char.pos.x, char.pos.y - 90);
   });
 
-  // Player name tag + bubble
+  // Player chat bubble (name hidden)
   if (this.PlayerCharacter?.pos) {
     const pc = this.PlayerCharacter as any;
-    NameTagRenderer.draw(canvas, camera, pc.pos.x, pc.pos.y - 90, pc.name ?? '', '3');
     ChatBubbleRenderer.draw(canvas, camera, pc.id ?? 0, pc.pos.x, pc.pos.y - 90);
   }
 

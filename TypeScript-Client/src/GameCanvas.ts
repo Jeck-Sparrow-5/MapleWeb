@@ -22,16 +22,23 @@ class GameCanvas {
   _texCache: Map<any, PIXI.Texture> = new Map();
   _updatedThisFrame: Set<PIXI.BaseTexture> = new Set();
   _texUpdateCount: WeakMap<PIXI.BaseTexture, number> = new WeakMap();
-  // Three fixed layers — bg → sprites → fg (HP bars, text, UI)
+  // Layers: bg → sprites → fg (world text) → uiSprites → uiText → particles
   _bgLayer: PIXI.Container = new PIXI.Container();
   _spriteLayer: PIXI.Container = new PIXI.Container();
   _fgLayer: PIXI.Container = new PIXI.Container();
+  _uiSpriteLayer: PIXI.Container = new PIXI.Container();
+  _uiTextLayer: PIXI.Container = new PIXI.Container();
   _spritePool: PIXI.Sprite[] = [];
   _spriteIdx: number = 0;
+  _uiSpritePool: PIXI.Sprite[] = [];
+  _uiSpriteIdx: number = 0;
   _bgGfx: PIXI.Graphics = new PIXI.Graphics();
   _fgGfx: PIXI.Graphics = new PIXI.Graphics();
   _textPool: PIXI.Text[] = [];
   _textIdx: number = 0;
+  _uiTextPool: PIXI.Text[] = [];
+  _uiTextIdx: number = 0;
+  uiMode: boolean = false;
   _styleCache: Map<string, PIXI.TextStyle> = new Map();
   _colorCache: Map<string, number> = new Map();
   _subTexCache: Map<string, PIXI.Texture> = new Map();
@@ -195,18 +202,21 @@ class GameCanvas {
       console.info('[pixi] WebGL context restored');
     }, false);
 
-    // Layer order: background → sprites → foreground → particles (damage numbers on top)
+    // Layer order: bg → sprites → fg (world text) → uiSprites → uiText → particles
     const stage = this._pixiApp.stage as any;
     stage.addChild(this._bgLayer);
     stage.addChild(this._spriteLayer);
     stage.addChild(this._fgLayer);
+    stage.addChild(this._uiSpriteLayer);
+    stage.addChild(this._uiTextLayer);
     stage.addChild(this._particleLayer);
     this._bgLayer.addChild(this._bgGfx);
     this._fgLayer.addChild(this._fgGfx);
-    // No interaction traversal — we handle clicks ourselves
     this._bgLayer.interactiveChildren = false;
     this._spriteLayer.interactiveChildren = false;
     this._fgLayer.interactiveChildren = false;
+    this._uiSpriteLayer.interactiveChildren = false;
+    this._uiTextLayer.interactiveChildren = false;
     this._particleLayer.interactiveChildren = false;
 
     this._cachedRect = gameWrapper.getBoundingClientRect();
@@ -240,6 +250,19 @@ class GameCanvas {
   }
 
   _getPoolSprite(): PIXI.Sprite {
+    if (this.uiMode) {
+      if (this._uiSpriteIdx < this._uiSpritePool.length) {
+        const s = this._uiSpritePool[this._uiSpriteIdx++];
+        s.visible = true;
+        s.tint = 0xFFFFFF;
+        return s;
+      }
+      const s = new PIXI.Sprite();
+      this._uiSpriteLayer.addChild(s);
+      this._uiSpritePool.push(s);
+      this._uiSpriteIdx++;
+      return s;
+    }
     if (this._spriteIdx < this._spritePool.length) {
       const s = this._spritePool[this._spriteIdx++];
       s.visible = true;
@@ -334,8 +357,11 @@ class GameCanvas {
     if (this._contextLost) return;
     this._spriteIdx = 0;
     this._textIdx = 0;
+    this._uiSpriteIdx = 0;
+    this._uiTextIdx = 0;
     this._tilingIdx = 0;
     this._particleIdx = 0;
+    this.uiMode = false;
     this._bgGfx.clear();
     this._fgGfx.clear();
     this._updatedThisFrame.clear();
@@ -346,6 +372,8 @@ class GameCanvas {
     if (this._contextLost) return;
     for (let i = this._spriteIdx; i < this._spritePool.length; i++) this._spritePool[i].visible = false;
     for (let i = this._textIdx; i < this._textPool.length; i++) this._textPool[i].visible = false;
+    for (let i = this._uiSpriteIdx; i < this._uiSpritePool.length; i++) this._uiSpritePool[i].visible = false;
+    for (let i = this._uiTextIdx; i < this._uiTextPool.length; i++) this._uiTextPool[i].visible = false;
     for (let i = this._tilingIdx; i < this._tilingPool.length; i++) this._tilingPool[i].visible = false;
     for (let i = this._particleIdx; i < this._particlePool.length; i++) this._particlePool[i].visible = false;
     this._pixiApp.renderer.render(this._pixiApp.stage);
@@ -420,6 +448,18 @@ class GameCanvas {
   }
 
   _getPoolText(style: PIXI.TextStyle): PIXI.Text {
+    if (this.uiMode) {
+      if (this._uiTextIdx < this._uiTextPool.length) {
+        const t = this._uiTextPool[this._uiTextIdx++];
+        t.visible = true;
+        return t;
+      }
+      const t = new PIXI.Text('', style);
+      this._uiTextLayer.addChild(t);
+      this._uiTextPool.push(t);
+      this._uiTextIdx++;
+      return t;
+    }
     if (this._textIdx < this._textPool.length) {
       const t = this._textPool[this._textIdx++];
       t.visible = true;

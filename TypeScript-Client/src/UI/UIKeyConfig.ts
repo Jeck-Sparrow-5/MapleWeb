@@ -4,28 +4,31 @@ import ClickManager from './ClickManager';
 import GameCanvas from '../GameCanvas';
 import { OutPacket, OutPacketOpcode } from '../Net/OutPacket';
 import SessionManager from '../SessionManager';
+import config from '../Config';
+
+const SC = 1.4; // uniform scale for background + key overlay
 
 // ─── Key positions relative to window origin (from HeavenMS load_keys_pos) ───
 const KEY_POS: Record<string, [number, number]> = {
-  esc: [31, 91],
-  f1: [95, 91],  f2: [128, 91],  f3: [161, 91],  f4: [194, 91],
-  f5: [244, 91], f6: [277, 91],  f7: [310, 91],  f8: [343, 91],
-  f9: [393, 91], f10: [426, 91], f11: [459, 91], f12: [492, 91],
-  tilde: [31, 126],
-  '1': [64,126], '2': [97,126],  '3': [130,126], '4': [163,126], '5': [196,126],
-  '6': [229,126],'7': [262,126], '8': [295,126], '9': [328,126], '0': [361,126],
-  minus: [394,126], plus: [427,126],
-  insert: [568,126], home: [601,126], pageup: [634,126],
-  q:[80,159],  w:[113,159], e:[146,159], r:[179,159], t:[212,159],
-  y:[245,159], u:[278,159], i:[311,159], o:[344,159], p:[377,159],
-  '[': [410,159], ']': [443,159],
-  delete:[568,159], end:[601,159], pagedown:[634,192],
-  a:[96,192],  s:[129,192], d:[162,192], f:[195,192], g:[228,192],
-  h:[261,192], j:[294,192], k:[327,192], l:[360,192],
-  colon:[393,192], quote:[426,192],
-  z:[79,225],  x:[112,225], c:[145,225], v:[178,225], b:[211,225],
-  n:[244,225], m:[277,225], comma:[310,225], period:[343,225],
-  ctrl:[39,259], alt:[137,259], space:[234,259],
+  esc: [21, 31],
+  f1: [85, 31],  f2: [118, 31],  f3: [151, 31],  f4: [184, 31],
+  f5: [234, 31], f6: [267, 31],  f7: [300, 31],  f8: [333, 31],
+  f9: [383, 31], f10: [416, 31], f11: [449, 31], f12: [482, 31],
+  tilde: [21, 66],
+  '1': [54,66], '2': [87,66],  '3': [120,66], '4': [153,66], '5': [186,66],
+  '6': [219,66],'7': [252,66], '8': [285,66], '9': [318,66], '0': [351,66],
+  minus: [384,66], plus: [417,66],
+  insert: [558,66], home: [591,66], pageup: [624,66],
+  q:[70,99],  w:[103,99], e:[136,99], r:[169,99], t:[202,99],
+  y:[235,99], u:[268,99], i:[301,99], o:[334,99], p:[367,99],
+  '[': [400,99], ']': [433,99],
+  delete:[558,99], end:[591,99], pagedown:[624,132],
+  a:[86,132],  s:[119,132], d:[152,132], f:[185,132], g:[218,132],
+  h:[251,132], j:[284,132], k:[317,132], l:[350,132],
+  colon:[383,132], quote:[416,132],
+  z:[69,165],  x:[102,165], c:[135,165], v:[168,165], b:[201,165],
+  n:[234,165], m:[267,165], comma:[300,165], period:[333,165],
+  ctrl:[29,199], alt:[127,199], space:[224,199],
 };
 
 // Per-key slot widths for wider keys (height stays 28 for all)
@@ -121,10 +124,6 @@ const UIKeyConfig = {
   selectedKey: null as string | null,
   hoveredKey: null as string | null,
 
-  // Quick slot bar — 8 assignable action slots
-  quickSlots: new Array(8).fill(null) as (string | null)[],
-  _selectedQuickSlot: -1,
-
   async initialize(canvas: GameCanvas) {
     if (this.initialized) return;
     if (!canvas?.keys) { console.warn('[UIKeyConfig] no canvas.keys'); return; }
@@ -149,10 +148,10 @@ const UIKeyConfig = {
     this.bgImg2 = null; this.bgImg3 = null;
 
     if (this.bgImg?.width > 1) {
-      this.W = this.bgImg.width;
-      this.H = this.bgImg.height;
-      this.x = Math.floor((800 - this.W) / 2);
-      this.y = Math.floor((600 - this.H) / 2);
+      this.W = Math.round(this.bgImg.width * SC);
+      this.H = Math.round(this.bgImg.height * SC);
+      this.x = Math.floor((config.width - this.W) / 2);
+      this.y = Math.floor((config.height - this.H) / 2);
     }
 
     // key[] children named "1","2",... in NX binary (same as HeavenMS indices)
@@ -252,21 +251,18 @@ const UIKeyConfig = {
     if (this.isHidden) return false;
     const rx = mx - this.x, ry = my - this.y;
 
-    // Hit-test action icon tray (y=25..83, two rows of 20 icons × 30px)
-    const ICON_SIZE = 28, ICON_GAP = 2, ICON_STEP = ICON_SIZE + ICON_GAP;
-    const TRAY_Y1 = 25, TRAY_Y2 = 55;
+    // Hit-test action icon tray (scaled)
+    const ICON_SIZE = Math.round(28 * SC), ICON_STEP = Math.round(30 * SC);
+    const TRAY_Y1 = Math.round(25 * SC), TRAY_Y2 = Math.round(55 * SC);
     const allActions = Object.keys(ACTION_ICON_IDX);
     for (let i = 0; i < allActions.length; i++) {
       const row = i < 20 ? 0 : 1;
       const col = i < 20 ? i : i - 20;
-      const ix = 8 + col * ICON_STEP;
+      const ix = Math.round(8 * SC) + col * ICON_STEP;
       const iy = row === 0 ? TRAY_Y1 : TRAY_Y2;
       if (rx >= ix && rx < ix + ICON_SIZE && ry >= iy && ry < iy + ICON_SIZE) {
         const action = allActions[i];
-        if (this._selectedQuickSlot >= 0) {
-          this.quickSlots[this._selectedQuickSlot] = action;
-          this._selectedQuickSlot = -1;
-        } else if (this.selectedKey) {
+        if (this.selectedKey) {
           this._bindAction(action, this.selectedKey);
           this.selectedKey = null;
         }
@@ -274,11 +270,12 @@ const UIKeyConfig = {
       }
     }
 
-    // Hit-test key slots (keyboard area, y=91+)
-    const KEY_SLOT = 28;
+    // Hit-test key slots (scaled)
+    const KEY_SLOT = Math.round(28 * SC);
     for (const [keyName, [kx, ky]] of Object.entries(KEY_POS)) {
-      const slotW = KEY_W[keyName] ?? KEY_SLOT;
-      if (rx >= kx && rx < kx + slotW && ry >= ky && ry < ky + KEY_SLOT) {
+      const skx = Math.round(kx * SC), sky = Math.round(ky * SC);
+      const slotW = Math.round((KEY_W[keyName] ?? 28) * SC);
+      if (rx >= skx && rx < skx + slotW && ry >= sky && ry < sky + KEY_SLOT) {
         if (this.selectedKey === keyName) {
           this.selectedKey = null;
         } else if (this.selectedKey === null) {
@@ -297,20 +294,6 @@ const UIKeyConfig = {
       }
     }
 
-    // Hit-test quick slot config panel (below keyboard)
-    const QS = 30, QS_PAD = 4, QS_COUNT = 8;
-    const QS_X0 = 8, QS_RY = this.H - 75;
-    if (ry >= QS_RY && ry < QS_RY + QS) {
-      for (let qi = 0; qi < QS_COUNT; qi++) {
-        const qx = QS_X0 + qi * (QS + QS_PAD);
-        if (rx >= qx && rx < qx + QS) {
-          this._selectedQuickSlot = (this._selectedQuickSlot === qi) ? -1 : qi;
-          this.selectedKey = null;
-          return true;
-        }
-      }
-    }
-
     return true;
   },
 
@@ -318,9 +301,9 @@ const UIKeyConfig = {
   draw(canvas: GameCanvas) {
     if (this.isHidden) return;
 
-    // 1. Background — WZ image (629×373) contains the full keyboard layout
+    // 1. Background — drawn at SC scale
     if (this.bgImg?.width > 1) {
-      canvas.drawImage({ img: this.bgImg, dx: this.x, dy: this.y });
+      canvas.drawImage({ img: this.bgImg, dx: this.x, dy: this.y, scaleX: SC, scaleY: SC });
     } else {
       canvas.drawRect({ x: this.x, y: this.y, width: this.W, height: this.H,
         color: '#0e0e1e', alpha: 0.97, strokeColor: '#445577', strokeWidth: 1 });
@@ -328,16 +311,16 @@ const UIKeyConfig = {
         x: this.x + 10, y: this.y + 14, fontSize: 12, fontWeight: 'bold' });
     }
 
-    // 2. Action icon tray — two rows of 20 icons above the keyboard (y+25, y+55)
-    const ICON_SIZE = 28, ICON_STEP = 30;
+    // 2. Action icon tray — two rows scaled with SC
+    const ICON_SIZE = Math.round(28 * SC), ICON_STEP = Math.round(30 * SC);
     const allActions = Object.keys(ACTION_ICON_IDX);
     const mx = (canvas as any).mouseX ?? -1, my = (canvas as any).mouseY ?? -1;
     let hoveredAction: string | null = null;
     allActions.forEach((action, i) => {
       const row = i < 20 ? 0 : 1;
       const col = i < 20 ? i : i - 20;
-      const ix = this.x + 8 + col * ICON_STEP;
-      const iy = this.y + (row === 0 ? 25 : 55);
+      const ix = this.x + Math.round(8 * SC) + col * ICON_STEP;
+      const iy = this.y + Math.round((row === 0 ? 25 : 55) * SC);
       const isBound = !!stagedBindings[action];
       const icon = this.actionIcons[action];
 
@@ -348,54 +331,47 @@ const UIKeyConfig = {
       if (icon?.width > 1) {
         const scale = ICON_SIZE / Math.max(icon.width, icon.height);
         canvas.drawImage({ img: icon, dx: ix, dy: iy, scaleX: scale, scaleY: scale,
-          alpha: isBound ? 0.35 : 1 }); // dim bound icons
+          alpha: isBound ? 0.35 : 1 });
       } else {
-        // Fallback box
         canvas.drawRect({ x: ix, y: iy, width: ICON_SIZE, height: ICON_SIZE,
           color: isBound ? '#111122' : '#223366', alpha: 0.8 });
         canvas.drawText({ text: (ACTION_LABEL[action] ?? action).slice(0,4),
-          color: isBound ? '#445566' : '#AABBCC', x: ix + 2, y: iy + 18, fontSize: 7 });
+          color: isBound ? '#445566' : '#AABBCC', x: ix + 2, y: iy + Math.round(18 * SC), fontSize: Math.round(7 * SC) });
       }
     });
 
     // Hint bar
-    const hint = this._selectedQuickSlot >= 0
-      ? `Quick slot ${this._selectedQuickSlot + 1} selected — click an action icon above to assign`
-      : this.selectedKey
-        ? `Key [${this.selectedKey.toUpperCase()}] selected — click action above to bind, or another key to swap`
-        : 'Click a key to bind, or click a quick slot then an action icon';
-    const hintColor = this._selectedQuickSlot >= 0 ? '#FFDD88' : this.selectedKey ? '#AADDFF' : '#778899';
-    canvas.drawText({ text: hint, color: hintColor,
-      x: this.x + 8, y: this.y + this.H - 85, fontSize: 9 });
+    const hint = this.selectedKey
+      ? `Key [${this.selectedKey.toUpperCase()}] selected — click action above to bind, or another key to swap`
+      : 'Click a key on the keyboard, then click an action icon above to bind';
+    canvas.drawText({ text: hint, color: this.selectedKey ? '#AADDFF' : '#778899',
+      x: this.x + 8, y: this.y + this.H - 32, fontSize: 9 });
 
-    // 3. Keyboard — key label glyphs + action icons on bound keys
-    const KEY_SLOT = 28;
+    // 3. Keyboard — key label glyphs + action icons on bound keys (all scaled)
+    const KEY_SLOT = Math.round(28 * SC);
     let hoveredKey: string | null = null;
     for (const [keyName, [kx, ky]] of Object.entries(KEY_POS)) {
-      const ax = this.x + kx, ay = this.y + ky;
-      const slotW = KEY_W[keyName] ?? KEY_SLOT;
+      const ax = this.x + Math.round(kx * SC), ay = this.y + Math.round(ky * SC);
+      const slotW = Math.round((KEY_W[keyName] ?? 28) * SC);
       const isSelected = this.selectedKey === keyName;
       const isHovKey = mx >= ax && mx < ax + slotW && my >= ay && my < ay + KEY_SLOT;
       if (isHovKey) hoveredKey = keyName;
       const boundAction = this._actionForKey(keyName);
 
-      // Hover or selection highlight
       if (isSelected) {
-        canvas.drawRect({ x: ax, y: ay, width: slotW, height: KEY_SLOT,
-          color: '#4488FF', alpha: 0.5 });
+        canvas.drawRect({ x: ax, y: ay, width: slotW, height: KEY_SLOT, color: '#4488FF', alpha: 0.5 });
       } else if (isHovKey) {
-        canvas.drawRect({ x: ax, y: ay, width: slotW, height: KEY_SLOT,
-          color: '#AADDFF', alpha: 0.2 });
+        canvas.drawRect({ x: ax, y: ay, width: slotW, height: KEY_SLOT, color: '#AADDFF', alpha: 0.2 });
       }
 
-      // Key label glyph from WZ key[] — drawn in top-left corner of slot
+      // Key label glyph scaled
       const glyphIdx = KEY_TEX_IDX[keyName];
       const glyph = glyphIdx != null ? this.keyTex[glyphIdx] : null;
       if (glyph?.width > 1) {
-        canvas.drawImage({ img: glyph, dx: ax + 2, dy: ay + 2 });
+        canvas.drawImage({ img: glyph, dx: ax + 2, dy: ay + 2, scaleX: SC, scaleY: SC });
       }
 
-      // Action icon on key if bound — centred, full-slot scale
+      // Action icon on key if bound
       if (boundAction) {
         const icon = this.actionIcons[boundAction];
         if (icon?.width > 1) {
@@ -403,38 +379,12 @@ const UIKeyConfig = {
           canvas.drawImage({ img: icon, dx: ax + 2, dy: ay + 2, scaleX: scale, scaleY: scale });
         } else {
           canvas.drawText({ text: (ACTION_LABEL[boundAction] ?? boundAction).slice(0,3),
-            color: '#FFEE88', x: ax + 2, y: ay + 18, fontSize: 7 });
+            color: '#FFEE88', x: ax + 2, y: ay + Math.round(18 * SC), fontSize: Math.round(7 * SC) });
         }
       }
     }
 
-    // 4. Quick slot config panel — 8 assignable slots above button row
-    const QS = 30, QS_PAD = 4, QS_COUNT = 8;
-    const QS_X0 = this.x + 8, QS_RY_ABS = this.y + this.H - 75;
-    canvas.drawText({ text: 'Quick Slots', x: QS_X0, y: QS_RY_ABS - 8, color: '#99AABB', fontSize: 8 });
-    for (let qi = 0; qi < QS_COUNT; qi++) {
-      const qx = QS_X0 + qi * (QS + QS_PAD);
-      const qy = QS_RY_ABS;
-      const isQSel = this._selectedQuickSlot === qi;
-      const qAction = this.quickSlots[qi];
-      canvas.drawRect({ x: qx, y: qy, width: QS, height: QS,
-        color: isQSel ? '#224488' : '#0a0a18', alpha: 0.9 });
-      canvas.drawRect({ x: qx, y: qy, width: QS, height: QS,
-        strokeColor: isQSel ? '#AADDFF' : '#334466', strokeWidth: 1 });
-      if (qAction) {
-        const icon = this.actionIcons[qAction];
-        if (icon?.width > 1) {
-          const scale = (QS - 4) / Math.max(icon.width, icon.height);
-          canvas.drawImage({ img: icon, dx: qx + 2, dy: qy + 2, scaleX: scale, scaleY: scale });
-        } else {
-          canvas.drawText({ text: (ACTION_LABEL[qAction] ?? qAction).slice(0, 3),
-            color: '#AABBCC', x: qx + 2, y: qy + 20, fontSize: 7 });
-        }
-      }
-      canvas.drawText({ text: `${qi + 1}`, x: qx + 2, y: qy + 9, color: '#445566', fontSize: 7 });
-    }
-
-    // 5. Hover tooltip for icon tray or keyboard key
+    // 4. Hover tooltip for icon tray or keyboard key
     const tooltipAction = hoveredAction ?? (hoveredKey ? this._actionForKey(hoveredKey) : null);
     const tooltipLabel = tooltipAction ? (ACTION_LABEL[tooltipAction] ?? tooltipAction)
       : hoveredKey ? hoveredKey.toUpperCase() : null;
@@ -446,13 +396,12 @@ const UIKeyConfig = {
       canvas.drawText({ text: tooltipLabel, color: '#FFFFFF', x: tx + 2, y: ty + 11, fontSize: 10 });
     }
 
-    // 6. Buttons
+    // 5. Buttons
     this.buttons.forEach(b => b.draw(canvas, { x: 0, y: 0 } as any, 0, 0, 0));
   },
 };
 
 export default UIKeyConfig;
 
-// Exported so UIStatusBar can render the gameplay quick slot bar
-export function getQuickSlots() { return UIKeyConfig.quickSlots; }
-export function getQuickSlotIcons() { return UIKeyConfig.actionIcons; }
+// Exported so UIStatusBar can read action icons for the status bar display
+export function getActionIcons() { return UIKeyConfig.actionIcons; }

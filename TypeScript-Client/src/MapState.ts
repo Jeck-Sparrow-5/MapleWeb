@@ -1,4 +1,5 @@
 import MapleMap from "./MapleMap";
+import { setGameCanvas } from "./GameContext";
 import MyCharacter from "./MyCharacter";
 import UIState from './UIState';
 import Camera, { CameraInterface } from "./Camera";
@@ -124,6 +125,7 @@ MapStateInstance.initialize = async function (gameCanvas?: GameCanvas) {
   const canvas = (gameCanvas?.keys ? gameCanvas : _cachedCanvas) as GameCanvas;
   if (!canvas?.keys) { console.error('[MapState] initialize called without a GameCanvas'); return; }
   _cachedCanvas = canvas;
+  setGameCanvas(canvas);
 
   this.UIMenus = [];
 
@@ -296,7 +298,7 @@ MapStateInstance.doUpdate = function (
         if (!this.quitDialog.isHidden) {
           this.quitDialog.hide();
         } else if (MapleMap.npcDialog && !MapleMap.npcDialog.isHidden) {
-          MapleMap.npcDialog.close(0);
+          MapleMap.npcDialog.close();
         } else {
           const notHiddenMenus = this.UIMenus.filter((menu) => !menu.isHidden);
           if (notHiddenMenus.length > 0) {
